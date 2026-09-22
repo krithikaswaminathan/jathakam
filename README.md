@@ -1,0 +1,2 @@
+# jathakam
+Vedic astrology app
