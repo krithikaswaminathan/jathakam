@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jathakam Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1 id="pageTitle">Jathakam Calculator</h1>
+    <select id="langToggle">
+      <option value="en">English</option>
+      <option value="ta">தமிழ்</option>
+    </select>
+  </header>
+
+  <main>
+    <section id="formSection" class="card">
+      <h2 id="formTitle">New Chart</h2>
+      <form id="birthForm">
+        <label><span id="lblName">Name</span><input type="text" id="name" required /></label>
+        <label><span id="lblGender">Gender</span>
+          <select id="gender">
+            <option value="Male" id="optMale">Male</option>
+            <option value="Female" id="optFemale">Female</option>
+            <option value="Other" id="optOther">Other</option>
+          </select>
+        </label>
+        <label><span id="lblDob">Date of Birth</span><input type="date" id="dob" required /></label>
+        <label><span id="lblTob">Time of Birth</span><input type="time" id="tob" step="1" required /></label>
+        <label><span id="lblPob">Place of Birth</span><input type="text" id="pob" required /></label>
+        <label><span id="lblLat">Latitude</span><input type="number" step="any" id="latitude" required /></label>
+        <label><span id="lblLon">Longitude</span><input type="number" step="any" id="longitude" required /></label>
+        <label><span id="lblUtc">UTC Offset (hours)</span><input type="number" step="any" id="utcOffset" required /></label>
+        <button type="submit" id="btnCalculate">Calculate Chart</button>
+      </form>
+    </section>
+
+    <section id="savedSection" class="card">
+      <h2 id="lblSavedCharts">Saved Charts</h2>
+      <ul id="savedList"></ul>
+    </section>
+
+    <section id="resultSection" class="card hidden">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="chartTab" id="lblChartTab">Chart</button>
+        <button class="tab-btn" data-tab="dasaTab" id="lblDasaTab">Dasa</button>
+        <button class="tab-btn" data-tab="yogaTab" id="lblYogaTab">Yogas</button>
+        <button class="tab-btn" data-tab="taraTab" id="lblTaraTab">Tara Balam</button>
+      </div>
+
+      <div id="chartTab" class="tab-panel active">
+        <select id="vargaSelect"></select>
+        <div id="chartGrid" class="south-indian-grid"></div>
+      </div>
+
+      <div id="dasaTab" class="tab-panel">
+        <table id="dasaTable">
+          <thead><tr><th>Lord</th><th>Start</th><th>End</th></tr></thead>
+          <tbody id="dasaBody"></tbody>
+        </table>
+      </div>
+
+      <div id="yogaTab" class="tab-panel">
+        <ul id="yogaList"></ul>
+      </div>
+
+      <div id="taraTab" class="tab-panel">
+        <table id="taraTable">
+          <thead><tr><th>#</th><th>Nakshatra</th><th>Category</th><th>Quality</th></tr></thead>
+          <tbody id="taraBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="labels.js"></script>
+  <script src="chart.js"></script>
+</body>
+</html>
