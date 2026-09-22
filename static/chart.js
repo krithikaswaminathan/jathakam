@@ -11,6 +11,7 @@ let state = {
   lang: "en",
   chart: null,
   varga: "D1",
+  selectedPlace: null, // { label, latitude, longitude, timezone }
 };
 
 function L() {
@@ -40,9 +41,7 @@ function applyLanguage() {
   document.getElementById("lblDob").textContent = labels.ui.dob;
   document.getElementById("lblTob").textContent = labels.ui.tob;
   document.getElementById("lblPob").textContent = labels.ui.pob;
-  document.getElementById("lblLat").textContent = labels.ui.latitude;
-  document.getElementById("lblLon").textContent = labels.ui.longitude;
-  document.getElementById("lblUtc").textContent = labels.ui.utcOffset;
+  document.getElementById("pob").placeholder = labels.ui.pobPlaceholder;
   document.getElementById("btnCalculate").textContent = labels.ui.calculate;
   document.getElementById("lblSavedCharts").textContent = labels.ui.savedCharts;
   document.getElementById("lblChartTab").textContent = labels.ui.chartTab;
@@ -85,19 +84,72 @@ async function loadChart(id) {
   renderAll();
 }
 
+// --- Place of Birth search ---
+
+let pobSearchTimer = null;
+
+const pobInput = document.getElementById("pob");
+const pobResultsEl = document.getElementById("pobResults");
+
+pobInput.addEventListener("input", () => {
+  state.selectedPlace = null; // typing invalidates any prior selection
+  const query = pobInput.value.trim();
+  clearTimeout(pobSearchTimer);
+  if (query.length < 2) {
+    pobResultsEl.classList.add("hidden");
+    pobResultsEl.innerHTML = "";
+    return;
+  }
+  pobSearchTimer = setTimeout(() => runPobSearch(query), 300);
+});
+
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".pob-field")) {
+    pobResultsEl.classList.add("hidden");
+  }
+});
+
+async function runPobSearch(query) {
+  const res = await fetch(`/api/geocode?query=${encodeURIComponent(query)}`);
+  const places = await res.json();
+  pobResultsEl.innerHTML = "";
+  if (places.length === 0) {
+    const li = document.createElement("li");
+    li.className = "pob-no-results";
+    li.textContent = L().ui.pobNoResults;
+    pobResultsEl.appendChild(li);
+  } else {
+    for (const place of places) {
+      const li = document.createElement("li");
+      li.textContent = place.label;
+      li.addEventListener("click", () => {
+        state.selectedPlace = place;
+        pobInput.value = place.label;
+        pobResultsEl.classList.add("hidden");
+      });
+      pobResultsEl.appendChild(li);
+    }
+  }
+  pobResultsEl.classList.remove("hidden");
+}
+
 // --- Form ---
 
 document.getElementById("birthForm").addEventListener("submit", async (e) => {
   e.preventDefault();
+  if (!state.selectedPlace) {
+    alert(L().ui.pobSelectPrompt);
+    return;
+  }
   const body = {
     name: document.getElementById("name").value,
     gender: document.getElementById("gender").value,
     dob: document.getElementById("dob").value,
     tob: document.getElementById("tob").value,
-    pob_label: document.getElementById("pob").value,
-    latitude: parseFloat(document.getElementById("latitude").value),
-    longitude: parseFloat(document.getElementById("longitude").value),
-    utc_offset: parseFloat(document.getElementById("utcOffset").value),
+    pob_label: state.selectedPlace.label,
+    latitude: state.selectedPlace.latitude,
+    longitude: state.selectedPlace.longitude,
+    timezone: state.selectedPlace.timezone,
   };
   const res = await fetch("/api/chart", {
     method: "POST",

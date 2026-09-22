@@ -17,6 +17,7 @@ def test_save_list_get_roundtrip(tmp_path):
         pob_label="Chennai",
         latitude=13.0827,
         longitude=80.2707,
+        tz_name="Asia/Kolkata",
         utc_offset=5.5,
         chart_json="{}",
     )
@@ -30,7 +31,7 @@ def test_save_list_get_roundtrip(tmp_path):
 
     chart2 = db.SavedChart(
         name="Second Person", gender="Male", dob=date(1985, 1, 1), tob=time(0, 0, 0),
-        pob_label="Madurai", latitude=9.9252, longitude=78.1198, utc_offset=5.5, chart_json="{}",
+        pob_label="Madurai", latitude=9.9252, longitude=78.1198, tz_name="Asia/Kolkata", utc_offset=5.5, chart_json="{}",
     )
     db.save_chart(chart2)
 

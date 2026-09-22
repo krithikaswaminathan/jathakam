@@ -11,7 +11,14 @@ class BirthRequest(BaseModel):
     pob_label: str
     latitude: float
     longitude: float
-    utc_offset: float
+    timezone: str  # IANA name, from the resolved place (e.g. "Asia/Kolkata")
+
+
+class PlaceResult(BaseModel):
+    label: str
+    latitude: float
+    longitude: float
+    timezone: str
 
 
 class GrahaOut(BaseModel):

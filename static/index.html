@@ -29,10 +29,11 @@
         </label>
         <label><span id="lblDob">Date of Birth</span><input type="date" id="dob" required /></label>
         <label><span id="lblTob">Time of Birth</span><input type="time" id="tob" step="1" required /></label>
-        <label><span id="lblPob">Place of Birth</span><input type="text" id="pob" required /></label>
-        <label><span id="lblLat">Latitude</span><input type="number" step="any" id="latitude" required /></label>
-        <label><span id="lblLon">Longitude</span><input type="number" step="any" id="longitude" required /></label>
-        <label><span id="lblUtc">UTC Offset (hours)</span><input type="number" step="any" id="utcOffset" required /></label>
+        <label class="pob-field">
+          <span id="lblPob">Place of Birth</span>
+          <input type="text" id="pob" autocomplete="off" required />
+          <ul id="pobResults" class="pob-results hidden"></ul>
+        </label>
         <button type="submit" id="btnCalculate">Calculate Chart</button>
       </form>
     </section>

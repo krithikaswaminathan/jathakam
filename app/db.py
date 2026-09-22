@@ -12,7 +12,8 @@ class SavedChart(SQLModel, table=True):
     pob_label: str
     latitude: float
     longitude: float
-    utc_offset: float
+    tz_name: str
+    utc_offset: float  # computed from tz_name + dob/tob at save time; stored for display
     chart_json: str
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 

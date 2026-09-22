@@ -8,6 +8,7 @@ from app.astrology import ChartData, VARGA_FUNCTIONS, build_chart, build_varga_c
 from app.dasa import compute_mahadasas, compute_sub_periods
 from app.db import SavedChart, get_chart, init_db, list_charts, save_chart
 from app.ephemeris import compute_ascendant, compute_graha_longitudes, init_ephemeris, to_julian_day_ut
+from app.geocode import search_places
 from app.models import (
     BirthRequest,
     ChartOut,
@@ -16,10 +17,12 @@ from app.models import (
     DasaExpandRequest,
     DasaPeriodOut,
     GrahaOut,
+    PlaceResult,
     TaraEntryOut,
     YogaOut,
 )
 from app.tara import compute_tara_balam
+from app.timezone_utils import compute_utc_offset
 from app.yogas import detect_all_yogas
 
 app = FastAPI(title="Jathakam Calculator")
@@ -44,9 +47,18 @@ def _to_chart_out(chart: ChartData) -> ChartOut:
     )
 
 
+@app.get("/api/geocode", response_model=list[PlaceResult])
+async def geocode(query: str) -> list[PlaceResult]:
+    if len(query.strip()) < 2:
+        return []
+    results = await search_places(query)
+    return [PlaceResult(**r) for r in results]
+
+
 @app.post("/api/chart", response_model=ChartResponse)
 def create_chart(req: BirthRequest) -> ChartResponse:
-    jd_ut = to_julian_day_ut(req.dob, req.tob, req.utc_offset)
+    utc_offset = compute_utc_offset(req.timezone, req.dob, req.tob)
+    jd_ut = to_julian_day_ut(req.dob, req.tob, utc_offset)
     graha_longitudes = compute_graha_longitudes(jd_ut)
     lagna_longitude = compute_ascendant(jd_ut, req.latitude, req.longitude)
 
@@ -84,7 +96,8 @@ def create_chart(req: BirthRequest) -> ChartResponse:
             pob_label=req.pob_label,
             latitude=req.latitude,
             longitude=req.longitude,
-            utc_offset=req.utc_offset,
+            tz_name=req.timezone,
+            utc_offset=utc_offset,
             chart_json=chart_json,
         )
     )

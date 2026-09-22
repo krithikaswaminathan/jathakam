@@ -17,8 +17,9 @@ const LABELS = {
     taraCategories: { Janma: "Janma", Sampat: "Sampat", Vipat: "Vipat", Kshema: "Kshema", Pratyak: "Pratyak", Sadhaka: "Sadhaka", Vadha: "Vadha", Mitra: "Mitra", "Ati-Mitra": "Ati-Mitra" },
     ui: {
       title: "Jathakam Calculator", name: "Name", gender: "Gender", male: "Male", female: "Female", other: "Other",
-      dob: "Date of Birth", tob: "Time of Birth", pob: "Place of Birth", latitude: "Latitude", longitude: "Longitude",
-      utcOffset: "UTC Offset (hours)", calculate: "Calculate Chart", savedCharts: "Saved Charts", loadChart: "Load",
+      dob: "Date of Birth", tob: "Time of Birth", pob: "Place of Birth", pobPlaceholder: "Start typing a city...",
+      pobNoResults: "No matching places found", pobSelectPrompt: "Please select a place from the list",
+      calculate: "Calculate Chart", savedCharts: "Saved Charts", loadChart: "Load",
       lagna: "Lagna", chartTab: "Chart", dasaTab: "Dasa", yogaTab: "Yogas", taraTab: "Tara Balam",
       expand: "Expand", collapse: "Collapse", noYogas: "No yogas detected in this starter rule set.",
     },
@@ -41,8 +42,9 @@ const LABELS = {
     taraCategories: { Janma: "ஜென்மம்", Sampat: "சம்பத்", Vipat: "விபத்", Kshema: "க்ஷேமம்", Pratyak: "பிரத்யக்", Sadhaka: "சாதகம்", Vadha: "வதம்", Mitra: "மித்ரம்", "Ati-Mitra": "அதிமித்ரம்" },
     ui: {
       title: "ஜாதக கணிப்பான்", name: "பெயர்", gender: "பாலினம்", male: "ஆண்", female: "பெண்", other: "மற்றவை",
-      dob: "பிறந்த தேதி", tob: "பிறந்த நேரம்", pob: "பிறந்த இடம்", latitude: "அட்சரேகை", longitude: "தீர்க்கரேகை",
-      utcOffset: "UTC ஆஃப்செட் (மணி)", calculate: "ஜாதகம் கணிக்க", savedCharts: "சேமித்த ஜாதகங்கள்", loadChart: "ஏற்று",
+      dob: "பிறந்த தேதி", tob: "பிறந்த நேரம்", pob: "பிறந்த இடம்", pobPlaceholder: "ஒரு நகரத்தை தட்டச்சு செய்யவும்...",
+      pobNoResults: "பொருந்தும் இடங்கள் இல்லை", pobSelectPrompt: "பட்டியலில் இருந்து ஒரு இடத்தைத் தேர்ந்தெடுக்கவும்",
+      calculate: "ஜாதகம் கணிக்க", savedCharts: "சேமித்த ஜாதகங்கள்", loadChart: "ஏற்று",
       lagna: "லக்னம்", chartTab: "ஜாதகம்", dasaTab: "தசை", yogaTab: "யோகங்கள்", taraTab: "தாரா பலம்",
       expand: "விரிவாக்கு", collapse: "சுருக்கு", noYogas: "இந்த ஆரம்ப விதிகளில் யோகங்கள் எதுவும் கண்டறியப்படவில்லை.",
     },
