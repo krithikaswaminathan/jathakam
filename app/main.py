@@ -34,6 +34,16 @@ def startup() -> None:
     init_db()
 
 
+@app.middleware("http")
+async def no_cache_static_files(request, call_next):
+    response = await call_next(request)
+    if not request.url.path.startswith("/api"):
+        # Forces the browser to revalidate (ETag/Last-Modified) instead of silently
+        # reusing a stale cached copy of index.html/chart.js/labels.js/style.css.
+        response.headers["Cache-Control"] = "no-cache"
+    return response
+
+
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
