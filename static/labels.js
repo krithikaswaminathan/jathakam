@@ -6,7 +6,7 @@ const LABELS = {
     planetAbbr: { Sun: "Su", Moon: "Mo", Mars: "Ma", Mercury: "Me", Jupiter: "Ju", Venus: "Ve", Saturn: "Sa", Rahu: "Ra", Ketu: "Ke" },
     dasaLords: { Sun: "Sun", Moon: "Moon", Mars: "Mars", Mercury: "Mercury", Jupiter: "Jupiter", Venus: "Venus", Saturn: "Saturn", Rahu: "Rahu", Ketu: "Ketu" },
     dasaLevels: { mahadasa: "Mahadasa", antardasa: "Antardasa", antaram: "Antaram", sookshma: "Sookshma", prana: "Prana" },
-    vargas: { D1: "D1 - Rasi", D2: "D2 - Hora", D3: "D3 - Drekkana", D7: "D7 - Saptamsa", D9: "D9 - Navamsa", D10: "D10 - Dasamsa", D12: "D12 - Dwadasamsa" },
+    vargas: { D1: "D1 - Rasi", D2: "D2 - Hora", D3: "D3 - Drekkana", D7: "D7 - Saptamsa", D9: "D9 - Navamsa", D10: "D10 - Dasamsa", D12: "D12 - Dwadasamsa", D60: "D60 - Shashtiamsa" },
     yogas: {
       "Mangal Dosha": "Mangal Dosha",
       "Gaja Kesari Yoga": "Gaja Kesari Yoga",
@@ -32,7 +32,7 @@ const LABELS = {
     planetAbbr: { Sun: "சூ", Moon: "சந்", Mars: "செ", Mercury: "பு", Jupiter: "கு", Venus: "சு", Saturn: "ச", Rahu: "ரா", Ketu: "கே" },
     dasaLords: { Sun: "சூரியன்", Moon: "சந்திரன்", Mars: "செவ்வாய்", Mercury: "புதன்", Jupiter: "குரு", Venus: "சுக்ரன்", Saturn: "சனி", Rahu: "ராகு", Ketu: "கேது" },
     dasaLevels: { mahadasa: "மகாதசை", antardasa: "அந்தரதசை", antaram: "அந்தரம்", sookshma: "சூட்சுமம்", prana: "பிராணம்" },
-    vargas: { D1: "D1 - ராசி", D2: "D2 - ஹோரை", D3: "D3 - திரேக்காணம்", D7: "D7 - சப்தாம்சம்", D9: "D9 - நவாம்சம்", D10: "D10 - தசாம்சம்", D12: "D12 - துவாதசாம்சம்" },
+    vargas: { D1: "D1 - ராசி", D2: "D2 - ஹோரை", D3: "D3 - திரேக்காணம்", D7: "D7 - சப்தாம்சம்", D9: "D9 - நவாம்சம்", D10: "D10 - தசாம்சம்", D12: "D12 - துவாதசாம்சம்", D60: "D60 - சஷ்டியாம்சம்" },
     yogas: {
       "Mangal Dosha": "செவ்வாய் தோஷம்",
       "Gaja Kesari Yoga": "கஜகேசரி யோகம்",

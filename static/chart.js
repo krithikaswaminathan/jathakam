@@ -27,6 +27,25 @@ function fmtDate(iso) {
   return iso.slice(0, 10);
 }
 
+function readTob24Hour() {
+  const hour12 = parseInt(document.getElementById("tobHour").value, 10);
+  const minute = parseInt(document.getElementById("tobMinute").value, 10);
+  const ampm = document.getElementById("tobAmPm").value;
+  let hour24 = hour12 % 12;
+  if (ampm === "PM") hour24 += 12;
+  return `${String(hour24).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00`;
+}
+
+function populateTobMinutes() {
+  const select = document.getElementById("tobMinute");
+  for (let m = 0; m < 60; m++) {
+    const opt = document.createElement("option");
+    opt.value = String(m);
+    opt.textContent = String(m).padStart(2, "0");
+    select.appendChild(opt);
+  }
+}
+
 // --- Language ---
 
 function applyLanguage() {
@@ -146,7 +165,7 @@ document.getElementById("birthForm").addEventListener("submit", async (e) => {
     name: document.getElementById("name").value,
     gender: document.getElementById("gender").value,
     dob: document.getElementById("dob").value,
-    tob: document.getElementById("tob").value,
+    tob: readTob24Hour(),
     pob_label: state.selectedPlace.label,
     latitude: state.selectedPlace.latitude,
     longitude: state.selectedPlace.longitude,
@@ -355,5 +374,6 @@ function renderTaraBalam() {
 
 // --- Init ---
 
+populateTobMinutes();
 applyLanguage();
 loadSavedCharts();

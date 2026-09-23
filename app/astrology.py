@@ -113,6 +113,14 @@ def d12_dwadasamsa(longitude: float) -> int:
     return (rasi + part) % 12
 
 
+def d60_shashtiamsa(longitude: float) -> int:
+    # Unlike D3/D7/D9/D10, classical BPHS gives no odd/even reversal for D60 —
+    # each sign's 60 amsas (0.5deg each) simply count forward from the sign itself.
+    rasi = longitude_to_rasi(longitude)
+    part = _part_index(longitude, 60)
+    return (rasi + part) % 12
+
+
 VARGA_FUNCTIONS = {
     "D2": d2_hora,
     "D3": d3_drekkana,
@@ -120,6 +128,7 @@ VARGA_FUNCTIONS = {
     "D9": d9_navamsa,
     "D10": d10_dasamsa,
     "D12": d12_dwadasamsa,
+    "D60": d60_shashtiamsa,
 }
 
 

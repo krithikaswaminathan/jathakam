@@ -7,6 +7,7 @@ from app.astrology import (
     d9_navamsa,
     d10_dasamsa,
     d12_dwadasamsa,
+    d60_shashtiamsa,
     longitude_to_nakshatra_pada,
     longitude_to_rasi,
     whole_sign_houses,
@@ -74,3 +75,18 @@ def test_d12_dwadasamsa_uniform():
     assert d12_dwadasamsa(0.0) == 0
     assert d12_dwadasamsa(2.5) == 1
     assert d12_dwadasamsa(30.0) == 1
+
+
+def test_d60_shashtiamsa_uniform_no_reversal():
+    # Each 0.5deg division counts forward from the sign itself, no odd/even flip
+    assert d60_shashtiamsa(0.0) == 0  # Aries, part 0 -> Aries
+    assert d60_shashtiamsa(0.4) == 0  # still part 0 (< 0.5deg)
+    assert d60_shashtiamsa(0.5) == 1  # part 1 -> Taurus
+    assert d60_shashtiamsa(29.9) == 11  # last part (59) of Aries -> Pisces
+    assert d60_shashtiamsa(30.0) == 1  # Taurus, part 0 -> Taurus itself
+    assert d60_shashtiamsa(30.5) == 2  # Taurus, part 1 -> Gemini
+
+
+def test_d60_shashtiamsa_covers_all_60_parts_per_sign():
+    seen_signs = {d60_shashtiamsa(part * 0.5 + 0.01) for part in range(60)}
+    assert seen_signs == set(range(12))
