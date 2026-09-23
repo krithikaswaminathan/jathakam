@@ -32,7 +32,8 @@ function fmtDate(iso) {
 function applyLanguage() {
   const labels = L();
   document.getElementById("pageTitle").textContent = labels.ui.title;
-  document.getElementById("formTitle").textContent = state.chart ? labels.ui.title : "";
+  document.getElementById("pageTagline").textContent = labels.ui.tagline;
+  document.getElementById("lblFormTitle").textContent = labels.ui.newChart;
   document.getElementById("lblName").textContent = labels.ui.name;
   document.getElementById("lblGender").textContent = labels.ui.gender;
   document.getElementById("optMale").textContent = labels.ui.male;

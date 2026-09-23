@@ -25,7 +25,7 @@ from app.tara import compute_tara_balam
 from app.timezone_utils import compute_utc_offset
 from app.yogas import detect_all_yogas
 
-app = FastAPI(title="Jathakam Calculator")
+app = FastAPI(title="Namma Jothidam")
 
 
 @app.on_event("startup")

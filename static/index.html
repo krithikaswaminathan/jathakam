@@ -3,21 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jathakam Calculator</title>
+  <title>Namma Jothidam</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header class="topbar">
-    <h1 id="pageTitle">Jathakam Calculator</h1>
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+        <circle cx="24" cy="24" r="9" fill="currentColor" />
+        <g stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
+          <line x1="24" y1="2" x2="24" y2="10" />
+          <line x1="24" y1="38" x2="24" y2="46" />
+          <line x1="2" y1="24" x2="10" y2="24" />
+          <line x1="38" y1="24" x2="46" y2="24" />
+          <line x1="8.2" y1="8.2" x2="13.8" y2="13.8" />
+          <line x1="34.2" y1="34.2" x2="39.8" y2="39.8" />
+          <line x1="8.2" y1="39.8" x2="13.8" y2="34.2" />
+          <line x1="34.2" y1="13.8" x2="39.8" y2="8.2" />
+        </g>
+      </svg>
+      <div class="brand-text">
+        <h1 id="pageTitle">Namma Jothidam</h1>
+        <p id="pageTagline" class="tagline">your personal jathakam, cast in a moment</p>
+      </div>
+    </div>
     <select id="langToggle">
       <option value="en">English</option>
       <option value="ta">தமிழ்</option>
     </select>
   </header>
+  <div class="kolam-divider" aria-hidden="true"></div>
 
   <main>
     <section id="formSection" class="card">
-      <h2 id="formTitle">New Chart</h2>
+      <h2 id="lblFormTitle">New Chart</h2>
       <form id="birthForm">
         <label><span id="lblName">Name</span><input type="text" id="name" required /></label>
         <label><span id="lblGender">Gender</span>
@@ -75,6 +97,8 @@
       </div>
     </section>
   </main>
+
+  <footer class="site-footer">Namma Jothidam</footer>
 
   <script src="labels.js"></script>
   <script src="chart.js"></script>

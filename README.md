@@ -1,4 +1,4 @@
-# Jathakam Calculator
+# Namma Jothidam
 
 A personal Vedic astrology birth chart (jathakam) calculator: South Indian style rasi chart,
 divisional charts (D2/D3/D7/D9/D10/D12), Vimshottari dasa down to Prana level, Tara Balam,
