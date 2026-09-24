@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from app.astrology import ChartData, VARGA_FUNCTIONS, build_chart, build_varga_chart, longitude_to_rasi, make_graha_position
 from app.dasa import compute_mahadasas, compute_sub_periods
 from app.db import SavedChart, get_chart, init_db, list_charts, save_chart
-from app.ephemeris import compute_ascendant, compute_graha_longitudes, init_ephemeris, to_julian_day_ut
+from app.ephemeris import compute_ascendant, compute_graha_positions, init_ephemeris, to_julian_day_ut
 from app.geocode import search_places
 from app.models import (
     BirthRequest,
@@ -23,7 +23,7 @@ from app.models import (
 )
 from app.tara import compute_tara_balam
 from app.timezone_utils import compute_utc_offset
-from app.upagraha import compute_mandi_longitude
+from app.upagraha import compute_gulika_longitude, compute_mandi_longitude
 from app.yogas import detect_all_yogas
 
 app = FastAPI(title="Namma Jothidam")
@@ -70,12 +70,19 @@ async def geocode(query: str) -> list[PlaceResult]:
 def create_chart(req: BirthRequest) -> ChartResponse:
     utc_offset = compute_utc_offset(req.timezone, req.dob, req.tob)
     jd_ut = to_julian_day_ut(req.dob, req.tob, utc_offset)
-    graha_longitudes = compute_graha_longitudes(jd_ut)
+    graha_positions = compute_graha_positions(jd_ut)
+    graha_longitudes = {name: lon for name, (lon, _speed) in graha_positions.items()}
+    graha_speeds = {name: speed for name, (_lon, speed) in graha_positions.items()}
     lagna_longitude = compute_ascendant(jd_ut, req.latitude, req.longitude)
 
-    d1 = build_chart(lagna_longitude, graha_longitudes)
-    vargas = {varga: build_varga_chart(varga, lagna_longitude, graha_longitudes) for varga in VARGA_FUNCTIONS}
+    d1 = build_chart(lagna_longitude, graha_longitudes, graha_speeds)
+    vargas = {
+        varga: build_varga_chart(varga, lagna_longitude, graha_longitudes, graha_speeds)
+        for varga in VARGA_FUNCTIONS
+    }
 
+    gulika_longitude = compute_gulika_longitude(req.dob, req.tob, utc_offset, req.latitude, req.longitude)
+    gulika = make_graha_position("Gulika", gulika_longitude, longitude_to_rasi(gulika_longitude), d1.lagna_rasi)
     mandi_longitude = compute_mandi_longitude(req.dob, req.tob, utc_offset, req.latitude, req.longitude)
     mandi = make_graha_position("Mandi", mandi_longitude, longitude_to_rasi(mandi_longitude), d1.lagna_rasi)
 
@@ -87,6 +94,7 @@ def create_chart(req: BirthRequest) -> ChartResponse:
 
     d1_out = _to_chart_out(d1)
     vargas_out = {varga: _to_chart_out(c) for varga, c in vargas.items()}
+    gulika_out = GrahaOut(**vars(gulika))
     mandi_out = GrahaOut(**vars(mandi))
     mahadasas_out = [DasaPeriodOut(lord=p.lord, start=p.start, end=p.end, level=p.level) for p in mahadasas]
     tara_out = [TaraEntryOut(nakshatra=e.nakshatra, count=e.count, category=e.category, quality=e.quality) for e in tara_entries]
@@ -96,6 +104,7 @@ def create_chart(req: BirthRequest) -> ChartResponse:
         {
             "d1": d1_out.model_dump(),
             "vargas": {k: v.model_dump() for k, v in vargas_out.items()},
+            "gulika": gulika_out.model_dump(),
             "mandi": mandi_out.model_dump(),
             "mahadasas": [p.model_dump(mode="json") for p in mahadasas_out],
             "tara_balam": [t.model_dump() for t in tara_out],
@@ -127,6 +136,7 @@ def create_chart(req: BirthRequest) -> ChartResponse:
         pob_label=req.pob_label,
         d1=d1_out,
         vargas=vargas_out,
+        gulika=gulika_out,
         mandi=mandi_out,
         mahadasas=mahadasas_out,
         tara_balam=tara_out,
@@ -154,6 +164,7 @@ def get_chart_by_id(chart_id: int) -> ChartResponse:
         pob_label=record.pob_label,
         d1=ChartOut(**data["d1"]),
         vargas={k: ChartOut(**v) for k, v in data["vargas"].items()},
+        gulika=GrahaOut(**data["gulika"]),
         mandi=GrahaOut(**data["mandi"]),
         mahadasas=[DasaPeriodOut(**p) for p in data["mahadasas"]],
         tara_balam=[TaraEntryOut(**t) for t in data["tara_balam"]],

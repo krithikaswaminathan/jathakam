@@ -17,6 +17,7 @@ class GrahaPosition:
     degree_in_sign: float
     rasi_lord: str
     star_lord: str
+    retrograde: bool
 
 
 @dataclass
@@ -49,7 +50,9 @@ def nakshatra_lord(nak_index: int) -> str:
     return DASA_ORDER[nak_index % 9]
 
 
-def make_graha_position(name: str, longitude: float, rasi: int, lagna_rasi: int) -> GrahaPosition:
+def make_graha_position(
+    name: str, longitude: float, rasi: int, lagna_rasi: int, retrograde: bool = False
+) -> GrahaPosition:
     nak, pada = longitude_to_nakshatra_pada(longitude)
     house = house_of_rasi(rasi, lagna_rasi)
     return GrahaPosition(
@@ -62,17 +65,21 @@ def make_graha_position(name: str, longitude: float, rasi: int, lagna_rasi: int)
         degree_in_sign=longitude % 30,
         rasi_lord=RASI_LORDS[rasi],
         star_lord=nakshatra_lord(nak),
+        retrograde=retrograde,
     )
 
 
-def build_chart(lagna_longitude: float, graha_longitudes: dict[str, float]) -> ChartData:
+def build_chart(
+    lagna_longitude: float, graha_longitudes: dict[str, float], graha_speeds: dict[str, float]
+) -> ChartData:
     lagna_rasi = longitude_to_rasi(lagna_longitude)
     houses: dict[int, list[str]] = {h: [] for h in range(1, 13)}
     grahas: dict[str, GrahaPosition] = {}
     for name in GRAHA_NAMES:
         longitude = graha_longitudes[name]
         rasi = longitude_to_rasi(longitude)
-        grahas[name] = make_graha_position(name, longitude, rasi, lagna_rasi)
+        retrograde = graha_speeds[name] < 0
+        grahas[name] = make_graha_position(name, longitude, rasi, lagna_rasi, retrograde)
         houses[house_of_rasi(rasi, lagna_rasi)].append(name)
     return ChartData(lagna_rasi=lagna_rasi, grahas=grahas, houses=houses)
 
@@ -153,7 +160,9 @@ VARGA_FUNCTIONS = {
 }
 
 
-def build_varga_chart(varga: str, lagna_longitude: float, graha_longitudes: dict[str, float]) -> ChartData:
+def build_varga_chart(
+    varga: str, lagna_longitude: float, graha_longitudes: dict[str, float], graha_speeds: dict[str, float]
+) -> ChartData:
     fn = VARGA_FUNCTIONS[varga]
     lagna_rasi = fn(lagna_longitude)
     houses: dict[int, list[str]] = {h: [] for h in range(1, 13)}
@@ -161,6 +170,7 @@ def build_varga_chart(varga: str, lagna_longitude: float, graha_longitudes: dict
     for name in GRAHA_NAMES:
         longitude = graha_longitudes[name]
         rasi = fn(longitude)
-        grahas[name] = make_graha_position(name, longitude, rasi, lagna_rasi)
+        retrograde = graha_speeds[name] < 0
+        grahas[name] = make_graha_position(name, longitude, rasi, lagna_rasi, retrograde)
         houses[house_of_rasi(rasi, lagna_rasi)].append(name)
     return ChartData(lagna_rasi=lagna_rasi, grahas=grahas, houses=houses)

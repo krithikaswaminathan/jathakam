@@ -7,6 +7,11 @@ const GRID_POSITIONS = [
   { rasi: 8, row: 4, col: 1 }, { rasi: 7, row: 4, col: 2 }, { rasi: 6, row: 4, col: 3 }, { rasi: 5, row: 4, col: 4 },
 ];
 
+// Rahu/Ketu (nodes) are essentially always retrograde by nature (Mean Node),
+// so marking them "(R)" would be noise, not information — classical charts
+// only mark it for the 5 planets where it's a noteworthy, temporary state.
+const NODES_NOT_MARKED_RETROGRADE = new Set(["Rahu", "Ketu"]);
+
 let state = {
   lang: "en",
   chart: null,
@@ -262,7 +267,7 @@ function renderGrid() {
 
   const rasiToPlanets = {};
   for (const [name, g] of Object.entries(chart.grahas)) {
-    (rasiToPlanets[g.rasi] = rasiToPlanets[g.rasi] || []).push(name);
+    (rasiToPlanets[g.rasi] = rasiToPlanets[g.rasi] || []).push(g);
   }
 
   for (const pos of GRID_POSITIONS) {
@@ -279,9 +284,10 @@ function renderGrid() {
 
     const planetsDiv = document.createElement("div");
     planetsDiv.className = "planets";
-    for (const p of rasiToPlanets[pos.rasi] || []) {
+    for (const g of rasiToPlanets[pos.rasi] || []) {
       const span = document.createElement("span");
-      span.textContent = labels.planetAbbr[p];
+      const isRetrogradeEligible = g.retrograde && !NODES_NOT_MARKED_RETROGRADE.has(g.name);
+      span.textContent = labels.planetAbbr[g.name] + (isRetrogradeEligible ? " (R)" : "");
       planetsDiv.appendChild(span);
     }
     cell.appendChild(planetsDiv);
@@ -290,7 +296,13 @@ function renderGrid() {
 
   const center = document.createElement("div");
   center.className = "grid-center";
-  center.textContent = labels.vargas[state.varga] || state.varga;
+  const ganeshaImg = document.createElement("img");
+  ganeshaImg.src = "ganesha.svg";
+  ganeshaImg.alt = "";
+  ganeshaImg.className = "ganesha-icon";
+  const vargaLabel = document.createElement("div");
+  vargaLabel.textContent = labels.vargas[state.varga] || state.varga;
+  center.append(ganeshaImg, vargaLabel);
   grid.appendChild(center);
 }
 
@@ -397,11 +409,12 @@ function renderGrahaDetails() {
   tbody.innerHTML = "";
   const labels = L();
 
-  const rows = [...Object.values(state.chart.d1.grahas), state.chart.mandi];
+  const rows = [...Object.values(state.chart.d1.grahas), state.chart.gulika, state.chart.mandi];
   for (const g of rows) {
     const tr = document.createElement("tr");
+    const isRetrogradeEligible = g.retrograde && !NODES_NOT_MARKED_RETROGRADE.has(g.name);
     const cells = [
-      labels.planets[g.name] || g.name,
+      (labels.planets[g.name] || g.name) + (isRetrogradeEligible ? " (R)" : ""),
       labels.rasi[g.rasi],
       labels.planets[g.rasi_lord] || g.rasi_lord,
       formatDMS(g.longitude),

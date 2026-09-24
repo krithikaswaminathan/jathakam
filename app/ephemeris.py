@@ -28,13 +28,19 @@ def to_julian_day_ut(birth_date: date, birth_time: time, utc_offset_hours: float
     return swe.julday(utc_dt.year, utc_dt.month, utc_dt.day, hour_decimal, swe.GREG_CAL)
 
 
-def compute_graha_longitudes(jd_ut: float) -> dict[str, float]:
+def compute_graha_positions(jd_ut: float) -> dict[str, tuple[float, float]]:
+    """Returns {name: (longitude, speed_deg_per_day)}. Negative speed = retrograde."""
     result = {}
     for name, body in BODIES.items():
         xx, _ = swe.calc_ut(jd_ut, body, EPHEMERIS_FLAGS)
-        result[name] = xx[0] % 360
-    result["Ketu"] = (result["Rahu"] + 180.0) % 360
+        result[name] = (xx[0] % 360, xx[3])
+    rahu_lon, rahu_speed = result["Rahu"]
+    result["Ketu"] = ((rahu_lon + 180.0) % 360, rahu_speed)  # Ketu mirrors Rahu's motion
     return result
+
+
+def compute_graha_longitudes(jd_ut: float) -> dict[str, float]:
+    return {name: lon for name, (lon, _speed) in compute_graha_positions(jd_ut).items()}
 
 
 def compute_ascendant(jd_ut: float, lat: float, lon: float) -> float:

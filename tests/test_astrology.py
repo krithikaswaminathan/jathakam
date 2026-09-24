@@ -121,3 +121,11 @@ def test_make_graha_position_computes_lordships_and_degree_in_sign():
     assert pos.rasi_lord == "Venus"
     assert abs(pos.degree_in_sign - 10.0) < 1e-9
     assert pos.star_lord == nakshatra_lord(pos.nakshatra)
+    assert pos.retrograde is False
+
+
+def test_make_graha_position_retrograde_flag():
+    direct = make_graha_position("Mercury", 40.0, longitude_to_rasi(40.0), lagna_rasi=0, retrograde=False)
+    retro = make_graha_position("Mercury", 40.0, longitude_to_rasi(40.0), lagna_rasi=0, retrograde=True)
+    assert direct.retrograde is False
+    assert retro.retrograde is True
