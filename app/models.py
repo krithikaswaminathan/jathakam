@@ -59,6 +59,7 @@ class YogaOut(BaseModel):
     name: str
     description: str
     triggered: bool
+    from_moon: bool = False
 
 
 class ChartResponse(BaseModel):

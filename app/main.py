@@ -110,7 +110,10 @@ def create_chart(req: BirthRequest) -> ChartResponse:
     mandi_out = GrahaOut(**vars(mandi))
     mahadasas_out = [DasaPeriodOut(lord=p.lord, start=p.start, end=p.end, level=p.level) for p in mahadasas]
     tara_out = [TaraEntryOut(nakshatra=e.nakshatra, count=e.count, category=e.category, quality=e.quality) for e in tara_entries]
-    yogas_out = [YogaOut(name=y.name, description=y.description, triggered=y.triggered) for y in yoga_results]
+    yogas_out = [
+        YogaOut(name=y.name, description=y.description, triggered=y.triggered, from_moon=y.from_moon)
+        for y in yoga_results
+    ]
 
     chart_json = json.dumps(
         {

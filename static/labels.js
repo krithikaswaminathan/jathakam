@@ -13,6 +13,8 @@ const LABELS = {
       "Budhaditya Yoga": "Budhaditya Yoga",
       "Chandra-Mangal Yoga": "Chandra-Mangal Yoga",
       "Kemadruma Yoga (simplified)": "Kemadruma Yoga (simplified)",
+      "Ruchaka Yoga": "Ruchaka Yoga", "Bhadra Yoga": "Bhadra Yoga", "Hamsa Yoga": "Hamsa Yoga",
+      "Malavya Yoga": "Malavya Yoga", "Sasa Yoga": "Sasa Yoga",
     },
     taraCategories: { Janma: "Janma", Sampat: "Sampat", Vipat: "Vipat", Kshema: "Kshema", Pratyak: "Pratyak", Sadhaka: "Sadhaka", Vadha: "Vadha", Mitra: "Mitra", "Ati-Mitra": "Ati-Mitra" },
     ui: {
@@ -28,6 +30,7 @@ const LABELS = {
       colPushkara: "Pushkara Navamsa",
       induLagna: "Indu Lagna", induLagnaHint: "Wealth ascendant — sign lord in parentheses",
       reading: "Reading", sources: "Sources", back: "Back",
+      yogaFromMoon: "Not formed from Lagna, but present counting from the Moon.",
     },
   },
   ta: {
@@ -44,6 +47,8 @@ const LABELS = {
       "Budhaditya Yoga": "புதாதித்ய யோகம்",
       "Chandra-Mangal Yoga": "சந்திர-செவ்வாய் யோகம்",
       "Kemadruma Yoga (simplified)": "கேமத்ரும யோகம் (எளிமைப்படுத்தியது)",
+      "Ruchaka Yoga": "ருசக யோகம்", "Bhadra Yoga": "பத்ர யோகம்", "Hamsa Yoga": "ஹம்ச யோகம்",
+      "Malavya Yoga": "மாளவ்ய யோகம்", "Sasa Yoga": "சச யோகம்",
     },
     taraCategories: { Janma: "ஜென்மம்", Sampat: "சம்பத்", Vipat: "விபத்", Kshema: "க்ஷேமம்", Pratyak: "பிரத்யக்", Sadhaka: "சாதகம்", Vadha: "வதம்", Mitra: "மித்ரம்", "Ati-Mitra": "அதிமித்ரம்" },
     ui: {
@@ -59,6 +64,7 @@ const LABELS = {
       colPushkara: "புஷ்கர நவாம்சம்",
       induLagna: "இந்து லக்னம்", induLagnaHint: "செல்வ லக்னம் — அடைப்புக்குறிக்குள் ராசி அதிபதி",
       reading: "வாசிப்பு", sources: "மூலங்கள்", back: "பின்செல்",
+      yogaFromMoon: "லக்னத்திலிருந்து அமையவில்லை, ஆனால் சந்திரனிலிருந்து எண்ணும்போது உள்ளது.",
     },
   },
 };
@@ -71,10 +77,10 @@ const READING_TOPICS = {
       ta: "ஒவ்வொரு ராசிக்கும் அதன் 9 நவாம்சப் பிரிவுகளில் 2 பிரிவுகள் மிகவும் சுபமானவை (“ஊட்டமளிக்கும்”) என்று கருதப்படுகின்றன — ஒரு கிரகம் அங்கு அமைந்தால், அந்த ராசியில் பலவீனமாக இருந்தாலும் நல்ல பலன்களைத் தரும். எந்த இரு பிரிவுகள் என்பது ராசியின் தத்துவத்தைப் பொறுத்தது:",
     },
     table: [
-      { element: { en: "Fire", ta: "அக்னி" }, signs: { en: "Aries, Leo, Sagittarius", ta: "மேஷம், சிம்மம், தனுசு" }, divisions: { en: "7th & 9th", ta: "7, 9" } },
-      { element: { en: "Earth", ta: "பூமி" }, signs: { en: "Taurus, Virgo, Capricorn", ta: "ரிஷபம், கன்னி, மகரம்" }, divisions: { en: "3rd & 5th", ta: "3, 5" } },
-      { element: { en: "Air", ta: "வாயு" }, signs: { en: "Gemini, Libra, Aquarius", ta: "மிதுனம், துலாம், கும்பம்" }, divisions: { en: "6th & 8th", ta: "6, 8" } },
-      { element: { en: "Water", ta: "நீர்" }, signs: { en: "Cancer, Scorpio, Pisces", ta: "கடகம், விருச்சிகம், மீனம்" }, divisions: { en: "1st & 3rd", ta: "1, 3" } },
+      [{ en: "Fire", ta: "அக்னி" }, { en: "Aries, Leo, Sagittarius", ta: "மேஷம், சிம்மம், தனுசு" }, { en: "7th & 9th", ta: "7, 9" }],
+      [{ en: "Earth", ta: "பூமி" }, { en: "Taurus, Virgo, Capricorn", ta: "ரிஷபம், கன்னி, மகரம்" }, { en: "3rd & 5th", ta: "3, 5" }],
+      [{ en: "Air", ta: "வாயு" }, { en: "Gemini, Libra, Aquarius", ta: "மிதுனம், துலாம், கும்பம்" }, { en: "6th & 8th", ta: "6, 8" }],
+      [{ en: "Water", ta: "நீர்" }, { en: "Cancer, Scorpio, Pisces", ta: "கடகம், விருச்சிகம், மீனம்" }, { en: "1st & 3rd", ta: "1, 3" }],
     ],
     note: {
       en: "There's also a finer single-degree “Pushkara Bhaga” within that range that's even more potent, but sources disagree on the exact degrees per sign, so it isn't implemented yet.",
@@ -83,6 +89,32 @@ const READING_TOPICS = {
     sources: [
       { title: "Pushkara — Navamsha and Bhaga (Part One)", url: "https://komilla.com/lib-pushkara-part-one.html" },
       { title: "Pushkara — Navamsha and Bhaga (Part Two)", url: "https://komilla.com/lib-pushkara-part-two.html" },
+    ],
+  },
+  panchaMahapurusha: {
+    title: { en: "Pancha Mahapurusha Yogas", ta: "பஞ்ச மகாபுருஷ யோகங்கள்" },
+    intro: {
+      en: "Five \u201Cgreat person\u201D yogas form when Mars, Mercury, Jupiter, Venus or Saturn is in its own sign or its sign of exaltation and is also in a kendra (the 1st, 4th, 7th or 10th house) from the Lagna. Both conditions must hold together \u2014 dignity alone or a kendra alone does not form the yoga.",
+      ta: "செவ்வாய், புதன், குரு, சுக்ரன் அல்லது சனி தனது சொந்த ராசியிலோ உச்ச ராசியிலோ இருந்து, அதே நேரத்தில் லக்னத்திலிருந்து கேந்திரத்தில் (1, 4, 7, 10) இருந்தால் ஐந்து \u201Cமகாபுருஷ\u201D யோகங்கள் உருவாகின்றன. இரண்டு நிபந்தனைகளும் ஒன்றாக இருக்க வேண்டும்.",
+    },
+    table: [
+      [{ en: "Ruchaka (Mars)", ta: "ருசக (செவ்வாய்)" }, { en: "Aries, Scorpio", ta: "மேஷம், விருச்சிகம்" }, { en: "Capricorn", ta: "மகரம்" }],
+      [{ en: "Bhadra (Mercury)", ta: "பத்ர (புதன்)" }, { en: "Gemini, Virgo", ta: "மிதுனம், கன்னி" }, { en: "Virgo", ta: "கன்னி" }],
+      [{ en: "Hamsa (Jupiter)", ta: "ஹம்ச (குரு)" }, { en: "Sagittarius, Pisces", ta: "தனுசு, மீனம்" }, { en: "Cancer", ta: "கடகம்" }],
+      [{ en: "Malavya (Venus)", ta: "மாளவ்ய (சுக்ரன்)" }, { en: "Taurus, Libra", ta: "ரிஷபம், துலாம்" }, { en: "Pisces", ta: "மீனம்" }],
+      [{ en: "Sasa (Saturn)", ta: "சச (சனி)" }, { en: "Capricorn, Aquarius", ta: "மகரம், கும்பம்" }, { en: "Libra", ta: "துலாம்" }],
+    ],
+    tableHeader: [
+      { en: "Yoga", ta: "யோகம்" }, { en: "Own signs", ta: "சொந்த ராசிகள்" }, { en: "Exaltation", ta: "உச்சம்" },
+    ],
+    note: {
+      en: "The app checks the kendra from the Lagna. If the condition fails from the Lagna but holds counting from the Moon, that is noted separately, since sources differ on whether the Moon counts. Combustion and affliction, which some sources say reduce the yoga's effect, are not modeled.",
+      ta: "இந்தச் செயலி லக்னத்திலிருந்து கேந்திரத்தைச் சோதிக்கிறது. லக்னத்திலிருந்து அமையாமல் சந்திரனிலிருந்து எண்ணும்போது அமைந்தால் அது தனியாகக் குறிப்பிடப்படும். அஸ்தங்கம், பாதிப்பு ஆகியவை கணக்கிடப்படவில்லை.",
+    },
+    sources: [
+      { title: "Pancha Mahapurusha Yoga | GrahaLab", url: "https://grahalab.com/en/learn/yogas/pancha-mahapurusha" },
+      { title: "Pancha Mahapurusha Yogas - Cosmic Insights", url: "https://blog.cosmicinsights.net/pancha-mahapurusha-yogas/" },
+      { title: "Pancha Mahapurusha Yoga \u2014 Vedic Astrology | Satyori", url: "https://satyori.com/jyotish/articles/pancha-mahapurusha-yoga/" },
     ],
   },
 };

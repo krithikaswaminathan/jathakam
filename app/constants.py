@@ -61,6 +61,17 @@ SATURN_NIGHT_SEGMENT = {0: 3, 1: 2, 2: 1, 3: 7, 4: 6, 5: 5, 6: 4}
 # aren't used. Cross-checked against two independent sources before use.
 INDU_KALA = {"Sun": 30, "Moon": 16, "Mars": 6, "Mercury": 8, "Jupiter": 10, "Venus": 12, "Saturn": 1}
 
+# Pancha Mahapurusha yogas: planet -> (yoga name, own-sign rasis, exaltation rasi).
+# The yoga forms when the planet is in its own or exaltation sign AND in a kendra.
+# Rasi indices: 0=Aries..11=Pisces. Cross-checked against three sources.
+PANCHA_MAHAPURUSHA = {
+    "Mars": ("Ruchaka Yoga", {0, 7}, 9),
+    "Mercury": ("Bhadra Yoga", {2, 5}, 5),
+    "Jupiter": ("Hamsa Yoga", {8, 11}, 3),
+    "Venus": ("Malavya Yoga", {1, 6}, 11),
+    "Saturn": ("Sasa Yoga", {9, 10}, 6),
+}
+
 # Pushkara Navamsa: element of each rasi, index 0=Aries..11=Pisces.
 RASI_ELEMENTS = ["fire", "earth", "air", "water"] * 3
 

@@ -99,7 +99,9 @@ function applyLanguage() {
   document.getElementById("induLagnaHint").textContent = labels.ui.induLagnaHint;
   document.getElementById("lblReading").textContent = labels.ui.reading;
   document.getElementById("lblBack").textContent = labels.ui.back;
-  document.getElementById("navPushkaraNavamsa").textContent = READING_TOPICS.pushkaraNavamsa.title[state.lang];
+  document.querySelectorAll(".side-nav-topic").forEach((btn) => {
+    btn.textContent = READING_TOPICS[btn.dataset.topic].title[state.lang];
+  });
   if (!document.getElementById("readingSection").classList.contains("hidden")) {
     renderReadingPage(state.readingTopic);
   }
@@ -232,14 +234,21 @@ document.getElementById("langToggle").addEventListener("change", (e) => {
 // its own full-width page in the main content area, replacing the chart/form
 // view (not squeezed into the narrow sidebar).
 
-document.querySelectorAll(".side-nav-topic").forEach((btn) => {
+for (const key of Object.keys(READING_TOPICS)) {
+  const li = document.createElement("li");
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "side-nav-topic";
+  btn.dataset.topic = key;
   btn.addEventListener("click", () => {
     document.querySelectorAll(".side-nav-topic").forEach((b) => b.classList.remove("active"));
     btn.classList.add("active");
-    state.readingTopic = btn.dataset.topic;
-    showReadingPage(state.readingTopic);
+    state.readingTopic = key;
+    showReadingPage(key);
   });
-});
+  li.appendChild(btn);
+  document.getElementById("sideNavList").appendChild(li);
+}
 
 document.getElementById("readingBack").addEventListener("click", hideReadingPage);
 
@@ -274,15 +283,22 @@ function renderReadingPage(topicKey) {
   if (topic.table) {
     const table = document.createElement("table");
     table.className = "reading-table";
+    if (topic.tableHeader) {
+      const headRow = document.createElement("tr");
+      for (const col of topic.tableHeader) {
+        const th = document.createElement("th");
+        th.textContent = col[state.lang];
+        headRow.appendChild(th);
+      }
+      table.appendChild(headRow);
+    }
     for (const row of topic.table) {
       const tr = document.createElement("tr");
-      const c1 = document.createElement("td");
-      c1.textContent = row.element[state.lang];
-      const c2 = document.createElement("td");
-      c2.textContent = row.signs[state.lang];
-      const c3 = document.createElement("td");
-      c3.textContent = row.divisions[state.lang];
-      tr.append(c1, c2, c3);
+      for (const col of row) {
+        const td = document.createElement("td");
+        td.textContent = col[state.lang];
+        tr.appendChild(td);
+      }
       table.appendChild(tr);
     }
     container.appendChild(table);
@@ -531,6 +547,12 @@ function renderYogas() {
     const desc = document.createElement("div");
     desc.textContent = y.description;
     li.append(title, desc);
+    if (y.from_moon) {
+      const moonNote = document.createElement("div");
+      moonNote.className = "yoga-moon-note";
+      moonNote.textContent = labels.ui.yogaFromMoon;
+      li.appendChild(moonNote);
+    }
     ul.appendChild(li);
   }
   if (state.chart.yogas.every((y) => !y.triggered)) {

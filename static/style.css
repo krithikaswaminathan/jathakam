@@ -125,6 +125,7 @@ body {
 #readingContent { font-size: 0.95rem; color: var(--ink); line-height: 1.6; max-width: 640px; }
 #readingContent p { margin: 0 0 0.9rem; }
 .reading-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.88rem; }
+.reading-table th { text-align: left; padding: 0.5rem 0.6rem; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--ink-soft); border-bottom: 2px solid var(--line); }
 .reading-table td { padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--line); }
 .reading-table td:first-child { font-weight: 600; color: var(--maroon-700); }
 .reading-note { font-size: 0.82rem; color: var(--ink-soft); font-style: italic; }
@@ -304,6 +305,7 @@ tr.current-period .dasa-level-tag { background: var(--gold-500); color: white; }
 #yogaList li { padding: 0.75rem 0.9rem; border-radius: 8px; border-left: 4px solid var(--line); background: var(--cream-50); font-size: 0.88rem; }
 #yogaList li strong { display: block; margin-bottom: 0.2rem; color: var(--ink); }
 #yogaList li div { color: var(--ink-soft); font-size: 0.82rem; }
+.yoga-moon-note { margin-top: 0.3rem; font-size: 0.78rem; color: var(--neutral); font-style: italic; }
 #yogaList li.triggered { border-left-color: var(--good); background: #f1f8f2; }
 
 td.quality-good { color: var(--good); font-weight: 600; }

@@ -1,9 +1,11 @@
 from dataclasses import dataclass
 
 from app.astrology import ChartData
+from app.constants import PANCHA_MAHAPURUSHA
 
 MANGAL_HOUSES = {1, 2, 4, 7, 8, 12}
 KENDRA_OFFSETS = {0, 3, 6, 9}
+KENDRA_HOUSES = {1, 4, 7, 10}
 
 
 @dataclass
@@ -11,6 +13,32 @@ class YogaResult:
     name: str
     description: str
     triggered: bool
+    from_moon: bool = False  # only set for a yoga that fails from Lagna but holds counting from the Moon
+
+
+def _has_dignity(planet: str, rasi: int) -> bool:
+    _, own_signs, exaltation = PANCHA_MAHAPURUSHA[planet]
+    return rasi in own_signs or rasi == exaltation
+
+
+def detect_pancha_mahapurusha(chart: ChartData) -> list[YogaResult]:
+    moon_rasi = chart.grahas["Moon"].rasi
+    results = []
+    for planet, (name, _own, _exalt) in PANCHA_MAHAPURUSHA.items():
+        graha = chart.grahas[planet]
+        dignified = _has_dignity(planet, graha.rasi)
+        from_lagna = dignified and graha.house in KENDRA_HOUSES
+        from_moon = dignified and (((graha.rasi - moon_rasi) % 12) + 1) in KENDRA_HOUSES
+        results.append(
+            YogaResult(
+                name,
+                f"{planet} in its own or exaltation sign and in a kendra (1/4/7/10) from Lagna. "
+                "Full effect also assumes the planet is not combust or badly afflicted (not modeled).",
+                from_lagna,
+                from_moon=from_moon and not from_lagna,
+            )
+        )
+    return results
 
 
 def check_mangal_dosha(chart: ChartData) -> bool:
@@ -55,4 +83,5 @@ YOGA_CHECKS = [
 
 
 def detect_all_yogas(chart: ChartData) -> list[YogaResult]:
-    return [YogaResult(name, desc, fn(chart)) for name, desc, fn in YOGA_CHECKS]
+    basic = [YogaResult(name, desc, fn(chart)) for name, desc, fn in YOGA_CHECKS]
+    return basic + detect_pancha_mahapurusha(chart)
