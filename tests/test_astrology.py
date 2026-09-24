@@ -10,8 +10,11 @@ from app.astrology import (
     d60_shashtiamsa,
     longitude_to_nakshatra_pada,
     longitude_to_rasi,
+    make_graha_position,
+    nakshatra_lord,
     whole_sign_houses,
 )
+from app.constants import DASA_ORDER, RASI_LORDS
 
 
 def test_longitude_to_rasi_boundaries():
@@ -90,3 +93,31 @@ def test_d60_shashtiamsa_uniform_no_reversal():
 def test_d60_shashtiamsa_covers_all_60_parts_per_sign():
     seen_signs = {d60_shashtiamsa(part * 0.5 + 0.01) for part in range(60)}
     assert seen_signs == set(range(12))
+
+
+def test_nakshatra_lord_cycles_dasa_order():
+    for i in range(27):
+        assert nakshatra_lord(i) == DASA_ORDER[i % 9]
+    # spot checks against known lordships
+    assert nakshatra_lord(0) == "Ketu"  # Ashwini
+    assert nakshatra_lord(8) == "Mercury"  # Ashlesha, end of first 9-cycle
+    assert nakshatra_lord(26) == "Mercury"  # Revati, end of third 9-cycle
+
+
+def test_rasi_lords_table_shape():
+    assert len(RASI_LORDS) == 12
+    assert RASI_LORDS[0] == "Mars"  # Aries
+    assert RASI_LORDS[3] == "Moon"  # Cancer
+    assert RASI_LORDS[4] == "Sun"  # Leo
+    assert RASI_LORDS[9] == "Saturn"  # Capricorn
+    # every sign is ruled by one of the 7 classical grahas, never Rahu/Ketu
+    assert set(RASI_LORDS) == {"Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"}
+
+
+def test_make_graha_position_computes_lordships_and_degree_in_sign():
+    # 40 deg = 10 deg into Taurus (rasi 1); Taurus lord is Venus
+    pos = make_graha_position("Mars", 40.0, longitude_to_rasi(40.0), lagna_rasi=0)
+    assert pos.rasi == 1
+    assert pos.rasi_lord == "Venus"
+    assert abs(pos.degree_in_sign - 10.0) < 1e-9
+    assert pos.star_lord == nakshatra_lord(pos.nakshatra)

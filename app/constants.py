@@ -15,6 +15,12 @@ NAKSHATRA_NAMES = [
 
 GRAHA_NAMES = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn", "Rahu", "Ketu"]
 
+# Classical rasi rulers, index 0=Aries..11=Pisces. Rahu/Ketu rule no sign classically.
+RASI_LORDS = [
+    "Mars", "Venus", "Mercury", "Moon", "Sun", "Mercury",
+    "Venus", "Mars", "Jupiter", "Saturn", "Saturn", "Jupiter",
+]
+
 MOVABLE_RASIS = {0, 3, 6, 9}
 FIXED_RASIS = {1, 4, 7, 10}
 DUAL_RASIS = {2, 5, 8, 11}
@@ -43,3 +49,10 @@ TARA_QUALITY = {
     "Janma": "neutral", "Sampat": "good", "Vipat": "bad", "Kshema": "good",
     "Pratyak": "bad", "Sadhaka": "good", "Vadha": "bad", "Mitra": "good", "Ati-Mitra": "good",
 }
+
+# Mandi/Gulika: which of the 8 day (or night) segments belongs to Saturn, by weekday
+# (Sunday=0..Saturday=6). Day table decreases 7->1 across the week; the night table
+# is derived from the classical "5th weekday forward" rule and comes out equally
+# clean (3,2,1,7,6,5,4) — see app/upagraha.py for the full derivation/sources.
+SATURN_DAY_SEGMENT = {0: 7, 1: 6, 2: 5, 3: 4, 4: 3, 5: 2, 6: 1}
+SATURN_NIGHT_SEGMENT = {0: 3, 1: 2, 2: 1, 3: 7, 4: 6, 5: 5, 6: 4}

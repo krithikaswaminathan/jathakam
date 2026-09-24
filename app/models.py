@@ -28,6 +28,9 @@ class GrahaOut(BaseModel):
     house: int
     nakshatra: int
     pada: int
+    degree_in_sign: float
+    rasi_lord: str
+    star_lord: str
 
 
 class ChartOut(BaseModel):
@@ -65,6 +68,7 @@ class ChartResponse(BaseModel):
     pob_label: str
     d1: ChartOut
     vargas: dict[str, ChartOut]
+    mandi: GrahaOut
     mahadasas: list[DasaPeriodOut]
     tara_balam: list[TaraEntryOut]
     yogas: list[YogaOut]

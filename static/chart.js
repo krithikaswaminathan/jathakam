@@ -27,6 +27,16 @@ function fmtDate(iso) {
   return iso.slice(0, 10);
 }
 
+function formatDMS(deg) {
+  let d = Math.floor(deg);
+  let mFull = (deg - d) * 60;
+  let m = Math.floor(mFull);
+  let s = Math.round((mFull - m) * 60);
+  if (s === 60) { s = 0; m += 1; }
+  if (m === 60) { m = 0; d += 1; }
+  return `${d}°${String(m).padStart(2, "0")}'${String(s).padStart(2, "0")}"`;
+}
+
 function readTob24Hour() {
   const hour12 = parseInt(document.getElementById("tobHour").value, 10);
   const minute = parseInt(document.getElementById("tobMinute").value, 10);
@@ -68,6 +78,15 @@ function applyLanguage() {
   document.getElementById("lblDasaTab").textContent = labels.ui.dasaTab;
   document.getElementById("lblYogaTab").textContent = labels.ui.yogaTab;
   document.getElementById("lblTaraTab").textContent = labels.ui.taraTab;
+  document.getElementById("lblDetailsTab").textContent = labels.ui.detailsTab;
+  document.getElementById("thPlanet").textContent = labels.ui.colPlanet;
+  document.getElementById("thRasi").textContent = labels.ui.colRasi;
+  document.getElementById("thRasiLord").textContent = labels.ui.colRasiLord;
+  document.getElementById("thAbsDeg").textContent = labels.ui.colAbsDeg;
+  document.getElementById("thDegInSign").textContent = labels.ui.colDegInSign;
+  document.getElementById("thStar").textContent = labels.ui.colStar;
+  document.getElementById("thPada").textContent = labels.ui.colPada;
+  document.getElementById("thStarLord").textContent = labels.ui.colStarLord;
 
   renderSavedList(state.savedCharts || []);
   if (state.chart) renderAll();
@@ -211,6 +230,7 @@ function renderAll() {
   renderDasaTable();
   renderYogas();
   renderTaraBalam();
+  renderGrahaDetails();
 }
 
 function renderVargaSelect() {
@@ -368,6 +388,33 @@ function renderTaraBalam() {
     c4.textContent = t.quality;
     c4.className = "quality-" + t.quality;
     tr.append(c1, c2, c3, c4);
+    tbody.appendChild(tr);
+  }
+}
+
+function renderGrahaDetails() {
+  const tbody = document.getElementById("detailsBody");
+  tbody.innerHTML = "";
+  const labels = L();
+
+  const rows = [...Object.values(state.chart.d1.grahas), state.chart.mandi];
+  for (const g of rows) {
+    const tr = document.createElement("tr");
+    const cells = [
+      labels.planets[g.name] || g.name,
+      labels.rasi[g.rasi],
+      labels.planets[g.rasi_lord] || g.rasi_lord,
+      formatDMS(g.longitude),
+      formatDMS(g.degree_in_sign),
+      labels.nakshatra[g.nakshatra],
+      g.pada,
+      labels.planets[g.star_lord] || g.star_lord,
+    ];
+    for (const value of cells) {
+      const td = document.createElement("td");
+      td.textContent = value;
+      tr.appendChild(td);
+    }
     tbody.appendChild(tr);
   }
 }

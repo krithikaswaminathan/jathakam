@@ -86,6 +86,7 @@
         <button class="tab-btn" data-tab="dasaTab" id="lblDasaTab">Dasa</button>
         <button class="tab-btn" data-tab="yogaTab" id="lblYogaTab">Yogas</button>
         <button class="tab-btn" data-tab="taraTab" id="lblTaraTab">Tara Balam</button>
+        <button class="tab-btn" data-tab="detailsTab" id="lblDetailsTab">Graha Details</button>
       </div>
 
       <div id="chartTab" class="tab-panel active">
@@ -108,6 +109,19 @@
         <table id="taraTable">
           <thead><tr><th>#</th><th>Nakshatra</th><th>Category</th><th>Quality</th></tr></thead>
           <tbody id="taraBody"></tbody>
+        </table>
+      </div>
+
+      <div id="detailsTab" class="tab-panel">
+        <table id="detailsTable">
+          <thead>
+            <tr>
+              <th id="thPlanet">Planet</th><th id="thRasi">Rasi</th><th id="thRasiLord">Rasi Lord</th>
+              <th id="thAbsDeg">Absolute Degree</th><th id="thDegInSign">Degree in Sign</th>
+              <th id="thStar">Star</th><th id="thPada">Pada</th><th id="thStarLord">Star Lord</th>
+            </tr>
+          </thead>
+          <tbody id="detailsBody"></tbody>
         </table>
       </div>
     </section>

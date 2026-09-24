@@ -4,7 +4,7 @@ from datetime import datetime
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 
-from app.astrology import ChartData, VARGA_FUNCTIONS, build_chart, build_varga_chart
+from app.astrology import ChartData, VARGA_FUNCTIONS, build_chart, build_varga_chart, longitude_to_rasi, make_graha_position
 from app.dasa import compute_mahadasas, compute_sub_periods
 from app.db import SavedChart, get_chart, init_db, list_charts, save_chart
 from app.ephemeris import compute_ascendant, compute_graha_longitudes, init_ephemeris, to_julian_day_ut
@@ -23,6 +23,7 @@ from app.models import (
 )
 from app.tara import compute_tara_balam
 from app.timezone_utils import compute_utc_offset
+from app.upagraha import compute_mandi_longitude
 from app.yogas import detect_all_yogas
 
 app = FastAPI(title="Namma Jothidam")
@@ -75,6 +76,9 @@ def create_chart(req: BirthRequest) -> ChartResponse:
     d1 = build_chart(lagna_longitude, graha_longitudes)
     vargas = {varga: build_varga_chart(varga, lagna_longitude, graha_longitudes) for varga in VARGA_FUNCTIONS}
 
+    mandi_longitude = compute_mandi_longitude(req.dob, req.tob, utc_offset, req.latitude, req.longitude)
+    mandi = make_graha_position("Mandi", mandi_longitude, longitude_to_rasi(mandi_longitude), d1.lagna_rasi)
+
     birth_dt = datetime.combine(req.dob, req.tob)
     mahadasas = compute_mahadasas(birth_dt, graha_longitudes["Moon"])
 
@@ -83,6 +87,7 @@ def create_chart(req: BirthRequest) -> ChartResponse:
 
     d1_out = _to_chart_out(d1)
     vargas_out = {varga: _to_chart_out(c) for varga, c in vargas.items()}
+    mandi_out = GrahaOut(**vars(mandi))
     mahadasas_out = [DasaPeriodOut(lord=p.lord, start=p.start, end=p.end, level=p.level) for p in mahadasas]
     tara_out = [TaraEntryOut(nakshatra=e.nakshatra, count=e.count, category=e.category, quality=e.quality) for e in tara_entries]
     yogas_out = [YogaOut(name=y.name, description=y.description, triggered=y.triggered) for y in yoga_results]
@@ -91,6 +96,7 @@ def create_chart(req: BirthRequest) -> ChartResponse:
         {
             "d1": d1_out.model_dump(),
             "vargas": {k: v.model_dump() for k, v in vargas_out.items()},
+            "mandi": mandi_out.model_dump(),
             "mahadasas": [p.model_dump(mode="json") for p in mahadasas_out],
             "tara_balam": [t.model_dump() for t in tara_out],
             "yogas": [y.model_dump() for y in yogas_out],
@@ -121,6 +127,7 @@ def create_chart(req: BirthRequest) -> ChartResponse:
         pob_label=req.pob_label,
         d1=d1_out,
         vargas=vargas_out,
+        mandi=mandi_out,
         mahadasas=mahadasas_out,
         tara_balam=tara_out,
         yogas=yogas_out,
@@ -147,6 +154,7 @@ def get_chart_by_id(chart_id: int) -> ChartResponse:
         pob_label=record.pob_label,
         d1=ChartOut(**data["d1"]),
         vargas={k: ChartOut(**v) for k, v in data["vargas"].items()},
+        mandi=GrahaOut(**data["mandi"]),
         mahadasas=[DasaPeriodOut(**p) for p in data["mahadasas"]],
         tara_balam=[TaraEntryOut(**t) for t in data["tara_balam"]],
         yogas=[YogaOut(**y) for y in data["yogas"]],
