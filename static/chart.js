@@ -138,9 +138,30 @@ function renderSavedList(list) {
     const btn = document.createElement("button");
     btn.textContent = L().ui.loadChart;
     btn.onclick = () => loadChart(c.id);
-    li.append(span, btn);
+    const del = document.createElement("button");
+    del.textContent = L().ui.deleteChart;
+    del.className = "delete-btn";
+    del.onclick = () => deleteSavedChart(c);
+    const actions = document.createElement("span");
+    actions.className = "saved-actions";
+    actions.append(btn, del);
+    li.append(span, actions);
     ul.appendChild(li);
   }
+}
+
+async function deleteSavedChart(c) {
+  if (!window.confirm(`${c.name} \u2014 ${c.dob}\n\n${L().ui.deleteConfirm}`)) return;
+  const res = await fetch(`/api/charts/${c.id}`, { method: "DELETE" });
+  if (!res.ok && res.status !== 404) {
+    alert("Could not delete chart: " + (await res.text()));
+    return;
+  }
+  if (state.chart && state.chart.id === c.id) {
+    state.chart = null;
+    document.getElementById("resultSection").classList.add("hidden");
+  }
+  await loadSavedCharts();
 }
 
 async function loadChart(id) {

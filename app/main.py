@@ -1,4 +1,3 @@
-import json
 from datetime import datetime
 
 from fastapi import FastAPI, HTTPException
@@ -15,7 +14,7 @@ from app.astrology import (
 )
 from app.constants import RASI_LORDS
 from app.dasa import compute_mahadasas, compute_sub_periods
-from app.db import SavedChart, get_chart, init_db, list_charts, save_chart
+from app.db import SavedChart, delete_chart, get_chart, init_db, list_charts, save_chart
 from app.dignity import compute_dignities
 from app.ephemeris import compute_ascendant, compute_graha_positions, init_ephemeris, to_julian_day_ut
 from app.geocode import search_places
@@ -77,14 +76,18 @@ async def geocode(query: str) -> list[PlaceResult]:
     return [PlaceResult(**r) for r in results]
 
 
-@app.post("/api/chart", response_model=ChartResponse)
-def create_chart(req: BirthRequest) -> ChartResponse:
-    utc_offset = compute_utc_offset(req.timezone, req.dob, req.tob)
-    jd_ut = to_julian_day_ut(req.dob, req.tob, utc_offset)
+def _build_chart_response(
+    chart_id: int, name: str, gender: str, dob, tob, pob_label: str, latitude: float, longitude: float, timezone: str
+) -> ChartResponse:
+    """Everything shown for a chart, computed from birth details alone. Saved charts
+    are recomputed on load (not read back from stored results), so they always
+    include every feature added since they were saved."""
+    utc_offset = compute_utc_offset(timezone, dob, tob)
+    jd_ut = to_julian_day_ut(dob, tob, utc_offset)
     graha_positions = compute_graha_positions(jd_ut)
-    graha_longitudes = {name: lon for name, (lon, _speed) in graha_positions.items()}
-    graha_speeds = {name: speed for name, (_lon, speed) in graha_positions.items()}
-    lagna_longitude = compute_ascendant(jd_ut, req.latitude, req.longitude)
+    graha_longitudes = {n: lon for n, (lon, _speed) in graha_positions.items()}
+    graha_speeds = {n: speed for n, (_lon, speed) in graha_positions.items()}
+    lagna_longitude = compute_ascendant(jd_ut, latitude, longitude)
 
     d1 = build_chart(lagna_longitude, graha_longitudes, graha_speeds)
     vargas = {
@@ -92,48 +95,46 @@ def create_chart(req: BirthRequest) -> ChartResponse:
         for varga in VARGA_FUNCTIONS
     }
 
-    gulika_longitude = compute_gulika_longitude(req.dob, req.tob, utc_offset, req.latitude, req.longitude)
+    gulika_longitude = compute_gulika_longitude(dob, tob, utc_offset, latitude, longitude)
     gulika = make_graha_position("Gulika", gulika_longitude, longitude_to_rasi(gulika_longitude), d1.lagna_rasi)
-    mandi_longitude = compute_mandi_longitude(req.dob, req.tob, utc_offset, req.latitude, req.longitude)
+    mandi_longitude = compute_mandi_longitude(dob, tob, utc_offset, latitude, longitude)
     mandi = make_graha_position("Mandi", mandi_longitude, longitude_to_rasi(mandi_longitude), d1.lagna_rasi)
 
     indu_lagna_rasi = compute_indu_lagna(d1.lagna_rasi, d1.grahas["Moon"].rasi)
-    indu_lagna_lord = RASI_LORDS[indu_lagna_rasi]
-
-    birth_dt = datetime.combine(req.dob, req.tob)
-    mahadasas = compute_mahadasas(birth_dt, graha_longitudes["Moon"])
-
+    mahadasas = compute_mahadasas(datetime.combine(dob, tob), graha_longitudes["Moon"])
     tara_entries = compute_tara_balam(d1.grahas["Moon"].nakshatra)
-    yoga_results = detect_all_yogas(d1)
-    dignities = compute_dignities(d1)
 
-    dignities_out = [DignityOut(**vars(e)) for e in dignities]
-    d1_out = _to_chart_out(d1)
-    vargas_out = {varga: _to_chart_out(c) for varga, c in vargas.items()}
-    gulika_out = GrahaOut(**vars(gulika))
-    mandi_out = GrahaOut(**vars(mandi))
-    mahadasas_out = [DasaPeriodOut(lord=p.lord, start=p.start, end=p.end, level=p.level) for p in mahadasas]
-    tara_out = [TaraEntryOut(nakshatra=e.nakshatra, count=e.count, category=e.category, quality=e.quality) for e in tara_entries]
-    yogas_out = [
-        YogaOut(name=y.name, description=y.description, triggered=y.triggered, from_moon=y.from_moon)
-        for y in yoga_results
-    ]
-
-    chart_json = json.dumps(
-        {
-            "d1": d1_out.model_dump(),
-            "vargas": {k: v.model_dump() for k, v in vargas_out.items()},
-            "gulika": gulika_out.model_dump(),
-            "mandi": mandi_out.model_dump(),
-            "indu_lagna_rasi": indu_lagna_rasi,
-            "indu_lagna_lord": indu_lagna_lord,
-            "mahadasas": [p.model_dump(mode="json") for p in mahadasas_out],
-            "tara_balam": [t.model_dump() for t in tara_out],
-            "yogas": [y.model_dump() for y in yogas_out],
-            "dignities": [e.model_dump() for e in dignities_out],
-        }
+    return ChartResponse(
+        id=chart_id,
+        name=name,
+        gender=gender,
+        dob=dob,
+        tob=tob,
+        pob_label=pob_label,
+        d1=_to_chart_out(d1),
+        vargas={varga: _to_chart_out(c) for varga, c in vargas.items()},
+        gulika=GrahaOut(**vars(gulika)),
+        mandi=GrahaOut(**vars(mandi)),
+        indu_lagna_rasi=indu_lagna_rasi,
+        indu_lagna_lord=RASI_LORDS[indu_lagna_rasi],
+        mahadasas=[DasaPeriodOut(lord=p.lord, start=p.start, end=p.end, level=p.level) for p in mahadasas],
+        tara_balam=[
+            TaraEntryOut(nakshatra=e.nakshatra, count=e.count, category=e.category, quality=e.quality)
+            for e in tara_entries
+        ],
+        yogas=[
+            YogaOut(name=y.name, description=y.description, triggered=y.triggered, from_moon=y.from_moon)
+            for y in detect_all_yogas(d1)
+        ],
+        dignities=[DignityOut(**vars(e)) for e in compute_dignities(d1)],
     )
 
+
+@app.post("/api/chart", response_model=ChartResponse)
+def create_chart(req: BirthRequest) -> ChartResponse:
+    response = _build_chart_response(
+        0, req.name, req.gender, req.dob, req.tob, req.pob_label, req.latitude, req.longitude, req.timezone
+    )
     record = save_chart(
         SavedChart(
             name=req.name,
@@ -144,29 +145,12 @@ def create_chart(req: BirthRequest) -> ChartResponse:
             latitude=req.latitude,
             longitude=req.longitude,
             tz_name=req.timezone,
-            utc_offset=utc_offset,
-            chart_json=chart_json,
+            utc_offset=compute_utc_offset(req.timezone, req.dob, req.tob),
+            chart_json="{}",  # results are recomputed on load; kept only because the column is required
         )
     )
-
-    return ChartResponse(
-        id=record.id,
-        name=req.name,
-        gender=req.gender,
-        dob=req.dob,
-        tob=req.tob,
-        pob_label=req.pob_label,
-        d1=d1_out,
-        vargas=vargas_out,
-        gulika=gulika_out,
-        mandi=mandi_out,
-        indu_lagna_rasi=indu_lagna_rasi,
-        indu_lagna_lord=indu_lagna_lord,
-        mahadasas=mahadasas_out,
-        tara_balam=tara_out,
-        yogas=yogas_out,
-        dignities=dignities_out,
-    )
+    response.id = record.id
+    return response
 
 
 @app.get("/api/charts", response_model=list[ChartSummary])
@@ -179,25 +163,16 @@ def get_chart_by_id(chart_id: int) -> ChartResponse:
     record = get_chart(chart_id)
     if record is None:
         raise HTTPException(status_code=404, detail="Chart not found")
-    data = json.loads(record.chart_json)
-    return ChartResponse(
-        id=record.id,
-        name=record.name,
-        gender=record.gender,
-        dob=record.dob,
-        tob=record.tob,
-        pob_label=record.pob_label,
-        d1=ChartOut(**data["d1"]),
-        vargas={k: ChartOut(**v) for k, v in data["vargas"].items()},
-        gulika=GrahaOut(**data["gulika"]),
-        mandi=GrahaOut(**data["mandi"]),
-        indu_lagna_rasi=data["indu_lagna_rasi"],
-        indu_lagna_lord=data["indu_lagna_lord"],
-        mahadasas=[DasaPeriodOut(**p) for p in data["mahadasas"]],
-        tara_balam=[TaraEntryOut(**t) for t in data["tara_balam"]],
-        yogas=[YogaOut(**y) for y in data["yogas"]],
-        dignities=[DignityOut(**e) for e in data.get("dignities", [])],
+    return _build_chart_response(
+        record.id, record.name, record.gender, record.dob, record.tob, record.pob_label,
+        record.latitude, record.longitude, record.tz_name,
     )
+
+
+@app.delete("/api/charts/{chart_id}", status_code=204)
+def remove_chart(chart_id: int) -> None:
+    if not delete_chart(chart_id):
+        raise HTTPException(status_code=404, detail="Chart not found")
 
 
 @app.post("/api/dasa/expand", response_model=list[DasaPeriodOut])

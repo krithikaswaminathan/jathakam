@@ -49,3 +49,13 @@ def list_charts() -> list[SavedChart]:
 def get_chart(chart_id: int) -> SavedChart | None:
     with Session(get_engine()) as session:
         return session.get(SavedChart, chart_id)
+
+
+def delete_chart(chart_id: int) -> bool:
+    with Session(get_engine()) as session:
+        chart = session.get(SavedChart, chart_id)
+        if chart is None:
+            return False
+        session.delete(chart)
+        session.commit()
+        return True
