@@ -301,12 +301,19 @@ tr.current-period td span:first-child { font-weight: 700; color: var(--maroon-70
 }
 tr.current-period .dasa-level-tag { background: var(--gold-500); color: white; }
 
+.yoga-summary { margin-bottom: 0.9rem; padding: 0.65rem 0.9rem; border-radius: 8px; background: var(--cream-100); font-size: 0.9rem; font-weight: 600; color: var(--maroon-700); }
 #yogaList { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
 #yogaList li { padding: 0.75rem 0.9rem; border-radius: 8px; border-left: 4px solid var(--line); background: var(--cream-50); font-size: 0.88rem; }
-#yogaList li strong { display: block; margin-bottom: 0.2rem; color: var(--ink); }
-#yogaList li div { color: var(--ink-soft); font-size: 0.82rem; }
-.yoga-moon-note { margin-top: 0.3rem; font-size: 0.78rem; color: var(--neutral); font-style: italic; }
+.yoga-head { display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; margin-bottom: 0.2rem; }
+.yoga-head strong { color: var(--ink); }
+.yoga-desc { color: var(--ink-soft); font-size: 0.82rem; }
+.yoga-tag { flex-shrink: 0; padding: 0.05rem 0.5rem; border-radius: 999px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em; }
+.yoga-tag-absent { background: var(--cream-100); color: var(--ink-soft); }
+.yoga-tag-present { background: var(--good); color: white; }
 #yogaList li.triggered { border-left-color: var(--good); background: #f1f8f2; }
+#yogaList li.triggered-warning { border-left-color: var(--bad); background: #fbf0ed; }
+#yogaList li.triggered-warning .yoga-tag-present { background: var(--bad); }
+.yoga-moon-note { margin-top: 0.3rem; font-size: 0.78rem; color: var(--neutral); font-style: italic; }
 
 td.quality-good { color: var(--good); font-weight: 600; }
 td.quality-bad { color: var(--bad); font-weight: 600; }

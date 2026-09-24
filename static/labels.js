@@ -31,6 +31,7 @@ const LABELS = {
       induLagna: "Indu Lagna", induLagnaHint: "Wealth ascendant — sign lord in parentheses",
       reading: "Reading", sources: "Sources", back: "Back",
       yogaFromMoon: "Not formed from Lagna, but present counting from the Moon.",
+      yogaPresent: "Present", yogaAbsent: "Not present", yogaSummary: "Present in this chart",
     },
   },
   ta: {
@@ -65,6 +66,7 @@ const LABELS = {
       induLagna: "இந்து லக்னம்", induLagnaHint: "செல்வ லக்னம் — அடைப்புக்குறிக்குள் ராசி அதிபதி",
       reading: "வாசிப்பு", sources: "மூலங்கள்", back: "பின்செல்",
       yogaFromMoon: "லக்னத்திலிருந்து அமையவில்லை, ஆனால் சந்திரனிலிருந்து எண்ணும்போது உள்ளது.",
+      yogaPresent: "உள்ளது", yogaAbsent: "இல்லை", yogaSummary: "இந்த ஜாதகத்தில் உள்ளவை",
     },
   },
 };

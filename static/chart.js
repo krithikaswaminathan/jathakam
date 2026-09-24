@@ -12,6 +12,8 @@ const GRID_POSITIONS = [
 // only mark it for the 5 planets where it's a noteworthy, temporary state.
 const NODES_NOT_MARKED_RETROGRADE = new Set(["Rahu", "Ketu"]);
 const UPAGRAHA_NAMES = new Set(["Gulika", "Mandi"]);
+// Inauspicious combinations: shown in a warning colour when present, not the green used for yogas.
+const INAUSPICIOUS_YOGAS = new Set(["Mangal Dosha", "Kemadruma Yoga (simplified)"]);
 
 let state = {
   lang: "en",
@@ -539,14 +541,26 @@ function renderYogas() {
   const ul = document.getElementById("yogaList");
   ul.innerHTML = "";
   const labels = L();
+  const present = [];
   for (const y of state.chart.yogas) {
+    const displayName = labels.yogas[y.name] || y.name;
     const li = document.createElement("li");
-    if (y.triggered) li.classList.add("triggered");
+    if (y.triggered) {
+      li.classList.add(INAUSPICIOUS_YOGAS.has(y.name) ? "triggered-warning" : "triggered");
+      present.push(displayName);
+    }
+    const head = document.createElement("div");
+    head.className = "yoga-head";
     const title = document.createElement("strong");
-    title.textContent = labels.yogas[y.name] || y.name;
+    title.textContent = displayName;
+    const tag = document.createElement("span");
+    tag.className = "yoga-tag " + (y.triggered ? "yoga-tag-present" : "yoga-tag-absent");
+    tag.textContent = y.triggered ? labels.ui.yogaPresent : labels.ui.yogaAbsent;
+    head.append(title, tag);
     const desc = document.createElement("div");
+    desc.className = "yoga-desc";
     desc.textContent = y.description;
-    li.append(title, desc);
+    li.append(head, desc);
     if (y.from_moon) {
       const moonNote = document.createElement("div");
       moonNote.className = "yoga-moon-note";
@@ -555,11 +569,9 @@ function renderYogas() {
     }
     ul.appendChild(li);
   }
-  if (state.chart.yogas.every((y) => !y.triggered)) {
-    const note = document.createElement("li");
-    note.textContent = labels.ui.noYogas;
-    ul.appendChild(note);
-  }
+  document.getElementById("yogaSummary").textContent = present.length
+    ? `${labels.ui.yogaSummary}: ${present.join(", ")}`
+    : labels.ui.noYogas;
 }
 
 function renderTaraBalam() {
