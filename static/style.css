@@ -226,7 +226,19 @@ th { text-align: left; padding: 0.5rem 0.7rem; font-size: 0.78rem; text-transfor
 td { text-align: left; padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--line); font-size: 0.88rem; }
 tr.expandable { cursor: pointer; transition: background 0.12s; }
 tr.expandable:hover { background: var(--cream-50); }
-tr.child-row td:first-child { padding-left: 1.75rem; color: var(--ink-soft); }
+tr.child-row td:first-child { padding-left: calc(1rem + var(--dasa-depth, 1) * 1.1rem); color: var(--ink-soft); border-left: 2px solid var(--line); }
+
+tr.current-period { background: var(--gold-100); }
+tr.current-period:hover { background: var(--gold-100); }
+tr.current-period td:first-child { border-left-color: var(--gold-500); }
+tr.current-period td span:first-child { font-weight: 700; color: var(--maroon-700); }
+
+.dasa-level-tag {
+  display: inline-block; margin-left: 0.5rem; padding: 0.05rem 0.4rem;
+  border-radius: 999px; background: var(--cream-100); color: var(--ink-soft);
+  font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.02em;
+}
+tr.current-period .dasa-level-tag { background: var(--gold-500); color: white; }
 
 #yogaList { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
 #yogaList li { padding: 0.75rem 0.9rem; border-radius: 8px; border-left: 4px solid var(--line); background: var(--cream-50); font-size: 0.88rem; }

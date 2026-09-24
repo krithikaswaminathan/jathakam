@@ -324,21 +324,74 @@ function renderGrid() {
   grid.appendChild(center);
 }
 
+function isCurrentPeriod(period) {
+  const now = new Date();
+  return now >= new Date(period.start) && now < new Date(period.end);
+}
+
+async function fetchDasaChildren(period, nextLevel) {
+  const res = await fetch("/api/dasa/expand", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ lord: period.lord, start: period.start, end: period.end, next_level: nextLevel }),
+  });
+  return res.json();
+}
+
+async function expandRow(tr, period, depth) {
+  const next = nextDasaLevel(period.level);
+  if (!next || tr.dataset.expanded === "true") return [];
+  const children = await fetchDasaChildren(period, next);
+  let anchor = tr;
+  const childRows = [];
+  for (const child of children) {
+    const childRow = makeDasaRow(child, depth + 1);
+    childRow.dataset.parentDepth = depth;
+    anchor.after(childRow);
+    anchor = childRow;
+    childRows.push({ row: childRow, period: child });
+  }
+  tr.dataset.expanded = "true";
+  return childRows;
+}
+
 function renderDasaTable() {
   const tbody = document.getElementById("dasaBody");
   tbody.innerHTML = "";
+  const rows = [];
   for (const period of state.chart.mahadasas) {
-    tbody.appendChild(makeDasaRow(period, 0));
+    const tr = makeDasaRow(period, 0);
+    tbody.appendChild(tr);
+    rows.push({ row: tr, period });
   }
+  autoExpandCurrentChain(rows, 0);
+}
+
+// Reveals the currently-active Mahadasa -> Antardasa -> Antaram (Pratyantardasa)
+// chain automatically, so the periods that matter right now don't require clicking.
+async function autoExpandCurrentChain(rows, depth) {
+  if (depth >= 2) return; // stop after Antaram (mahadasa=0, antardasa=1, antaram=2)
+  const current = rows.find(({ period }) => isCurrentPeriod(period));
+  if (!current) return;
+  current.row.classList.add("current-period");
+  const childRows = await expandRow(current.row, current.period, depth);
+  await autoExpandCurrentChain(childRows, depth + 1);
 }
 
 function makeDasaRow(period, depth) {
   const tr = document.createElement("tr");
   tr.className = depth === 0 ? "expandable" : `expandable child-row depth-${depth}`;
   tr.dataset.expanded = "false";
+  if (depth > 0) tr.style.setProperty("--dasa-depth", depth);
+  if (isCurrentPeriod(period)) tr.classList.add("current-period");
 
   const lordTd = document.createElement("td");
-  lordTd.textContent = "  ".repeat(depth) + (L().dasaLords[period.lord] || period.lord);
+  const lordSpan = document.createElement("span");
+  lordSpan.textContent = L().dasaLords[period.lord] || period.lord;
+  const levelSpan = document.createElement("span");
+  levelSpan.className = "dasa-level-tag";
+  levelSpan.textContent = L().dasaLevels[period.level] || period.level;
+  lordTd.append(lordSpan, levelSpan);
   const startTd = document.createElement("td");
   startTd.textContent = fmtDate(period.start);
   const endTd = document.createElement("td");
@@ -353,20 +406,7 @@ function makeDasaRow(period, depth) {
         tr.dataset.expanded = "false";
         return;
       }
-      const res = await fetch("/api/dasa/expand", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lord: period.lord, start: period.start, end: period.end, next_level: next }),
-      });
-      const children = await res.json();
-      let anchor = tr;
-      for (const child of children) {
-        const childRow = makeDasaRow(child, depth + 1);
-        childRow.dataset.parentDepth = depth;
-        anchor.after(childRow);
-        anchor = childRow;
-      }
-      tr.dataset.expanded = "true";
+      await expandRow(tr, period, depth);
     });
   }
   return tr;
