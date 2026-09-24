@@ -100,6 +100,7 @@
         <button class="tab-btn" data-tab="yogaTab" id="lblYogaTab">Yogas</button>
         <button class="tab-btn" data-tab="taraTab" id="lblTaraTab">Tara Balam</button>
         <button class="tab-btn" data-tab="detailsTab" id="lblDetailsTab">Graha Details</button>
+        <button class="tab-btn" data-tab="dignityTab" id="lblDignityTab">Ucham / Neecham</button>
       </div>
 
       <div id="chartTab" class="tab-panel active">
@@ -142,6 +143,18 @@
           </thead>
           <tbody id="detailsBody"></tbody>
         </table>
+      </div>
+
+      <div id="dignityTab" class="tab-panel">
+        <div id="dignitySummary" class="yoga-summary"></div>
+        <table id="dignityTable" class="hidden">
+          <thead><tr>
+            <th id="thDgPlanet">Planet</th><th id="thDgState">State</th><th id="thDgRasi">Rasi</th>
+            <th id="thDgDeg">Degree in Sign</th><th id="thDgDeep">Deep point</th><th id="thDgDist">From deep point</th>
+          </tr></thead>
+          <tbody id="dignityBody"></tbody>
+        </table>
+        <p id="dignityNote" class="reading-note"></p>
       </div>
     </section>
   </main>

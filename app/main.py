@@ -16,6 +16,7 @@ from app.astrology import (
 from app.constants import RASI_LORDS
 from app.dasa import compute_mahadasas, compute_sub_periods
 from app.db import SavedChart, get_chart, init_db, list_charts, save_chart
+from app.dignity import compute_dignities
 from app.ephemeris import compute_ascendant, compute_graha_positions, init_ephemeris, to_julian_day_ut
 from app.geocode import search_places
 from app.models import (
@@ -25,6 +26,7 @@ from app.models import (
     ChartSummary,
     DasaExpandRequest,
     DasaPeriodOut,
+    DignityOut,
     GrahaOut,
     PlaceResult,
     TaraEntryOut,
@@ -103,7 +105,9 @@ def create_chart(req: BirthRequest) -> ChartResponse:
 
     tara_entries = compute_tara_balam(d1.grahas["Moon"].nakshatra)
     yoga_results = detect_all_yogas(d1)
+    dignities = compute_dignities(d1)
 
+    dignities_out = [DignityOut(**vars(e)) for e in dignities]
     d1_out = _to_chart_out(d1)
     vargas_out = {varga: _to_chart_out(c) for varga, c in vargas.items()}
     gulika_out = GrahaOut(**vars(gulika))
@@ -126,6 +130,7 @@ def create_chart(req: BirthRequest) -> ChartResponse:
             "mahadasas": [p.model_dump(mode="json") for p in mahadasas_out],
             "tara_balam": [t.model_dump() for t in tara_out],
             "yogas": [y.model_dump() for y in yogas_out],
+            "dignities": [e.model_dump() for e in dignities_out],
         }
     )
 
@@ -160,6 +165,7 @@ def create_chart(req: BirthRequest) -> ChartResponse:
         mahadasas=mahadasas_out,
         tara_balam=tara_out,
         yogas=yogas_out,
+        dignities=dignities_out,
     )
 
 
@@ -190,6 +196,7 @@ def get_chart_by_id(chart_id: int) -> ChartResponse:
         mahadasas=[DasaPeriodOut(**p) for p in data["mahadasas"]],
         tara_balam=[TaraEntryOut(**t) for t in data["tara_balam"]],
         yogas=[YogaOut(**y) for y in data["yogas"]],
+        dignities=[DignityOut(**e) for e in data.get("dignities", [])],
     )
 
 

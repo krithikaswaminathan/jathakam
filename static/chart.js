@@ -97,6 +97,14 @@ function applyLanguage() {
   document.getElementById("thPada").textContent = labels.ui.colPada;
   document.getElementById("thStarLord").textContent = labels.ui.colStarLord;
   document.getElementById("thPushkara").textContent = labels.ui.colPushkara;
+  document.getElementById("lblDignityTab").textContent = labels.ui.dignityTab;
+  document.getElementById("thDgPlanet").textContent = labels.ui.colPlanet;
+  document.getElementById("thDgState").textContent = labels.ui.colState;
+  document.getElementById("thDgRasi").textContent = labels.ui.colRasi;
+  document.getElementById("thDgDeg").textContent = labels.ui.colDegInSign;
+  document.getElementById("thDgDeep").textContent = labels.ui.colDeep;
+  document.getElementById("thDgDist").textContent = labels.ui.colDistance;
+  document.getElementById("dignityNote").textContent = labels.ui.dignityNote;
   document.getElementById("lblInduLagna").textContent = labels.ui.induLagna;
   document.getElementById("induLagnaHint").textContent = labels.ui.induLagnaHint;
   document.getElementById("lblReading").textContent = labels.ui.reading;
@@ -356,6 +364,7 @@ function renderAll() {
   renderYogas();
   renderTaraBalam();
   renderGrahaDetails();
+  renderDignity();
 }
 
 function renderInduLagna() {
@@ -613,6 +622,42 @@ function renderGrahaDetails() {
       g.pada,
       labels.planets[g.star_lord] || g.star_lord,
       g.pushkara_navamsa ? "✓" : "–",
+    ];
+    for (const value of cells) {
+      const td = document.createElement("td");
+      td.textContent = value;
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+}
+
+function renderDignity() {
+  const labels = L();
+  const entries = state.chart.dignities || [];
+  const table = document.getElementById("dignityTable");
+  const tbody = document.getElementById("dignityBody");
+  tbody.innerHTML = "";
+  const summary = document.getElementById("dignitySummary");
+  if (entries.length === 0) {
+    summary.textContent = labels.ui.dignityNone;
+    table.classList.add("hidden");
+    return;
+  }
+  summary.textContent = entries
+    .map((e) => `${labels.planets[e.planet] || e.planet}: ${e.state === "ucham" ? labels.ui.dignityUcham : labels.ui.dignityNeecham}`)
+    .join("  \u00B7  ");
+  table.classList.remove("hidden");
+  for (const e of entries) {
+    const tr = document.createElement("tr");
+    tr.className = e.state === "ucham" ? "dignity-ucham" : "dignity-neecham";
+    const cells = [
+      labels.planets[e.planet] || e.planet,
+      e.state === "ucham" ? labels.ui.dignityUcham : labels.ui.dignityNeecham,
+      labels.rasi[e.rasi],
+      formatDMS(e.degree_in_sign),
+      e.deep_degree === null ? "\u2013" : formatDMS(e.deep_degree),
+      e.degrees_from_deep === null ? "\u2013" : formatDMS(e.degrees_from_deep),
     ];
     for (const value of cells) {
       const td = document.createElement("td");

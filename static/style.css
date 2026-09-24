@@ -315,6 +315,8 @@ tr.current-period .dasa-level-tag { background: var(--gold-500); color: white; }
 #yogaList li.triggered-warning .yoga-tag-present { background: var(--bad); }
 .yoga-moon-note { margin-top: 0.3rem; font-size: 0.78rem; color: var(--neutral); font-style: italic; }
 
+tr.dignity-ucham td:nth-child(2) { color: var(--good); font-weight: 600; }
+tr.dignity-neecham td:nth-child(2) { color: var(--bad); font-weight: 600; }
 td.quality-good { color: var(--good); font-weight: 600; }
 td.quality-bad { color: var(--bad); font-weight: 600; }
 td.quality-neutral { color: var(--neutral); font-weight: 600; }

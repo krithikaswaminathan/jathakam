@@ -61,6 +61,22 @@ SATURN_NIGHT_SEGMENT = {0: 3, 1: 2, 2: 1, 3: 7, 4: 6, 5: 5, 6: 4}
 # aren't used. Cross-checked against two independent sources before use.
 INDU_KALA = {"Sun": 30, "Moon": 16, "Mars": 6, "Mercury": 8, "Jupiter": 10, "Venus": 12, "Saturn": 1}
 
+# Dignity: planet -> (exaltation rasi, debilitation rasi, deep exaltation degree).
+# Debilitation is the opposite sign at the same degree. Rahu/Ketu follow the BPHS
+# reading (Rahu exalted Taurus, Ketu exalted Scorpio); other traditions differ
+# (e.g. Gemini/Sagittarius) so they have no agreed deep degree.
+DIGNITY = {
+    "Sun": (0, 6, 10.0),
+    "Moon": (1, 7, 3.0),
+    "Mars": (9, 3, 28.0),
+    "Mercury": (5, 11, 15.0),
+    "Jupiter": (3, 9, 5.0),
+    "Venus": (11, 5, 27.0),
+    "Saturn": (6, 0, 20.0),
+    "Rahu": (1, 7, None),
+    "Ketu": (7, 1, None),
+}
+
 # Pancha Mahapurusha yogas: planet -> (yoga name, own-sign rasis, exaltation rasi).
 # The yoga forms when the planet is in its own or exaltation sign AND in a kendra.
 # Rasi indices: 0=Aries..11=Pisces. Cross-checked against three sources.

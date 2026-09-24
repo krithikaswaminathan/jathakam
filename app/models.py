@@ -62,6 +62,15 @@ class YogaOut(BaseModel):
     from_moon: bool = False
 
 
+class DignityOut(BaseModel):
+    planet: str
+    state: str
+    rasi: int
+    degree_in_sign: float
+    deep_degree: float | None
+    degrees_from_deep: float | None
+
+
 class ChartResponse(BaseModel):
     id: int
     name: str
@@ -78,6 +87,7 @@ class ChartResponse(BaseModel):
     mahadasas: list[DasaPeriodOut]
     tara_balam: list[TaraEntryOut]
     yogas: list[YogaOut]
+    dignities: list[DignityOut] = []
 
 
 class DasaExpandRequest(BaseModel):
