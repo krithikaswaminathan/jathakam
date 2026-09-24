@@ -56,3 +56,7 @@ TARA_QUALITY = {
 # clean (3,2,1,7,6,5,4) — see app/upagraha.py for the full derivation/sources.
 SATURN_DAY_SEGMENT = {0: 7, 1: 6, 2: 5, 3: 4, 4: 3, 5: 2, 6: 1}
 SATURN_NIGHT_SEGMENT = {0: 3, 1: 2, 2: 1, 3: 7, 4: 6, 5: 5, 6: 4}
+
+# Indu Lagna: Kala (numeric value) of each of the 7 classical grahas; Rahu/Ketu
+# aren't used. Cross-checked against two independent sources before use.
+INDU_KALA = {"Sun": 30, "Moon": 16, "Mars": 6, "Mercury": 8, "Jupiter": 10, "Venus": 12, "Saturn": 1}

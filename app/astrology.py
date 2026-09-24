@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from app.constants import DASA_ORDER, DUAL_RASIS, FIXED_RASIS, GRAHA_NAMES, MOVABLE_RASIS, RASI_LORDS
+from app.constants import DASA_ORDER, DUAL_RASIS, FIXED_RASIS, GRAHA_NAMES, INDU_KALA, MOVABLE_RASIS, RASI_LORDS
 
 NAKSHATRA_SPAN = 360 / 27
 PADA_SPAN = NAKSHATRA_SPAN / 4
@@ -48,6 +48,16 @@ def house_of_rasi(rasi: int, lagna_rasi: int) -> int:
 
 def nakshatra_lord(nak_index: int) -> str:
     return DASA_ORDER[nak_index % 9]
+
+
+def compute_indu_lagna(lagna_rasi: int, moon_rasi: int) -> int:
+    """9th lord from Lagna + 9th lord from Moon, summed by classical Kala
+    values, remainder mod 12 (0->12) counted forward from the Moon's sign."""
+    ninth_from_lagna = (lagna_rasi + 8) % 12
+    ninth_from_moon = (moon_rasi + 8) % 12
+    total = INDU_KALA[RASI_LORDS[ninth_from_lagna]] + INDU_KALA[RASI_LORDS[ninth_from_moon]]
+    remainder = total % 12 or 12
+    return (moon_rasi + remainder - 1) % 12
 
 
 def make_graha_position(

@@ -1,6 +1,7 @@
 import pytest
 
 from app.astrology import (
+    compute_indu_lagna,
     d2_hora,
     d3_drekkana,
     d7_saptamsa,
@@ -129,3 +130,18 @@ def test_make_graha_position_retrograde_flag():
     retro = make_graha_position("Mercury", 40.0, longitude_to_rasi(40.0), lagna_rasi=0, retrograde=True)
     assert direct.retrograde is False
     assert retro.retrograde is True
+
+
+def test_compute_indu_lagna_known_example():
+    # Cross-checked by hand in conversation: Lagna=Sagittarius(8), Moon=Taurus(1)
+    # -> 9th from Lagna=Leo(Sun,30), 9th from Moon=Capricorn(Saturn,1) -> sum=31
+    # -> remainder=7 -> 7 signs forward from Taurus (inclusive) = Scorpio(7)
+    assert compute_indu_lagna(lagna_rasi=8, moon_rasi=1) == 7
+
+
+def test_compute_indu_lagna_remainder_zero_wraps_to_twelve():
+    # Lagna=Leo(4): 9th from it is Aries(0), lord Mars (Kala 6).
+    # Moon=Pisces(11): 9th from it is Scorpio(7), lord Mars (Kala 6).
+    # Sum = 12 -> remainder 0 -> wraps to 12 -> counting 12 signs forward from
+    # Moon's own sign (inclusive) wraps all the way around to Aquarius (10).
+    assert compute_indu_lagna(lagna_rasi=4, moon_rasi=11) == 10

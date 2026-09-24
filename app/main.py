@@ -4,7 +4,16 @@ from datetime import datetime
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 
-from app.astrology import ChartData, VARGA_FUNCTIONS, build_chart, build_varga_chart, longitude_to_rasi, make_graha_position
+from app.astrology import (
+    ChartData,
+    VARGA_FUNCTIONS,
+    build_chart,
+    build_varga_chart,
+    compute_indu_lagna,
+    longitude_to_rasi,
+    make_graha_position,
+)
+from app.constants import RASI_LORDS
 from app.dasa import compute_mahadasas, compute_sub_periods
 from app.db import SavedChart, get_chart, init_db, list_charts, save_chart
 from app.ephemeris import compute_ascendant, compute_graha_positions, init_ephemeris, to_julian_day_ut
@@ -86,6 +95,9 @@ def create_chart(req: BirthRequest) -> ChartResponse:
     mandi_longitude = compute_mandi_longitude(req.dob, req.tob, utc_offset, req.latitude, req.longitude)
     mandi = make_graha_position("Mandi", mandi_longitude, longitude_to_rasi(mandi_longitude), d1.lagna_rasi)
 
+    indu_lagna_rasi = compute_indu_lagna(d1.lagna_rasi, d1.grahas["Moon"].rasi)
+    indu_lagna_lord = RASI_LORDS[indu_lagna_rasi]
+
     birth_dt = datetime.combine(req.dob, req.tob)
     mahadasas = compute_mahadasas(birth_dt, graha_longitudes["Moon"])
 
@@ -106,6 +118,8 @@ def create_chart(req: BirthRequest) -> ChartResponse:
             "vargas": {k: v.model_dump() for k, v in vargas_out.items()},
             "gulika": gulika_out.model_dump(),
             "mandi": mandi_out.model_dump(),
+            "indu_lagna_rasi": indu_lagna_rasi,
+            "indu_lagna_lord": indu_lagna_lord,
             "mahadasas": [p.model_dump(mode="json") for p in mahadasas_out],
             "tara_balam": [t.model_dump() for t in tara_out],
             "yogas": [y.model_dump() for y in yogas_out],
@@ -138,6 +152,8 @@ def create_chart(req: BirthRequest) -> ChartResponse:
         vargas=vargas_out,
         gulika=gulika_out,
         mandi=mandi_out,
+        indu_lagna_rasi=indu_lagna_rasi,
+        indu_lagna_lord=indu_lagna_lord,
         mahadasas=mahadasas_out,
         tara_balam=tara_out,
         yogas=yogas_out,
@@ -166,6 +182,8 @@ def get_chart_by_id(chart_id: int) -> ChartResponse:
         vargas={k: ChartOut(**v) for k, v in data["vargas"].items()},
         gulika=GrahaOut(**data["gulika"]),
         mandi=GrahaOut(**data["mandi"]),
+        indu_lagna_rasi=data["indu_lagna_rasi"],
+        indu_lagna_lord=data["indu_lagna_lord"],
         mahadasas=[DasaPeriodOut(**p) for p in data["mahadasas"]],
         tara_balam=[TaraEntryOut(**t) for t in data["tara_balam"]],
         yogas=[YogaOut(**y) for y in data["yogas"]],

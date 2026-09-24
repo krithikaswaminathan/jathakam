@@ -11,6 +11,7 @@ const GRID_POSITIONS = [
 // so marking them "(R)" would be noise, not information — classical charts
 // only mark it for the 5 planets where it's a noteworthy, temporary state.
 const NODES_NOT_MARKED_RETROGRADE = new Set(["Rahu", "Ketu"]);
+const UPAGRAHA_NAMES = new Set(["Gulika", "Mandi"]);
 
 let state = {
   lang: "en",
@@ -92,6 +93,8 @@ function applyLanguage() {
   document.getElementById("thStar").textContent = labels.ui.colStar;
   document.getElementById("thPada").textContent = labels.ui.colPada;
   document.getElementById("thStarLord").textContent = labels.ui.colStarLord;
+  document.getElementById("lblInduLagna").textContent = labels.ui.induLagna;
+  document.getElementById("induLagnaHint").textContent = labels.ui.induLagnaHint;
 
   renderSavedList(state.savedCharts || []);
   if (state.chart) renderAll();
@@ -232,10 +235,18 @@ document.querySelectorAll(".tab-btn").forEach((btn) => {
 function renderAll() {
   renderVargaSelect();
   renderGrid();
+  renderInduLagna();
   renderDasaTable();
   renderYogas();
   renderTaraBalam();
   renderGrahaDetails();
+}
+
+function renderInduLagna() {
+  const labels = L();
+  const rasiName = labels.rasi[state.chart.indu_lagna_rasi];
+  const lordName = labels.planets[state.chart.indu_lagna_lord] || state.chart.indu_lagna_lord;
+  document.getElementById("induLagnaValue").textContent = `${rasiName} (${lordName})`;
 }
 
 function renderVargaSelect() {
@@ -269,6 +280,12 @@ function renderGrid() {
   for (const [name, g] of Object.entries(chart.grahas)) {
     (rasiToPlanets[g.rasi] = rasiToPlanets[g.rasi] || []).push(g);
   }
+  if (state.varga === "D1") {
+    // Gulika/Mandi are only computed for D1, not per-varga
+    for (const upagraha of [state.chart.gulika, state.chart.mandi]) {
+      (rasiToPlanets[upagraha.rasi] = rasiToPlanets[upagraha.rasi] || []).push(upagraha);
+    }
+  }
 
   for (const pos of GRID_POSITIONS) {
     const cell = document.createElement("div");
@@ -287,7 +304,8 @@ function renderGrid() {
     for (const g of rasiToPlanets[pos.rasi] || []) {
       const span = document.createElement("span");
       const isRetrogradeEligible = g.retrograde && !NODES_NOT_MARKED_RETROGRADE.has(g.name);
-      span.textContent = labels.planetAbbr[g.name] + (isRetrogradeEligible ? " (R)" : "");
+      span.textContent = (labels.planetAbbr[g.name] || g.name) + (isRetrogradeEligible ? " (R)" : "");
+      if (UPAGRAHA_NAMES.has(g.name)) span.classList.add("upagraha");
       planetsDiv.appendChild(span);
     }
     cell.appendChild(planetsDiv);

@@ -71,6 +71,8 @@ class ChartResponse(BaseModel):
     vargas: dict[str, ChartOut]
     gulika: GrahaOut
     mandi: GrahaOut
+    indu_lagna_rasi: int
+    indu_lagna_lord: str
     mahadasas: list[DasaPeriodOut]
     tara_balam: list[TaraEntryOut]
     yogas: list[YogaOut]
