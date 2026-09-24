@@ -90,7 +90,7 @@ body {
 }
 
 .side-nav {
-  width: 240px;
+  width: 210px;
   flex-shrink: 0;
   position: sticky;
   top: 1.5rem;
@@ -98,7 +98,7 @@ body {
   background: white;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 1.1rem 1.2rem;
+  padding: 1.1rem 1rem;
   box-shadow: var(--shadow);
 }
 .side-nav h2 {
@@ -106,27 +106,32 @@ body {
   font-weight: 600;
   font-size: 1rem;
   color: var(--maroon-700);
-  margin: 0 0 0.7rem;
+  margin: 0 0 0.6rem;
 }
-.side-nav-list { list-style: none; margin: 0 0 0.8rem; padding: 0; }
+.side-nav-list { list-style: none; margin: 0; padding: 0; }
 .side-nav-topic {
-  width: 100%; text-align: left; padding: 0.45rem 0.6rem; border: none; border-radius: 6px;
+  width: 100%; text-align: left; padding: 0.55rem 0.65rem; border: none; border-radius: 6px;
   background: none; color: var(--ink-soft); font-family: var(--font-body); font-size: 0.85rem;
   font-weight: 500; cursor: pointer; transition: background 0.12s, color 0.12s;
 }
 .side-nav-topic:hover { background: var(--cream-50); }
 .side-nav-topic.active { background: var(--cream-100); color: var(--maroon-700); font-weight: 600; }
 
-.side-nav-content { font-size: 0.82rem; color: var(--ink); line-height: 1.5; }
-.side-nav-content p { margin: 0 0 0.7rem; }
-.reading-table { width: 100%; border-collapse: collapse; margin-bottom: 0.7rem; font-size: 0.8rem; }
-.reading-table td { padding: 0.3rem 0.4rem; border-bottom: 1px solid var(--line); }
+.reading-back {
+  border: none; background: none; color: var(--maroon-700); font-family: var(--font-body);
+  font-size: 0.85rem; font-weight: 600; cursor: pointer; padding: 0; margin-bottom: 0.9rem;
+}
+.reading-back:hover { text-decoration: underline; }
+#readingContent { font-size: 0.95rem; color: var(--ink); line-height: 1.6; max-width: 640px; }
+#readingContent p { margin: 0 0 0.9rem; }
+.reading-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.88rem; }
+.reading-table td { padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--line); }
 .reading-table td:first-child { font-weight: 600; color: var(--maroon-700); }
-.reading-note { font-size: 0.76rem; color: var(--ink-soft); font-style: italic; }
-.reading-sources-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--ink-soft); margin-bottom: 0.3rem; font-weight: 600; }
+.reading-note { font-size: 0.82rem; color: var(--ink-soft); font-style: italic; }
+.reading-sources-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--ink-soft); margin-bottom: 0.4rem; font-weight: 600; }
 .reading-sources { list-style: none; margin: 0; padding: 0; }
-.reading-sources li { margin-bottom: 0.3rem; }
-.reading-sources a { color: var(--gold-500); font-size: 0.8rem; text-decoration: none; }
+.reading-sources li { margin-bottom: 0.4rem; }
+.reading-sources a { color: var(--gold-500); font-size: 0.88rem; text-decoration: none; }
 .reading-sources a:hover { text-decoration: underline; }
 
 main {

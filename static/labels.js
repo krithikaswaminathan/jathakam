@@ -27,7 +27,7 @@ const LABELS = {
       colDegInSign: "Degree in Sign", colStar: "Star", colPada: "Pada", colStarLord: "Star Lord",
       colPushkara: "Pushkara Navamsa",
       induLagna: "Indu Lagna", induLagnaHint: "Wealth ascendant — sign lord in parentheses",
-      reading: "Reading", sources: "Sources",
+      reading: "Reading", sources: "Sources", back: "Back",
     },
   },
   ta: {
@@ -58,7 +58,7 @@ const LABELS = {
       colDegInSign: "ராசியில் பாகை", colStar: "நட்சத்திரம்", colPada: "பாதம்", colStarLord: "நட்சத்திர அதிபதி",
       colPushkara: "புஷ்கர நவாம்சம்",
       induLagna: "இந்து லக்னம்", induLagnaHint: "செல்வ லக்னம் — அடைப்புக்குறிக்குள் ராசி அதிபதி",
-      reading: "வாசிப்பு", sources: "மூலங்கள்",
+      reading: "வாசிப்பு", sources: "மூலங்கள்", back: "பின்செல்",
     },
   },
 };

@@ -98,8 +98,11 @@ function applyLanguage() {
   document.getElementById("lblInduLagna").textContent = labels.ui.induLagna;
   document.getElementById("induLagnaHint").textContent = labels.ui.induLagnaHint;
   document.getElementById("lblReading").textContent = labels.ui.reading;
+  document.getElementById("lblBack").textContent = labels.ui.back;
   document.getElementById("navPushkaraNavamsa").textContent = READING_TOPICS.pushkaraNavamsa.title[state.lang];
-  renderReadingTopic(state.readingTopic || "pushkaraNavamsa");
+  if (!document.getElementById("readingSection").classList.contains("hidden")) {
+    renderReadingPage(state.readingTopic);
+  }
 
   renderSavedList(state.savedCharts || []);
   if (state.chart) renderAll();
@@ -225,21 +228,44 @@ document.getElementById("langToggle").addEventListener("change", (e) => {
 });
 
 // --- Reading / side nav ---
+// The side nav is just a compact row list; clicking a row opens that topic as
+// its own full-width page in the main content area, replacing the chart/form
+// view (not squeezed into the narrow sidebar).
 
 document.querySelectorAll(".side-nav-topic").forEach((btn) => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".side-nav-topic").forEach((b) => b.classList.remove("active"));
     btn.classList.add("active");
     state.readingTopic = btn.dataset.topic;
-    renderReadingTopic(state.readingTopic);
+    showReadingPage(state.readingTopic);
   });
 });
 
-function renderReadingTopic(topicKey) {
+document.getElementById("readingBack").addEventListener("click", hideReadingPage);
+
+function showReadingPage(topicKey) {
+  document.getElementById("formSection").classList.add("hidden");
+  document.getElementById("savedSection").classList.add("hidden");
+  document.getElementById("resultSection").classList.add("hidden");
+  document.getElementById("readingSection").classList.remove("hidden");
+  renderReadingPage(topicKey);
+}
+
+function hideReadingPage() {
+  document.getElementById("readingSection").classList.add("hidden");
+  document.querySelectorAll(".side-nav-topic").forEach((b) => b.classList.remove("active"));
+  document.getElementById("formSection").classList.remove("hidden");
+  document.getElementById("savedSection").classList.remove("hidden");
+  if (state.chart) document.getElementById("resultSection").classList.remove("hidden");
+}
+
+function renderReadingPage(topicKey) {
   const topic = READING_TOPICS[topicKey];
-  const container = document.getElementById("sideNavContent");
+  const container = document.getElementById("readingContent");
   container.innerHTML = "";
   if (!topic) return;
+
+  document.getElementById("readingTitle").textContent = topic.title[state.lang];
 
   const intro = document.createElement("p");
   intro.textContent = topic.intro[state.lang];
@@ -253,8 +279,10 @@ function renderReadingTopic(topicKey) {
       const c1 = document.createElement("td");
       c1.textContent = row.element[state.lang];
       const c2 = document.createElement("td");
-      c2.textContent = row.divisions[state.lang];
-      tr.append(c1, c2);
+      c2.textContent = row.signs[state.lang];
+      const c3 = document.createElement("td");
+      c3.textContent = row.divisions[state.lang];
+      tr.append(c1, c2, c3);
       table.appendChild(tr);
     }
     container.appendChild(table);
