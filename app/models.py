@@ -88,6 +88,7 @@ class ChartResponse(BaseModel):
     tara_balam: list[TaraEntryOut]
     yogas: list[YogaOut]
     dignities: list[DignityOut] = []
+    pranapada: GrahaOut | None = None
 
 
 class DasaExpandRequest(BaseModel):

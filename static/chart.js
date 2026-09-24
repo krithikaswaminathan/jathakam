@@ -97,6 +97,8 @@ function applyLanguage() {
   document.getElementById("thPada").textContent = labels.ui.colPada;
   document.getElementById("thStarLord").textContent = labels.ui.colStarLord;
   document.getElementById("thPushkara").textContent = labels.ui.colPushkara;
+  document.getElementById("lblPranapada").textContent = labels.ui.pranapada;
+  document.getElementById("pranapadaHint").textContent = labels.ui.pranapadaHint;
   document.getElementById("lblDignityTab").textContent = labels.ui.dignityTab;
   document.getElementById("thDgPlanet").textContent = labels.ui.colPlanet;
   document.getElementById("thDgState").textContent = labels.ui.colState;
@@ -381,11 +383,21 @@ function renderAll() {
   renderVargaSelect();
   renderGrid();
   renderInduLagna();
+  renderPranapada();
   renderDasaTable();
   renderYogas();
   renderTaraBalam();
   renderGrahaDetails();
   renderDignity();
+}
+
+function renderPranapada() {
+  const labels = L();
+  const p = state.chart.pranapada;
+  document.getElementById("pranapadaBox").classList.toggle("hidden", !p);
+  if (!p) return;
+  document.getElementById("pranapadaValue").textContent =
+    `${labels.rasi[p.rasi]} ${formatDMS(p.degree_in_sign)} \u00B7 ${labels.nakshatra[p.nakshatra]} \u00B7 ${labels.ui.houseWord} ${p.house}`;
 }
 
 function renderInduLagna() {

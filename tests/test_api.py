@@ -43,6 +43,7 @@ def test_old_saved_charts_load_with_all_current_features(client):
     assert {(e["planet"], e["state"]) for e in body["dignities"]} == {("Moon", "ucham"), ("Saturn", "neecham")}
     assert len(body["yogas"]) == 10
     assert "gulika" in body and "mandi" in body
+    assert body["pranapada"]["rasi"] == 7  # Scorpio
 
 
 def test_create_then_load_matches(client):

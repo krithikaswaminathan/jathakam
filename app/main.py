@@ -31,6 +31,7 @@ from app.models import (
     TaraEntryOut,
     YogaOut,
 )
+from app.pranapada import compute_pranapada_longitude
 from app.tara import compute_tara_balam
 from app.timezone_utils import compute_utc_offset
 from app.upagraha import compute_gulika_longitude, compute_mandi_longitude
@@ -100,6 +101,13 @@ def _build_chart_response(
     mandi_longitude = compute_mandi_longitude(dob, tob, utc_offset, latitude, longitude)
     mandi = make_graha_position("Mandi", mandi_longitude, longitude_to_rasi(mandi_longitude), d1.lagna_rasi)
 
+    pranapada_longitude = compute_pranapada_longitude(
+        dob, tob, utc_offset, latitude, longitude, graha_longitudes["Sun"]
+    )
+    pranapada = make_graha_position(
+        "Pranapada", pranapada_longitude, longitude_to_rasi(pranapada_longitude), d1.lagna_rasi
+    )
+
     indu_lagna_rasi = compute_indu_lagna(d1.lagna_rasi, d1.grahas["Moon"].rasi)
     mahadasas = compute_mahadasas(datetime.combine(dob, tob), graha_longitudes["Moon"])
     tara_entries = compute_tara_balam(d1.grahas["Moon"].nakshatra)
@@ -127,6 +135,7 @@ def _build_chart_response(
             for y in detect_all_yogas(d1)
         ],
         dignities=[DignityOut(**vars(e)) for e in compute_dignities(d1)],
+        pranapada=GrahaOut(**vars(pranapada)),
     )
 
 

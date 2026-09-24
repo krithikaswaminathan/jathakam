@@ -35,6 +35,8 @@ const LABELS = {
       dignityUcham: "Ucham (exalted)", dignityNeecham: "Neecham (debilitated)",
       dignityNone: "No planet is in its exaltation or debilitation sign.",
       dignityNote: "Sign-based, main chart only. Rahu and Ketu use the BPHS reading (traditions differ). Neecha Bhanga, the cancellation of a debilitation, is not modeled.",
+      pranapada: "Pranapada Lagna", houseWord: "house",
+      pranapadaHint: "Moves about 5\u00B0 per minute of birth time, so it is very sensitive to the exact time and sunrise.",
       yogaPresent: "Present", yogaAbsent: "Not present", yogaSummary: "Present in this chart",
     },
   },
@@ -74,6 +76,8 @@ const LABELS = {
       dignityUcham: "உச்சம்", dignityNeecham: "நீசம்",
       dignityNone: "எந்த கிரகமும் உச்ச அல்லது நீச ராசியில் இல்லை.",
       dignityNote: "ராசி அடிப்படையிலானது, ராசி சக்கரத்திற்கு மட்டும். ராகு, கேதுவுக்கு பராசர ஹோரை (BPHS) கருத்து பயன்படுத்தப்படுகிறது (மரபுகள் வேறுபடும்). நீச பங்கம் கணக்கிடப்படவில்லை.",
+      pranapada: "பிராணபத லக்னம்", houseWord: "வீடு",
+      pranapadaHint: "பிறந்த நேரத்தின் ஒவ்வொரு நிமிடத்திற்கும் சுமார் 5\u00B0 நகர்வதால், துல்லியமான நேரம் மற்றும் சூரிய உதயத்தைப் பொறுத்து மிகவும் மாறும்.",
       yogaPresent: "உள்ளது", yogaAbsent: "இல்லை", yogaSummary: "இந்த ஜாதகத்தில் உள்ளவை",
     },
   },
@@ -154,6 +158,29 @@ const READING_TOPICS = {
     sources: [
       { title: "Brihat Parashara Hora Sastra, Chapter 3", url: "https://yourastroguide.wordpress.com/2012/09/01/brihat-parashara-hora-sashtra-chapter-3/" },
       { title: "Saptarishis on exaltation/debilitation of Rahu & Ketu", url: "https://madhivanan.in/rahu-ketu-exalted-scorpio/" },
+    ],
+  },
+  pranapada: {
+    title: { en: "Pranapada Lagna", ta: "பிராணபத லக்னம்" },
+    intro: {
+      en: "Pranapada is a special lagna derived from the time elapsed since sunrise, traditionally linked to the breath (prana). It is used in birth-time rectification. The elapsed time is converted to vighatis (1 hour = 150), divided by 15 to give signs and degrees (so it moves about 5\u00B0 per minute), and added to the Sun's longitude with a correction that depends on the Sun's sign type:",
+      ta: "பிராணபதம் என்பது சூரிய உதயத்திலிருந்து கடந்த நேரத்தைக் கொண்டு கணக்கிடப்படும் சிறப்பு லக்னம்; மரபுப்படி சுவாசத்துடன் (பிராணன்) தொடர்புடையது. பிறந்த நேரத்தைச் சரிசெய்யப் பயன்படுகிறது. கடந்த நேரம் விகடிகைகளாக (1 மணி = 150) மாற்றப்பட்டு, 15-ஆல் வகுக்கப்பட்டு ராசி, பாகைகளாகிறது (நிமிடத்திற்கு சுமார் 5\u00B0 நகரும்); சூரியனின் ராசி வகைக்கு ஏற்ற திருத்தத்துடன் சூரியனின் பாகையுடன் கூட்டப்படுகிறது:",
+    },
+    tableHeader: [
+      { en: "Sun in a...", ta: "சூரியன் உள்ள ராசி" }, { en: "Add", ta: "கூட்டுக" },
+    ],
+    table: [
+      [{ en: "Movable sign", ta: "சர ராசி" }, { en: "0\u00B0", ta: "0\u00B0" }],
+      [{ en: "Dual sign", ta: "உபய ராசி" }, { en: "120\u00B0", ta: "120\u00B0" }],
+      [{ en: "Fixed sign", ta: "ஸ்திர ராசி" }, { en: "240\u00B0", ta: "240\u00B0" }],
+    ],
+    note: {
+      en: "Because it moves so fast, a one-minute change in birth time shifts it by 5\u00B0, and the sunrise convention matters as much. Here sunrise is the true (geometric-with-refraction) sunrise, the same one used for Gulika and Mandi. A birth before that day's sunrise is counted from the previous day's sunrise.",
+      ta: "இது மிக வேகமாக நகர்வதால், பிறந்த நேரத்தில் ஒரு நிமிட மாற்றம் 5\u00B0 மாற்றத்தை ஏற்படுத்தும்; சூரிய உதய முறையும் அதே அளவு முக்கியம். இங்கு குளிகன், மாந்திக்குப் பயன்படுத்தும் அதே உண்மையான சூரிய உதயம் பயன்படுத்தப்படுகிறது. அன்றைய சூரிய உதயத்திற்கு முன் பிறந்தால் முந்தைய நாளின் சூரிய உதயத்திலிருந்து கணக்கிடப்படும்.",
+    },
+    sources: [
+      { title: "BPHS Pranapada \u2014 BP Lama Jyotishavidya", url: "https://barbarapijan.com/bpa/Amsha/pada_pranapada_BPHS.htm" },
+      { title: "Aprakash Grahas, Upagrahas & Pranapada (worked example)", url: "http://varahamihira.blogspot.com/2008/02/aprakash-grahas-upagrahas-pranapada.html" },
     ],
   },
 };
