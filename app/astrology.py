@@ -1,6 +1,16 @@
 from dataclasses import dataclass, field
 
-from app.constants import DASA_ORDER, DUAL_RASIS, FIXED_RASIS, GRAHA_NAMES, INDU_KALA, MOVABLE_RASIS, RASI_LORDS
+from app.constants import (
+    DASA_ORDER,
+    DUAL_RASIS,
+    FIXED_RASIS,
+    GRAHA_NAMES,
+    INDU_KALA,
+    MOVABLE_RASIS,
+    PUSHKARA_NAVAMSA_PARTS,
+    RASI_ELEMENTS,
+    RASI_LORDS,
+)
 
 NAKSHATRA_SPAN = 360 / 27
 PADA_SPAN = NAKSHATRA_SPAN / 4
@@ -18,6 +28,7 @@ class GrahaPosition:
     rasi_lord: str
     star_lord: str
     retrograde: bool
+    pushkara_navamsa: bool
 
 
 @dataclass
@@ -76,6 +87,7 @@ def make_graha_position(
         rasi_lord=RASI_LORDS[rasi],
         star_lord=nakshatra_lord(nak),
         retrograde=retrograde,
+        pushkara_navamsa=is_pushkara_navamsa(longitude),
     )
 
 
@@ -100,6 +112,16 @@ def build_chart(
 
 def _part_index(longitude: float, n: int) -> int:
     return int((longitude % 30) // (30 / n))
+
+
+def is_pushkara_navamsa(longitude: float) -> bool:
+    """2 of the 9 navamsa divisions per sign are especially auspicious
+    ('nourishing') — which two depends on the sign's element. See app/constants.py
+    for the table and its verification."""
+    rasi = longitude_to_rasi(longitude)
+    element = RASI_ELEMENTS[rasi]
+    part = _part_index(longitude, 9)
+    return part in PUSHKARA_NAVAMSA_PARTS[element]
 
 
 def d2_hora(longitude: float) -> int:

@@ -18,6 +18,7 @@ let state = {
   chart: null,
   varga: "D1",
   selectedPlace: null, // { label, latitude, longitude, timezone }
+  readingTopic: "pushkaraNavamsa",
 };
 
 function L() {
@@ -93,8 +94,12 @@ function applyLanguage() {
   document.getElementById("thStar").textContent = labels.ui.colStar;
   document.getElementById("thPada").textContent = labels.ui.colPada;
   document.getElementById("thStarLord").textContent = labels.ui.colStarLord;
+  document.getElementById("thPushkara").textContent = labels.ui.colPushkara;
   document.getElementById("lblInduLagna").textContent = labels.ui.induLagna;
   document.getElementById("induLagnaHint").textContent = labels.ui.induLagnaHint;
+  document.getElementById("lblReading").textContent = labels.ui.reading;
+  document.getElementById("navPushkaraNavamsa").textContent = READING_TOPICS.pushkaraNavamsa.title[state.lang];
+  renderReadingTopic(state.readingTopic || "pushkaraNavamsa");
 
   renderSavedList(state.savedCharts || []);
   if (state.chart) renderAll();
@@ -218,6 +223,71 @@ document.getElementById("langToggle").addEventListener("change", (e) => {
   state.lang = e.target.value;
   applyLanguage();
 });
+
+// --- Reading / side nav ---
+
+document.querySelectorAll(".side-nav-topic").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".side-nav-topic").forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    state.readingTopic = btn.dataset.topic;
+    renderReadingTopic(state.readingTopic);
+  });
+});
+
+function renderReadingTopic(topicKey) {
+  const topic = READING_TOPICS[topicKey];
+  const container = document.getElementById("sideNavContent");
+  container.innerHTML = "";
+  if (!topic) return;
+
+  const intro = document.createElement("p");
+  intro.textContent = topic.intro[state.lang];
+  container.appendChild(intro);
+
+  if (topic.table) {
+    const table = document.createElement("table");
+    table.className = "reading-table";
+    for (const row of topic.table) {
+      const tr = document.createElement("tr");
+      const c1 = document.createElement("td");
+      c1.textContent = row.element[state.lang];
+      const c2 = document.createElement("td");
+      c2.textContent = row.divisions[state.lang];
+      tr.append(c1, c2);
+      table.appendChild(tr);
+    }
+    container.appendChild(table);
+  }
+
+  if (topic.note) {
+    const note = document.createElement("p");
+    note.className = "reading-note";
+    note.textContent = topic.note[state.lang];
+    container.appendChild(note);
+  }
+
+  if (topic.sources && topic.sources.length) {
+    const sourcesLabel = document.createElement("div");
+    sourcesLabel.className = "reading-sources-label";
+    sourcesLabel.textContent = L().ui.sources;
+    container.appendChild(sourcesLabel);
+
+    const ul = document.createElement("ul");
+    ul.className = "reading-sources";
+    for (const src of topic.sources) {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = src.url;
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+      a.textContent = src.title;
+      li.appendChild(a);
+      ul.appendChild(li);
+    }
+    container.appendChild(ul);
+  }
+}
 
 // --- Tabs ---
 
@@ -480,6 +550,7 @@ function renderGrahaDetails() {
       labels.nakshatra[g.nakshatra],
       g.pada,
       labels.planets[g.star_lord] || g.star_lord,
+      g.pushkara_navamsa ? "✓" : "–",
     ];
     for (const value of cells) {
       const td = document.createElement("td");

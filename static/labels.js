@@ -25,7 +25,9 @@ const LABELS = {
       expand: "Expand", collapse: "Collapse", noYogas: "No yogas detected in this starter rule set.",
       colPlanet: "Planet", colRasi: "Rasi", colRasiLord: "Rasi Lord", colAbsDeg: "Absolute Degree",
       colDegInSign: "Degree in Sign", colStar: "Star", colPada: "Pada", colStarLord: "Star Lord",
+      colPushkara: "Pushkara Navamsa",
       induLagna: "Indu Lagna", induLagnaHint: "Wealth ascendant — sign lord in parentheses",
+      reading: "Reading", sources: "Sources",
     },
   },
   ta: {
@@ -54,7 +56,33 @@ const LABELS = {
       expand: "விரிவாக்கு", collapse: "சுருக்கு", noYogas: "இந்த ஆரம்ப விதிகளில் யோகங்கள் எதுவும் கண்டறியப்படவில்லை.",
       colPlanet: "கிரகம்", colRasi: "ராசி", colRasiLord: "ராசி அதிபதி", colAbsDeg: "முழு பாகை",
       colDegInSign: "ராசியில் பாகை", colStar: "நட்சத்திரம்", colPada: "பாதம்", colStarLord: "நட்சத்திர அதிபதி",
+      colPushkara: "புஷ்கர நவாம்சம்",
       induLagna: "இந்து லக்னம்", induLagnaHint: "செல்வ லக்னம் — அடைப்புக்குறிக்குள் ராசி அதிபதி",
+      reading: "வாசிப்பு", sources: "மூலங்கள்",
     },
+  },
+};
+
+const READING_TOPICS = {
+  pushkaraNavamsa: {
+    title: { en: "Pushkara Navamsa", ta: "புஷ்கர நவாம்சம்" },
+    intro: {
+      en: "Each sign has 2 of its 9 navamsa divisions considered especially auspicious (“nourishing”) — a planet landing there gives strong results even if otherwise weak in its own sign. Which two divisions depends on the sign's element:",
+      ta: "ஒவ்வொரு ராசிக்கும் அதன் 9 நவாம்சப் பிரிவுகளில் 2 பிரிவுகள் மிகவும் சுபமானவை (“ஊட்டமளிக்கும்”) என்று கருதப்படுகின்றன — ஒரு கிரகம் அங்கு அமைந்தால், அந்த ராசியில் பலவீனமாக இருந்தாலும் நல்ல பலன்களைத் தரும். எந்த இரு பிரிவுகள் என்பது ராசியின் தத்துவத்தைப் பொறுத்தது:",
+    },
+    table: [
+      { element: { en: "Fire", ta: "அக்னி" }, signs: { en: "Aries, Leo, Sagittarius", ta: "மேஷம், சிம்மம், தனுசு" }, divisions: { en: "7th & 9th", ta: "7, 9" } },
+      { element: { en: "Earth", ta: "பூமி" }, signs: { en: "Taurus, Virgo, Capricorn", ta: "ரிஷபம், கன்னி, மகரம்" }, divisions: { en: "3rd & 5th", ta: "3, 5" } },
+      { element: { en: "Air", ta: "வாயு" }, signs: { en: "Gemini, Libra, Aquarius", ta: "மிதுனம், துலாம், கும்பம்" }, divisions: { en: "6th & 8th", ta: "6, 8" } },
+      { element: { en: "Water", ta: "நீர்" }, signs: { en: "Cancer, Scorpio, Pisces", ta: "கடகம், விருச்சிகம், மீனம்" }, divisions: { en: "1st & 3rd", ta: "1, 3" } },
+    ],
+    note: {
+      en: "There's also a finer single-degree “Pushkara Bhaga” within that range that's even more potent, but sources disagree on the exact degrees per sign, so it isn't implemented yet.",
+      ta: "இதற்குள் இன்னும் துல்லியமான ஒரு குறிப்பிட்ட பாகையான “புஷ்கர பாகம்” உள்ளது, ஆனால் ஆதாரங்கள் ஒவ்வொரு ராசிக்கான சரியான பாகை மதிப்பில் உடன்படவில்லை, எனவே இது இன்னும் செயல்படுத்தப்படவில்லை.",
+    },
+    sources: [
+      { title: "Pushkara — Navamsha and Bhaga (Part One)", url: "https://komilla.com/lib-pushkara-part-one.html" },
+      { title: "Pushkara — Navamsha and Bhaga (Part Two)", url: "https://komilla.com/lib-pushkara-part-two.html" },
+    ],
   },
 };

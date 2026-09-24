@@ -32,6 +32,7 @@ class GrahaOut(BaseModel):
     rasi_lord: str
     star_lord: str
     retrograde: bool
+    pushkara_navamsa: bool
 
 
 class ChartOut(BaseModel):

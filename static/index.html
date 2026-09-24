@@ -37,6 +37,15 @@
   </header>
   <div class="kolam-divider" aria-hidden="true"></div>
 
+  <div class="app-body">
+  <nav id="sideNav" class="side-nav">
+    <h2 id="lblReading">Reading</h2>
+    <ul id="sideNavList" class="side-nav-list">
+      <li><button type="button" class="side-nav-topic active" data-topic="pushkaraNavamsa" id="navPushkaraNavamsa">Pushkara Navamsa</button></li>
+    </ul>
+    <div id="sideNavContent" class="side-nav-content"></div>
+  </nav>
+
   <main>
     <section id="formSection" class="card">
       <h2 id="lblFormTitle">New Chart</h2>
@@ -123,6 +132,7 @@
               <th id="thPlanet">Planet</th><th id="thRasi">Rasi</th><th id="thRasiLord">Rasi Lord</th>
               <th id="thAbsDeg">Absolute Degree</th><th id="thDegInSign">Degree in Sign</th>
               <th id="thStar">Star</th><th id="thPada">Pada</th><th id="thStarLord">Star Lord</th>
+              <th id="thPushkara">Pushkara Navamsa</th>
             </tr>
           </thead>
           <tbody id="detailsBody"></tbody>
@@ -130,6 +140,7 @@
       </div>
     </section>
   </main>
+  </div>
 
   <footer class="site-footer">Namma Jothidam</footer>
 

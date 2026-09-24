@@ -9,6 +9,7 @@ from app.astrology import (
     d10_dasamsa,
     d12_dwadasamsa,
     d60_shashtiamsa,
+    is_pushkara_navamsa,
     longitude_to_nakshatra_pada,
     longitude_to_rasi,
     make_graha_position,
@@ -145,3 +146,36 @@ def test_compute_indu_lagna_remainder_zero_wraps_to_twelve():
     # Sum = 12 -> remainder 0 -> wraps to 12 -> counting 12 signs forward from
     # Moon's own sign (inclusive) wraps all the way around to Aquarius (10).
     assert compute_indu_lagna(lagna_rasi=4, moon_rasi=11) == 10
+
+
+def test_is_pushkara_navamsa_fire_signs():
+    # Aries (fire): divisions 7 & 9 (parts 6 & 8) are pushkara
+    assert is_pushkara_navamsa(1.0) is False  # part 0
+    assert is_pushkara_navamsa(21.0) is True  # part 6 (7th division)
+    assert is_pushkara_navamsa(27.0) is True  # part 8 (9th division)
+
+
+def test_is_pushkara_navamsa_earth_signs():
+    # Taurus (earth, longitude 30-60): divisions 3 & 5 (parts 2 & 4)
+    assert is_pushkara_navamsa(31.0) is False  # part 0
+    assert is_pushkara_navamsa(37.0) is True  # part 2 (3rd division)
+    assert is_pushkara_navamsa(44.0) is True  # part 4 (5th division)
+
+
+def test_is_pushkara_navamsa_air_signs():
+    # Gemini (air, longitude 60-90): divisions 6 & 8 (parts 5 & 7)
+    assert is_pushkara_navamsa(61.0) is False  # part 0
+    assert is_pushkara_navamsa(77.0) is True  # part 5 (6th division)
+    assert is_pushkara_navamsa(84.0) is True  # part 7 (8th division)
+
+
+def test_is_pushkara_navamsa_water_signs():
+    # Cancer (water, longitude 90-120): divisions 1 & 3 (parts 0 & 2)
+    assert is_pushkara_navamsa(91.0) is True  # part 0 (1st division)
+    assert is_pushkara_navamsa(95.0) is False  # part 1
+    assert is_pushkara_navamsa(97.0) is True  # part 2 (3rd division)
+
+
+def test_make_graha_position_includes_pushkara_navamsa():
+    pos = make_graha_position("Sun", 21.0, longitude_to_rasi(21.0), lagna_rasi=0)
+    assert pos.pushkara_navamsa is True

@@ -60,3 +60,17 @@ SATURN_NIGHT_SEGMENT = {0: 3, 1: 2, 2: 1, 3: 7, 4: 6, 5: 5, 6: 4}
 # Indu Lagna: Kala (numeric value) of each of the 7 classical grahas; Rahu/Ketu
 # aren't used. Cross-checked against two independent sources before use.
 INDU_KALA = {"Sun": 30, "Moon": 16, "Mars": 6, "Mercury": 8, "Jupiter": 10, "Venus": 12, "Saturn": 1}
+
+# Pushkara Navamsa: element of each rasi, index 0=Aries..11=Pisces.
+RASI_ELEMENTS = ["fire", "earth", "air", "water"] * 3
+
+# Which 2 of the 9 navamsa divisions (0-indexed part number) are Pushkara for
+# each element. Cross-checked against two sources and independently re-derived
+# from the app's own d9_navamsa formula (the degree ranges the sources give
+# match exactly) — see conversation history for the derivation.
+PUSHKARA_NAVAMSA_PARTS = {
+    "fire": {6, 8},
+    "earth": {2, 4},
+    "air": {5, 7},
+    "water": {0, 2},
+}
