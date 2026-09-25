@@ -109,6 +109,7 @@ function applyLanguage() {
   document.getElementById("dignityNote").textContent = labels.ui.dignityNote;
   document.getElementById("lblInduLagna").textContent = labels.ui.induLagna;
   document.getElementById("lblTithi").textContent = labels.ui.tithi;
+  document.getElementById("lblTithiBox").textContent = labels.ui.tithiBox;
   document.getElementById("lblSoonyam").textContent = labels.ui.soonyam;
   document.getElementById("soonyamHint").textContent = labels.ui.soonyamHint;
   document.getElementById("soonyamLegendText").textContent = labels.ui.soonyamLegend;

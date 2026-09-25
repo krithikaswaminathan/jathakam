@@ -107,23 +107,29 @@
         <select id="vargaSelect"></select>
         <div id="chartGrid" class="south-indian-grid"></div>
         <div id="soonyamLegend" class="soonyam-legend hidden"><span class="soonyam-swatch"></span><span id="soonyamLegendText"></span></div>
-        <div id="induLagnaBox" class="indu-lagna-box">
-          <span id="lblInduLagna">Indu Lagna</span>: <span id="induLagnaValue"></span>
-          <div id="induLagnaHint" class="indu-lagna-hint"></div>
-        </div>
-        <div id="pranapadaBox" class="indu-lagna-box">
-          <span id="lblPranapada">Pranapada Lagna</span>: <span id="pranapadaValue"></span>
-          <div id="pranapadaHint" class="indu-lagna-hint"></div>
-        </div>
-        <div id="tithiBox" class="indu-lagna-box">
-          <span id="lblTithi">Tithi</span>: <span id="tithiValue"></span>
-          <div><span id="lblSoonyam">Thithi Soonyam</span>: <span id="soonyamValue"></span></div>
-          <div id="soonyamHint" class="indu-lagna-hint"></div>
-        </div>
-        <div id="mudakkuBox" class="indu-lagna-box">
-          <span id="lblMudakku">Mudakku Rasi</span>: <span id="mudakkuValue"></span>
-          <div id="mudakkuLagnaNote" class="indu-lagna-hint"></div>
-          <div id="mudakkuHint" class="indu-lagna-hint"></div>
+        <div class="info-boxes">
+          <details id="induLagnaBox" class="info-box">
+            <summary id="lblInduLagna">Indu Lagna</summary>
+            <div id="induLagnaValue"></div>
+            <div id="induLagnaHint" class="info-hint"></div>
+          </details>
+          <details id="pranapadaBox" class="info-box">
+            <summary id="lblPranapada">Pranapada Lagna</summary>
+            <div id="pranapadaValue"></div>
+            <div id="pranapadaHint" class="info-hint"></div>
+          </details>
+          <details id="tithiBox" class="info-box">
+            <summary id="lblTithiBox">Tithi and Thithi Soonyam</summary>
+            <div><span id="lblTithi" class="info-label">Tithi</span>: <span id="tithiValue"></span></div>
+            <div><span id="lblSoonyam" class="info-label">Thithi Soonyam</span>: <span id="soonyamValue"></span></div>
+            <div id="soonyamHint" class="info-hint"></div>
+          </details>
+          <details id="mudakkuBox" class="info-box">
+            <summary id="lblMudakku">Mudakku Rasi</summary>
+            <div id="mudakkuValue"></div>
+            <div id="mudakkuLagnaNote" class="info-hint"></div>
+            <div id="mudakkuHint" class="info-hint"></div>
+          </details>
         </div>
       </div>
 
