@@ -1,8 +1,21 @@
 # Namma Jothidam
 
-A personal Vedic astrology birth chart (jathakam) calculator: South Indian style rasi chart,
-divisional charts (D2/D3/D7/D9/D10/D12), Vimshottari dasa down to Prana level, Tara Balam,
-a starter set of yoga/dosha rules, saved locally, with an English/Tamil toggle.
+A personal Vedic astrology birth chart (jathakam) calculator, with an English/Tamil toggle.
+
+- **Birth details**: place-name search (Open-Meteo geocoding) fills in latitude, longitude and
+  time zone; 12-hour time picker.
+- **Charts**: South Indian style rasi chart (D1) with retrograde marking and Gulika/Mandi placed
+  in the grid, plus divisional charts D2, D3, D7, D9, D10, D12 and D60.
+- **Special lagnas**: Indu Lagna and Pranapada Lagna.
+- **Graha details**: rasi and nakshatra lords, absolute and in-sign degrees, and a Pushkara
+  Navamsa column.
+- **Ucham / Neecham**: planets in exaltation or debilitation, with distance from the deep
+  exaltation/debilitation degree.
+- **Dasa**: Vimshottari dasa down to Prana level, with the current period highlighted.
+- **Tara Balam** from the birth star.
+- **Yogas and doshas**: Mangal Dosha, Gaja Kesari, Budhaditya, Chandra-Mangal, Kemadruma
+  (simplified) and the five Pancha Mahapurusha yogas, each marked Present or Not present.
+- **Saved charts**: stored locally, recomputed on load, and deletable.
 
 ## Setup
 
@@ -44,7 +57,11 @@ python -m pytest tests/ -v
 
 - Ayanamsa: Lahiri. Node: Mean Node (not True Node).
 - Houses: whole-sign, from the lagna.
-- Data is stored locally in `jathakam.db` (SQLite), gitignored.
-- Yoga/dosha detection is a small starter set (5 rules); classical cancellation
-  conditions are not modeled — see each yoga's description in the app.
+- Gulika is cast from the start of Saturn's day/night segment and Mandi from its middle;
+  both are shown because traditions differ on which to use.
+- Pranapada uses the BPHS method: Sun + ishta kala from sunrise, plus a correction for the
+  Sun's sign type (movable +0°, dual +120°, fixed +240°).
+- Classical cancellation conditions (for example, Neecha Bhanga and Mangal Dosha
+  cancellations) are not modeled. Each yoga's description in the app says what is checked.
 - Tara Balam is computed from the birth star only (not two-person compatibility).
+- Data is stored locally in `jathakam.db` (SQLite), gitignored.
