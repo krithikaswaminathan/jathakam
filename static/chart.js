@@ -112,6 +112,8 @@ function applyLanguage() {
   document.getElementById("lblSoonyam").textContent = labels.ui.soonyam;
   document.getElementById("soonyamHint").textContent = labels.ui.soonyamHint;
   document.getElementById("soonyamLegendText").textContent = labels.ui.soonyamLegend;
+  document.getElementById("lblMudakku").textContent = labels.ui.mudakku;
+  document.getElementById("mudakkuHint").textContent = labels.ui.mudakkuHint;
   document.getElementById("induLagnaHint").textContent = labels.ui.induLagnaHint;
   document.getElementById("lblReading").textContent = labels.ui.reading;
   document.getElementById("lblBack").textContent = labels.ui.back;
@@ -389,6 +391,7 @@ function renderAll() {
   renderInduLagna();
   renderPranapada();
   renderTithi();
+  renderMudakku();
   renderDasaTable();
   renderYogas();
   renderTaraBalam();
@@ -426,6 +429,19 @@ function renderTithi() {
         })
         .join("; ")
     : labels.ui.soonyamNone;
+}
+
+function renderMudakku() {
+  const labels = L();
+  const m = state.chart.mudakku;
+  document.getElementById("mudakkuBox").classList.toggle("hidden", !m);
+  if (!m) return;
+  const planet = (p) => labels.planets[p] || p;
+  const planets = m.planets.map(planet).join(", ");
+  document.getElementById("mudakkuValue").textContent =
+    `${labels.rasi[m.rasi]} (${planet(m.rasi_lord)}) \u00B7 ${labels.nakshatra[m.nakshatra]} ${labels.ui.padaWord} ${m.pada} (${labels.ui.starLordWord} ${planet(m.star_lord)}) \u00B7 ${labels.ui.houseWord} ${m.house}` +
+    (planets ? ` \u00B7 ${planets}` : "");
+  document.getElementById("mudakkuLagnaNote").textContent = m.is_lagna ? labels.ui.mudakkuLagna : "";
 }
 
 function renderInduLagna() {
@@ -491,6 +507,12 @@ function renderGrid() {
     nameDiv.className = "rasi-name";
     nameDiv.textContent = labels.rasi[pos.rasi];
     cell.appendChild(nameDiv);
+    if (state.varga === "D1" && state.chart.mudakku && state.chart.mudakku.rasi === pos.rasi) {
+      const tag = document.createElement("div");
+      tag.className = "mudakku-tag";
+      tag.textContent = labels.ui.mudakkuTag;
+      cell.appendChild(tag);
+    }
 
     const planetsDiv = document.createElement("div");
     planetsDiv.className = "planets";

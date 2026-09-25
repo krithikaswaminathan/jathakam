@@ -86,6 +86,20 @@ class TithiOut(BaseModel):
     soonya_rasis: list[SoonyaRasiOut]
 
 
+class MudakkuOut(BaseModel):
+    sun_nakshatra: int
+    sun_pada: int
+    count: int
+    nakshatra: int
+    pada: int
+    star_lord: str
+    rasi: int
+    rasi_lord: str
+    house: int
+    planets: list[str]
+    is_lagna: bool
+
+
 class ChartResponse(BaseModel):
     id: int
     name: str
@@ -105,6 +119,7 @@ class ChartResponse(BaseModel):
     dignities: list[DignityOut] = []
     pranapada: GrahaOut | None = None
     tithi: TithiOut | None = None
+    mudakku: MudakkuOut | None = None
 
 
 class DasaExpandRequest(BaseModel):

@@ -50,6 +50,11 @@ def test_old_saved_charts_load_with_all_current_features(client):
         (1, 6, ["Moon"]),
         (4, 9, ["Ketu"]),
     ]
+    mudakku = body["mudakku"]
+    assert (mudakku["sun_pada"], mudakku["count"]) == (2, 1)  # Sun in Moolam pada 2
+    assert (mudakku["nakshatra"], mudakku["pada"], mudakku["rasi"], mudakku["house"]) == (18, 2, 8, 1)
+    assert (mudakku["rasi_lord"], mudakku["star_lord"]) == ("Jupiter", "Ketu")
+    assert mudakku["planets"] == ["Sun", "Mercury"] and mudakku["is_lagna"]
 
 
 def test_create_then_load_matches(client):

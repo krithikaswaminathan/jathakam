@@ -27,12 +27,14 @@ from app.models import (
     DasaPeriodOut,
     DignityOut,
     GrahaOut,
+    MudakkuOut,
     PlaceResult,
     SoonyaRasiOut,
     TaraEntryOut,
     TithiOut,
     YogaOut,
 )
+from app.mudakku import compute_mudakku
 from app.pranapada import compute_pranapada_longitude
 from app.tara import compute_tara_balam
 from app.tithi import compute_tithi
@@ -115,6 +117,7 @@ def _build_chart_response(
     mahadasas = compute_mahadasas(datetime.combine(dob, tob), graha_longitudes["Moon"])
     tara_entries = compute_tara_balam(d1.grahas["Moon"].nakshatra)
     tithi = compute_tithi(d1)
+    mudakku = compute_mudakku(d1)
 
     return ChartResponse(
         id=chart_id,
@@ -147,6 +150,7 @@ def _build_chart_response(
             progress=tithi.progress,
             soonya_rasis=[SoonyaRasiOut(**vars(r)) for r in tithi.soonya_rasis],
         ),
+        mudakku=MudakkuOut(**vars(mudakku)),
     )
 
 

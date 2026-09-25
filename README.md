@@ -9,6 +9,8 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
 - **Special lagnas**: Indu Lagna and Pranapada Lagna.
 - **Tithi and Thithi Soonyam**: birth tithi, its void (soonya) rasis with their lords, houses
   and occupants, hatched in the D1 grid.
+- **Mudakku Rasi**: from the Sun's nakshatra pada, with its rasi and star lords, house and
+  occupants, tagged in the D1 grid.
 - **Graha details**: rasi and nakshatra lords, absolute and in-sign degrees, and a Pushkara
   Navamsa column.
 - **Ucham / Neecham**: planets in exaltation or debilitation, with distance from the deep
@@ -65,6 +67,9 @@ python -m pytest tests/ -v
   Sun's sign type (movable +0°, dual +120°, fixed +240°).
 - Thithi Soonyam uses the South Indian panchanga table, the same for both pakshas; sources
   cite no classical text for it.
+- Mudakku counts padas from the Sun's pada to the same pada of Moolam, then the same again
+  from there; the landing pada's rasi is the Mudakku rasi. Some versions count whole stars from
+  Pooradam instead.
 - Classical cancellation conditions (for example, Neecha Bhanga and Mangal Dosha
   cancellations) are not modeled. Each yoga's description in the app says what is checked.
 - Tara Balam is computed from the birth star only (not two-person compatibility).

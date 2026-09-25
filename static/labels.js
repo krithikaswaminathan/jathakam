@@ -41,6 +41,9 @@ const LABELS = {
       tithi: "Tithi", soonyam: "Thithi Soonyam", soonyamNone: "None (no void rasis on Pournami or Amavasai)",
       soonyamHint: "Void rasis for the birth tithi. Planets in them, and their lords, are said to give weaker results.",
       soonyamLegend: "Thithi Soonyam rasi",
+      mudakku: "Mudakku Rasi", mudakkuTag: "Mudakku", starLordWord: "star lord", padaWord: "pada",
+      mudakkuHint: "From the Sun's pada, count padas to the same pada of Moolam; count the same again from there. Planets here, the rasi lord and the star lord are said to be blocked.",
+      mudakkuLagna: "The Mudakku rasi is the lagna, which is said to weaken the Mudakku effect.",
     },
     tithiNames: ["Prathamai", "Dwitiyai", "Tritiyai", "Chaturthi", "Panchami", "Shashti", "Saptami", "Ashtami", "Navami", "Dasami", "Ekadasi", "Dwadasi", "Trayodasi", "Chaturdasi"],
     paksha: { shukla: "Shukla", krishna: "Krishna" },
@@ -88,6 +91,9 @@ const LABELS = {
       tithi: "திதி", soonyam: "திதி சூன்யம்", soonyamNone: "இல்லை (பௌர்ணமி, அமாவாசைக்கு சூன்ய ராசி இல்லை)",
       soonyamHint: "பிறந்த திதிக்கான சூன்ய ராசிகள். அவற்றில் உள்ள கிரகங்களும் அவற்றின் அதிபதிகளும் பலம் குறைந்த பலன்களைத் தருவதாகக் கூறப்படுகிறது.",
       soonyamLegend: "திதி சூன்ய ராசி",
+      mudakku: "முடக்கு ராசி", mudakkuTag: "முடக்கு", starLordWord: "நட்சத்திர அதிபதி", padaWord: "பாதம்",
+      mudakkuHint: "சூரியன் நின்ற பாதத்திலிருந்து மூலத்தின் அதே பாதம் வரை பாதங்களை எண்ணி, அதே எண்ணிக்கையை அங்கிருந்து எண்ணவும். இங்குள்ள கிரகங்கள், ராசி அதிபதி, நட்சத்திர அதிபதி முடங்குவதாகக் கூறப்படுகிறது.",
+      mudakkuLagna: "முடக்கு ராசி லக்னமாக இருப்பதால், முடக்கின் பலன் குறையும் என்று கூறப்படுகிறது.",
     },
     tithiNames: ["பிரதமை", "துவிதியை", "திருதியை", "சதுர்த்தி", "பஞ்சமி", "சஷ்டி", "சப்தமி", "அஷ்டமி", "நவமி", "தசமி", "ஏகாதசி", "துவாதசி", "திரயோதசி", "சதுர்த்தசி"],
     paksha: { shukla: "வளர்பிறை", krishna: "தேய்பிறை" },
@@ -225,6 +231,30 @@ const READING_TOPICS = {
       { title: "Tithi Shoonya or Daghda Rasi (SMAFIR)", url: "http://tuningmymelody.blogspot.com/2019/03/concept-of-daghda-rasi-or-tithi-shoonya.html" },
       { title: "What is Thithi Sunya? (Zeroness of Thithi)", url: "https://horoscopeanswer.blogspot.com/2013/06/what-is-thithi-sunya-zeroness-of-thithi.html" },
       { title: "Tithi Shoonya or Daghda Rasi (Indian Astrology Secrets)", url: "https://indianastrologysecrets.quora.com/Tithi-Shoonya-orDaghda-Rasi" },
+    ],
+  },
+  mudakku: {
+    title: { en: "Mudakku Rasi", ta: "முடக்கு ராசி" },
+    intro: {
+      en: "Take the pada (quarter) of the nakshatra the Sun is in, and count padas from it to the same pada of Moolam, counting both. Count the same number of padas again starting from that Moolam pada (it = 1). The pada you land on gives the Mudakku nakshatra, and the rasi that pada is in is the Mudakku rasi. Planets in that rasi, its rasi lord and the star lord are said to be blocked (முடக்கம்) and give fewer good results. Example:",
+      ta: "சூரியன் நின்ற நட்சத்திரத்தின் பாதத்திலிருந்து மூலத்தின் அதே பாதம் வரை (இரண்டையும் சேர்த்து) பாதங்களை எண்ணவும். அதே எண்ணிக்கையை அந்த மூல பாதத்திலிருந்து (அது = 1) மீண்டும் எண்ணவும். வந்து சேரும் பாதத்தின் நட்சத்திரம் முடக்கு நட்சத்திரம்; அந்தப் பாதம் உள்ள ராசி முடக்கு ராசி. அந்த ராசியில் உள்ள கிரகங்கள், ராசி அதிபதி, நட்சத்திர அதிபதி முடங்கி, நல்ல பலன்களைக் குறைவாகத் தருவதாகக் கூறப்படுகிறது. உதாரணம்:",
+    },
+    tableHeader: [
+      { en: "Sun's pada", ta: "சூரியன் பாதம்" }, { en: "Padas to Moolam", ta: "மூலம் வரை பாதங்கள்" }, { en: "Mudakku pada", ta: "முடக்கு பாதம்" }, { en: "Mudakku rasi", ta: "முடக்கு ராசி" },
+    ],
+    table: [
+      [{ en: "Uthirattathi 1", ta: "உத்திரட்டாதி 1" }, { en: "81", ta: "81" }, { en: "Uthiram 1", ta: "உத்திரம் 1" }, { en: "Leo", ta: "சிம்மம்" }],
+      [{ en: "Uthirattathi 3", ta: "உத்திரட்டாதி 3" }, { en: "81", ta: "81" }, { en: "Uthiram 3", ta: "உத்திரம் 3" }, { en: "Virgo", ta: "கன்னி" }],
+      [{ en: "Moolam 2", ta: "மூலம் 2" }, { en: "1", ta: "1" }, { en: "Moolam 2", ta: "மூலம் 2" }, { en: "Sagittarius", ta: "தனுசு" }],
+    ],
+    note: {
+      en: "A pada is 3\u00B020\u2032 and never spans two signs, so the rasi is always clear. Some published versions count whole stars and start the second count from Pooradam instead, which lands one star later. Said to weaken when the Mudakku rasi is the lagna (flagged here); other conditions such as Saturn's or a strong Jupiter's aspect, and timing by the lord's transit, are not modeled.",
+      ta: "ஒரு பாதம் 3\u00B020\u2032; அது இரு ராசிகளில் பரவாது, எனவே ராசி எப்போதும் தெளிவு. சில நூல்கள் முழு நட்சத்திரங்களாக எண்ணி, இரண்டாவது எண்ணிக்கையை பூராடத்திலிருந்து தொடங்குகின்றன; அது ஒரு நட்சத்திரம் தள்ளி வரும். முடக்கு ராசி லக்னமாக இருந்தால் பலன் குறையும் (இங்கு குறிக்கப்படுகிறது); சனி அல்லது பலமுள்ள குருவின் பார்வை, அதிபதியின் கோசாரம் போன்றவை கணக்கிடப்படவில்லை.",
+    },
+    sources: [
+      { title: "சோதிட ரீதியான முடக்கு (Virakesari)", url: "https://www.virakesari.lk/article/143534" },
+      { title: "முடக்கு ராசி அட்டவணை (AstroSiva)", url: "https://astrosiva.in/mudakku-tithi-sunyam-life-remedies/" },
+      { title: "முடக்கு ராசி ஒரு ஜோதிட பார்வை (Neerkondar)", url: "http://neerkondar.blogspot.com/2024/12/blog-post_70.html" },
     ],
   },
 };
