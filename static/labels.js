@@ -41,6 +41,7 @@ const LABELS = {
       tithiBox: "Tithi and Thithi Soonyam", tithi: "Tithi", soonyam: "Thithi Soonyam", soonyamNone: "None (no void rasis on Pournami or Amavasai)",
       soonyamHint: "Void rasis for the birth tithi. Planets in them, and their lords, are said to give weaker results.",
       soonyamLegend: "Thithi Soonyam rasi",
+      upasana: "Upasana Deivam", upasanaPick: "Choose a rasi",
       mudakku: "Mudakku Rasi", mudakkuTag: "Mudakku", starLordWord: "star lord", padaWord: "pada",
       mudakkuHint: "From the Sun's pada, count padas to the same pada of Moolam; count the same again from there. Planets here, the rasi lord and the star lord are said to be blocked.",
       mudakkuLagna: "The Mudakku rasi is the lagna, which is said to weaken the Mudakku effect.",
@@ -91,6 +92,7 @@ const LABELS = {
       tithiBox: "திதி மற்றும் திதி சூன்யம்", tithi: "திதி", soonyam: "திதி சூன்யம்", soonyamNone: "இல்லை (பௌர்ணமி, அமாவாசைக்கு சூன்ய ராசி இல்லை)",
       soonyamHint: "பிறந்த திதிக்கான சூன்ய ராசிகள். அவற்றில் உள்ள கிரகங்களும் அவற்றின் அதிபதிகளும் பலம் குறைந்த பலன்களைத் தருவதாகக் கூறப்படுகிறது.",
       soonyamLegend: "திதி சூன்ய ராசி",
+      upasana: "உபாசனை தெய்வம்", upasanaPick: "ராசியைத் தேர்ந்தெடுக்கவும்",
       mudakku: "முடக்கு ராசி", mudakkuTag: "முடக்கு", starLordWord: "நட்சத்திர அதிபதி", padaWord: "பாதம்",
       mudakkuHint: "சூரியன் நின்ற பாதத்திலிருந்து மூலத்தின் அதே பாதம் வரை பாதங்களை எண்ணி, அதே எண்ணிக்கையை அங்கிருந்து எண்ணவும். இங்குள்ள கிரகங்கள், ராசி அதிபதி, நட்சத்திர அதிபதி முடங்குவதாகக் கூறப்படுகிறது.",
       mudakkuLagna: "முடக்கு ராசி லக்னமாக இருப்பதால், முடக்கின் பலன் குறையும் என்று கூறப்படுகிறது.",
@@ -100,6 +102,22 @@ const LABELS = {
     pournami: "பௌர்ணமி", amavasai: "அமாவாசை",
   },
 };
+
+// Upasana Deivam for each rasi (0=Mesham..11=Meenam), as given by the user.
+const UPASANA_DEIVAM = [
+  { en: "Palani \u2013 Murugan", ta: "பழனி \u2013 முருகன்" },
+  { en: "Rameshwaram \u2013 Parvathavarthini and Ramanatha Swamy", ta: "ராமேஸ்வரம் \u2013 பர்வதவர்த்தினி, ராமநாத சுவாமி" },
+  { en: "Tirunelveli \u2013 Nellaiyappar and Gandhimathi Amman", ta: "திருநெல்வேலி \u2013 நெல்லையப்பர், காந்திமதி அம்மன்" },
+  { en: "Nemili \u2013 Bala Thiripurasundari veedu", ta: "நெமிலி \u2013 பாலா திரிபுரசுந்தரி வீடு" },
+  { en: "Thirumeeyachur \u2013 Sri Lalithambigai", ta: "திருமீயச்சூர் \u2013 ஸ்ரீ லலிதாம்பிகை" },
+  { en: "Patteeswaram \u2013 Sri Durgai", ta: "பட்டீஸ்வரம் \u2013 ஸ்ரீ துர்கை" },
+  { en: "Srirangam \u2013 Kattazhagiya Singar", ta: "ஸ்ரீரங்கம் \u2013 காட்டழகிய சிங்கர்" },
+  { en: "Keel Tirupathi \u2013 Sri Padmavathy Thayaar", ta: "கீழ் திருப்பதி \u2013 ஸ்ரீ பத்மாவதி தாயார்" },
+  { en: "Thanjavur \u2013 Sri Varahi Amman", ta: "தஞ்சாவூர் \u2013 ஸ்ரீ வாராஹி அம்மன்" },
+  { en: "Thethupatti \u2013 Sri Rajakaliamman Temple", ta: "தேத்துப்பட்டி \u2013 ஸ்ரீ ராஜகாளியம்மன் கோவில்" },
+  { en: "Courtallam \u2013 Sri Kutralanathar", ta: "குற்றாலம் \u2013 ஸ்ரீ குற்றாலநாதர்" },
+  { en: "Sri Meenakshi Amman", ta: "ஸ்ரீ மீனாட்சி அம்மன்" },
+];
 
 const READING_TOPICS = {
   pushkaraNavamsa: {

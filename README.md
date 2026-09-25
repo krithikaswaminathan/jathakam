@@ -19,6 +19,7 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
 - **Tara Balam** from the birth star.
 - **Yogas and doshas**: Mangal Dosha, Gaja Kesari, Budhaditya, Chandra-Mangal, Kemadruma
   (simplified) and the five Pancha Mahapurusha yogas, each marked Present or Not present.
+- **Upasana Deivam**: pick a rasi to see its Upasana Deivam (temple and deity).
 - **Saved charts**: stored locally, recomputed on load, and deletable.
 
 ## Setup

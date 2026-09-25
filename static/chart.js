@@ -21,6 +21,7 @@ let state = {
   varga: "D1",
   selectedPlace: null, // { label, latitude, longitude, timezone }
   readingTopic: "pushkaraNavamsa",
+  upasanaRasi: "", // rasi index picked in the Upasana Deivam box, as a string
 };
 
 function L() {
@@ -115,6 +116,8 @@ function applyLanguage() {
   document.getElementById("soonyamLegendText").textContent = labels.ui.soonyamLegend;
   document.getElementById("lblMudakku").textContent = labels.ui.mudakku;
   document.getElementById("mudakkuHint").textContent = labels.ui.mudakkuHint;
+  document.getElementById("lblUpasana").textContent = labels.ui.upasana;
+  document.getElementById("lblUpasanaRasi").textContent = labels.ui.colRasi;
   document.getElementById("induLagnaHint").textContent = labels.ui.induLagnaHint;
   document.getElementById("lblReading").textContent = labels.ui.reading;
   document.getElementById("lblBack").textContent = labels.ui.back;
@@ -393,6 +396,7 @@ function renderAll() {
   renderPranapada();
   renderTithi();
   renderMudakku();
+  renderUpasana();
   renderDasaTable();
   renderYogas();
   renderTaraBalam();
@@ -443,6 +447,32 @@ function renderMudakku() {
     `${labels.rasi[m.rasi]} (${planet(m.rasi_lord)}) \u00B7 ${labels.nakshatra[m.nakshatra]} ${labels.ui.padaWord} ${m.pada} (${labels.ui.starLordWord} ${planet(m.star_lord)}) \u00B7 ${labels.ui.houseWord} ${m.house}` +
     (planets ? ` \u00B7 ${planets}` : "");
   document.getElementById("mudakkuLagnaNote").textContent = m.is_lagna ? labels.ui.mudakkuLagna : "";
+}
+
+function renderUpasana() {
+  const labels = L();
+  const select = document.getElementById("upasanaRasi");
+  select.innerHTML = "";
+  const blank = document.createElement("option");
+  blank.value = "";
+  blank.textContent = labels.ui.upasanaPick;
+  select.appendChild(blank);
+  labels.rasi.forEach((name, i) => {
+    const opt = document.createElement("option");
+    opt.value = String(i);
+    opt.textContent = name;
+    select.appendChild(opt);
+  });
+  select.value = state.upasanaRasi;
+  const show = () => {
+    document.getElementById("upasanaValue").textContent =
+      state.upasanaRasi === "" ? "" : UPASANA_DEIVAM[Number(state.upasanaRasi)][state.lang];
+  };
+  select.onchange = () => {
+    state.upasanaRasi = select.value;
+    show();
+  };
+  show();
 }
 
 function renderInduLagna() {
