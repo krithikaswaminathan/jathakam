@@ -108,6 +108,10 @@ function applyLanguage() {
   document.getElementById("thDgDist").textContent = labels.ui.colDistance;
   document.getElementById("dignityNote").textContent = labels.ui.dignityNote;
   document.getElementById("lblInduLagna").textContent = labels.ui.induLagna;
+  document.getElementById("lblTithi").textContent = labels.ui.tithi;
+  document.getElementById("lblSoonyam").textContent = labels.ui.soonyam;
+  document.getElementById("soonyamHint").textContent = labels.ui.soonyamHint;
+  document.getElementById("soonyamLegendText").textContent = labels.ui.soonyamLegend;
   document.getElementById("induLagnaHint").textContent = labels.ui.induLagnaHint;
   document.getElementById("lblReading").textContent = labels.ui.reading;
   document.getElementById("lblBack").textContent = labels.ui.back;
@@ -384,6 +388,7 @@ function renderAll() {
   renderGrid();
   renderInduLagna();
   renderPranapada();
+  renderTithi();
   renderDasaTable();
   renderYogas();
   renderTaraBalam();
@@ -398,6 +403,29 @@ function renderPranapada() {
   if (!p) return;
   document.getElementById("pranapadaValue").textContent =
     `${labels.rasi[p.rasi]} ${formatDMS(p.degree_in_sign)} \u00B7 ${labels.nakshatra[p.nakshatra]} \u00B7 ${labels.ui.houseWord} ${p.house}`;
+}
+
+function tithiName(t) {
+  const labels = L();
+  if (t.paksha_tithi === 15) return t.paksha === "shukla" ? labels.pournami : labels.amavasai;
+  return `${labels.paksha[t.paksha]} ${labels.tithiNames[t.paksha_tithi - 1]}`;
+}
+
+function renderTithi() {
+  const labels = L();
+  const t = state.chart.tithi;
+  document.getElementById("tithiBox").classList.toggle("hidden", !t);
+  if (!t) return;
+  document.getElementById("tithiValue").textContent = tithiName(t);
+  document.getElementById("soonyamValue").textContent = t.soonya_rasis.length
+    ? t.soonya_rasis
+        .map((r) => {
+          const lord = labels.planets[r.lord] || r.lord;
+          const planets = r.planets.map((p) => labels.planets[p] || p).join(", ");
+          return `${labels.rasi[r.rasi]} (${lord}) \u00B7 ${labels.ui.houseWord} ${r.house}` + (planets ? ` \u00B7 ${planets}` : "");
+        })
+        .join("; ")
+    : labels.ui.soonyamNone;
 }
 
 function renderInduLagna() {
@@ -445,10 +473,17 @@ function renderGrid() {
     }
   }
 
+  // Thithi Soonyam is sign-based and read from the D1 chart only
+  const soonyaRasis = new Set(
+    state.varga === "D1" && state.chart.tithi ? state.chart.tithi.soonya_rasis.map((r) => r.rasi) : []
+  );
+  document.getElementById("soonyamLegend").classList.toggle("hidden", soonyaRasis.size === 0);
+
   for (const pos of GRID_POSITIONS) {
     const cell = document.createElement("div");
     cell.className = "grid-cell";
     if (pos.rasi === chart.lagna_rasi) cell.classList.add("lagna");
+    if (soonyaRasis.has(pos.rasi)) cell.classList.add("soonyam");
     cell.style.gridRow = pos.row;
     cell.style.gridColumn = pos.col;
 

@@ -71,6 +71,21 @@ class DignityOut(BaseModel):
     degrees_from_deep: float | None
 
 
+class SoonyaRasiOut(BaseModel):
+    rasi: int
+    lord: str
+    house: int
+    planets: list[str]
+
+
+class TithiOut(BaseModel):
+    number: int
+    paksha: str
+    paksha_tithi: int
+    progress: float
+    soonya_rasis: list[SoonyaRasiOut]
+
+
 class ChartResponse(BaseModel):
     id: int
     name: str
@@ -89,6 +104,7 @@ class ChartResponse(BaseModel):
     yogas: list[YogaOut]
     dignities: list[DignityOut] = []
     pranapada: GrahaOut | None = None
+    tithi: TithiOut | None = None
 
 
 class DasaExpandRequest(BaseModel):

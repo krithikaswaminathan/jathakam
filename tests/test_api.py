@@ -44,6 +44,12 @@ def test_old_saved_charts_load_with_all_current_features(client):
     assert len(body["yogas"]) == 10
     assert "gulika" in body and "mandi" in body
     assert body["pranapada"]["rasi"] == 7  # Scorpio
+    tithi = body["tithi"]
+    assert (tithi["number"], tithi["paksha"]) == (13, "shukla")  # Shukla Trayodasi
+    assert [(r["rasi"], r["house"], r["planets"]) for r in tithi["soonya_rasis"]] == [
+        (1, 6, ["Moon"]),
+        (4, 9, ["Ketu"]),
+    ]
 
 
 def test_create_then_load_matches(client):

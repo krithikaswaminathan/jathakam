@@ -101,3 +101,25 @@ PUSHKARA_NAVAMSA_PARTS = {
     "air": {5, 7},
     "water": {0, 2},
 }
+
+# Thithi Soonyam: tithi number within its paksha (1=Prathamai..14=Chaturdasi) ->
+# the rasis that tithi makes "void". Same table for both pakshas; Pournami and
+# Amavasai (15) have none. Cross-checked against two sources, and the pattern
+# matches a third's description (mostly 4th/10th pairs; Tritiyai and Saptami
+# 6/8; Shashti 5/9; Chaturdasi all four dual signs).
+THITHI_SOONYA_RASIS = {
+    1: (6, 9),
+    2: (8, 11),
+    3: (4, 9),
+    4: (1, 10),
+    5: (2, 5),
+    6: (0, 4),
+    7: (3, 8),
+    8: (2, 5),
+    9: (4, 7),
+    10: (4, 7),
+    11: (8, 11),
+    12: (6, 9),
+    13: (1, 4),
+    14: (2, 5, 8, 11),
+}

@@ -38,7 +38,13 @@ const LABELS = {
       pranapada: "Pranapada Lagna", houseWord: "house",
       pranapadaHint: "Moves about 5\u00B0 per minute of birth time, so it is very sensitive to the exact time and sunrise.",
       yogaPresent: "Present", yogaAbsent: "Not present", yogaSummary: "Present in this chart",
+      tithi: "Tithi", soonyam: "Thithi Soonyam", soonyamNone: "None (no void rasis on Pournami or Amavasai)",
+      soonyamHint: "Void rasis for the birth tithi. Planets in them, and their lords, are said to give weaker results.",
+      soonyamLegend: "Thithi Soonyam rasi",
     },
+    tithiNames: ["Prathamai", "Dwitiyai", "Tritiyai", "Chaturthi", "Panchami", "Shashti", "Saptami", "Ashtami", "Navami", "Dasami", "Ekadasi", "Dwadasi", "Trayodasi", "Chaturdasi"],
+    paksha: { shukla: "Shukla", krishna: "Krishna" },
+    pournami: "Pournami", amavasai: "Amavasai",
   },
   ta: {
     rasi: ["மேஷம்", "ரிஷபம்", "மிதுனம்", "கடகம்", "சிம்மம்", "கன்னி", "துலாம்", "விருச்சிகம்", "தனுசு", "மகரம்", "கும்பம்", "மீனம்"],
@@ -79,7 +85,13 @@ const LABELS = {
       pranapada: "பிராணபத லக்னம்", houseWord: "வீடு",
       pranapadaHint: "பிறந்த நேரத்தின் ஒவ்வொரு நிமிடத்திற்கும் சுமார் 5\u00B0 நகர்வதால், துல்லியமான நேரம் மற்றும் சூரிய உதயத்தைப் பொறுத்து மிகவும் மாறும்.",
       yogaPresent: "உள்ளது", yogaAbsent: "இல்லை", yogaSummary: "இந்த ஜாதகத்தில் உள்ளவை",
+      tithi: "திதி", soonyam: "திதி சூன்யம்", soonyamNone: "இல்லை (பௌர்ணமி, அமாவாசைக்கு சூன்ய ராசி இல்லை)",
+      soonyamHint: "பிறந்த திதிக்கான சூன்ய ராசிகள். அவற்றில் உள்ள கிரகங்களும் அவற்றின் அதிபதிகளும் பலம் குறைந்த பலன்களைத் தருவதாகக் கூறப்படுகிறது.",
+      soonyamLegend: "திதி சூன்ய ராசி",
     },
+    tithiNames: ["பிரதமை", "துவிதியை", "திருதியை", "சதுர்த்தி", "பஞ்சமி", "சஷ்டி", "சப்தமி", "அஷ்டமி", "நவமி", "தசமி", "ஏகாதசி", "துவாதசி", "திரயோதசி", "சதுர்த்தசி"],
+    paksha: { shukla: "வளர்பிறை", krishna: "தேய்பிறை" },
+    pournami: "பௌர்ணமி", amavasai: "அமாவாசை",
   },
 };
 
@@ -181,6 +193,38 @@ const READING_TOPICS = {
     sources: [
       { title: "BPHS Pranapada \u2014 BP Lama Jyotishavidya", url: "https://barbarapijan.com/bpa/Amsha/pada_pranapada_BPHS.htm" },
       { title: "Aprakash Grahas, Upagrahas & Pranapada (worked example)", url: "http://varahamihira.blogspot.com/2008/02/aprakash-grahas-upagrahas-pranapada.html" },
+    ],
+  },
+  thithiSoonyam: {
+    title: { en: "Thithi Soonyam", ta: "திதி சூன்யம்" },
+    intro: {
+      en: "Each tithi (lunar day) makes certain rasis \u201Cvoid\u201D (soonyam). Planets placed in those rasis, and the lords of those rasis, are said to give weaker results, even when they are benefics. The same table is used for Shukla and Krishna paksha:",
+      ta: "ஒவ்வொரு திதியும் சில ராசிகளை \u201Cசூன்யம்\u201D ஆக்குகிறது. அந்த ராசிகளில் உள்ள கிரகங்களும், அந்த ராசிகளின் அதிபதிகளும், சுப கிரகங்களாக இருந்தாலும், பலம் குறைந்த பலன்களைத் தருவதாகக் கூறப்படுகிறது. வளர்பிறை, தேய்பிறை இரண்டிற்கும் ஒரே அட்டவணை:",
+    },
+    tableHeader: [
+      { en: "Tithi", ta: "திதி" }, { en: "Soonya rasis", ta: "சூன்ய ராசிகள்" },
+    ],
+    table: [
+      [{ en: "Prathamai, Dwadasi", ta: "பிரதமை, துவாதசி" }, { en: "Libra, Capricorn", ta: "துலாம், மகரம்" }],
+      [{ en: "Dwitiyai, Ekadasi", ta: "துவிதியை, ஏகாதசி" }, { en: "Sagittarius, Pisces", ta: "தனுசு, மீனம்" }],
+      [{ en: "Tritiyai", ta: "திருதியை" }, { en: "Leo, Capricorn", ta: "சிம்மம், மகரம்" }],
+      [{ en: "Chaturthi", ta: "சதுர்த்தி" }, { en: "Taurus, Aquarius", ta: "ரிஷபம், கும்பம்" }],
+      [{ en: "Panchami, Ashtami", ta: "பஞ்சமி, அஷ்டமி" }, { en: "Gemini, Virgo", ta: "மிதுனம், கன்னி" }],
+      [{ en: "Shashti", ta: "சஷ்டி" }, { en: "Aries, Leo", ta: "மேஷம், சிம்மம்" }],
+      [{ en: "Saptami", ta: "சப்தமி" }, { en: "Cancer, Sagittarius", ta: "கடகம், தனுசு" }],
+      [{ en: "Navami, Dasami", ta: "நவமி, தசமி" }, { en: "Leo, Scorpio", ta: "சிம்மம், விருச்சிகம்" }],
+      [{ en: "Trayodasi", ta: "திரயோதசி" }, { en: "Taurus, Leo", ta: "ரிஷபம், சிம்மம்" }],
+      [{ en: "Chaturdasi", ta: "சதுர்த்தசி" }, { en: "Gemini, Virgo, Sagittarius, Pisces", ta: "மிதுனம், கன்னி, தனுசு, மீனம்" }],
+      [{ en: "Pournami, Amavasai", ta: "பௌர்ணமி, அமாவாசை" }, { en: "None", ta: "இல்லை" }],
+    ],
+    note: {
+      en: "Commonly read as milder when a soonya rasi falls in the 6th, 8th or 12th house, and natural malefics (Mars, Saturn, Rahu, Ketu) are less affected. The tithi is the Moon's lead over the Sun in 12\u00B0 steps. Sources give no classical text for this table; it comes from the South Indian panchanga tradition.",
+      ta: "சூன்ய ராசி 6, 8, 12 ஆம் வீடுகளில் விழுந்தால் பாதிப்பு குறைவு என்றும், இயற்கை பாப கிரகங்கள் (செவ்வாய், சனி, ராகு, கேது) குறைவாகப் பாதிக்கப்படும் என்றும் கருதப்படுகிறது. திதி என்பது சூரியனை விட சந்திரன் முன்னிருக்கும் தூரம், 12\u00B0 படிகளில். இந்த அட்டவணைக்கு ஆதாரங்கள் செவ்வியல் நூலைக் குறிப்பிடவில்லை; இது தென்னிந்திய பஞ்சாங்க மரபிலிருந்து வருகிறது.",
+    },
+    sources: [
+      { title: "Tithi Shoonya or Daghda Rasi (SMAFIR)", url: "http://tuningmymelody.blogspot.com/2019/03/concept-of-daghda-rasi-or-tithi-shoonya.html" },
+      { title: "What is Thithi Sunya? (Zeroness of Thithi)", url: "https://horoscopeanswer.blogspot.com/2013/06/what-is-thithi-sunya-zeroness-of-thithi.html" },
+      { title: "Tithi Shoonya or Daghda Rasi (Indian Astrology Secrets)", url: "https://indianastrologysecrets.quora.com/Tithi-Shoonya-orDaghda-Rasi" },
     ],
   },
 };

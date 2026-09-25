@@ -7,6 +7,8 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
 - **Charts**: South Indian style rasi chart (D1) with retrograde marking and Gulika/Mandi placed
   in the grid, plus divisional charts D2, D3, D7, D9, D10, D12 and D60.
 - **Special lagnas**: Indu Lagna and Pranapada Lagna.
+- **Tithi and Thithi Soonyam**: birth tithi, its void (soonya) rasis with their lords, houses
+  and occupants, hatched in the D1 grid.
 - **Graha details**: rasi and nakshatra lords, absolute and in-sign degrees, and a Pushkara
   Navamsa column.
 - **Ucham / Neecham**: planets in exaltation or debilitation, with distance from the deep
@@ -61,6 +63,8 @@ python -m pytest tests/ -v
   both are shown because traditions differ on which to use.
 - Pranapada uses the BPHS method: Sun + ishta kala from sunrise, plus a correction for the
   Sun's sign type (movable +0°, dual +120°, fixed +240°).
+- Thithi Soonyam uses the South Indian panchanga table, the same for both pakshas; sources
+  cite no classical text for it.
 - Classical cancellation conditions (for example, Neecha Bhanga and Mangal Dosha
   cancellations) are not modeled. Each yoga's description in the app says what is checked.
 - Tara Balam is computed from the birth star only (not two-person compatibility).
