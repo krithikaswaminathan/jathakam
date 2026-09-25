@@ -6,11 +6,13 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   time zone; 12-hour time picker.
 - **Charts**: South Indian style rasi chart (D1) with retrograde marking and Gulika/Mandi placed
   in the grid, plus divisional charts D2, D3, D7, D9, D10, D12 and D60.
+- **Under the chart**: Indu Lagna, Pranapada, Tithi/Thithi Soonyam, Mudakku Rasi and Upasana
+  Deivam each sit in a collapsed box; click a title to open it.
 - **Special lagnas**: Indu Lagna and Pranapada Lagna.
 - **Tithi and Thithi Soonyam**: birth tithi, its void (soonya) rasis with their lords, houses
   and occupants, hatched in the D1 grid.
 - **Mudakku Rasi**: from the Sun's nakshatra pada, with its rasi and star lords, house and
-  occupants, tagged in the D1 grid.
+  occupants, tagged in the D1 grid; flags when it is the lagna, which is said to weaken it.
 - **Graha details**: rasi and nakshatra lords, absolute and in-sign degrees, and a Pushkara
   Navamsa column.
 - **Ucham / Neecham**: planets in exaltation or debilitation, with distance from the deep
@@ -21,6 +23,8 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   (simplified) and the five Pancha Mahapurusha yogas, each marked Present or Not present.
 - **Upasana Deivam**: the 11th rasi from Jupiter (for a man) or Venus (for a woman), with its
   temple and deity; any other rasi can be looked up too.
+- **Reading**: side-nav pages explaining the method, tables and sources for Pushkara Navamsa,
+  Pancha Mahapurusha yogas, Ucham/Neecham, Pranapada, Thithi Soonyam and Mudakku.
 - **Saved charts**: stored locally, recomputed on load, and deletable.
 
 ## Setup
@@ -72,6 +76,8 @@ python -m pytest tests/ -v
 - Mudakku counts padas from the Sun's pada to the same pada of Moolam, then the same again
   from there; the landing pada's rasi is the Mudakku rasi. Some versions count whole stars from
   Pooradam instead.
+- Upasana Deivam: the rasi-to-temple/deity list is the author's own, not from a published
+  source. Charts with gender "Other" get no computed rasi; the lookup still works.
 - Classical cancellation conditions (for example, Neecha Bhanga and Mangal Dosha
   cancellations) are not modeled. Each yoga's description in the app says what is checked.
 - Tara Balam is computed from the birth star only (not two-person compatibility).
