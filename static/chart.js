@@ -180,6 +180,7 @@ async function loadChart(id) {
   const res = await fetch(`/api/charts/${id}`);
   state.chart = await res.json();
   state.varga = "D1";
+  state.upasanaRasi = state.chart.upasana ? String(state.chart.upasana.rasi) : "";
   document.getElementById("resultSection").classList.remove("hidden");
   renderAll();
 }
@@ -262,6 +263,7 @@ document.getElementById("birthForm").addEventListener("submit", async (e) => {
   }
   state.chart = await res.json();
   state.varga = "D1";
+  state.upasanaRasi = state.chart.upasana ? String(state.chart.upasana.rasi) : "";
   document.getElementById("resultSection").classList.remove("hidden");
   renderAll();
   loadSavedCharts();
@@ -464,6 +466,16 @@ function renderUpasana() {
     select.appendChild(opt);
   });
   select.value = state.upasanaRasi;
+
+  const u = state.chart.upasana;
+  document.getElementById("upasanaCalc").textContent = u
+    ? labels.ui.upasanaCalc
+        .replace("{planet}", labels.planets[u.planet])
+        .replace("{from}", labels.rasi[u.planet_rasi])
+        .replace("{rasi}", labels.rasi[u.rasi])
+    : labels.ui.upasanaNoGender;
+  document.getElementById("upasanaHint").textContent = labels.ui.upasanaHint;
+
   const show = () => {
     document.getElementById("upasanaValue").textContent =
       state.upasanaRasi === "" ? "" : UPASANA_DEIVAM[Number(state.upasanaRasi)][state.lang];

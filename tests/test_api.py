@@ -55,6 +55,7 @@ def test_old_saved_charts_load_with_all_current_features(client):
     assert (mudakku["nakshatra"], mudakku["pada"], mudakku["rasi"], mudakku["house"]) == (18, 2, 8, 1)
     assert (mudakku["rasi_lord"], mudakku["star_lord"]) == ("Jupiter", "Ketu")
     assert mudakku["planets"] == ["Sun", "Mercury"] and mudakku["is_lagna"]
+    assert body["upasana"] == {"planet": "Venus", "planet_rasi": 7, "rasi": 5}  # Venus in Scorpio -> 11th is Virgo
 
 
 def test_create_then_load_matches(client):

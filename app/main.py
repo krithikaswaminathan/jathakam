@@ -32,6 +32,7 @@ from app.models import (
     SoonyaRasiOut,
     TaraEntryOut,
     TithiOut,
+    UpasanaOut,
     YogaOut,
 )
 from app.mudakku import compute_mudakku
@@ -39,6 +40,7 @@ from app.pranapada import compute_pranapada_longitude
 from app.tara import compute_tara_balam
 from app.tithi import compute_tithi
 from app.timezone_utils import compute_utc_offset
+from app.upasana import compute_upasana
 from app.upagraha import compute_gulika_longitude, compute_mandi_longitude
 from app.yogas import detect_all_yogas
 
@@ -118,6 +120,7 @@ def _build_chart_response(
     tara_entries = compute_tara_balam(d1.grahas["Moon"].nakshatra)
     tithi = compute_tithi(d1)
     mudakku = compute_mudakku(d1)
+    upasana = compute_upasana(d1, gender)
 
     return ChartResponse(
         id=chart_id,
@@ -151,6 +154,7 @@ def _build_chart_response(
             soonya_rasis=[SoonyaRasiOut(**vars(r)) for r in tithi.soonya_rasis],
         ),
         mudakku=MudakkuOut(**vars(mudakku)),
+        upasana=UpasanaOut(**vars(upasana)) if upasana else None,
     )
 
 

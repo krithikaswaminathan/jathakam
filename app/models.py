@@ -100,6 +100,12 @@ class MudakkuOut(BaseModel):
     is_lagna: bool
 
 
+class UpasanaOut(BaseModel):
+    planet: str
+    planet_rasi: int
+    rasi: int
+
+
 class ChartResponse(BaseModel):
     id: int
     name: str
@@ -120,6 +126,7 @@ class ChartResponse(BaseModel):
     pranapada: GrahaOut | None = None
     tithi: TithiOut | None = None
     mudakku: MudakkuOut | None = None
+    upasana: UpasanaOut | None = None
 
 
 class DasaExpandRequest(BaseModel):
