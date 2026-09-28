@@ -33,9 +33,13 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
 - **Drekkana Lords Aathipathyam**: for all nine planets, the drekkana lord (controller) picked
   by the planet's degree, where it sits, and whether it is 6th or 8th from the planet, which
   weakens the planet; when any planet is weakened, the pariharam (Vakkarakali Amman) is shown.
+- **Navamsa Sashtashtagam**: each of the nine planets' D9 rasi counted from its D1 rasi; a planet
+  6th or 8th is flagged with the houses it rules in D1 (its aathipathyam) and what they stand for,
+  plus the Vakkarakali Amman pariharam. None flagged is a huge plus in the jathakam.
 - **Reading**: side-nav pages explaining the method, tables and sources for Pushkara Navamsa,
   Pancha Mahapurusha yogas, Ucham/Neecham, Pranapada, Thithi Soonyam, Mudakku, Soorya Chandraadhi
-  Yoga, Jeevanam Yoga, Kaala Pakai, Moorthi Nirnayam and Drekkana Lords Aathipathyam.
+  Yoga, Jeevanam Yoga, Kaala Pakai, Moorthi Nirnayam, Drekkana Lords Aathipathyam
+  and Navamsa Sashtashtagam.
 - **Saved charts**: stored locally, recomputed on load, and deletable.
 
 ## Setup
@@ -121,3 +125,6 @@ python -m pytest tests/ -v
   20° stay in the earlier drekkana, unlike the usual convention and the app's D3 chart). A
   controller 6th or 8th from the planet weakens it. All nine planets are checked; Rahu and Ketu are
   never controllers, as they rule no rasi. The author's own rule.
+- Navamsa Sashtashtagam: counted from each planet's D1 rasi (= 1) to its D9 rasi; 6th or 8th is
+  flagged. The house meanings shown are a common short list, not from a single source. Rahu and
+  Ketu rule no house, so the house they sit in is shown instead. The author's own rule.
