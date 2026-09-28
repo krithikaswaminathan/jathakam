@@ -26,9 +26,13 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   earnings) and the five Pancha Mahapurusha yogas, each marked Present or Not present.
 - **Upasana Deivam**: the 11th rasi from Jupiter (for a man) or Venus (for a woman), with its
   temple and deity; any other rasi can be looked up too.
+- **Peyarchi and Moorthi Nirnayam**: every rasi change of Saturn, Jupiter and Rahu/Ketu from
+  2026 to 2031 (plus the one already running on 1 Jan 2026), with the date and time, the Moon's
+  rasi then and the Moorthi (Swarna, Rajatha, Thamira or Loha) counted from the janma rasi;
+  the running transits are highlighted, and the table can be filtered by planet.
 - **Reading**: side-nav pages explaining the method, tables and sources for Pushkara Navamsa,
   Pancha Mahapurusha yogas, Ucham/Neecham, Pranapada, Thithi Soonyam, Mudakku, Soorya Chandraadhi
-  Yoga, Jeevanam Yoga and Kaala Pakai.
+  Yoga, Jeevanam Yoga, Kaala Pakai and Moorthi Nirnayam.
 - **Saved charts**: stored locally, recomputed on load, and deletable.
 
 ## Setup
@@ -103,3 +107,9 @@ python -m pytest tests/ -v
 - Jeevanam Yoga: the Moon's rasi numbered from Mesha (Mesha = 1) gives a house count from the
   lagna; any of the nine grahas there, the Moon included, forms the yoga and shows the source of
   earnings. Always present for a Mesha lagna. D1 only; the author's own rule.
+- Moorthi Nirnayam follows [Astroshala's Moorti Nirnaya article](https://astroshala.com/moorti-nirnaya-a-traditional-and-authentic-approach-to-check-planetary-transit-results/):
+  count from the janma rasi to the Moon's rasi at the moment of each peyarchi (1/6/11 Swarna,
+  2/5/9 Rajatha, 3/7/10 Thamira, 4/8/12 Loha). Peyarchi times come from the Swiss Ephemeris with
+  Lahiri ayanamsa and the mean node (Thirukanitha); Vakya panchangam dates can differ. A retrograde
+  slip back into the previous rasi, and the re-entry after it, are listed with their own Moorthi.
+  The window is set by `PEYARCHI_START_YEAR` and `PEYARCHI_END_YEAR` in `app/constants.py`.
