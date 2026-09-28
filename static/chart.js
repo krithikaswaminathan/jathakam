@@ -23,6 +23,7 @@ let state = {
   readingTopic: "pushkaraNavamsa",
   upasanaRasi: "", // rasi index picked in the Upasana Deivam box, as a string
   kaalaPakaiPlanet: "", // planet picked in the Kaala Pakai box
+  peyarchiPlanet: "", // planet filter on the Peyarchi tab; "" = all
 };
 
 function L() {
@@ -123,6 +124,14 @@ function applyLanguage() {
   document.getElementById("lblKaalaPakaiPlanet").textContent = labels.ui.colPlanet;
   document.getElementById("kaalaPakaiHint").textContent = labels.ui.kaalaPakaiHint;
   document.getElementById("thKaalaPakai").textContent = labels.ui.colKaalaPakai;
+  document.getElementById("lblPeyarchiTab").textContent = labels.ui.peyarchiTab;
+  document.getElementById("lblPeyarchiFilter").textContent = labels.ui.colPlanet;
+  document.getElementById("thPyPlanet").textContent = labels.ui.colPlanet;
+  document.getElementById("thPyEnters").textContent = labels.ui.colEnters;
+  document.getElementById("thPyWhen").textContent = labels.ui.colWhen;
+  document.getElementById("thPyMoon").textContent = labels.ui.colMoonThen;
+  document.getElementById("thPyCount").textContent = labels.ui.colCount;
+  document.getElementById("thPyMoorthi").textContent = labels.ui.colMoorthi;
   document.getElementById("induLagnaHint").textContent = labels.ui.induLagnaHint;
   document.getElementById("lblReading").textContent = labels.ui.reading;
   document.getElementById("lblBack").textContent = labels.ui.back;
@@ -412,6 +421,7 @@ function renderAll() {
   renderTaraBalam();
   renderGrahaDetails();
   renderDignity();
+  renderPeyarchi();
 }
 
 function renderPranapada() {
@@ -896,6 +906,84 @@ function renderDignity() {
       td.textContent = value;
       tr.appendChild(td);
     }
+    tbody.appendChild(tr);
+  }
+}
+
+// Rahu and Ketu change rasi together, so a Rahu peyarchi is shown as both.
+function peyarchiPlanetName(planet) {
+  return planet === "Rahu" ? L().ui.rahuKetu : L().planets[planet];
+}
+
+function peyarchiRasiName(p) {
+  const rasi = L().rasi;
+  return p.planet === "Rahu" ? `${rasi[p.rasi]} / ${rasi[(p.rasi + 6) % 12]}` : rasi[p.rasi];
+}
+
+// The peyarchi of each planet that is running now: its latest one that has started.
+function currentPeyarchis() {
+  const now = new Date();
+  const current = new Map();
+  for (const p of state.chart.peyarchis) {
+    if (new Date(p.when) <= now) current.set(p.planet, p);
+  }
+  return current;
+}
+
+function renderPeyarchi() {
+  const labels = L();
+  const peyarchis = state.chart.peyarchis;
+  const current = currentPeyarchis();
+
+  document.getElementById("peyarchiSummary").textContent = current.size
+    ? `${labels.ui.peyarchiNow}: ` +
+      [...current.values()].map((p) => `${peyarchiPlanetName(p.planet)} ${peyarchiRasiName(p)} \u2013 ${labels.moorthi[p.moorthi]}`).join("  \u00B7  ")
+    : "";
+  document.getElementById("peyarchiNote").textContent =
+    labels.ui.peyarchiNote.replace("{janma}", labels.rasi[state.chart.d1.grahas.Moon.rasi]);
+
+  const select = document.getElementById("peyarchiFilter");
+  select.innerHTML = "";
+  for (const planet of ["", "Saturn", "Jupiter", "Rahu"]) {
+    const opt = document.createElement("option");
+    opt.value = planet;
+    opt.textContent = planet ? peyarchiPlanetName(planet) : labels.ui.peyarchiAll;
+    select.appendChild(opt);
+  }
+  select.value = state.peyarchiPlanet;
+  select.onchange = () => {
+    state.peyarchiPlanet = select.value;
+    renderPeyarchi();
+  };
+
+  const tbody = document.getElementById("peyarchiBody");
+  tbody.innerHTML = "";
+  const currentSet = new Set(current.values());
+  for (const p of peyarchis) {
+    if (state.peyarchiPlanet && p.planet !== state.peyarchiPlanet) continue;
+    const tr = document.createElement("tr");
+    if (currentSet.has(p)) tr.className = "current-period";
+    const kind = p.kind === "retrograde" ? ` ${labels.ui.peyarchiRetro}` : p.kind === "re-entry" ? ` ${labels.ui.peyarchiReentry}` : "";
+    const cells = [
+      [peyarchiPlanetName(p.planet)],
+      [peyarchiRasiName(p) + kind],
+      [p.when.slice(0, 16).replace("T", " "), p.in_effect_at_start ? labels.ui.peyarchiCarried : ""],
+      [labels.rasi[p.moon_rasi]],
+      [String(p.count)],
+      [labels.moorthi[p.moorthi], labels.moorthiResult[p.moorthi]],
+    ];
+    cells.forEach(([main, sub], i) => {
+      const td = document.createElement("td");
+      td.textContent = main;
+      if (sub) {
+        const span = document.createElement("span");
+        span.className = "peyarchi-sub";
+        span.textContent = sub;
+        td.appendChild(span);
+      }
+      if (i === 5) td.className = `moorthi-${p.moorthi}`;
+      tr.appendChild(td);
+    });
     tbody.appendChild(tr);
   }
 }

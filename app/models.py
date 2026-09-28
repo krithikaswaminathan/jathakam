@@ -112,6 +112,17 @@ class KaalaPakaiOut(BaseModel):
     house: int
 
 
+class PeyarchiOut(BaseModel):
+    planet: str
+    when: datetime  # in the chart's time zone
+    rasi: int
+    kind: str
+    moon_rasi: int
+    count: int
+    moorthi: str
+    in_effect_at_start: bool
+
+
 class ChartResponse(BaseModel):
     id: int
     name: str
@@ -134,6 +145,7 @@ class ChartResponse(BaseModel):
     mudakku: MudakkuOut | None = None
     upasana: UpasanaOut | None = None
     kaala_pakai: list[KaalaPakaiOut] = []
+    peyarchis: list[PeyarchiOut] = []
 
 
 class DasaExpandRequest(BaseModel):

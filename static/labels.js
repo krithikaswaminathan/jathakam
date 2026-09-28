@@ -35,6 +35,11 @@ const LABELS = {
       sooryaChandraadhiCalc: "Sun is in house {house} from the lagna; rasi {house} from Mesha is {target}; the Moon is in {moon}.",
       jeevanamCalc: "Moon is in {moon}, rasi {n} from Mesha; house {n} from the lagna is {target}; planets there: {planets}.",
       jeevanamEarning: "Earnings come through: {planets}.", noneWord: "none",
+      peyarchiTab: "Peyarchi", colEnters: "Enters", colWhen: "Date and time", colMoonThen: "Moon then",
+      colCount: "Count", colMoorthi: "Moorthi", peyarchiAll: "All planets", rahuKetu: "Rahu / Ketu",
+      peyarchiRetro: "(retrograde, back)", peyarchiReentry: "(re-entry)", peyarchiNow: "Now",
+      peyarchiCarried: "began before 2026 and still running then",
+      peyarchiNote: "Moorthi counts from your janma rasi ({janma}) to the Moon's rasi at the moment of each peyarchi, 2026 to 2031. Times are in the birth place's time zone. Dates follow the Thirukanitha method; Vakya panchangam dates can differ.",
       dignityTab: "Ucham / Neecham", colState: "State", colDeep: "Deep point", colDistance: "From deep point",
       dignityUcham: "Ucham (exalted)", dignityNeecham: "Neecham (debilitated)",
       dignityNone: "No planet is in its exaltation or debilitation sign.",
@@ -59,6 +64,8 @@ const LABELS = {
     tithiNames: ["Prathamai", "Dwitiyai", "Tritiyai", "Chaturthi", "Panchami", "Shashti", "Saptami", "Ashtami", "Navami", "Dasami", "Ekadasi", "Dwadasi", "Trayodasi", "Chaturdasi"],
     paksha: { shukla: "Shukla", krishna: "Krishna" },
     pournami: "Pournami", amavasai: "Amavasai",
+    moorthi: { Swarna: "Swarna (gold)", Rajatha: "Rajatha (silver)", Thamira: "Thamira (copper)", Loha: "Loha (iron)" },
+    moorthiResult: { Swarna: "very favourable", Rajatha: "favourable", Thamira: "average", Loha: "unfavourable" },
   },
   ta: {
     rasi: ["மேஷம்", "ரிஷபம்", "மிதுனம்", "கடகம்", "சிம்மம்", "கன்னி", "துலாம்", "விருச்சிகம்", "தனுசு", "மகரம்", "கும்பம்", "மீனம்"],
@@ -96,6 +103,11 @@ const LABELS = {
       sooryaChandraadhiCalc: "சூரியன் லக்னத்திலிருந்து {house}ஆம் வீட்டில் உள்ளது; மேஷத்திலிருந்து {house}ஆம் ராசி {target}; சந்திரன் {moon} ராசியில் உள்ளது.",
       jeevanamCalc: "சந்திரன் {moon} ராசியில், மேஷத்திலிருந்து {n}ஆம் ராசி; லக்னத்திலிருந்து {n}ஆம் வீடு {target}; அங்குள்ள கிரகங்கள்: {planets}.",
       jeevanamEarning: "சம்பாத்தியம் வரும் வழி: {planets}.", noneWord: "இல்லை",
+      peyarchiTab: "பெயர்ச்சி", colEnters: "நுழையும் ராசி", colWhen: "தேதி, நேரம்", colMoonThen: "அப்போது சந்திரன்",
+      colCount: "எண்ணிக்கை", colMoorthi: "மூர்த்தி", peyarchiAll: "அனைத்து கிரகங்கள்", rahuKetu: "ராகு / கேது",
+      peyarchiRetro: "(வக்கிரம், பின்னோக்கி)", peyarchiReentry: "(மீண்டும் நுழைவு)", peyarchiNow: "தற்போது",
+      peyarchiCarried: "2026க்கு முன் தொடங்கி, அப்போதும் நடப்பில்",
+      peyarchiNote: "ஒவ்வொரு பெயர்ச்சியின் போதும் சந்திரன் நின்ற ராசியை உங்கள் ஜென்ம ராசியிலிருந்து ({janma}) எண்ணி மூர்த்தி கணக்கிடப்படுகிறது, 2026 முதல் 2031 வரை. நேரங்கள் பிறந்த ஊரின் நேர மண்டலத்தில். தேதிகள் திருக்கணித முறைப்படி; வாக்கிய பஞ்சாங்கத் தேதிகள் மாறுபடலாம்.",
       dignityTab: "உச்சம் / நீசம்", colState: "நிலை", colDeep: "உச்ச பாகை", colDistance: "உச்ச பாகையிலிருந்து",
       dignityUcham: "உச்சம்", dignityNeecham: "நீசம்",
       dignityNone: "எந்த கிரகமும் உச்ச அல்லது நீச ராசியில் இல்லை.",
@@ -120,6 +132,8 @@ const LABELS = {
     tithiNames: ["பிரதமை", "துவிதியை", "திருதியை", "சதுர்த்தி", "பஞ்சமி", "சஷ்டி", "சப்தமி", "அஷ்டமி", "நவமி", "தசமி", "ஏகாதசி", "துவாதசி", "திரயோதசி", "சதுர்த்தசி"],
     paksha: { shukla: "வளர்பிறை", krishna: "தேய்பிறை" },
     pournami: "பௌர்ணமி", amavasai: "அமாவாசை",
+    moorthi: { Swarna: "சுவர்ண (தங்கம்)", Rajatha: "ரஜத (வெள்ளி)", Thamira: "தாமிர (செம்பு)", Loha: "லோஹ (இரும்பு)" },
+    moorthiResult: { Swarna: "மிக நல்லது", Rajatha: "நல்லது", Thamira: "சுமார்", Loha: "சாதகமில்லை" },
   },
 };
 
@@ -350,6 +364,29 @@ const READING_TOPICS = {
       en: "As given by the user; no written source. Only the rasi counts, not the degree.",
       ta: "பயனர் தந்த விதி; எழுத்து மூலம் இல்லை. பாகை அல்ல, ராசி மட்டுமே கணக்கில் கொள்ளப்படுகிறது.",
     },
+  },
+  moorthiNirnayam: {
+    title: { en: "Moorthi Nirnayam", ta: "மூர்த்தி நிர்ணயம்" },
+    intro: {
+      en: "When Saturn, Jupiter or Rahu/Ketu changes rasi (peyarchi), note the rasi the Moon is in at that moment. Count from your janma rasi (the Moon's rasi at birth) to that rasi, the janma rasi being the 1st. The count gives the Moorthi, which sets how well that transit goes for you:",
+      ta: "சனி, குரு அல்லது ராகு/கேது ராசி மாறும் (பெயர்ச்சி) நேரத்தில் சந்திரன் எந்த ராசியில் உள்ளது என்று பார்க்கவும். உங்கள் ஜென்ம ராசியிலிருந்து (பிறந்தபோது சந்திரன் நின்ற ராசி, அதுவே 1) அந்த ராசி வரை எண்ணவும். அந்த எண்ணிக்கை மூர்த்தியைத் தரும்; அந்தப் பெயர்ச்சி உங்களுக்கு எப்படி அமையும் என்பதை அது காட்டும்:",
+    },
+    tableHeader: [
+      { en: "Count from janma rasi", ta: "ஜென்ம ராசியிலிருந்து எண்ணிக்கை" }, { en: "Moorthi", ta: "மூர்த்தி" }, { en: "Result", ta: "பலன்" },
+    ],
+    table: [
+      [{ en: "1, 6, 11", ta: "1, 6, 11" }, { en: "Swarna (gold)", ta: "சுவர்ண (தங்கம்)" }, { en: "Very favourable", ta: "மிக நல்லது" }],
+      [{ en: "2, 5, 9", ta: "2, 5, 9" }, { en: "Rajatha (silver)", ta: "ரஜத (வெள்ளி)" }, { en: "Favourable", ta: "நல்லது" }],
+      [{ en: "3, 7, 10", ta: "3, 7, 10" }, { en: "Thamira (copper)", ta: "தாமிர (செம்பு)" }, { en: "Average", ta: "சுமார்" }],
+      [{ en: "4, 8, 12", ta: "4, 8, 12" }, { en: "Loha (iron)", ta: "லோஹ (இரும்பு)" }, { en: "Unfavourable", ta: "சாதகமில்லை" }],
+    ],
+    note: {
+      en: "Example from the source: Jupiter entered Capricorn on 20 Nov 2020 with the Moon also in Capricorn, so for a Capricorn janma rasi it was Swarna and for Aries (10th) Thamira. When Saturn or Jupiter slips back into the previous rasi while retrograde, and when it enters again, each is listed with its own Moorthi. Rahu and Ketu always change rasi together.",
+      ta: "மூலத்தின் உதாரணம்: 20 நவம்பர் 2020 அன்று குரு மகரத்தில் நுழைந்தபோது சந்திரனும் மகரத்தில் இருந்தது; எனவே மகர ராசிக்கு சுவர்ண மூர்த்தி, மேஷத்திற்கு (10ஆம்) தாமிர மூர்த்தி. சனி அல்லது குரு வக்கிரமாகி முந்தைய ராசிக்குத் திரும்பும்போதும், மீண்டும் நுழையும்போதும், ஒவ்வொன்றும் தனி மூர்த்தியுடன் காட்டப்படுகிறது. ராகுவும் கேதுவும் எப்போதும் ஒன்றாக ராசி மாறுகின்றன.",
+    },
+    sources: [
+      { title: "Moorti Nirnaya: a traditional approach to check transit results (Astroshala)", url: "https://astroshala.com/moorti-nirnaya-a-traditional-and-authentic-approach-to-check-planetary-transit-results/" },
+    ],
   },
   jeevanam: {
     title: { en: "Jeevanam Yoga", ta: "ஜீவன யோகம்" },

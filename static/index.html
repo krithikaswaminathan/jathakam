@@ -101,6 +101,7 @@
         <button class="tab-btn" data-tab="taraTab" id="lblTaraTab">Tara Balam</button>
         <button class="tab-btn" data-tab="detailsTab" id="lblDetailsTab">Graha Details</button>
         <button class="tab-btn" data-tab="dignityTab" id="lblDignityTab">Ucham / Neecham</button>
+        <button class="tab-btn" data-tab="peyarchiTab" id="lblPeyarchiTab">Peyarchi</button>
       </div>
 
       <div id="chartTab" class="tab-panel active">
@@ -194,6 +195,20 @@
           <tbody id="dignityBody"></tbody>
         </table>
         <p id="dignityNote" class="reading-note"></p>
+      </div>
+
+      <div id="peyarchiTab" class="tab-panel">
+        <div id="peyarchiSummary" class="yoga-summary"></div>
+        <div class="peyarchi-filter"><label for="peyarchiFilter" id="lblPeyarchiFilter" class="info-label">Planet</label>
+          <select id="peyarchiFilter" class="upasana-select"></select></div>
+        <table id="peyarchiTable">
+          <thead><tr>
+            <th id="thPyPlanet">Planet</th><th id="thPyEnters">Enters</th><th id="thPyWhen">Date and time</th>
+            <th id="thPyMoon">Moon then</th><th id="thPyCount">Count</th><th id="thPyMoorthi">Moorthi</th>
+          </tr></thead>
+          <tbody id="peyarchiBody"></tbody>
+        </table>
+        <p id="peyarchiNote" class="reading-note"></p>
       </div>
     </section>
   </main>

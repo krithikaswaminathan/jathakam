@@ -137,3 +137,17 @@ KAALA_PAKAI_RASIS = {
     "Venus": (9, 10),
     "Saturn": (11,),
 }
+
+# Moorthi Nirnayam: count from the janma rasi to the Moon's rasi at a peyarchi
+# (janma rasi = 1) -> Moorthi. Swarna is best, then Rajatha, Thamira, Loha. From
+# astroshala.com's Moorti Nirnaya article.
+MOORTHI_BY_COUNT = {
+    1: "Swarna", 6: "Swarna", 11: "Swarna",
+    2: "Rajatha", 5: "Rajatha", 9: "Rajatha",
+    3: "Thamira", 7: "Thamira", 10: "Thamira",
+    4: "Loha", 8: "Loha", 12: "Loha",
+}
+
+# The peyarchi window shown: 2026 and the next five years.
+PEYARCHI_START_YEAR = 2026
+PEYARCHI_END_YEAR = 2031

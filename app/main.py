@@ -1,4 +1,5 @@
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
@@ -12,7 +13,7 @@ from app.astrology import (
     longitude_to_rasi,
     make_graha_position,
 )
-from app.constants import RASI_LORDS
+from app.constants import PEYARCHI_END_YEAR, PEYARCHI_START_YEAR, RASI_LORDS
 from app.dasa import compute_mahadasas, compute_sub_periods
 from app.db import SavedChart, delete_chart, get_chart, init_db, list_charts, save_chart
 from app.dignity import compute_dignities
@@ -29,6 +30,7 @@ from app.models import (
     GrahaOut,
     KaalaPakaiOut,
     MudakkuOut,
+    PeyarchiOut,
     PlaceResult,
     SoonyaRasiOut,
     TaraEntryOut,
@@ -38,6 +40,7 @@ from app.models import (
 )
 from app.kaala_pakai import compute_kaala_pakai
 from app.mudakku import compute_mudakku
+from app.peyarchi import compute_peyarchis
 from app.pranapada import compute_pranapada_longitude
 from app.tara import compute_tara_balam
 from app.tithi import compute_tithi
@@ -158,7 +161,18 @@ def _build_chart_response(
         mudakku=MudakkuOut(**vars(mudakku)),
         upasana=UpasanaOut(**vars(upasana)) if upasana else None,
         kaala_pakai=[KaalaPakaiOut(**vars(e)) for e in compute_kaala_pakai(d1)],
+        peyarchis=_peyarchis_out(d1.grahas["Moon"].rasi, timezone),
     )
+
+
+def _peyarchis_out(janma_rasi: int, timezone_name: str) -> list[PeyarchiOut]:
+    tz = ZoneInfo(timezone_name)
+    start = datetime(PEYARCHI_START_YEAR, 1, 1, tzinfo=tz)
+    end = datetime(PEYARCHI_END_YEAR + 1, 1, 1, tzinfo=tz)
+    return [
+        PeyarchiOut(**{**vars(e), "when": e.when.astimezone(tz)})
+        for e in compute_peyarchis(janma_rasi, start, end)
+    ]
 
 
 @app.post("/api/chart", response_model=ChartResponse)
