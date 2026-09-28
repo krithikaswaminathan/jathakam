@@ -26,7 +26,7 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   earnings) and the five Pancha Mahapurusha yogas, each marked Present or Not present.
 - **Upasana Deivam**: the 11th rasi from Jupiter (for a man) or Venus (for a woman), with its
   temple and deity; any other rasi can be looked up too.
-- **Peyarchi and Moorthi Nirnayam**: every rasi change of Saturn, Jupiter and Rahu/Ketu from
+- **Moorthy (Moorthi Nirnayam)**: every rasi change of Saturn, Jupiter and Rahu/Ketu from
   2026 to 2031 (plus the one already running on 1 Jan 2026), with the date and time, the Moon's
   rasi then and the Moorthi (Swarna, Rajatha, Thamira or Loha) counted from the janma rasi;
   the running transits are highlighted, and the table can be filtered by planet.
