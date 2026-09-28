@@ -31,7 +31,8 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   rasi then and the Moorthi (Swarna, Rajatha, Thamira or Loha) counted from the janma rasi;
   the running transits are highlighted, and the table can be filtered by planet.
 - **Drekkana Lords**: for Sun to Saturn, the drekkana lord (controller) picked by the planet's
-  degree, where it sits, and whether it is 6th or 8th from the planet, which weakens the planet.
+  degree, where it sits, and whether it is 6th or 8th from the planet, which weakens the planet;
+  when any planet is weakened, the pariharam (Vakkarakali Amman) is shown.
 - **Reading**: side-nav pages explaining the method, tables and sources for Pushkara Navamsa,
   Pancha Mahapurusha yogas, Ucham/Neecham, Pranapada, Thithi Soonyam, Mudakku, Soorya Chandraadhi
   Yoga, Jeevanam Yoga, Kaala Pakai, Moorthi Nirnayam and Drekkana Lords.

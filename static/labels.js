@@ -43,6 +43,7 @@ const LABELS = {
       colFromPlanet: "From planet", colResult: "Result", drekkanaOrdinal: ["1st", "2nd", "3rd"],
       drekkanaWeak: "⚠ {n}th from it: cannot perform well", drekkanaOk: "Fine", drekkanaOwn: "Its own controller",
       drekkanaNone: "No planet's controller is 6th or 8th from it.", drekkanaSummary: "Weakened by their controller",
+      drekkanaPariharam: "Pariharam: Vakkarakali Amman",
       drekkanaNote: "Drekkana: up to 10° the controller is the lord of the planet's own rasi, over 10° up to 20° the lord of the 5th rasi, over 20° the lord of the 9th. If the controller is in the 6th or 8th rasi from the planet, the planet cannot perform well. Rahu and Ketu are not checked.",
       peyarchiNote: "Moorthi counts from your janma rasi ({janma}) to the Moon's rasi at the moment of each peyarchi, 2026 to 2031. Times are in the birth place's time zone. Dates follow the Thirukanitha method; Vakya panchangam dates can differ.",
       dignityTab: "Ucham / Neecham", colState: "State", colDeep: "Deep point", colDistance: "From deep point",
@@ -116,6 +117,7 @@ const LABELS = {
       colFromPlanet: "கிரகத்திலிருந்து", colResult: "பலன்", drekkanaOrdinal: ["1ஆம்", "2ஆம்", "3ஆம்"],
       drekkanaWeak: "⚠ {n}ஆம் இடம்: சரியாகச் செயல்பட இயலாது", drekkanaOk: "சரி", drekkanaOwn: "தானே அதிபதி",
       drekkanaNone: "எந்த கிரகத்தின் அதிபதியும் அதற்கு 6 அல்லது 8ஆம் இடத்தில் இல்லை.", drekkanaSummary: "அதிபதியால் பலம் குறைந்தவை",
+      drekkanaPariharam: "பரிகாரம்: வக்கிரகாளி அம்மன்",
       drekkanaNote: "திரேக்காணம்: 10° வரை கிரகம் நின்ற ராசியின் அதிபதி, 10°க்கு மேல் 20° வரை 5ஆம் ராசியின் அதிபதி, 20°க்கு மேல் 9ஆம் ராசியின் அதிபதி. அந்த அதிபதி கிரகத்திலிருந்து 6 அல்லது 8ஆம் ராசியில் இருந்தால், அந்தக் கிரகம் சரியாகச் செயல்பட இயலாது. ராகு, கேது கணக்கில் இல்லை.",
       peyarchiNote: "ஒவ்வொரு பெயர்ச்சியின் போதும் சந்திரன் நின்ற ராசியை உங்கள் ஜென்ம ராசியிலிருந்து ({janma}) எண்ணி மூர்த்தி கணக்கிடப்படுகிறது, 2026 முதல் 2031 வரை. நேரங்கள் பிறந்த ஊரின் நேர மண்டலத்தில். தேதிகள் திருக்கணித முறைப்படி; வாக்கிய பஞ்சாங்கத் தேதிகள் மாறுபடலாம்.",
       dignityTab: "உச்சம் / நீசம்", colState: "நிலை", colDeep: "உச்ச பாகை", colDistance: "உச்ச பாகையிலிருந்து",
@@ -378,8 +380,8 @@ const READING_TOPICS = {
   drekkanaLords: {
     title: { en: "Drekkana Lords", ta: "திரேக்காண அதிபதிகள்" },
     intro: {
-      en: "Each planet's degree in its rasi picks its drekkana, and the drekkana's lord is the planet's controller: up to 10°, the lord of the planet's own rasi (1st); over 10° up to 20°, the lord of the 5th rasi from it; over 20°, the lord of the 9th. If the controller sits in the 6th or 8th rasi from the planet, the planet cannot perform well. Example, Saturn in Rishabam (6th from it is Thulam, 8th is Dhanus):",
-      ta: "ஒவ்வொரு கிரகமும் ராசியில் நிற்கும் பாகை அதன் திரேக்காணத்தைத் தீர்மானிக்கும்; அந்தத் திரேக்காணத்தின் அதிபதியே கிரகத்தை இயக்குபவர்: 10° வரை கிரகம் நின்ற ராசியின் (1ஆம்) அதிபதி; 10°க்கு மேல் 20° வரை அதிலிருந்து 5ஆம் ராசியின் அதிபதி; 20°க்கு மேல் 9ஆம் ராசியின் அதிபதி. அந்த அதிபதி கிரகத்திலிருந்து 6 அல்லது 8ஆம் ராசியில் இருந்தால், அந்தக் கிரகம் சரியாகச் செயல்பட இயலாது. உதாரணம், ரிஷபத்தில் சனி (அதிலிருந்து 6ஆம் ராசி துலாம், 8ஆம் ராசி தனுசு):",
+      en: "Each planet's degree in its rasi picks its drekkana, and the drekkana's lord is the planet's controller: up to 10°, the lord of the planet's own rasi (1st); over 10° up to 20°, the lord of the 5th rasi from it; over 20°, the lord of the 9th. If the controller sits in the 6th or 8th rasi from the planet, the planet cannot perform well; the pariharam is Vakkarakali Amman. Example, Saturn in Rishabam (6th from it is Thulam, 8th is Dhanus):",
+      ta: "ஒவ்வொரு கிரகமும் ராசியில் நிற்கும் பாகை அதன் திரேக்காணத்தைத் தீர்மானிக்கும்; அந்தத் திரேக்காணத்தின் அதிபதியே கிரகத்தை இயக்குபவர்: 10° வரை கிரகம் நின்ற ராசியின் (1ஆம்) அதிபதி; 10°க்கு மேல் 20° வரை அதிலிருந்து 5ஆம் ராசியின் அதிபதி; 20°க்கு மேல் 9ஆம் ராசியின் அதிபதி. அந்த அதிபதி கிரகத்திலிருந்து 6 அல்லது 8ஆம் ராசியில் இருந்தால், அந்தக் கிரகம் சரியாகச் செயல்பட இயலாது; பரிகாரம் வக்கிரகாளி அம்மன். உதாரணம், ரிஷபத்தில் சனி (அதிலிருந்து 6ஆம் ராசி துலாம், 8ஆம் ராசி தனுசு):",
     },
     tableHeader: [
       { en: "Saturn's degree", ta: "சனியின் பாகை" }, { en: "Drekkana", ta: "திரேக்காணம்" }, { en: "Controller", ta: "அதிபதி" }, { en: "Weakened if the controller is in", ta: "அதிபதி இங்கிருந்தால் பலம் குறையும்" },

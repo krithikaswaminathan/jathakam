@@ -1007,6 +1007,9 @@ function renderDrekkanaLords() {
     ? `${labels.ui.drekkanaSummary}: ` +
       weak.map((e) => `${labels.planets[e.planet]} (${labels.planets[e.controller]} ${e.count})`).join("  \u00B7  ")
     : labels.ui.drekkanaNone;
+  const pariharam = document.getElementById("drekkanaPariharam");
+  pariharam.textContent = labels.ui.drekkanaPariharam;
+  pariharam.classList.toggle("hidden", weak.length === 0);
 
   const tbody = document.getElementById("drekkanaBody");
   tbody.innerHTML = "";
