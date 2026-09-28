@@ -82,3 +82,25 @@ def test_krithika_chart_forms_none():
     for y in detect_all_yogas(chart):
         if y.name in names:
             assert y.triggered is False and y.from_moon is False, y.name
+
+
+SOORYA_CHANDRAADHI = "Soorya Chandraadhi Yoga"
+
+
+def test_soorya_chandraadhi_every_sun_house():
+    # Aries lagna for simplicity, then a Leo lagna so house and rasi differ.
+    for lagna in (0, 4):
+        for house in range(1, 13):
+            sun_rasi = (lagna + house - 1) % 12
+            target = house - 1  # the house-th rasi from Mesha
+            for moon_rasi in range(12):
+                chart = make_chart(lagna, {**BASE, "Sun": sun_rasi, "Moon": moon_rasi})
+                assert chart.grahas["Sun"].house == house
+                assert yoga(chart, SOORYA_CHANDRAADHI).triggered is (moon_rasi == target), (lagna, house, moon_rasi)
+
+
+def test_soorya_chandraadhi_worked_example():
+    # Leo lagna, Sun in Virgo = house 2 -> 2nd from Mesha is Rishabam; Moon in Rishabam
+    assert yoga(make_chart(4, {**BASE, "Sun": 5, "Moon": 1}), SOORYA_CHANDRAADHI).triggered is True
+    # Sun in the lagna rasi = house 1 -> Mesha; Moon in Rishabam is not it
+    assert yoga(make_chart(8, {**BASE, "Sun": 8, "Moon": 1}), SOORYA_CHANDRAADHI).triggered is False

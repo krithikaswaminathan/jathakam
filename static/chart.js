@@ -758,6 +758,16 @@ function renderYogas() {
     desc.className = "yoga-desc";
     desc.textContent = y.description;
     li.append(head, desc);
+    if (y.name === "Soorya Chandraadhi Yoga") {
+      const sunHouse = state.chart.d1.grahas.Sun.house;
+      const calc = document.createElement("div");
+      calc.className = "yoga-moon-note";
+      calc.textContent = labels.ui.sooryaChandraadhiCalc
+        .replaceAll("{house}", sunHouse)
+        .replace("{target}", labels.rasi[sunHouse - 1])
+        .replace("{moon}", labels.rasi[state.chart.d1.grahas.Moon.rasi]);
+      li.appendChild(calc);
+    }
     if (y.from_moon) {
       const moonNote = document.createElement("div");
       moonNote.className = "yoga-moon-note";

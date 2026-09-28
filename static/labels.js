@@ -15,6 +15,7 @@ const LABELS = {
       "Kemadruma Yoga (simplified)": "Kemadruma Yoga (simplified)",
       "Ruchaka Yoga": "Ruchaka Yoga", "Bhadra Yoga": "Bhadra Yoga", "Hamsa Yoga": "Hamsa Yoga",
       "Malavya Yoga": "Malavya Yoga", "Sasa Yoga": "Sasa Yoga",
+      "Soorya Chandraadhi Yoga": "Soorya Chandraadhi Yoga",
     },
     taraCategories: { Janma: "Janma", Sampat: "Sampat", Vipat: "Vipat", Kshema: "Kshema", Pratyak: "Pratyak", Sadhaka: "Sadhaka", Vadha: "Vadha", Mitra: "Mitra", "Ati-Mitra": "Ati-Mitra" },
     ui: {
@@ -31,6 +32,7 @@ const LABELS = {
       induLagna: "Indu Lagna", induLagnaHint: "Wealth ascendant — sign lord in parentheses",
       reading: "Reading", sources: "Sources", back: "Back",
       yogaFromMoon: "Not formed from Lagna, but present counting from the Moon.",
+      sooryaChandraadhiCalc: "Sun is in house {house} from the lagna; rasi {house} from Mesha is {target}; the Moon is in {moon}.",
       dignityTab: "Ucham / Neecham", colState: "State", colDeep: "Deep point", colDistance: "From deep point",
       dignityUcham: "Ucham (exalted)", dignityNeecham: "Neecham (debilitated)",
       dignityNone: "No planet is in its exaltation or debilitation sign.",
@@ -72,6 +74,7 @@ const LABELS = {
       "Kemadruma Yoga (simplified)": "கேமத்ரும யோகம் (எளிமைப்படுத்தியது)",
       "Ruchaka Yoga": "ருசக யோகம்", "Bhadra Yoga": "பத்ர யோகம்", "Hamsa Yoga": "ஹம்ச யோகம்",
       "Malavya Yoga": "மாளவ்ய யோகம்", "Sasa Yoga": "சச யோகம்",
+      "Soorya Chandraadhi Yoga": "சூரிய சந்திராதி யோகம்",
     },
     taraCategories: { Janma: "ஜென்மம்", Sampat: "சம்பத்", Vipat: "விபத்", Kshema: "க்ஷேமம்", Pratyak: "பிரத்யக்", Sadhaka: "சாதகம்", Vadha: "வதம்", Mitra: "மித்ரம்", "Ati-Mitra": "அதிமித்ரம்" },
     ui: {
@@ -88,6 +91,7 @@ const LABELS = {
       induLagna: "இந்து லக்னம்", induLagnaHint: "செல்வ லக்னம் — அடைப்புக்குறிக்குள் ராசி அதிபதி",
       reading: "வாசிப்பு", sources: "மூலங்கள்", back: "பின்செல்",
       yogaFromMoon: "லக்னத்திலிருந்து அமையவில்லை, ஆனால் சந்திரனிலிருந்து எண்ணும்போது உள்ளது.",
+      sooryaChandraadhiCalc: "சூரியன் லக்னத்திலிருந்து {house}ஆம் வீட்டில் உள்ளது; மேஷத்திலிருந்து {house}ஆம் ராசி {target}; சந்திரன் {moon} ராசியில் உள்ளது.",
       dignityTab: "உச்சம் / நீசம்", colState: "நிலை", colDeep: "உச்ச பாகை", colDistance: "உச்ச பாகையிலிருந்து",
       dignityUcham: "உச்சம்", dignityNeecham: "நீசம்",
       dignityNone: "எந்த கிரகமும் உச்ச அல்லது நீச ராசியில் இல்லை.",
@@ -323,6 +327,25 @@ const READING_TOPICS = {
       { title: "முடக்கு ராசி அட்டவணை (AstroSiva)", url: "https://astrosiva.in/mudakku-tithi-sunyam-life-remedies/" },
       { title: "முடக்கு ராசி ஒரு ஜோதிட பார்வை (Neerkondar)", url: "http://neerkondar.blogspot.com/2024/12/blog-post_70.html" },
     ],
+  },
+  sooryaChandraadhi: {
+    title: { en: "Soorya Chandraadhi Yoga", ta: "சூரிய சந்திராதி யோகம்" },
+    intro: {
+      en: "In the rasi chart (D1), count the Sun's house from the lagna (the lagna is the 1st). Count the same number of rasis from Mesha (Mesha is the 1st). If the Moon is in that rasi, the chart has Soorya Chandraadhi Yoga. Examples:",
+      ta: "ராசி கட்டத்தில் (D1), லக்னத்திலிருந்து (லக்னம் = 1) சூரியன் நிற்கும் வீட்டை எண்ணவும். அதே எண்ணிக்கையை மேஷத்திலிருந்து (மேஷம் = 1) எண்ணவும். அந்த ராசியில் சந்திரன் இருந்தால், சூரிய சந்திராதி யோகம் உண்டு. உதாரணம்:",
+    },
+    tableHeader: [
+      { en: "Sun's house", ta: "சூரியன் வீடு" }, { en: "Rasi from Mesha", ta: "மேஷத்திலிருந்து ராசி" }, { en: "Moon in", ta: "சந்திரன்" }, { en: "Yoga", ta: "யோகம்" },
+    ],
+    table: [
+      [{ en: "1", ta: "1" }, { en: "Aries", ta: "மேஷம்" }, { en: "Aries", ta: "மேஷம்" }, { en: "Present", ta: "உள்ளது" }],
+      [{ en: "2", ta: "2" }, { en: "Taurus", ta: "ரிஷபம்" }, { en: "Taurus", ta: "ரிஷபம்" }, { en: "Present", ta: "உள்ளது" }],
+      [{ en: "4", ta: "4" }, { en: "Cancer", ta: "கடகம்" }, { en: "Taurus", ta: "ரிஷபம்" }, { en: "Not present", ta: "இல்லை" }],
+    ],
+    note: {
+      en: "As given by the user; no written source. Only the rasi counts, not the degree.",
+      ta: "பயனர் தந்த விதி; எழுத்து மூலம் இல்லை. பாகை அல்ல, ராசி மட்டுமே கணக்கில் கொள்ளப்படுகிறது.",
+    },
   },
   kaalaPakai: {
     title: { en: "Kaala Pakai", ta: "கால பகை" },

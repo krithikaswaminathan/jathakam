@@ -73,12 +73,19 @@ def check_kemadruma_yoga(chart: ChartData) -> bool:
     return True
 
 
+def check_soorya_chandraadhi_yoga(chart: ChartData) -> bool:
+    """The Sun's house from lagna (lagna = 1), counted that many rasis from Mesha
+    (Mesha = 1), must be the Moon's rasi. D1 only."""
+    return chart.grahas["Moon"].rasi == chart.grahas["Sun"].house - 1
+
+
 YOGA_CHECKS = [
     ("Mangal Dosha", "Mars in a dosha house (1,2,4,7,8,12) from lagna. Classical cancellation rules not modeled.", check_mangal_dosha),
     ("Gaja Kesari Yoga", "Jupiter in a kendra from the Moon.", check_gaja_kesari_yoga),
     ("Budhaditya Yoga", "Sun and Mercury share a rasi.", check_budhaditya_yoga),
     ("Chandra-Mangal Yoga", "Moon and Mars share a rasi.", check_chandra_mangal_yoga),
     ("Kemadruma Yoga (simplified)", "No planet in 2nd/12th from Moon or conjunct Moon's rasi. Classical cancellation conditions not modeled.", check_kemadruma_yoga),
+    ("Soorya Chandraadhi Yoga", "Count the Sun's house from the lagna, then count that many rasis from Mesha; the Moon is in that rasi.", check_soorya_chandraadhi_yoga),
 ]
 
 
