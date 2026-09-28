@@ -39,6 +39,11 @@ const LABELS = {
       colCount: "Count", colMoorthi: "Moorthi", peyarchiAll: "All planets", rahuKetu: "Rahu / Ketu",
       peyarchiRetro: "(retrograde, back)", peyarchiReentry: "(re-entry)", peyarchiNow: "Now",
       peyarchiCarried: "began before 2026 and still running then",
+      drekkanaTab: "Drekkana Lords", colDrekkana: "Drekkana", colController: "Controller", colControllerIn: "Controller in",
+      colFromPlanet: "From planet", colResult: "Result", drekkanaOrdinal: ["1st", "2nd", "3rd"],
+      drekkanaWeak: "⚠ {n}th from it: cannot perform well", drekkanaOk: "Fine", drekkanaOwn: "Its own controller",
+      drekkanaNone: "No planet's controller is 6th or 8th from it.", drekkanaSummary: "Weakened by their controller",
+      drekkanaNote: "Drekkana: up to 10° the controller is the lord of the planet's own rasi, over 10° up to 20° the lord of the 5th rasi, over 20° the lord of the 9th. If the controller is in the 6th or 8th rasi from the planet, the planet cannot perform well. Rahu and Ketu are not checked.",
       peyarchiNote: "Moorthi counts from your janma rasi ({janma}) to the Moon's rasi at the moment of each peyarchi, 2026 to 2031. Times are in the birth place's time zone. Dates follow the Thirukanitha method; Vakya panchangam dates can differ.",
       dignityTab: "Ucham / Neecham", colState: "State", colDeep: "Deep point", colDistance: "From deep point",
       dignityUcham: "Ucham (exalted)", dignityNeecham: "Neecham (debilitated)",
@@ -107,6 +112,11 @@ const LABELS = {
       colCount: "எண்ணிக்கை", colMoorthi: "மூர்த்தி", peyarchiAll: "அனைத்து கிரகங்கள்", rahuKetu: "ராகு / கேது",
       peyarchiRetro: "(வக்கிரம், பின்னோக்கி)", peyarchiReentry: "(மீண்டும் நுழைவு)", peyarchiNow: "தற்போது",
       peyarchiCarried: "2026க்கு முன் தொடங்கி, அப்போதும் நடப்பில்",
+      drekkanaTab: "திரேக்காண அதிபதிகள்", colDrekkana: "திரேக்காணம்", colController: "அதிபதி", colControllerIn: "அதிபதி நிற்கும் ராசி",
+      colFromPlanet: "கிரகத்திலிருந்து", colResult: "பலன்", drekkanaOrdinal: ["1ஆம்", "2ஆம்", "3ஆம்"],
+      drekkanaWeak: "⚠ {n}ஆம் இடம்: சரியாகச் செயல்பட இயலாது", drekkanaOk: "சரி", drekkanaOwn: "தானே அதிபதி",
+      drekkanaNone: "எந்த கிரகத்தின் அதிபதியும் அதற்கு 6 அல்லது 8ஆம் இடத்தில் இல்லை.", drekkanaSummary: "அதிபதியால் பலம் குறைந்தவை",
+      drekkanaNote: "திரேக்காணம்: 10° வரை கிரகம் நின்ற ராசியின் அதிபதி, 10°க்கு மேல் 20° வரை 5ஆம் ராசியின் அதிபதி, 20°க்கு மேல் 9ஆம் ராசியின் அதிபதி. அந்த அதிபதி கிரகத்திலிருந்து 6 அல்லது 8ஆம் ராசியில் இருந்தால், அந்தக் கிரகம் சரியாகச் செயல்பட இயலாது. ராகு, கேது கணக்கில் இல்லை.",
       peyarchiNote: "ஒவ்வொரு பெயர்ச்சியின் போதும் சந்திரன் நின்ற ராசியை உங்கள் ஜென்ம ராசியிலிருந்து ({janma}) எண்ணி மூர்த்தி கணக்கிடப்படுகிறது, 2026 முதல் 2031 வரை. நேரங்கள் பிறந்த ஊரின் நேர மண்டலத்தில். தேதிகள் திருக்கணித முறைப்படி; வாக்கிய பஞ்சாங்கத் தேதிகள் மாறுபடலாம்.",
       dignityTab: "உச்சம் / நீசம்", colState: "நிலை", colDeep: "உச்ச பாகை", colDistance: "உச்ச பாகையிலிருந்து",
       dignityUcham: "உச்சம்", dignityNeecham: "நீசம்",
@@ -363,6 +373,25 @@ const READING_TOPICS = {
     note: {
       en: "As given by the user; no written source. Only the rasi counts, not the degree.",
       ta: "பயனர் தந்த விதி; எழுத்து மூலம் இல்லை. பாகை அல்ல, ராசி மட்டுமே கணக்கில் கொள்ளப்படுகிறது.",
+    },
+  },
+  drekkanaLords: {
+    title: { en: "Drekkana Lords", ta: "திரேக்காண அதிபதிகள்" },
+    intro: {
+      en: "Each planet's degree in its rasi picks its drekkana, and the drekkana's lord is the planet's controller: up to 10°, the lord of the planet's own rasi (1st); over 10° up to 20°, the lord of the 5th rasi from it; over 20°, the lord of the 9th. If the controller sits in the 6th or 8th rasi from the planet, the planet cannot perform well. Example, Saturn in Rishabam (6th from it is Thulam, 8th is Dhanus):",
+      ta: "ஒவ்வொரு கிரகமும் ராசியில் நிற்கும் பாகை அதன் திரேக்காணத்தைத் தீர்மானிக்கும்; அந்தத் திரேக்காணத்தின் அதிபதியே கிரகத்தை இயக்குபவர்: 10° வரை கிரகம் நின்ற ராசியின் (1ஆம்) அதிபதி; 10°க்கு மேல் 20° வரை அதிலிருந்து 5ஆம் ராசியின் அதிபதி; 20°க்கு மேல் 9ஆம் ராசியின் அதிபதி. அந்த அதிபதி கிரகத்திலிருந்து 6 அல்லது 8ஆம் ராசியில் இருந்தால், அந்தக் கிரகம் சரியாகச் செயல்பட இயலாது. உதாரணம், ரிஷபத்தில் சனி (அதிலிருந்து 6ஆம் ராசி துலாம், 8ஆம் ராசி தனுசு):",
+    },
+    tableHeader: [
+      { en: "Saturn's degree", ta: "சனியின் பாகை" }, { en: "Drekkana", ta: "திரேக்காணம்" }, { en: "Controller", ta: "அதிபதி" }, { en: "Weakened if the controller is in", ta: "அதிபதி இங்கிருந்தால் பலம் குறையும்" },
+    ],
+    table: [
+      [{ en: "0° to 10°", ta: "0° முதல் 10°" }, { en: "1st: Rishabam", ta: "1ஆம்: ரிஷபம்" }, { en: "Venus", ta: "சுக்ரன்" }, { en: "Libra or Sagittarius", ta: "துலாம் அல்லது தனுசு" }],
+      [{ en: "10.01° to 20°", ta: "10.01° முதல் 20°" }, { en: "2nd: Kanni", ta: "2ஆம்: கன்னி" }, { en: "Mercury", ta: "புதன்" }, { en: "Libra or Sagittarius", ta: "துலாம் அல்லது தனுசு" }],
+      [{ en: "20.01° to 30°", ta: "20.01° முதல் 30°" }, { en: "3rd: Makaram", ta: "3ஆம்: மகரம்" }, { en: "Saturn itself", ta: "சனியே" }, { en: "Never", ta: "ஒருபோதும் இல்லை" }],
+    ],
+    note: {
+      en: "As given by the user; no written source. Exactly 10° counts as the 1st drekkana and exactly 20° as the 2nd, degrees taken to the hundredth; the usual convention starts the next drekkana at 10° and 20°. Only Sun to Saturn are checked; Rahu and Ketu rule no rasi, so they are never controllers either.",
+      ta: "பயனர் தந்த விதி; எழுத்து மூலம் இல்லை. சரியாக 10° என்பது 1ஆம் திரேக்காணம், சரியாக 20° என்பது 2ஆம் திரேக்காணம் (பாகை இரண்டு தசம இடங்கள் வரை); வழக்கமான முறையில் 10°, 20° அடுத்த திரேக்காணத்தின் தொடக்கம். சூரியன் முதல் சனி வரை மட்டுமே பார்க்கப்படுகிறது; ராகு, கேதுவுக்கு ராசி ஆதிபத்யம் இல்லாததால் அவை அதிபதியும் ஆகாது.",
     },
   },
   moorthiNirnayam: {

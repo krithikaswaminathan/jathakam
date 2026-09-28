@@ -346,11 +346,14 @@ tr.current-period .dasa-level-tag { background: var(--gold-500); color: white; }
 tr.dignity-ucham td:nth-child(2) { color: var(--good); font-weight: 600; }
 tr.dignity-neecham td:nth-child(2) { color: var(--bad); font-weight: 600; }
 #detailsTab { overflow-x: auto; }
-#detailsTable th, #detailsTable td { padding-left: 0.5rem; padding-right: 0.5rem; }
+#detailsTable th, #detailsTable td, #drekkanaTable th, #drekkanaTable td { padding-left: 0.5rem; padding-right: 0.5rem; }
 tr.kaala-pakai td { background: #fbf0ed; }
 tr.kaala-pakai td:last-child { color: var(--bad); font-weight: 600; }
 .kaala-pakai-entry { margin-bottom: 0.4rem; }
 .peyarchi-filter { margin-bottom: 0.7rem; }
+#drekkanaTab { overflow-x: auto; }
+tr.drekkana-weak td { background: #fbf0ed; }
+tr.drekkana-weak td:last-child { color: var(--bad); font-weight: 600; }
 #peyarchiTab { overflow-x: auto; }
 td.moorthi-Swarna { color: var(--gold-500); font-weight: 700; }
 td.moorthi-Rajatha { color: var(--good); font-weight: 600; }

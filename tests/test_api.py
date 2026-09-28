@@ -58,6 +58,10 @@ def test_old_saved_charts_load_with_all_current_features(client):
     assert (mudakku["rasi_lord"], mudakku["star_lord"]) == ("Jupiter", "Ketu")
     assert mudakku["planets"] == ["Sun", "Mercury"] and mudakku["is_lagna"]
     assert body["upasana"] == {"planet": "Venus", "planet_rasi": 7, "rasi": 5}  # Venus in Scorpio -> 11th is Virgo
+    drekkana = {e["planet"]: e for e in body["drekkana_lords"]}
+    assert not any(e["weakened"] for e in drekkana.values())
+    assert (drekkana["Mars"]["drekkana"], drekkana["Mars"]["controller"], drekkana["Mars"]["count"]) == (2, "Mercury", 11)
+    assert (drekkana["Venus"]["drekkana"], drekkana["Venus"]["controller"], drekkana["Venus"]["count"]) == (3, "Moon", 7)
     peyarchis = body["peyarchis"]
     assert [p["planet"] for p in peyarchis if p["in_effect_at_start"]] == ["Saturn", "Rahu", "Jupiter"]
     assert peyarchis[0]["when"] == "2025-03-29T21:45:09+05:30"  # Saturn into Pisces, in the chart's time zone

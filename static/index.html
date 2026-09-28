@@ -102,6 +102,7 @@
         <button class="tab-btn" data-tab="detailsTab" id="lblDetailsTab">Graha Details</button>
         <button class="tab-btn" data-tab="dignityTab" id="lblDignityTab">Ucham / Neecham</button>
         <button class="tab-btn" data-tab="peyarchiTab" id="lblPeyarchiTab">Peyarchi</button>
+        <button class="tab-btn" data-tab="drekkanaTab" id="lblDrekkanaTab">Drekkana Lords</button>
       </div>
 
       <div id="chartTab" class="tab-panel active">
@@ -209,6 +210,19 @@
           <tbody id="peyarchiBody"></tbody>
         </table>
         <p id="peyarchiNote" class="reading-note"></p>
+      </div>
+
+      <div id="drekkanaTab" class="tab-panel">
+        <div id="drekkanaSummary" class="yoga-summary"></div>
+        <table id="drekkanaTable">
+          <thead><tr>
+            <th id="thDkPlanet">Planet</th><th id="thDkRasi">Rasi</th><th id="thDkDeg">Degree in Sign</th>
+            <th id="thDkDrekkana">Drekkana</th><th id="thDkController">Controller</th><th id="thDkControllerIn">Controller in</th>
+            <th id="thDkCount">From planet</th><th id="thDkResult">Result</th>
+          </tr></thead>
+          <tbody id="drekkanaBody"></tbody>
+        </table>
+        <p id="drekkanaNote" class="reading-note"></p>
       </div>
     </section>
   </main>

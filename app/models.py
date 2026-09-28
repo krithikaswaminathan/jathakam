@@ -123,6 +123,18 @@ class PeyarchiOut(BaseModel):
     in_effect_at_start: bool
 
 
+class DrekkanaLordOut(BaseModel):
+    planet: str
+    rasi: int
+    degree_in_sign: float
+    drekkana: int
+    drekkana_rasi: int
+    controller: str
+    controller_rasi: int
+    count: int
+    weakened: bool
+
+
 class ChartResponse(BaseModel):
     id: int
     name: str
@@ -146,6 +158,7 @@ class ChartResponse(BaseModel):
     upasana: UpasanaOut | None = None
     kaala_pakai: list[KaalaPakaiOut] = []
     peyarchis: list[PeyarchiOut] = []
+    drekkana_lords: list[DrekkanaLordOut] = []
 
 
 class DasaExpandRequest(BaseModel):

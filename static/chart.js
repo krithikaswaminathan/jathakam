@@ -132,6 +132,16 @@ function applyLanguage() {
   document.getElementById("thPyMoon").textContent = labels.ui.colMoonThen;
   document.getElementById("thPyCount").textContent = labels.ui.colCount;
   document.getElementById("thPyMoorthi").textContent = labels.ui.colMoorthi;
+  document.getElementById("lblDrekkanaTab").textContent = labels.ui.drekkanaTab;
+  document.getElementById("thDkPlanet").textContent = labels.ui.colPlanet;
+  document.getElementById("thDkRasi").textContent = labels.ui.colRasi;
+  document.getElementById("thDkDeg").textContent = labels.ui.colDegInSign;
+  document.getElementById("thDkDrekkana").textContent = labels.ui.colDrekkana;
+  document.getElementById("thDkController").textContent = labels.ui.colController;
+  document.getElementById("thDkControllerIn").textContent = labels.ui.colControllerIn;
+  document.getElementById("thDkCount").textContent = labels.ui.colFromPlanet;
+  document.getElementById("thDkResult").textContent = labels.ui.colResult;
+  document.getElementById("drekkanaNote").textContent = labels.ui.drekkanaNote;
   document.getElementById("induLagnaHint").textContent = labels.ui.induLagnaHint;
   document.getElementById("lblReading").textContent = labels.ui.reading;
   document.getElementById("lblBack").textContent = labels.ui.back;
@@ -422,6 +432,7 @@ function renderAll() {
   renderGrahaDetails();
   renderDignity();
   renderPeyarchi();
+  renderDrekkanaLords();
 }
 
 function renderPranapada() {
@@ -984,6 +995,42 @@ function renderPeyarchi() {
       if (i === 5) td.className = `moorthi-${p.moorthi}`;
       tr.appendChild(td);
     });
+    tbody.appendChild(tr);
+  }
+}
+
+function renderDrekkanaLords() {
+  const labels = L();
+  const entries = state.chart.drekkana_lords;
+  const weak = entries.filter((e) => e.weakened);
+  document.getElementById("drekkanaSummary").textContent = weak.length
+    ? `${labels.ui.drekkanaSummary}: ` +
+      weak.map((e) => `${labels.planets[e.planet]} (${labels.planets[e.controller]} ${e.count})`).join("  \u00B7  ")
+    : labels.ui.drekkanaNone;
+
+  const tbody = document.getElementById("drekkanaBody");
+  tbody.innerHTML = "";
+  for (const e of entries) {
+    const tr = document.createElement("tr");
+    if (e.weakened) tr.className = "drekkana-weak";
+    const result = e.weakened
+      ? labels.ui.drekkanaWeak.replace("{n}", e.count)
+      : e.controller === e.planet ? labels.ui.drekkanaOwn : labels.ui.drekkanaOk;
+    const cells = [
+      labels.planets[e.planet],
+      labels.rasi[e.rasi],
+      formatDMS(e.degree_in_sign),
+      `${labels.ui.drekkanaOrdinal[e.drekkana - 1]} (${labels.rasi[e.drekkana_rasi]})`,
+      labels.planets[e.controller],
+      labels.rasi[e.controller_rasi],
+      String(e.count),
+      result,
+    ];
+    for (const value of cells) {
+      const td = document.createElement("td");
+      td.textContent = value;
+      tr.appendChild(td);
+    }
     tbody.appendChild(tr);
   }
 }

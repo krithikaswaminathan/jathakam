@@ -17,6 +17,7 @@ from app.constants import PEYARCHI_END_YEAR, PEYARCHI_START_YEAR, RASI_LORDS
 from app.dasa import compute_mahadasas, compute_sub_periods
 from app.db import SavedChart, delete_chart, get_chart, init_db, list_charts, save_chart
 from app.dignity import compute_dignities
+from app.drekkana_lords import compute_drekkana_lords
 from app.ephemeris import compute_ascendant, compute_graha_positions, init_ephemeris, to_julian_day_ut
 from app.geocode import search_places
 from app.models import (
@@ -27,6 +28,7 @@ from app.models import (
     DasaExpandRequest,
     DasaPeriodOut,
     DignityOut,
+    DrekkanaLordOut,
     GrahaOut,
     KaalaPakaiOut,
     MudakkuOut,
@@ -162,6 +164,7 @@ def _build_chart_response(
         upasana=UpasanaOut(**vars(upasana)) if upasana else None,
         kaala_pakai=[KaalaPakaiOut(**vars(e)) for e in compute_kaala_pakai(d1)],
         peyarchis=_peyarchis_out(d1.grahas["Moon"].rasi, timezone),
+        drekkana_lords=[DrekkanaLordOut(**vars(e)) for e in compute_drekkana_lords(d1)],
     )
 
 
