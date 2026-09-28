@@ -79,6 +79,17 @@ def check_soorya_chandraadhi_yoga(chart: ChartData) -> bool:
     return chart.grahas["Moon"].rasi == chart.grahas["Sun"].house - 1
 
 
+def jeevanam_house(chart: ChartData) -> int:
+    """The Moon's rasi numbered from Mesha (Mesha = 1), used as a house count from the lagna."""
+    return chart.grahas["Moon"].rasi + 1
+
+
+def check_jeevanam_yoga(chart: ChartData) -> bool:
+    """Any of the nine grahas, the Moon included, in that house. With a Mesha lagna the
+    house is the Moon's own rasi, so the yoga is always present. D1 only."""
+    return bool(chart.houses[jeevanam_house(chart)])
+
+
 YOGA_CHECKS = [
     ("Mangal Dosha", "Mars in a dosha house (1,2,4,7,8,12) from lagna. Classical cancellation rules not modeled.", check_mangal_dosha),
     ("Gaja Kesari Yoga", "Jupiter in a kendra from the Moon.", check_gaja_kesari_yoga),
@@ -86,6 +97,7 @@ YOGA_CHECKS = [
     ("Chandra-Mangal Yoga", "Moon and Mars share a rasi.", check_chandra_mangal_yoga),
     ("Kemadruma Yoga (simplified)", "No planet in 2nd/12th from Moon or conjunct Moon's rasi. Classical cancellation conditions not modeled.", check_kemadruma_yoga),
     ("Soorya Chandraadhi Yoga", "Count the Sun's house from the lagna, then count that many rasis from Mesha; the Moon is in that rasi.", check_soorya_chandraadhi_yoga),
+    ("Jeevanam Yoga", "Number the Moon's rasi from Mesha, then count that many houses from the lagna; one or more planets are in that house. They show how the native earns.", check_jeevanam_yoga),
 ]
 
 

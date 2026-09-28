@@ -734,6 +734,35 @@ function collapseChildren(parentRow) {
   }
 }
 
+// The worked count shown under yogas whose rule is a count, so it can be checked by eye.
+function yogaWorking(name, triggered) {
+  const labels = L();
+  const d1 = state.chart.d1;
+  if (name === "Soorya Chandraadhi Yoga") {
+    const sunHouse = d1.grahas.Sun.house;
+    return [
+      labels.ui.sooryaChandraadhiCalc
+        .replaceAll("{house}", sunHouse)
+        .replace("{target}", labels.rasi[sunHouse - 1])
+        .replace("{moon}", labels.rasi[d1.grahas.Moon.rasi]),
+    ];
+  }
+  if (name === "Jeevanam Yoga") {
+    const n = d1.grahas.Moon.rasi + 1;
+    const planets = d1.houses[n].map((p) => labels.planets[p]).join(", ");
+    const lines = [
+      labels.ui.jeevanamCalc
+        .replaceAll("{n}", n)
+        .replace("{moon}", labels.rasi[d1.grahas.Moon.rasi])
+        .replace("{target}", labels.rasi[(d1.lagna_rasi + n - 1) % 12])
+        .replace("{planets}", planets || labels.ui.noneWord),
+    ];
+    if (triggered) lines.push(labels.ui.jeevanamEarning.replace("{planets}", planets));
+    return lines;
+  }
+  return [];
+}
+
 function renderYogas() {
   const ul = document.getElementById("yogaList");
   ul.innerHTML = "";
@@ -758,14 +787,10 @@ function renderYogas() {
     desc.className = "yoga-desc";
     desc.textContent = y.description;
     li.append(head, desc);
-    if (y.name === "Soorya Chandraadhi Yoga") {
-      const sunHouse = state.chart.d1.grahas.Sun.house;
+    for (const line of yogaWorking(y.name, y.triggered)) {
       const calc = document.createElement("div");
       calc.className = "yoga-moon-note";
-      calc.textContent = labels.ui.sooryaChandraadhiCalc
-        .replaceAll("{house}", sunHouse)
-        .replace("{target}", labels.rasi[sunHouse - 1])
-        .replace("{moon}", labels.rasi[state.chart.d1.grahas.Moon.rasi]);
+      calc.textContent = line;
       li.appendChild(calc);
     }
     if (y.from_moon) {

@@ -104,3 +104,42 @@ def test_soorya_chandraadhi_worked_example():
     assert yoga(make_chart(4, {**BASE, "Sun": 5, "Moon": 1}), SOORYA_CHANDRAADHI).triggered is True
     # Sun in the lagna rasi = house 1 -> Mesha; Moon in Rishabam is not it
     assert yoga(make_chart(8, {**BASE, "Sun": 8, "Moon": 1}), SOORYA_CHANDRAADHI).triggered is False
+
+
+JEEVANAM = "Jeevanam Yoga"
+# Everything parked in Leo (Ketu opposite in Aquarius) unless a test moves it.
+PARKED = {"Sun": 4, "Moon": 4, "Mars": 4, "Mercury": 4, "Jupiter": 4, "Venus": 4, "Saturn": 4, "Rahu": 4, "Ketu": 10}
+
+
+def test_jeevanam_counts_moon_rasi_from_lagna():
+    # Moon in Simha = 5; Kanni lagna -> 5th house is Makaram
+    empty = make_chart(5, PARKED)
+    assert empty.grahas["Moon"].house == 12
+    assert yoga(empty, JEEVANAM).triggered is False
+    with_saturn = make_chart(5, {**PARKED, "Saturn": 9})
+    assert with_saturn.grahas["Saturn"].house == 5
+    assert yoga(with_saturn, JEEVANAM).triggered is True
+
+
+def test_jeevanam_every_moon_rasi_and_lagna():
+    for lagna in range(12):
+        for moon_rasi in range(12):
+            target_rasi = (lagna + moon_rasi) % 12  # house moon_rasi+1 from lagna
+            for planet_there in (False, True):
+                rasis = {name: moon_rasi for name in PARKED}
+                rasis["Moon"] = moon_rasi
+                # Park the others anywhere except the target rasi (Moon may be there).
+                park = next(r for r in range(12) if r != target_rasi)
+                rasis.update({name: park for name in PARKED if name != "Moon"})
+                if planet_there:
+                    rasis["Jupiter"] = target_rasi
+                chart = make_chart(lagna, rasis)
+                expected = planet_there or moon_rasi == target_rasi
+                assert yoga(chart, JEEVANAM).triggered is expected, (lagna, moon_rasi, planet_there)
+
+
+def test_jeevanam_always_present_for_mesha_lagna():
+    for moon_rasi in range(12):
+        others = (moon_rasi + 1) % 12
+        chart = make_chart(0, {**{n: others for n in PARKED}, "Moon": moon_rasi})
+        assert yoga(chart, JEEVANAM).triggered is True, moon_rasi

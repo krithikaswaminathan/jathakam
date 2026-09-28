@@ -41,7 +41,8 @@ def test_old_saved_charts_load_with_all_current_features(client):
     )
     body = client.get(f"/api/charts/{old.id}").json()
     assert {(e["planet"], e["state"]) for e in body["dignities"]} == {("Moon", "ucham"), ("Saturn", "neecham")}
-    assert len(body["yogas"]) == 11
+    assert len(body["yogas"]) == 12
+    assert not next(y for y in body["yogas"] if y["name"] == "Jeevanam Yoga")["triggered"]  # Moon in Rishabam -> 2nd house Makaram is empty
     assert not next(y for y in body["yogas"] if y["name"] == "Soorya Chandraadhi Yoga")["triggered"]  # Sun house 1 -> Mesha; Moon in Rishabam
     assert "gulika" in body and "mandi" in body
     assert body["pranapada"]["rasi"] == 7  # Scorpio

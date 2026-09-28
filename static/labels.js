@@ -15,7 +15,7 @@ const LABELS = {
       "Kemadruma Yoga (simplified)": "Kemadruma Yoga (simplified)",
       "Ruchaka Yoga": "Ruchaka Yoga", "Bhadra Yoga": "Bhadra Yoga", "Hamsa Yoga": "Hamsa Yoga",
       "Malavya Yoga": "Malavya Yoga", "Sasa Yoga": "Sasa Yoga",
-      "Soorya Chandraadhi Yoga": "Soorya Chandraadhi Yoga",
+      "Soorya Chandraadhi Yoga": "Soorya Chandraadhi Yoga", "Jeevanam Yoga": "Jeevanam Yoga",
     },
     taraCategories: { Janma: "Janma", Sampat: "Sampat", Vipat: "Vipat", Kshema: "Kshema", Pratyak: "Pratyak", Sadhaka: "Sadhaka", Vadha: "Vadha", Mitra: "Mitra", "Ati-Mitra": "Ati-Mitra" },
     ui: {
@@ -33,6 +33,8 @@ const LABELS = {
       reading: "Reading", sources: "Sources", back: "Back",
       yogaFromMoon: "Not formed from Lagna, but present counting from the Moon.",
       sooryaChandraadhiCalc: "Sun is in house {house} from the lagna; rasi {house} from Mesha is {target}; the Moon is in {moon}.",
+      jeevanamCalc: "Moon is in {moon}, rasi {n} from Mesha; house {n} from the lagna is {target}; planets there: {planets}.",
+      jeevanamEarning: "Earnings come through: {planets}.", noneWord: "none",
       dignityTab: "Ucham / Neecham", colState: "State", colDeep: "Deep point", colDistance: "From deep point",
       dignityUcham: "Ucham (exalted)", dignityNeecham: "Neecham (debilitated)",
       dignityNone: "No planet is in its exaltation or debilitation sign.",
@@ -74,7 +76,7 @@ const LABELS = {
       "Kemadruma Yoga (simplified)": "கேமத்ரும யோகம் (எளிமைப்படுத்தியது)",
       "Ruchaka Yoga": "ருசக யோகம்", "Bhadra Yoga": "பத்ர யோகம்", "Hamsa Yoga": "ஹம்ச யோகம்",
       "Malavya Yoga": "மாளவ்ய யோகம்", "Sasa Yoga": "சச யோகம்",
-      "Soorya Chandraadhi Yoga": "சூரிய சந்திராதி யோகம்",
+      "Soorya Chandraadhi Yoga": "சூரிய சந்திராதி யோகம்", "Jeevanam Yoga": "ஜீவன யோகம்",
     },
     taraCategories: { Janma: "ஜென்மம்", Sampat: "சம்பத்", Vipat: "விபத்", Kshema: "க்ஷேமம்", Pratyak: "பிரத்யக்", Sadhaka: "சாதகம்", Vadha: "வதம்", Mitra: "மித்ரம்", "Ati-Mitra": "அதிமித்ரம்" },
     ui: {
@@ -92,6 +94,8 @@ const LABELS = {
       reading: "வாசிப்பு", sources: "மூலங்கள்", back: "பின்செல்",
       yogaFromMoon: "லக்னத்திலிருந்து அமையவில்லை, ஆனால் சந்திரனிலிருந்து எண்ணும்போது உள்ளது.",
       sooryaChandraadhiCalc: "சூரியன் லக்னத்திலிருந்து {house}ஆம் வீட்டில் உள்ளது; மேஷத்திலிருந்து {house}ஆம் ராசி {target}; சந்திரன் {moon} ராசியில் உள்ளது.",
+      jeevanamCalc: "சந்திரன் {moon} ராசியில், மேஷத்திலிருந்து {n}ஆம் ராசி; லக்னத்திலிருந்து {n}ஆம் வீடு {target}; அங்குள்ள கிரகங்கள்: {planets}.",
+      jeevanamEarning: "சம்பாத்தியம் வரும் வழி: {planets}.", noneWord: "இல்லை",
       dignityTab: "உச்சம் / நீசம்", colState: "நிலை", colDeep: "உச்ச பாகை", colDistance: "உச்ச பாகையிலிருந்து",
       dignityUcham: "உச்சம்", dignityNeecham: "நீசம்",
       dignityNone: "எந்த கிரகமும் உச்ச அல்லது நீச ராசியில் இல்லை.",
@@ -345,6 +349,25 @@ const READING_TOPICS = {
     note: {
       en: "As given by the user; no written source. Only the rasi counts, not the degree.",
       ta: "பயனர் தந்த விதி; எழுத்து மூலம் இல்லை. பாகை அல்ல, ராசி மட்டுமே கணக்கில் கொள்ளப்படுகிறது.",
+    },
+  },
+  jeevanam: {
+    title: { en: "Jeevanam Yoga", ta: "ஜீவன யோகம்" },
+    intro: {
+      en: "In the rasi chart (D1), number the Moon's rasi from Mesha as in the Kaala Purusha chart (Mesha = 1, Simha = 5). Count that many houses from the lagna (the lagna is the 1st). If one or more planets are in that house, the chart has Jeevanam Yoga, and those planets show how the native earns. The Moon itself counts, so a Mesha lagna chart always has it. Examples:",
+      ta: "ராசி கட்டத்தில் (D1), கால புருஷ சக்கரப்படி சந்திரன் நின்ற ராசியின் எண்ணை மேஷத்திலிருந்து எடுக்கவும் (மேஷம் = 1, சிம்மம் = 5). அத்தனை வீடுகளை லக்னத்திலிருந்து (லக்னம் = 1) எண்ணவும். அந்த வீட்டில் ஒன்று அல்லது அதற்கு மேற்பட்ட கிரகங்கள் இருந்தால் ஜீவன யோகம் உண்டு; அந்தக் கிரகங்கள் ஜாதகர் சம்பாதிக்கும் வழியைக் காட்டும். சந்திரனும் கணக்கில் சேரும், எனவே மேஷ லக்னத்திற்கு இந்த யோகம் எப்போதும் உண்டு. உதாரணம்:",
+    },
+    tableHeader: [
+      { en: "Moon in", ta: "சந்திரன்" }, { en: "Lagna", ta: "லக்னம்" }, { en: "House to check", ta: "பார்க்க வேண்டிய வீடு" }, { en: "Yoga", ta: "யோகம்" },
+    ],
+    table: [
+      [{ en: "Leo (5)", ta: "சிம்மம் (5)" }, { en: "Aries", ta: "மேஷம்" }, { en: "5th, Leo: the Moon is there", ta: "5ஆம் வீடு, சிம்மம்: சந்திரன் அங்கே" }, { en: "Present", ta: "உள்ளது" }],
+      [{ en: "Leo (5)", ta: "சிம்மம் (5)" }, { en: "Virgo", ta: "கன்னி" }, { en: "5th, Capricorn: Saturn there", ta: "5ஆம் வீடு, மகரம்: சனி அங்கே" }, { en: "Present, earning through Saturn", ta: "உள்ளது, சனி வழியாக சம்பாத்தியம்" }],
+      [{ en: "Taurus (2)", ta: "ரிஷபம் (2)" }, { en: "Sagittarius", ta: "தனுசு" }, { en: "2nd, Capricorn: empty", ta: "2ஆம் வீடு, மகரம்: காலி" }, { en: "Not present", ta: "இல்லை" }],
+    ],
+    note: {
+      en: "As given by the user; no written source. The nine grahas count (Rahu and Ketu included); Gulika and Mandi do not.",
+      ta: "பயனர் தந்த விதி; எழுத்து மூலம் இல்லை. ஒன்பது கிரகங்களும் (ராகு, கேது உட்பட) கணக்கில் சேரும்; குளிகன், மாந்தி சேராது.",
     },
   },
   kaalaPakai: {

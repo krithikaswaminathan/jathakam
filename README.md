@@ -22,13 +22,13 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
 - **Dasa**: Vimshottari dasa down to Prana level, with the current period highlighted.
 - **Tara Balam** from the birth star.
 - **Yogas and doshas**: Mangal Dosha, Gaja Kesari, Budhaditya, Chandra-Mangal, Kemadruma
-  (simplified), Soorya Chandraadhi and the five Pancha Mahapurusha yogas, each marked Present or
-  Not present.
+  (simplified), Soorya Chandraadhi, Jeevanam (naming the planets that show the source of
+  earnings) and the five Pancha Mahapurusha yogas, each marked Present or Not present.
 - **Upasana Deivam**: the 11th rasi from Jupiter (for a man) or Venus (for a woman), with its
   temple and deity; any other rasi can be looked up too.
 - **Reading**: side-nav pages explaining the method, tables and sources for Pushkara Navamsa,
   Pancha Mahapurusha yogas, Ucham/Neecham, Pranapada, Thithi Soonyam, Mudakku, Soorya Chandraadhi
-  Yoga and Kaala Pakai.
+  Yoga, Jeevanam Yoga and Kaala Pakai.
 - **Saved charts**: stored locally, recomputed on load, and deletable.
 
 ## Setup
@@ -100,3 +100,6 @@ python -m pytest tests/ -v
 - Soorya Chandraadhi Yoga: the Sun's house from the lagna (lagna = 1), counted that many rasis
   from Mesha (Mesha = 1), must hold the Moon. D1 only; the rule is the author's own, with no
   written source.
+- Jeevanam Yoga: the Moon's rasi numbered from Mesha (Mesha = 1) gives a house count from the
+  lagna; any of the nine grahas there, the Moon included, forms the yoga and shows the source of
+  earnings. Always present for a Mesha lagna. D1 only; the author's own rule.
