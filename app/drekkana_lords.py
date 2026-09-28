@@ -12,7 +12,8 @@ from dataclasses import dataclass
 from app.astrology import ChartData
 from app.constants import RASI_LORDS
 
-CHECKED_PLANETS = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"]
+# All nine are checked; Rahu and Ketu rule no rasi, so they are never a controller.
+CHECKED_PLANETS = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn", "Rahu", "Ketu"]
 DREKKANA_OFFSET = {1: 0, 2: 4, 3: 8}  # the 1st, 5th and 9th rasi from the planet
 WEAK_COUNTS = {6, 8}
 

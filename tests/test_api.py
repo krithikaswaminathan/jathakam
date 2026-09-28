@@ -59,7 +59,9 @@ def test_old_saved_charts_load_with_all_current_features(client):
     assert mudakku["planets"] == ["Sun", "Mercury"] and mudakku["is_lagna"]
     assert body["upasana"] == {"planet": "Venus", "planet_rasi": 7, "rasi": 5}  # Venus in Scorpio -> 11th is Virgo
     drekkana = {e["planet"]: e for e in body["drekkana_lords"]}
-    assert not any(e["weakened"] for e in drekkana.values())
+    assert len(drekkana) == 9 and not any(e["weakened"] for e in drekkana.values())
+    assert (drekkana["Rahu"]["controller"], drekkana["Rahu"]["count"]) == ("Venus", 10)  # 3rd: Thulam
+    assert (drekkana["Ketu"]["controller"], drekkana["Ketu"]["count"]) == ("Mars", 7)  # 3rd: Mesham
     assert (drekkana["Mars"]["drekkana"], drekkana["Mars"]["controller"], drekkana["Mars"]["count"]) == (2, "Mercury", 11)
     assert (drekkana["Venus"]["drekkana"], drekkana["Venus"]["controller"], drekkana["Venus"]["count"]) == (3, "Moon", 7)
     peyarchis = body["peyarchis"]

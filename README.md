@@ -30,12 +30,12 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   2026 to 2031 (plus the one already running on 1 Jan 2026), with the date and time, the Moon's
   rasi then and the Moorthi (Swarna, Rajatha, Thamira or Loha) counted from the janma rasi;
   the running transits are highlighted, and the table can be filtered by planet.
-- **Drekkana Lords**: for Sun to Saturn, the drekkana lord (controller) picked by the planet's
-  degree, where it sits, and whether it is 6th or 8th from the planet, which weakens the planet;
-  when any planet is weakened, the pariharam (Vakkarakali Amman) is shown.
+- **Drekkana Lords Aathipathyam**: for all nine planets, the drekkana lord (controller) picked
+  by the planet's degree, where it sits, and whether it is 6th or 8th from the planet, which
+  weakens the planet; when any planet is weakened, the pariharam (Vakkarakali Amman) is shown.
 - **Reading**: side-nav pages explaining the method, tables and sources for Pushkara Navamsa,
   Pancha Mahapurusha yogas, Ucham/Neecham, Pranapada, Thithi Soonyam, Mudakku, Soorya Chandraadhi
-  Yoga, Jeevanam Yoga, Kaala Pakai, Moorthi Nirnayam and Drekkana Lords.
+  Yoga, Jeevanam Yoga, Kaala Pakai, Moorthi Nirnayam and Drekkana Lords Aathipathyam.
 - **Saved charts**: stored locally, recomputed on load, and deletable.
 
 ## Setup
@@ -116,7 +116,8 @@ python -m pytest tests/ -v
   Lahiri ayanamsa and the mean node (Thirukanitha); Vakya panchangam dates can differ. A retrograde
   slip back into the previous rasi, and the re-entry after it, are listed with their own Moorthi.
   The window is set by `PEYARCHI_START_YEAR` and `PEYARCHI_END_YEAR` in `app/constants.py`.
-- Drekkana Lords: up to 10° the controller is the planet's rasi lord, over 10° up to 20° the
+- Drekkana Lords Aathipathyam: up to 10° the controller is the planet's rasi lord, over 10° up to 20° the
   5th rasi's lord, over 20° the 9th rasi's lord (degrees to the hundredth, so exactly 10° and
   20° stay in the earlier drekkana, unlike the usual convention and the app's D3 chart). A
-  controller 6th or 8th from the planet weakens it. Sun to Saturn only; the author's own rule.
+  controller 6th or 8th from the planet weakens it. All nine planets are checked; Rahu and Ketu are
+  never controllers, as they rule no rasi. The author's own rule.

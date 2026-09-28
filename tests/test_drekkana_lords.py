@@ -43,7 +43,13 @@ def test_own_controller_is_never_weakened():
     assert (e.controller, e.count, e.weakened) == ("Saturn", 1, False)
 
 
-def test_only_the_seven_planets_are_checked():
+def test_all_nine_planets_are_checked():
     assert [e.planet for e in compute_drekkana_lords(_chart({}))] == [
-        "Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn",
+        "Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn", "Rahu", "Ketu",
     ]
+
+
+def test_ketu_gets_a_rasi_lord_as_controller():
+    # Ketu at 22deg in Simham: 3rd drekkana, the 9th rasi Mesham, so Mars; Mars in Makaram is 6th.
+    e = _entry(_chart({"Ketu": (4, 22.0), "Mars": (9, 5.0)}), "Ketu")
+    assert (e.drekkana, e.drekkana_rasi, e.controller, e.count, e.weakened) == (3, 0, "Mars", 6, True)
