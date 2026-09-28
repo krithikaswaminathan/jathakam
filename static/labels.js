@@ -48,6 +48,9 @@ const LABELS = {
       mudakku: "Mudakku Rasi", mudakkuTag: "Mudakku", starLordWord: "star lord", padaWord: "pada",
       mudakkuHint: "From the Sun's pada, count padas to the same pada of Moolam; count the same again from there. Planets here, the rasi lord and the star lord are said to be blocked.",
       mudakkuLagna: "The Mudakku rasi is the lagna, which is said to weaken the Mudakku effect.",
+      kaalaPakai: "Kaala Pakai", colKaalaPakai: "Kaala Pakai", kaalaPakaiYes: "\u26A0 Yes",
+      kaalaPakaiNone: "No planet is in Kaala Pakai.", kaalaPakaiPick: "Choose a planet", kaalaPakaiRasis: "Kaala Pakai rasi",
+      kaalaPakaiHint: "A planet in its Kaala Pakai rasi in the rasi chart (D1) is said to be troubled. Ketu has none. Choose a planet to see its rasis.",
     },
     tithiNames: ["Prathamai", "Dwitiyai", "Tritiyai", "Chaturthi", "Panchami", "Shashti", "Saptami", "Ashtami", "Navami", "Dasami", "Ekadasi", "Dwadasi", "Trayodasi", "Chaturdasi"],
     paksha: { shukla: "Shukla", krishna: "Krishna" },
@@ -102,6 +105,9 @@ const LABELS = {
       mudakku: "முடக்கு ராசி", mudakkuTag: "முடக்கு", starLordWord: "நட்சத்திர அதிபதி", padaWord: "பாதம்",
       mudakkuHint: "சூரியன் நின்ற பாதத்திலிருந்து மூலத்தின் அதே பாதம் வரை பாதங்களை எண்ணி, அதே எண்ணிக்கையை அங்கிருந்து எண்ணவும். இங்குள்ள கிரகங்கள், ராசி அதிபதி, நட்சத்திர அதிபதி முடங்குவதாகக் கூறப்படுகிறது.",
       mudakkuLagna: "முடக்கு ராசி லக்னமாக இருப்பதால், முடக்கின் பலன் குறையும் என்று கூறப்படுகிறது.",
+      kaalaPakai: "கால பகை", colKaalaPakai: "கால பகை", kaalaPakaiYes: "\u26A0 ஆம்",
+      kaalaPakaiNone: "எந்த கிரகமும் கால பகையில் இல்லை.", kaalaPakaiPick: "கிரகத்தைத் தேர்ந்தெடுக்கவும்", kaalaPakaiRasis: "கால பகை ராசி",
+      kaalaPakaiHint: "ராசி கட்டத்தில் (D1) தன் கால பகை ராசியில் உள்ள கிரகம் பாதிக்கப்படுவதாகக் கூறப்படுகிறது. கேதுவுக்குக் கால பகை இல்லை. ஒரு கிரகத்தைத் தேர்ந்தெடுத்து அதன் ராசிகளைப் பார்க்கலாம்.",
     },
     tithiNames: ["பிரதமை", "துவிதியை", "திருதியை", "சதுர்த்தி", "பஞ்சமி", "சஷ்டி", "சப்தமி", "அஷ்டமி", "நவமி", "தசமி", "ஏகாதசி", "துவாதசி", "திரயோதசி", "சதுர்த்தசி"],
     paksha: { shukla: "வளர்பிறை", krishna: "தேய்பிறை" },
@@ -124,6 +130,43 @@ const UPASANA_DEIVAM = [
   { en: "Courtallam \u2013 Sri Kutralanathar", ta: "குற்றாலம் \u2013 ஸ்ரீ குற்றாலநாதர்" },
   { en: "Sri Meenakshi Amman", ta: "ஸ்ரீ மீனாட்சி அம்மன்" },
 ];
+
+// Kaala Pakai rasis (0=Mesham..11=Meenam) and their effects, as given by the user from a
+// video. Must match KAALA_PAKAI_RASIS in app/constants.py. Ketu has none.
+const KAALA_PAKAI = {
+  Moon: {
+    rasis: [0, 1],
+    effect: { en: "Creates deep mental restlessness, fluctuating emotional security, and unexpected anxiety.", ta: "மனதில் ஆழ்ந்த அமைதியின்மை, உணர்ச்சிப் பாதுகாப்பில் ஏற்ற இறக்கம், எதிர்பாராத பதற்றம் உண்டாகும்." },
+  },
+  Rahu: {
+    rasis: [2],
+    effect: { en: "Amplifies dual thinking, leading to illusions, over-analysis, or potential deception by close peers.", ta: "இரட்டை எண்ணங்களை அதிகரித்து, மாயை, அளவுக்கு மீறிய ஆராய்ச்சி அல்லது நெருங்கியவர்களால் ஏமாற்றத்திற்கு வழிவகுக்கும்." },
+  },
+  Sun: {
+    rasis: [3],
+    effect: { en: "Weakens physical vitality/immunity and creates emotional friction with father figures or authority.", ta: "உடல் வலிமையையும் நோய் எதிர்ப்பு சக்தியையும் குறைத்து, தந்தை அல்லது அதிகாரத்தில் உள்ளவர்களுடன் மனக்கசப்பை உண்டாக்கும்." },
+  },
+  Mars: {
+    rasis: [5],
+    effect: { en: "Misdirects the warrior energy of Mars into hyper-criticism, internal anxiety, and digestive or nervous system friction.", ta: "செவ்வாயின் போர்க்குணத்தை அளவுக்கு மீறிய விமர்சனம், உள் பதற்றம், செரிமானம் அல்லது நரம்பு மண்டலக் கோளாறுகளாகத் திசை திருப்பும்." },
+  },
+  Jupiter: {
+    rasis: [6, 7],
+    effect: { en: "Clouds wisdom and judgment, often causing unexpected financial missteps or challenges in marital/business alliances.", ta: "ஞானத்தையும் முடிவெடுக்கும் திறனையும் மங்கச் செய்து, எதிர்பாராத பணத் தவறுகள் அல்லது திருமண / தொழில் கூட்டுகளில் சவால்களை ஏற்படுத்தும்." },
+  },
+  Mercury: {
+    rasis: [8],
+    effect: { en: "Scatters logical intelligence (Buddhi), leading to communication breakdowns or poorly timed business decisions.", ta: "தர்க்க அறிவை (புத்தி) சிதறடித்து, தொடர்பு முறிவுகள் அல்லது தவறான நேரத்தில் எடுக்கும் தொழில் முடிவுகளுக்கு வழிவகுக்கும்." },
+  },
+  Venus: {
+    rasis: [9, 10],
+    effect: { en: "Challenges relationship stability and material comforts, introducing chronic delays or emotional coldness in partnerships.", ta: "உறவுகளின் நிலைத்தன்மையையும் பொருள் சுகங்களையும் சோதித்து, தொடர்ந்த தாமதங்கள் அல்லது உறவுகளில் உணர்ச்சிக் குளிர்ச்சியை உண்டாக்கும்." },
+  },
+  Saturn: {
+    rasis: [11],
+    effect: { en: "Disrupts discipline and focus, introducing hidden spiritual dilemmas, boundary issues, or sudden isolation.", ta: "ஒழுக்கத்தையும் கவனத்தையும் குலைத்து, மறைந்த ஆன்மீகக் குழப்பங்கள், எல்லைப் பிரச்சினைகள் அல்லது திடீர் தனிமையை உண்டாக்கும்." },
+  },
+};
 
 const READING_TOPICS = {
   pushkaraNavamsa: {
@@ -280,5 +323,24 @@ const READING_TOPICS = {
       { title: "முடக்கு ராசி அட்டவணை (AstroSiva)", url: "https://astrosiva.in/mudakku-tithi-sunyam-life-remedies/" },
       { title: "முடக்கு ராசி ஒரு ஜோதிட பார்வை (Neerkondar)", url: "http://neerkondar.blogspot.com/2024/12/blog-post_70.html" },
     ],
+  },
+  kaalaPakai: {
+    title: { en: "Kaala Pakai", ta: "கால பகை" },
+    intro: {
+      en: "Each graha is said to be at odds (pakai) with certain rasis. When it sits in one of them in the rasi chart (D1), its significations are troubled as below. Ketu has no Kaala Pakai rasi, and no graha has Simha (Leo).",
+      ta: "ஒவ்வொரு கிரகமும் சில ராசிகளுடன் பகையாக இருப்பதாகக் கூறப்படுகிறது. ராசி கட்டத்தில் (D1) அந்த ராசியில் இருந்தால், அதன் காரகத்துவங்கள் கீழே உள்ளபடி பாதிக்கப்படும். கேதுவுக்குக் கால பகை ராசி இல்லை; சிம்மம் எந்த கிரகத்திற்கும் கால பகை இல்லை.",
+    },
+    tableHeader: [
+      { en: "Planet", ta: "கிரகம்" }, { en: "Kaala Pakai rasi", ta: "கால பகை ராசி" }, { en: "Effect", ta: "பலன்" },
+    ],
+    table: Object.entries(KAALA_PAKAI).map(([planet, k]) => [
+      { en: LABELS.en.planets[planet], ta: LABELS.ta.planets[planet] },
+      { en: k.rasis.map((r) => LABELS.en.rasi[r]).join(", "), ta: k.rasis.map((r) => LABELS.ta.rasi[r]).join(", ") },
+      k.effect,
+    ]),
+    note: {
+      en: "From a video; no written source. Only the rasi counts, not the degree.",
+      ta: "ஒரு காணொளியிலிருந்து; எழுத்து மூலம் இல்லை. பாகை அல்ல, ராசி மட்டுமே கணக்கில் கொள்ளப்படுகிறது.",
+    },
   },
 };

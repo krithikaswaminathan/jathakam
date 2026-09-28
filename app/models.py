@@ -106,6 +106,12 @@ class UpasanaOut(BaseModel):
     rasi: int
 
 
+class KaalaPakaiOut(BaseModel):
+    planet: str
+    rasi: int
+    house: int
+
+
 class ChartResponse(BaseModel):
     id: int
     name: str
@@ -127,6 +133,7 @@ class ChartResponse(BaseModel):
     tithi: TithiOut | None = None
     mudakku: MudakkuOut | None = None
     upasana: UpasanaOut | None = None
+    kaala_pakai: list[KaalaPakaiOut] = []
 
 
 class DasaExpandRequest(BaseModel):

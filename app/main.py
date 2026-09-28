@@ -27,6 +27,7 @@ from app.models import (
     DasaPeriodOut,
     DignityOut,
     GrahaOut,
+    KaalaPakaiOut,
     MudakkuOut,
     PlaceResult,
     SoonyaRasiOut,
@@ -35,6 +36,7 @@ from app.models import (
     UpasanaOut,
     YogaOut,
 )
+from app.kaala_pakai import compute_kaala_pakai
 from app.mudakku import compute_mudakku
 from app.pranapada import compute_pranapada_longitude
 from app.tara import compute_tara_balam
@@ -155,6 +157,7 @@ def _build_chart_response(
         ),
         mudakku=MudakkuOut(**vars(mudakku)),
         upasana=UpasanaOut(**vars(upasana)) if upasana else None,
+        kaala_pakai=[KaalaPakaiOut(**vars(e)) for e in compute_kaala_pakai(d1)],
     )
 
 

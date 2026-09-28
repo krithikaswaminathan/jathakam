@@ -56,6 +56,11 @@ def test_old_saved_charts_load_with_all_current_features(client):
     assert (mudakku["rasi_lord"], mudakku["star_lord"]) == ("Jupiter", "Ketu")
     assert mudakku["planets"] == ["Sun", "Mercury"] and mudakku["is_lagna"]
     assert body["upasana"] == {"planet": "Venus", "planet_rasi": 7, "rasi": 5}  # Venus in Scorpio -> 11th is Virgo
+    assert body["kaala_pakai"] == [
+        {"planet": "Moon", "rasi": 1, "house": 6},  # Taurus
+        {"planet": "Mercury", "rasi": 8, "house": 1},  # Sagittarius
+        {"planet": "Jupiter", "rasi": 6, "house": 11},  # Libra
+    ]
 
 
 def test_create_then_load_matches(client):

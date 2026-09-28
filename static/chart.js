@@ -22,6 +22,7 @@ let state = {
   selectedPlace: null, // { label, latitude, longitude, timezone }
   readingTopic: "pushkaraNavamsa",
   upasanaRasi: "", // rasi index picked in the Upasana Deivam box, as a string
+  kaalaPakaiPlanet: "", // planet picked in the Kaala Pakai box
 };
 
 function L() {
@@ -118,6 +119,10 @@ function applyLanguage() {
   document.getElementById("mudakkuHint").textContent = labels.ui.mudakkuHint;
   document.getElementById("lblUpasana").textContent = labels.ui.upasana;
   document.getElementById("lblUpasanaRasi").textContent = labels.ui.colRasi;
+  document.getElementById("lblKaalaPakai").textContent = labels.ui.kaalaPakai;
+  document.getElementById("lblKaalaPakaiPlanet").textContent = labels.ui.colPlanet;
+  document.getElementById("kaalaPakaiHint").textContent = labels.ui.kaalaPakaiHint;
+  document.getElementById("thKaalaPakai").textContent = labels.ui.colKaalaPakai;
   document.getElementById("induLagnaHint").textContent = labels.ui.induLagnaHint;
   document.getElementById("lblReading").textContent = labels.ui.reading;
   document.getElementById("lblBack").textContent = labels.ui.back;
@@ -181,6 +186,7 @@ async function loadChart(id) {
   state.chart = await res.json();
   state.varga = "D1";
   state.upasanaRasi = state.chart.upasana ? String(state.chart.upasana.rasi) : "";
+  state.kaalaPakaiPlanet = state.chart.kaala_pakai.length ? state.chart.kaala_pakai[0].planet : "";
   document.getElementById("resultSection").classList.remove("hidden");
   renderAll();
 }
@@ -264,6 +270,7 @@ document.getElementById("birthForm").addEventListener("submit", async (e) => {
   state.chart = await res.json();
   state.varga = "D1";
   state.upasanaRasi = state.chart.upasana ? String(state.chart.upasana.rasi) : "";
+  state.kaalaPakaiPlanet = state.chart.kaala_pakai.length ? state.chart.kaala_pakai[0].planet : "";
   document.getElementById("resultSection").classList.remove("hidden");
   renderAll();
   loadSavedCharts();
@@ -399,6 +406,7 @@ function renderAll() {
   renderTithi();
   renderMudakku();
   renderUpasana();
+  renderKaalaPakai();
   renderDasaTable();
   renderYogas();
   renderTaraBalam();
@@ -482,6 +490,53 @@ function renderUpasana() {
   };
   select.onchange = () => {
     state.upasanaRasi = select.value;
+    show();
+  };
+  show();
+}
+
+function renderKaalaPakai() {
+  const labels = L();
+  const value = document.getElementById("kaalaPakaiValue");
+  value.innerHTML = "";
+  const entries = state.chart.kaala_pakai;
+  if (entries.length === 0) value.textContent = labels.ui.kaalaPakaiNone;
+  for (const e of entries) {
+    const div = document.createElement("div");
+    div.className = "kaala-pakai-entry";
+    const head = document.createElement("span");
+    head.className = "info-label";
+    head.textContent = `${labels.planets[e.planet]}: ${labels.rasi[e.rasi]} \u00B7 ${labels.ui.houseWord} ${e.house}`;
+    const effect = document.createElement("div");
+    effect.className = "info-hint";
+    effect.textContent = KAALA_PAKAI[e.planet].effect[state.lang];
+    div.append(head, effect);
+    value.appendChild(div);
+  }
+
+  const select = document.getElementById("kaalaPakaiPlanet");
+  select.innerHTML = "";
+  const blank = document.createElement("option");
+  blank.value = "";
+  blank.textContent = labels.ui.kaalaPakaiPick;
+  select.appendChild(blank);
+  for (const planet of Object.keys(KAALA_PAKAI)) {
+    const opt = document.createElement("option");
+    opt.value = planet;
+    opt.textContent = labels.planets[planet];
+    select.appendChild(opt);
+  }
+  select.value = state.kaalaPakaiPlanet;
+
+  const show = () => {
+    const k = KAALA_PAKAI[state.kaalaPakaiPlanet];
+    document.getElementById("kaalaPakaiLookup").textContent = k
+      ? `${labels.ui.kaalaPakaiRasis}: ${k.rasis.map((r) => labels.rasi[r]).join(", ")}`
+      : "";
+    document.getElementById("kaalaPakaiEffect").textContent = k ? k.effect[state.lang] : "";
+  };
+  select.onchange = () => {
+    state.kaalaPakaiPlanet = select.value;
     show();
   };
   show();
@@ -741,9 +796,17 @@ function renderGrahaDetails() {
   tbody.innerHTML = "";
   const labels = L();
 
+  const kaalaPakai = state.chart.kaala_pakai;
+  document.getElementById("kaalaPakaiSummary").textContent = kaalaPakai.length
+    ? `${labels.ui.kaalaPakai}: ` +
+      kaalaPakai.map((e) => `${labels.planets[e.planet]} (${labels.rasi[e.rasi]})`).join("  \u00B7  ")
+    : labels.ui.kaalaPakaiNone;
+  const inKaalaPakai = new Set(kaalaPakai.map((e) => e.planet));
+
   const rows = [...Object.values(state.chart.d1.grahas), state.chart.gulika, state.chart.mandi];
   for (const g of rows) {
     const tr = document.createElement("tr");
+    if (inKaalaPakai.has(g.name)) tr.className = "kaala-pakai";
     const isRetrogradeEligible = g.retrograde && !NODES_NOT_MARKED_RETROGRADE.has(g.name);
     const cells = [
       (labels.planets[g.name] || g.name) + (isRetrogradeEligible ? " (R)" : ""),
@@ -755,6 +818,7 @@ function renderGrahaDetails() {
       g.pada,
       labels.planets[g.star_lord] || g.star_lord,
       g.pushkara_navamsa ? "✓" : "–",
+      inKaalaPakai.has(g.name) ? labels.ui.kaalaPakaiYes : "–",
     ];
     for (const value of cells) {
       const td = document.createElement("td");

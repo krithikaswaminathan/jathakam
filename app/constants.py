@@ -123,3 +123,17 @@ THITHI_SOONYA_RASIS = {
     13: (1, 4),
     14: (2, 5, 8, 11),
 }
+
+# Kaala Pakai: the D1 rasis a graha is said to be at odds with (0=Aries..11=Pisces).
+# As given by the user from a video; no written source. Ketu has none, and no graha
+# has Leo.
+KAALA_PAKAI_RASIS = {
+    "Moon": (0, 1),
+    "Rahu": (2,),
+    "Sun": (3,),
+    "Mars": (5,),
+    "Jupiter": (6, 7),
+    "Mercury": (8,),
+    "Venus": (9, 10),
+    "Saturn": (11,),
+}
