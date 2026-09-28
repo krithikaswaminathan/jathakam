@@ -378,3 +378,10 @@ td.quality-neutral { color: var(--neutral); font-weight: 600; }
   .brand-text h1 { font-size: 1.3rem; }
   .card { padding: 1.1rem; }
 }
+
+.timing-title { margin: 1.2rem 0 0.5rem; font-size: 1rem; color: var(--maroon-700); }
+.timing-block { margin-bottom: 0.9rem; padding: 0.65rem 0.9rem; border: 1px solid var(--line); border-radius: 8px; font-size: 0.9rem; }
+.timing-intro { margin-bottom: 0.4rem; }
+.timing-list { margin: 0.2rem 0 0.4rem; padding-left: 1.2rem; font-variant-numeric: tabular-nums; }
+.timing-now { color: var(--bad); font-weight: 600; }
+.timing-all summary { cursor: pointer; color: var(--gold-500); font-size: 0.85rem; }

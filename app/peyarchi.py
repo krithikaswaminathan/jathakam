@@ -5,12 +5,13 @@ Moorthi Nirnayam: at the moment a planet enters a rasi, count from the janma ras
 """
 
 from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 from functools import lru_cache
 
 import swisseph as swe
 
 from app.constants import EPHEMERIS_FLAGS, MOORTHI_BY_COUNT, NODE_MODE
+from app.ephemeris import datetime_from_jd, jd_from_datetime
 
 # Ketu is always opposite Rahu, so one Rahu row covers both.
 PEYARCHI_BODIES = {"Saturn": swe.SATURN, "Jupiter": swe.JUPITER, "Rahu": NODE_MODE}
@@ -46,16 +47,6 @@ class PeyarchiEntry:
 def _rasi(jd_ut: float, body: int) -> int:
     xx, _ = swe.calc_ut(jd_ut, body, EPHEMERIS_FLAGS)
     return int((xx[0] % 360) // 30)
-
-
-def _to_jd(dt: datetime) -> float:
-    dt = dt.astimezone(timezone.utc)
-    return swe.julday(dt.year, dt.month, dt.day, dt.hour + dt.minute / 60 + dt.second / 3600)
-
-
-def _to_datetime(jd_ut: float) -> datetime:
-    y, m, d, h = swe.revjul(jd_ut)
-    return datetime(y, m, d, tzinfo=timezone.utc) + timedelta(seconds=round(h * 3600))
 
 
 @lru_cache(maxsize=32)
@@ -95,7 +86,7 @@ def moorthi_for(janma_rasi: int, moon_rasi: int) -> tuple[int, str]:
 
 def compute_peyarchis(janma_rasi: int, start: datetime, end: datetime) -> list[PeyarchiEntry]:
     """Every peyarchi between start and end, plus the one per planet already in effect at start."""
-    jd_start, jd_end = _to_jd(start), _to_jd(end)
+    jd_start, jd_end = jd_from_datetime(start), jd_from_datetime(end)
     entries = []
     for planet in PEYARCHI_BODIES:
         ingresses = find_ingresses(planet, jd_start - LOOKBACK_DAYS, jd_end)
@@ -107,7 +98,7 @@ def compute_peyarchis(janma_rasi: int, start: datetime, end: datetime) -> list[P
             entries.append(
                 PeyarchiEntry(
                     planet=planet,
-                    when=_to_datetime(ingress.jd_ut),
+                    when=datetime_from_jd(ingress.jd_ut),
                     rasi=ingress.rasi,
                     kind=ingress.kind,
                     moon_rasi=moon_rasi,

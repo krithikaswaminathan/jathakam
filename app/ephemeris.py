@@ -1,4 +1,4 @@
-from datetime import date, datetime, time, timedelta
+from datetime import date, datetime, time, timedelta, timezone
 
 import swisseph as swe
 
@@ -46,3 +46,14 @@ def compute_graha_longitudes(jd_ut: float) -> dict[str, float]:
 def compute_ascendant(jd_ut: float, lat: float, lon: float) -> float:
     _, ascmc = swe.houses_ex(jd_ut, lat, lon, b"W", EPHEMERIS_FLAGS)
     return ascmc[0] % 360
+
+
+def jd_from_datetime(dt: datetime) -> float:
+    """Julian day (UT) of a time-zone-aware datetime."""
+    dt = dt.astimezone(timezone.utc)
+    return swe.julday(dt.year, dt.month, dt.day, dt.hour + dt.minute / 60 + dt.second / 3600)
+
+
+def datetime_from_jd(jd_ut: float) -> datetime:
+    y, m, d, h = swe.revjul(jd_ut)
+    return datetime(y, m, d, tzinfo=timezone.utc) + timedelta(seconds=round(h * 3600))

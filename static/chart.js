@@ -1063,7 +1063,15 @@ function renderSashtashtagam() {
   const flagged = entries.filter((e) => e.flagged);
   document.getElementById("sashtashtagamSummary").textContent = flagged.length
     ? `${labels.ui.sashtashtagamSummary}: ` +
-      flagged.map((e) => `${labels.planets[e.planet]} (${aathipathyamLines(e).join("; ")})`).join("  \u00B7  ")
+      flagged
+        .map((e) => {
+          const next = upcomingWindows(e)[0];
+          const nextText = next
+            ? ` \u2013 ${pointText(e, labels.ui.sashtashtagamNextShort).replace("{when}", fmtWindow(next))}`
+            : "";
+          return `${labels.planets[e.planet]} (${aathipathyamLines(e).join("; ")})${nextText}`;
+        })
+        .join("  \u00B7  ")
     : labels.ui.sashtashtagamNone;
   const pariharam = document.getElementById("sashtashtagamPariharam");
   pariharam.textContent = labels.ui.drekkanaPariharam;
@@ -1098,6 +1106,104 @@ function renderSashtashtagam() {
       tr.appendChild(td);
     }
     tbody.appendChild(tr);
+  }
+  renderSashtashtagamTiming(flagged);
+}
+
+function fmtDateTime(iso) {
+  return iso.slice(0, 16).replace("T", " ");
+}
+
+function fmtWindow(w) {
+  return `${fmtDateTime(w.start)} \u2192 ${fmtDateTime(w.end)}`;
+}
+
+function fmtDegMin(deg) {
+  const whole = Math.floor(deg + 1e-9);
+  const minutes = Math.round((deg - whole) * 60);
+  return `${whole}\u00B0${String(minutes).padStart(2, "0")}'`;
+}
+
+// Fills {planet} {star} {pada} {rasi} {from} {to} for a flagged planet's navamsa point.
+function pointText(e, template) {
+  const labels = L();
+  const p = e.point;
+  const rasi = Math.floor(p.start / 30);
+  return template
+    .replaceAll("{planet}", labels.planets[e.planet])
+    .replace("{star}", labels.nakshatra[p.nakshatra])
+    .replace("{pada}", p.pada)
+    .replace("{rasi}", labels.rasi[rasi])
+    .replace("{from}", fmtDegMin(p.start - rasi * 30))
+    .replace("{to}", fmtDegMin(p.end - rasi * 30));
+}
+
+// Periods not yet over, soonest first.
+function upcomingWindows(e) {
+  const now = new Date();
+  return e.transits.filter((w) => new Date(w.end) >= now);
+}
+
+function renderSashtashtagamTiming(flagged) {
+  const labels = L();
+  const container = document.getElementById("sashtashtagamTiming");
+  container.innerHTML = "";
+  if (flagged.length === 0) return;
+
+  const title = document.createElement("h3");
+  title.className = "timing-title";
+  title.textContent = labels.ui.sashtashtagamTimingTitle;
+  container.appendChild(title);
+
+  const now = new Date();
+  const windowLine = (w) => {
+    const li = document.createElement("li");
+    const running = new Date(w.start) <= now && now <= new Date(w.end);
+    li.textContent = fmtWindow(w) + (running ? ` (${labels.ui.sashtashtagamNowTag})` : "");
+    if (running) li.className = "timing-now";
+    return li;
+  };
+
+  for (const e of flagged) {
+    const block = document.createElement("div");
+    block.className = "timing-block";
+    const intro = document.createElement("div");
+    intro.className = "timing-intro";
+    if (e.transits.length === 0) {
+      intro.textContent = pointText(e, labels.ui.sashtashtagamNoTransit);
+      block.appendChild(intro);
+      container.appendChild(block);
+      continue;
+    }
+    intro.textContent = pointText(e, labels.ui.sashtashtagamTimingIntro);
+    block.appendChild(intro);
+
+    const upcoming = upcomingWindows(e);
+    const next = document.createElement("div");
+    next.className = "info-label";
+    next.textContent = labels.ui.sashtashtagamUpcoming;
+    block.appendChild(next);
+    const ul = document.createElement("ul");
+    ul.className = "timing-list";
+    if (upcoming.length === 0) {
+      const li = document.createElement("li");
+      li.textContent = labels.ui.sashtashtagamNoneLeft;
+      ul.appendChild(li);
+    }
+    for (const w of upcoming.slice(0, 3)) ul.appendChild(windowLine(w));
+    block.appendChild(ul);
+
+    const all = document.createElement("details");
+    all.className = "timing-all";
+    const summary = document.createElement("summary");
+    summary.textContent = labels.ui.sashtashtagamAllPeriods.replace("{n}", e.transits.length);
+    all.appendChild(summary);
+    const allList = document.createElement("ul");
+    allList.className = "timing-list";
+    for (const w of e.transits) allList.appendChild(windowLine(w));
+    all.appendChild(allList);
+    block.appendChild(all);
+    container.appendChild(block);
   }
 }
 

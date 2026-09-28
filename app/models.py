@@ -135,6 +135,18 @@ class DrekkanaLordOut(BaseModel):
     weakened: bool
 
 
+class NavamsaPointOut(BaseModel):
+    nakshatra: int
+    pada: int
+    start: float
+    end: float
+
+
+class TransitWindowOut(BaseModel):
+    start: datetime  # in the chart's time zone
+    end: datetime
+
+
 class SashtashtagamOut(BaseModel):
     planet: str
     d1_rasi: int
@@ -143,6 +155,8 @@ class SashtashtagamOut(BaseModel):
     count: int
     flagged: bool
     houses_ruled: list[int]
+    point: NavamsaPointOut | None = None
+    transits: list[TransitWindowOut] = []
 
 
 class ChartResponse(BaseModel):

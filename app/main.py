@@ -38,6 +38,7 @@ from app.models import (
     SoonyaRasiOut,
     TaraEntryOut,
     TithiOut,
+    TransitWindowOut,
     UpasanaOut,
     YogaOut,
 )
@@ -167,16 +168,29 @@ def _build_chart_response(
         kaala_pakai=[KaalaPakaiOut(**vars(e)) for e in compute_kaala_pakai(d1)],
         peyarchis=_peyarchis_out(d1.grahas["Moon"].rasi, timezone),
         drekkana_lords=[DrekkanaLordOut(**vars(e)) for e in compute_drekkana_lords(d1)],
-        navamsa_sashtashtagam=[
-            SashtashtagamOut(**vars(e)) for e in compute_navamsa_sashtashtagam(d1, vargas["D9"])
-        ],
+        navamsa_sashtashtagam=_sashtashtagam_out(d1, vargas["D9"], timezone),
     )
+
+
+def _transit_window(timezone_name: str) -> tuple[datetime, datetime]:
+    """The years the Moorthy and Sashtashtagam timings cover, in the chart's time zone."""
+    tz = ZoneInfo(timezone_name)
+    return datetime(PEYARCHI_START_YEAR, 1, 1, tzinfo=tz), datetime(PEYARCHI_END_YEAR + 1, 1, 1, tzinfo=tz)
+
+
+def _sashtashtagam_out(d1: ChartData, d9: ChartData, timezone_name: str) -> list[SashtashtagamOut]:
+    tz = ZoneInfo(timezone_name)
+    out = []
+    for e in compute_navamsa_sashtashtagam(d1, d9, *_transit_window(timezone_name)):
+        fields = {**vars(e), "point": vars(e.point) if e.point else None}
+        fields["transits"] = [TransitWindowOut(start=w.start.astimezone(tz), end=w.end.astimezone(tz)) for w in e.transits]
+        out.append(SashtashtagamOut(**fields))
+    return out
 
 
 def _peyarchis_out(janma_rasi: int, timezone_name: str) -> list[PeyarchiOut]:
     tz = ZoneInfo(timezone_name)
-    start = datetime(PEYARCHI_START_YEAR, 1, 1, tzinfo=tz)
-    end = datetime(PEYARCHI_END_YEAR + 1, 1, 1, tzinfo=tz)
+    start, end = _transit_window(timezone_name)
     return [
         PeyarchiOut(**{**vars(e), "when": e.when.astimezone(tz)})
         for e in compute_peyarchis(janma_rasi, start, end)

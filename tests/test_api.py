@@ -68,6 +68,10 @@ def test_old_saved_charts_load_with_all_current_features(client):
     assert [p for p, e in sashtashtagam.items() if e["flagged"]] == ["Sun"]  # Dhanus -> Rishabam in D9
     assert (sashtashtagam["Sun"]["count"], sashtashtagam["Sun"]["houses_ruled"]) == (6, [9])
     assert sashtashtagam["Rahu"]["houses_ruled"] == [] and sashtashtagam["Rahu"]["d1_house"] == 3
+    assert (sashtashtagam["Sun"]["point"]["nakshatra"], sashtashtagam["Sun"]["point"]["pada"]) == (3, 4)  # Rohini 4
+    assert len(sashtashtagam["Sun"]["transits"]) == 6  # every June, 2026 to 2031
+    assert sashtashtagam["Sun"]["transits"][0]["start"].startswith("2026-06-05T")
+    assert sashtashtagam["Moon"]["point"] is None and sashtashtagam["Moon"]["transits"] == []
     peyarchis = body["peyarchis"]
     assert [p["planet"] for p in peyarchis if p["in_effect_at_start"]] == ["Saturn", "Rahu", "Jupiter"]
     assert peyarchis[0]["when"] == "2025-03-29T21:45:09+05:30"  # Saturn into Pisces, in the chart's time zone

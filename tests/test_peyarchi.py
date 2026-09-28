@@ -4,8 +4,8 @@ from datetime import datetime, timedelta, timezone
 import pytest
 
 from app.constants import MOORTHI_BY_COUNT
-from app.ephemeris import init_ephemeris
-from app.peyarchi import _to_jd, compute_peyarchis, find_ingresses, moorthi_for
+from app.ephemeris import init_ephemeris, jd_from_datetime
+from app.peyarchi import compute_peyarchis, find_ingresses, moorthi_for
 
 IST = timezone(timedelta(hours=5, minutes=30))
 needs_ephe = pytest.mark.skipif(
@@ -57,14 +57,14 @@ def test_saturn_into_pisces_2025():
 def test_jupiter_retrograde_slip_and_reentry_2021():
     # Jupiter entered Aquarius in Apr 2021, slipped back into Capricorn in Sep, re-entered in Nov.
     start = datetime(2021, 1, 1, tzinfo=timezone.utc)
-    events = find_ingresses("Jupiter", _to_jd(start), _to_jd(start + timedelta(days=365)))
+    events = find_ingresses("Jupiter", jd_from_datetime(start), jd_from_datetime(start + timedelta(days=365)))
     assert [(e.rasi, e.kind) for e in events] == [(10, "normal"), (9, "retrograde"), (10, "re-entry")]
 
 
 @needs_ephe
 def test_rahu_moves_backwards_and_is_never_marked_retrograde():
     start = datetime(2020, 1, 1, tzinfo=timezone.utc)
-    events = find_ingresses("Rahu", _to_jd(start), _to_jd(start + timedelta(days=3650)))
+    events = find_ingresses("Rahu", jd_from_datetime(start), jd_from_datetime(start + timedelta(days=3650)))
     assert len(events) >= 5
     assert all(e.kind == "normal" for e in events)
     assert all((b.rasi - a.rasi) % 12 == 11 for a, b in zip(events, events[1:]))
