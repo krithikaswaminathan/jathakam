@@ -142,6 +142,15 @@ function applyLanguage() {
   document.getElementById("thDkCount").textContent = labels.ui.colFromPlanet;
   document.getElementById("thDkResult").textContent = labels.ui.colResult;
   document.getElementById("drekkanaNote").textContent = labels.ui.drekkanaNote;
+  document.getElementById("lblSashtashtagamTab").textContent = labels.ui.sashtashtagamTab;
+  document.getElementById("thSsPlanet").textContent = labels.ui.colPlanet;
+  document.getElementById("thSsD1Rasi").textContent = labels.ui.colD1Rasi;
+  document.getElementById("thSsD1House").textContent = labels.ui.colD1House;
+  document.getElementById("thSsD9Rasi").textContent = labels.ui.colD9Rasi;
+  document.getElementById("thSsCount").textContent = labels.ui.colCount;
+  document.getElementById("thSsRules").textContent = labels.ui.colAathipathyam;
+  document.getElementById("thSsResult").textContent = labels.ui.colResult;
+  document.getElementById("sashtashtagamNote").textContent = labels.ui.sashtashtagamNote;
   document.getElementById("induLagnaHint").textContent = labels.ui.induLagnaHint;
   document.getElementById("lblReading").textContent = labels.ui.reading;
   document.getElementById("lblBack").textContent = labels.ui.back;
@@ -433,6 +442,7 @@ function renderAll() {
   renderDignity();
   renderPeyarchi();
   renderDrekkanaLords();
+  renderSashtashtagam();
 }
 
 function renderPranapada() {
@@ -1032,6 +1042,59 @@ function renderDrekkanaLords() {
     for (const value of cells) {
       const td = document.createElement("td");
       td.textContent = value;
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+}
+
+// "9: father, fortune, dharma" for each house a planet rules; Rahu and Ketu get the house they sit in.
+function aathipathyamLines(e) {
+  const labels = L();
+  if (e.houses_ruled.length === 0) {
+    return [labels.ui.sashtashtagamNoLordship.replace("{house}", e.d1_house)];
+  }
+  return e.houses_ruled.map((h) => `${h}: ${labels.ui.houseMeanings[h - 1]}`);
+}
+
+function renderSashtashtagam() {
+  const labels = L();
+  const entries = state.chart.navamsa_sashtashtagam;
+  const flagged = entries.filter((e) => e.flagged);
+  document.getElementById("sashtashtagamSummary").textContent = flagged.length
+    ? `${labels.ui.sashtashtagamSummary}: ` +
+      flagged.map((e) => `${labels.planets[e.planet]} (${aathipathyamLines(e).join("; ")})`).join("  \u00B7  ")
+    : labels.ui.sashtashtagamNone;
+  const pariharam = document.getElementById("sashtashtagamPariharam");
+  pariharam.textContent = labels.ui.drekkanaPariharam;
+  pariharam.classList.toggle("hidden", flagged.length === 0);
+
+  const tbody = document.getElementById("sashtashtagamBody");
+  tbody.innerHTML = "";
+  for (const e of entries) {
+    const tr = document.createElement("tr");
+    if (e.flagged) tr.className = "sashtashtagam-flag";
+    const cells = [
+      labels.planets[e.planet],
+      labels.rasi[e.d1_rasi],
+      String(e.d1_house),
+      labels.rasi[e.d9_rasi],
+      String(e.count),
+      aathipathyamLines(e),
+      e.flagged ? labels.ui.sashtashtagamWeak.replace("{n}", e.count) : labels.ui.sashtashtagamOk,
+    ];
+    for (const value of cells) {
+      const td = document.createElement("td");
+      if (Array.isArray(value)) {
+        for (const line of value) {
+          const span = document.createElement("span");
+          span.className = "house-line";
+          span.textContent = line;
+          td.appendChild(span);
+        }
+      } else {
+        td.textContent = value;
+      }
       tr.appendChild(td);
     }
     tbody.appendChild(tr);

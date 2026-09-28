@@ -135,6 +135,16 @@ class DrekkanaLordOut(BaseModel):
     weakened: bool
 
 
+class SashtashtagamOut(BaseModel):
+    planet: str
+    d1_rasi: int
+    d1_house: int
+    d9_rasi: int
+    count: int
+    flagged: bool
+    houses_ruled: list[int]
+
+
 class ChartResponse(BaseModel):
     id: int
     name: str
@@ -159,6 +169,7 @@ class ChartResponse(BaseModel):
     kaala_pakai: list[KaalaPakaiOut] = []
     peyarchis: list[PeyarchiOut] = []
     drekkana_lords: list[DrekkanaLordOut] = []
+    navamsa_sashtashtagam: list[SashtashtagamOut] = []
 
 
 class DasaExpandRequest(BaseModel):

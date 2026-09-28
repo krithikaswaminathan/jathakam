@@ -238,7 +238,7 @@ main {
 }
 #savedList button:hover { background: var(--maroon-700); color: white; }
 
-.tabs { display: flex; gap: 0.25rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--line); }
+.tabs { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--line); }
 .tab-btn {
   padding: 0.55rem 1.1rem; border: none; background: none; cursor: pointer;
   font-family: var(--font-body); font-size: 0.9rem; font-weight: 500; color: var(--ink-soft);
@@ -352,9 +352,12 @@ tr.kaala-pakai td:last-child { color: var(--bad); font-weight: 600; }
 .kaala-pakai-entry { margin-bottom: 0.4rem; }
 .peyarchi-filter { margin-bottom: 0.7rem; }
 #drekkanaTab { overflow-x: auto; }
-tr.drekkana-weak td { background: #fbf0ed; }
+tr.drekkana-weak td, tr.sashtashtagam-flag td { background: #fbf0ed; }
 .pariharam { margin: -0.4rem 0 0.9rem; padding: 0.55rem 0.9rem; border-left: 3px solid var(--gold-500); background: var(--cream-50); font-weight: 600; color: var(--maroon-700); }
-tr.drekkana-weak td:last-child { color: var(--bad); font-weight: 600; }
+tr.drekkana-weak td:last-child, tr.sashtashtagam-flag td:last-child { color: var(--bad); font-weight: 600; }
+#sashtashtagamTab { overflow-x: auto; }
+.house-line { display: block; }
+.house-line + .house-line { margin-top: 0.2rem; }
 #peyarchiTab { overflow-x: auto; }
 td.moorthi-Swarna { color: var(--gold-500); font-weight: 700; }
 td.moorthi-Rajatha { color: var(--good); font-weight: 600; }

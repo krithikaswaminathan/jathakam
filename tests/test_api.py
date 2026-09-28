@@ -64,6 +64,10 @@ def test_old_saved_charts_load_with_all_current_features(client):
     assert (drekkana["Ketu"]["controller"], drekkana["Ketu"]["count"]) == ("Mars", 7)  # 3rd: Mesham
     assert (drekkana["Mars"]["drekkana"], drekkana["Mars"]["controller"], drekkana["Mars"]["count"]) == (2, "Mercury", 11)
     assert (drekkana["Venus"]["drekkana"], drekkana["Venus"]["controller"], drekkana["Venus"]["count"]) == (3, "Moon", 7)
+    sashtashtagam = {e["planet"]: e for e in body["navamsa_sashtashtagam"]}
+    assert [p for p, e in sashtashtagam.items() if e["flagged"]] == ["Sun"]  # Dhanus -> Rishabam in D9
+    assert (sashtashtagam["Sun"]["count"], sashtashtagam["Sun"]["houses_ruled"]) == (6, [9])
+    assert sashtashtagam["Rahu"]["houses_ruled"] == [] and sashtashtagam["Rahu"]["d1_house"] == 3
     peyarchis = body["peyarchis"]
     assert [p["planet"] for p in peyarchis if p["in_effect_at_start"]] == ["Saturn", "Rahu", "Jupiter"]
     assert peyarchis[0]["when"] == "2025-03-29T21:45:09+05:30"  # Saturn into Pisces, in the chart's time zone

@@ -34,6 +34,7 @@ from app.models import (
     MudakkuOut,
     PeyarchiOut,
     PlaceResult,
+    SashtashtagamOut,
     SoonyaRasiOut,
     TaraEntryOut,
     TithiOut,
@@ -42,6 +43,7 @@ from app.models import (
 )
 from app.kaala_pakai import compute_kaala_pakai
 from app.mudakku import compute_mudakku
+from app.navamsa_sashtashtagam import compute_navamsa_sashtashtagam
 from app.peyarchi import compute_peyarchis
 from app.pranapada import compute_pranapada_longitude
 from app.tara import compute_tara_balam
@@ -165,6 +167,9 @@ def _build_chart_response(
         kaala_pakai=[KaalaPakaiOut(**vars(e)) for e in compute_kaala_pakai(d1)],
         peyarchis=_peyarchis_out(d1.grahas["Moon"].rasi, timezone),
         drekkana_lords=[DrekkanaLordOut(**vars(e)) for e in compute_drekkana_lords(d1)],
+        navamsa_sashtashtagam=[
+            SashtashtagamOut(**vars(e)) for e in compute_navamsa_sashtashtagam(d1, vargas["D9"])
+        ],
     )
 
 
