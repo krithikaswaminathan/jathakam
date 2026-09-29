@@ -179,3 +179,37 @@ def test_is_pushkara_navamsa_water_signs():
 def test_make_graha_position_includes_pushkara_navamsa():
     pos = make_graha_position("Sun", 21.0, longitude_to_rasi(21.0), lagna_rasi=0)
     assert pos.pushkara_navamsa is True
+
+
+# The 24 Pushkara Navamsa padas from Dr. N. G. Kumaran, "Pushkara Navamsa", IJATET 8(1), 2023,
+# as (nakshatra index, pada). The paper's table prints Uttara Phalguni 3 and Uttara Bhadrapada 3;
+# its own rule (earth signs 3rd/5th, water signs 1st/3rd navamsa) gives 4 and 2, used here.
+PAPER_PUSHKARA_PADAS = [
+    (1, 3), (2, 1), (2, 4), (3, 2), (5, 4), (6, 2), (6, 4), (7, 2), (10, 3), (11, 1), (11, 4), (12, 2),
+    (14, 4), (15, 2), (15, 4), (16, 2), (19, 3), (20, 1), (20, 4), (21, 2), (23, 4), (24, 2), (24, 4), (25, 2),
+]
+
+
+def _pushkara_padas():
+    span = 10 / 3
+    return [(i // 4, i % 4 + 1) for i in range(108) if is_pushkara_navamsa(i * span + span / 2)]
+
+
+def test_pushkara_padas_match_the_paper():
+    assert _pushkara_padas() == PAPER_PUSHKARA_PADAS
+
+
+def test_pushkara_padas_by_star_lord():
+    from collections import Counter
+
+    counts = Counter(nakshatra_lord(nak) for nak, _ in _pushkara_padas())
+    assert counts == {"Sun": 6, "Jupiter": 6, "Venus": 3, "Saturn": 3, "Moon": 3, "Rahu": 3}
+    assert not {"Mars", "Mercury", "Ketu"} & set(counts)
+
+
+def test_reading_page_lists_the_same_padas():
+    import re
+
+    js = open("static/labels.js", encoding="utf-8").read()
+    block = js[js.index("const PUSHKARA_PADAS = [") : js.index("];", js.index("const PUSHKARA_PADAS = ["))]
+    assert [(int(a), int(b)) for a, b in re.findall(r"\[(\d+), (\d)\]", block)] == PAPER_PUSHKARA_PADAS

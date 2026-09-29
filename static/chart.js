@@ -601,6 +601,30 @@ function renderPariharam() {
   container.append(intro, ol);
 }
 
+function readingTable(header, rows) {
+  const table = document.createElement("table");
+  table.className = "reading-table";
+  if (header) {
+    const headRow = document.createElement("tr");
+    for (const col of header) {
+      const th = document.createElement("th");
+      th.textContent = col[state.lang];
+      headRow.appendChild(th);
+    }
+    table.appendChild(headRow);
+  }
+  for (const row of rows) {
+    const tr = document.createElement("tr");
+    for (const col of row) {
+      const td = document.createElement("td");
+      td.textContent = col[state.lang];
+      tr.appendChild(td);
+    }
+    table.appendChild(tr);
+  }
+  return table;
+}
+
 function renderReadingPage(topicKey) {
   const topic = READING_TOPICS[topicKey];
   const container = document.getElementById("readingContent");
@@ -613,28 +637,20 @@ function renderReadingPage(topicKey) {
   intro.textContent = topic.intro[state.lang];
   container.appendChild(intro);
 
-  if (topic.table) {
-    const table = document.createElement("table");
-    table.className = "reading-table";
-    if (topic.tableHeader) {
-      const headRow = document.createElement("tr");
-      for (const col of topic.tableHeader) {
-        const th = document.createElement("th");
-        th.textContent = col[state.lang];
-        headRow.appendChild(th);
-      }
-      table.appendChild(headRow);
+  if (topic.table) container.appendChild(readingTable(topic.tableHeader, topic.table));
+
+  // Optional further sections, each with a heading, text and its own table.
+  for (const section of topic.sections || []) {
+    const heading = document.createElement("h3");
+    heading.className = "reading-subhead";
+    heading.textContent = section.heading[state.lang];
+    container.appendChild(heading);
+    if (section.text) {
+      const p = document.createElement("p");
+      p.textContent = section.text[state.lang];
+      container.appendChild(p);
     }
-    for (const row of topic.table) {
-      const tr = document.createElement("tr");
-      for (const col of row) {
-        const td = document.createElement("td");
-        td.textContent = col[state.lang];
-        tr.appendChild(td);
-      }
-      table.appendChild(tr);
-    }
-    container.appendChild(table);
+    if (section.table) container.appendChild(readingTable(section.tableHeader, section.table));
   }
 
   if (topic.note) {
@@ -1138,7 +1154,10 @@ function renderGrahaDetails() {
       labels.nakshatra[g.nakshatra],
       g.pada,
       labels.planets[g.star_lord] || g.star_lord,
-      g.pushkara_navamsa ? "✓" : "–",
+      g.pushkara_navamsa
+        ? `\u2713 ${labels.nakshatra[g.nakshatra]} ${g.pada}` +
+          (isVargottamaPada([g.nakshatra, g.pada]) ? ` (${labels.ui.vargottamaWord})` : "")
+        : "–",
       inKaalaPakai.has(g.name) ? labels.ui.kaalaPakaiYes : "–",
     ];
     for (const value of cells) {

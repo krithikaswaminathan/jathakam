@@ -49,7 +49,7 @@ const LABELS = {
       sashtashtagamNone: "No planet is 6th or 8th in D9: a huge plus in the jathakam.",
       sashtashtagamSummary: "6th or 8th in D9, bringing issues related to the planet and its houses",
       sashtashtagamNoLordship: "rules no house; sits in house {house}",
-      topHome: "Jathakam", topPariharam: "Pariharam", topPrasannam: "Prasannam",
+      topHome: "Jathakam", topPariharam: "Pariharam", topPrasannam: "Prasannam", vargottamaWord: "vargottama",
       prasNow: "Now", prasUseLocation: "Use my location", prasChangePlace: "Change place",
       prasTime: "Time", prasPlace: "Place", prasMyLocation: "Your location ({lat}, {lon})",
       prasLocating: "Finding your location\u2026", prasCasting: "Casting the chart\u2026",
@@ -145,7 +145,7 @@ const LABELS = {
       sashtashtagamNone: "எந்த கிரகமும் D9இல் 6 அல்லது 8ஆம் இடத்தில் இல்லை: ஜாதகத்திற்குப் பெரிய பலம்.",
       sashtashtagamSummary: "D9இல் 6 அல்லது 8ஆம் இடம்; அந்தக் கிரகம், அதன் வீடுகள் தொடர்பான பிரச்சினைகள்",
       sashtashtagamNoLordship: "எந்த வீட்டிற்கும் அதிபதி இல்லை; {house}ஆம் வீட்டில் உள்ளது",
-      topHome: "ஜாதகம்", topPariharam: "பரிகாரம்", topPrasannam: "பிரசன்னம்",
+      topHome: "ஜாதகம்", topPariharam: "பரிகாரம்", topPrasannam: "பிரசன்னம்", vargottamaWord: "வர்கோத்தமம்",
       prasNow: "இப்போது", prasUseLocation: "என் இருப்பிடம்", prasChangePlace: "இடத்தை மாற்று",
       prasTime: "நேரம்", prasPlace: "இடம்", prasMyLocation: "உங்கள் இருப்பிடம் ({lat}, {lon})",
       prasLocating: "உங்கள் இருப்பிடத்தைக் கண்டறிகிறது\u2026", prasCasting: "ஜாதகம் கணிக்கப்படுகிறது\u2026",
@@ -266,26 +266,74 @@ const PARIHARAMS = [
   },
 ];
 
+// The 24 Pushkara Navamsa padas as [nakshatra index (Ashwini = 0), pada], two per rasi from
+// Mesham. Must match is_pushkara_navamsa in app/astrology.py (tests/test_astrology.py checks it).
+const PUSHKARA_PADAS = [
+  [1, 3], [2, 1], [2, 4], [3, 2], [5, 4], [6, 2], [6, 4], [7, 2], [10, 3], [11, 1], [11, 4], [12, 2],
+  [14, 4], [15, 2], [15, 4], [16, 2], [19, 3], [20, 1], [20, 4], [21, 2], [23, 4], [24, 2], [24, 4], [25, 2],
+];
+const STAR_LORD_CYCLE = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"];
+// A pada is one navamsa: pada number n (0..107) lies in rasi n / 9 and its navamsa is rasi n % 12.
+const padaIndex = ([nak, pada]) => nak * 4 + pada - 1;
+const isVargottamaPada = (p) => Math.floor(padaIndex(p) / 9) === padaIndex(p) % 12;
+const bothLangs = (fn) => ({ en: fn("en"), ta: fn("ta") });
+const VARGOTTAMA_WORD = { en: "vargottama", ta: "வர்கோத்தமம்" };
+const pushkaraPadaText = (lang, p) =>
+  `${LABELS[lang].nakshatra[p[0]]} ${p[1]} \u00B7 ${LABELS[lang].planets[STAR_LORD_CYCLE[p[0] % 9]]}` +
+  (isVargottamaPada(p) ? ` (${VARGOTTAMA_WORD[lang]})` : "");
+
 const READING_TOPICS = {
   pushkaraNavamsa: {
     title: { en: "Pushkara Navamsa", ta: "புஷ்கர நவாம்சம்" },
     intro: {
-      en: "Each sign has 2 of its 9 navamsa divisions considered especially auspicious (“nourishing”) — a planet landing there gives strong results even if otherwise weak in its own sign. Which two divisions depends on the sign's element:",
-      ta: "ஒவ்வொரு ராசிக்கும் அதன் 9 நவாம்சப் பிரிவுகளில் 2 பிரிவுகள் மிகவும் சுபமானவை (“ஊட்டமளிக்கும்”) என்று கருதப்படுகின்றன — ஒரு கிரகம் அங்கு அமைந்தால், அந்த ராசியில் பலவீனமாக இருந்தாலும் நல்ல பலன்களைத் தரும். எந்த இரு பிரிவுகள் என்பது ராசியின் தத்துவத்தைப் பொறுத்தது:",
+      en: "Pushkara means sacred or nourishing. Of the 108 navamsas (nakshatra padas), 24 are Pushkara Navamsas, two in every rasi. A planet placed in the D1 chart in one of these padas is in Pushkara Navamsa and is said to give auspicious results in its dasa and bhukti, even when it is otherwise weak. The 24 padas, with their star lords:",
+      ta: "புஷ்கரம் என்றால் புனிதமானது, ஊட்டமளிப்பது. 108 நவாம்சங்களில் (நட்சத்திரப் பாதங்களில்) 24 புஷ்கர நவாம்சங்கள்; ஒவ்வொரு ராசியிலும் இரண்டு. D1 கட்டத்தில் இந்தப் பாதங்களில் ஒன்றில் உள்ள கிரகம் புஷ்கர நவாம்சத்தில் உள்ளது; வேறு வகையில் பலம் குறைந்திருந்தாலும் அதன் தசை, புக்தியில் சுப பலன்களைத் தரும் என்று கூறப்படுகிறது. 24 பாதங்களும் அவற்றின் நட்சத்திர அதிபதிகளும்:",
     },
-    table: [
-      [{ en: "Fire", ta: "அக்னி" }, { en: "Aries, Leo, Sagittarius", ta: "மேஷம், சிம்மம், தனுசு" }, { en: "7th & 9th", ta: "7, 9" }],
-      [{ en: "Earth", ta: "பூமி" }, { en: "Taurus, Virgo, Capricorn", ta: "ரிஷபம், கன்னி, மகரம்" }, { en: "3rd & 5th", ta: "3, 5" }],
-      [{ en: "Air", ta: "வாயு" }, { en: "Gemini, Libra, Aquarius", ta: "மிதுனம், துலாம், கும்பம்" }, { en: "6th & 8th", ta: "6, 8" }],
-      [{ en: "Water", ta: "நீர்" }, { en: "Cancer, Scorpio, Pisces", ta: "கடகம், விருச்சிகம், மீனம்" }, { en: "1st & 3rd", ta: "1, 3" }],
+    tableHeader: [
+      { en: "Rasi", ta: "ராசி" }, { en: "First Pushkara pada", ta: "முதல் புஷ்கர பாதம்" }, { en: "Second Pushkara pada", ta: "இரண்டாம் புஷ்கர பாதம்" },
+    ],
+    table: LABELS.en.rasi.map((_, r) => [
+      bothLangs((lang) => `${LABELS[lang].rasi[r]} (${LABELS[lang].planets[["Mars", "Venus", "Mercury", "Moon", "Sun", "Mercury", "Venus", "Mars", "Jupiter", "Saturn", "Saturn", "Jupiter"][r]]})`),
+      bothLangs((lang) => pushkaraPadaText(lang, PUSHKARA_PADAS[2 * r])),
+      bothLangs((lang) => pushkaraPadaText(lang, PUSHKARA_PADAS[2 * r + 1])),
+    ]),
+    sections: [
+      {
+        heading: { en: "By star lord: why Mars, Mercury and Ketu have none", ta: "நட்சத்திர அதிபதி வாரியாக: செவ்வாய், புதன், கேதுவுக்கு ஏன் இல்லை" },
+        text: {
+          en: "The Sun's stars and Jupiter's stars hold 6 Pushkara padas each; Venus, Saturn, the Moon and Rahu hold 3 each; the stars of Mars, Mercury and Ketu hold none. The reason is where their stars fall. Ketu's stars (Ashwini, Magha, Mula) fill the first 13\u00B020\u2032 of the fire signs, their navamsas 1 to 4, but a fire sign's Pushkara navamsas are the 7th and 9th. Mercury's stars (Ashlesha, Jyeshtha, Revati) fill the last 13\u00B020\u2032 of the water signs, navamsas 6 to 9, but a water sign's are the 1st and 3rd. Mars's stars (Mrigashira, Chitra, Dhanishta) straddle an earth sign and the air sign after it, navamsas 8 and 9 of the earth sign and 1 and 2 of the air sign, but earth's are the 3rd and 5th and air's the 6th and 8th.",
+          ta: "சூரியன், குருவின் நட்சத்திரங்களில் தலா 6 புஷ்கர பாதங்கள்; சுக்ரன், சனி, சந்திரன், ராகுவின் நட்சத்திரங்களில் தலா 3; செவ்வாய், புதன், கேதுவின் நட்சத்திரங்களில் ஒன்றும் இல்லை. காரணம் அவற்றின் நட்சத்திரங்கள் அமையும் இடம். கேதுவின் நட்சத்திரங்கள் (அஸ்வினி, மகம், மூலம்) அக்னி ராசிகளின் முதல் 13\u00B020\u2032, அதாவது 1 முதல் 4 நவாம்சங்கள்; ஆனால் அக்னி ராசிகளின் புஷ்கர நவாம்சங்கள் 7, 9. புதனின் நட்சத்திரங்கள் (ஆயில்யம், கேட்டை, ரேவதி) நீர் ராசிகளின் கடைசி 13\u00B020\u2032, 6 முதல் 9 நவாம்சங்கள்; ஆனால் நீர் ராசிகளுக்கு 1, 3. செவ்வாயின் நட்சத்திரங்கள் (மிருகசீரிடம், சித்திரை, அவிட்டம்) ஒரு பூமி ராசியின் 8, 9 நவாம்சங்களிலும் அடுத்த வாயு ராசியின் 1, 2 நவாம்சங்களிலும் பரவியுள்ளன; ஆனால் பூமிக்கு 3, 5, வாயுவுக்கு 6, 8.",
+        },
+        tableHeader: [
+          { en: "Star lord", ta: "நட்சத்திர அதிபதி" }, { en: "Its stars", ta: "அதன் நட்சத்திரங்கள்" }, { en: "Pushkara padas", ta: "புஷ்கர பாதங்கள்" }, { en: "Count", ta: "எண்ணிக்கை" },
+        ],
+        table: ["Sun", "Jupiter", "Venus", "Saturn", "Moon", "Rahu", "Mars", "Mercury", "Ketu"].map((lord) => {
+          const stars = [0, 1, 2].map((k) => STAR_LORD_CYCLE.indexOf(lord) + 9 * k);
+          const padas = PUSHKARA_PADAS.filter(([nak]) => stars.includes(nak));
+          return [
+            bothLangs((lang) => LABELS[lang].planets[lord]),
+            bothLangs((lang) => stars.map((n) => LABELS[lang].nakshatra[n]).join(", ")),
+            bothLangs((lang) => (padas.length ? padas.map(([n, p]) => `${LABELS[lang].nakshatra[n]} ${p}`).join(", ") : LABELS[lang].ui.noneWord)),
+            bothLangs(() => String(padas.length)),
+          ];
+        }),
+      },
+      {
+        heading: { en: "Placement and strength", ta: "அமைவும் பலமும்" },
+        text: {
+          en: "In the navamsa chart (D9) every Pushkara Navamsa falls in a rasi of a benefic: Rishabam, Kadagam, Kanni, Thulam, Dhanus or Meenam (Venus, the Moon, Mercury and Jupiter). Three are vargottama, in the same rasi in D1 and D9, and are the strongest: Rohini 2 (Rishabam), Punarvasu 4 (Kadagam) and Uttara Ashadha 1 (Dhanus). By sign element the Pushkara navamsas are: fire signs the 7th and 9th, earth signs the 3rd and 5th, air signs the 6th and 8th, water signs the 1st and 3rd. When a planet's Pushkara navamsa is 6th, 8th or 12th from its D1 rasi, it can bring difficulties along with name and fame; the planet's nature, the house it falls in and its associations decide the final result.",
+          ta: "நவாம்சக் கட்டத்தில் (D9) ஒவ்வொரு புஷ்கர நவாம்சமும் சுப கிரகத்தின் ராசியில் விழும்: ரிஷபம், கடகம், கன்னி, துலாம், தனுசு அல்லது மீனம் (சுக்ரன், சந்திரன், புதன், குரு). மூன்று பாதங்கள் வர்கோத்தமம், D1, D9 இரண்டிலும் ஒரே ராசி; அவை மிக வலிமையானவை: ரோகிணி 2 (ரிஷபம்), புனர்பூசம் 4 (கடகம்), உத்திராடம் 1 (தனுசு). ராசியின் தத்துவப்படி புஷ்கர நவாம்சங்கள்: அக்னி ராசிகளுக்கு 7, 9; பூமி ராசிகளுக்கு 3, 5; வாயு ராசிகளுக்கு 6, 8; நீர் ராசிகளுக்கு 1, 3. ஒரு கிரகத்தின் புஷ்கர நவாம்சம் அதன் D1 ராசியிலிருந்து 6, 8 அல்லது 12ஆம் இடத்தில் இருந்தால், புகழுடன் சிரமங்களையும் தரலாம்; கிரகத்தின் இயல்பு, அது விழும் வீடு, சேர்க்கைகள் இறுதிப் பலனைத் தீர்மானிக்கும்.",
+        },
+      },
     ],
     note: {
-      en: "There's also a finer single-degree “Pushkara Bhaga” within that range that's even more potent, but sources disagree on the exact degrees per sign, so it isn't implemented yet.",
-      ta: "இதற்குள் இன்னும் துல்லியமான ஒரு குறிப்பிட்ட பாகையான “புஷ்கர பாகம்” உள்ளது, ஆனால் ஆதாரங்கள் ஒவ்வொரு ராசிக்கான சரியான பாகை மதிப்பில் உடன்படவில்லை, எனவே இது இன்னும் செயல்படுத்தப்படவில்லை.",
+      en: "The paper's table prints Uttara Phalguni 3 for Kanni and Uttara Bhadrapada 3 for Meenam, and gives Venus as the lord of Uttara Ashadha 4. By the paper's own rule (earth signs 3rd and 5th, water signs 1st and 3rd) these are Uttara Phalguni 4 and Uttara Bhadrapada 2, and Uttara Ashadha is the Sun's star, as its count of six Sun padas needs; the app uses those. A finer single-degree Pushkara Bhaga also exists, but sources disagree on its degrees, so it is not used.",
+      ta: "கட்டுரையின் அட்டவணையில் கன்னிக்கு உத்திரம் 3, மீனத்திற்கு உத்திரட்டாதி 3 என்றும், உத்திராடம் 4இன் அதிபதி சுக்ரன் என்றும் அச்சாகியுள்ளது. கட்டுரையின் சொந்த விதிப்படி (பூமி ராசிகளுக்கு 3, 5; நீர் ராசிகளுக்கு 1, 3) இவை உத்திரம் 4, உத்திரட்டாதி 2; உத்திராடம் சூரியனின் நட்சத்திரம், சூரியனுக்கு ஆறு பாதங்கள் என்ற கணக்கிற்கும் அதுவே பொருந்தும்; செயலி இவற்றையே பயன்படுத்துகிறது. ஒரு பாகை அளவிலான புஷ்கர பாகமும் உண்டு, ஆனால் அதன் பாகைகளில் ஆதாரங்கள் உடன்படாததால் அது பயன்படுத்தப்படவில்லை.",
     },
     sources: [
-      { title: "Pushkara — Navamsha and Bhaga (Part One)", url: "https://komilla.com/lib-pushkara-part-one.html" },
-      { title: "Pushkara — Navamsha and Bhaga (Part Two)", url: "https://komilla.com/lib-pushkara-part-two.html" },
+      { title: "Dr. N. G. Kumaran, \u201CPushkara Navamsa\u201D, IJATET 8(1), 2023", url: "https://ijatet.dvpublication.com/uploads/66c03489ca678_182.pdf" },
+      { title: "Pushkara \u2014 Navamsha and Bhaga (Part One)", url: "https://komilla.com/lib-pushkara-part-one.html" },
+      { title: "Pushkara \u2014 Navamsha and Bhaga (Part Two)", url: "https://komilla.com/lib-pushkara-part-two.html" },
     ],
   },
   panchaMahapurusha: {

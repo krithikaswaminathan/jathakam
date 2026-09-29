@@ -418,3 +418,4 @@ td.quality-neutral { color: var(--neutral); font-weight: 600; }
 .chandra-nadi-table td { padding: 0.25rem 1.2rem 0.25rem 0; border-bottom: none; font-size: 0.9rem; }
 .chandra-nadi-table td:first-child { color: var(--ink-soft); }
 #prasGrid { margin-bottom: 1.2rem; }
+.reading-subhead { margin: 1.4rem 0 0.5rem; font-family: var(--font-display); font-size: 1.02rem; color: var(--maroon-700); }
