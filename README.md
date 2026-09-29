@@ -14,7 +14,8 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
 - **Mudakku Rasi**: from the Sun's nakshatra pada, with its rasi and star lords, house and
   occupants, tagged in the D1 grid; flags when it is the lagna, which is said to weaken it.
 - **Graha details**: rasi and nakshatra lords, absolute and in-sign degrees, a Pushkara
-  Navamsa column, and a Kaala Pakai column with a summary line above the table.
+  Navamsa column naming the pada (and whether it is vargottama), and a Kaala Pakai column with a
+  summary line above the table.
 - **Kaala Pakai**: grahas sitting in their Kaala Pakai rasi in the D1 chart, with the rasi,
   house and effect; a planet picker shows any graha's Kaala Pakai rasis.
 - **Ucham / Neecham**: planets in exaltation or debilitation, with distance from the deep
@@ -140,3 +141,8 @@ python -m pytest tests/ -v
   The timing point is the pada holding the planet's navamsa longitude (its longitude times 9),
   e.g. a Sun at Dhanus 5°35' has its navamsa at Rishabam 20°18', Rohini pada 4; the transit
   periods are found with the Swiss Ephemeris and include each retrograde pass separately.
+- Pushkara Navamsa follows Dr. N. G. Kumaran, "Pushkara Navamsa", IJATET 8(1), 2023: 24 of the
+  108 padas, two per rasi (fire signs the 7th and 9th navamsa, earth the 3rd and 5th, air the 6th
+  and 8th, water the 1st and 3rd). The stars of the Sun and Jupiter hold 6 each; Venus, Saturn,
+  the Moon and Rahu 3 each; Mars, Mercury and Ketu none. The paper's table prints Uttara
+  Phalguni 3 and Uttara Bhadrapada 3; its own rule gives 4 and 2, which the app uses.
