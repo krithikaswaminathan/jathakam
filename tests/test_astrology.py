@@ -238,3 +238,19 @@ def test_reading_page_tara_order_matches_constants():
     assert re.findall(r'"([A-Za-z-]+)"', order) == TARA_CATEGORIES
     for name, quality in TARA_QUALITY.items():
         assert re.search(rf'"?{re.escape(name)}"?: "{quality}"', js), name
+
+
+COUNTED_PUSHKARA_PADAS = [(2, 1), (5, 4), (6, 2), (11, 1), (14, 4), (15, 2), (20, 1), (23, 4), (24, 2)]
+
+
+def test_only_6th_8th_and_9th_padas_count():
+    counted = [p for p in PAPER_PUSHKARA_PADAS if ((p[0] * 4 + p[1] - 1) % 9) + 1 in (6, 8, 9)]
+    assert counted == COUNTED_PUSHKARA_PADAS
+    assert {nakshatra_lord(nak) for nak, _ in counted} == {"Sun", "Rahu", "Jupiter"}
+
+
+def test_reading_page_counts_the_same_positions():
+    import re
+
+    js = open("static/labels.js", encoding="utf-8").read()
+    assert re.search(r"const COUNTED_PUSHKARA_POSITIONS = \[6, 8, 9\];", js)

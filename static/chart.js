@@ -1129,7 +1129,7 @@ function renderTaraBalam() {
   renderPushkaraQuality();
 }
 
-// All 24 Pushkara padas with the tara their position in the rasi gives, naming this chart's
+// The nine Pushkara padas that count (6th, 8th or 9th in their rasi), naming this chart's
 // planets (and Gulika/Mandi) that sit in each.
 function renderPushkaraQuality() {
   const labels = L();
@@ -1139,35 +1139,31 @@ function renderPushkaraQuality() {
   document.getElementById("thPqPada").textContent = labels.ui.colPushkaraPada;
   document.getElementById("thPqPos").textContent = labels.ui.colPosition;
   document.getElementById("thPqTara").textContent = labels.ui.colTara;
-  document.getElementById("thPqQuality").textContent = labels.ui.colQuality;
+  document.getElementById("thPqQuality").textContent = labels.ui.colStarLord;
   document.getElementById("thPqPlanets").textContent = labels.ui.colPlanetsHere;
 
   const bodies = [...Object.values(state.chart.d1.grahas), state.chart.gulika, state.chart.mandi];
   const tbody = document.getElementById("pushkaraQualityBody");
   tbody.innerHTML = "";
-  PUSHKARA_PADAS.forEach((p, i) => {
+  for (const p of COUNTED_PUSHKARA_PADAS) {
     const [nak, pada] = p;
     const here = bodies.filter((g) => g.nakshatra === nak && g.pada === pada).map((g) => labels.planets[g.name]);
-    const tara = pushkaraTara(p);
-    const quality = TARA_QUALITY[tara];
     const tr = document.createElement("tr");
     if (here.length) tr.className = "current-period";
-    const cells = [
-      labels.rasi[Math.floor(i / 2)],
+    for (const text of [
+      labels.rasi[Math.floor(padaIndex(p) / 9)],
       `${labels.nakshatra[nak]} ${pada}` + (isVargottamaPada(p) ? ` (${labels.ui.vargottamaWord})` : ""),
       String(padaPositionInRasi(p)),
-      labels.taraCategories[tara],
-      labels.quality[quality],
+      labels.taraCategories[pushkaraTara(p)],
+      labels.planets[STAR_LORD_CYCLE[nak % 9]],
       here.join(", ") || "\u2013",
-    ];
-    cells.forEach((text, col) => {
+    ]) {
       const td = document.createElement("td");
       td.textContent = text;
-      if (col === 4) td.className = "quality-" + quality;
       tr.appendChild(td);
-    });
+    }
     tbody.appendChild(tr);
-  });
+  }
 }
 
 function renderGrahaDetails() {
@@ -1196,11 +1192,10 @@ function renderGrahaDetails() {
       labels.nakshatra[g.nakshatra],
       g.pada,
       labels.planets[g.star_lord] || g.star_lord,
-      g.pushkara_navamsa
+      g.pushkara_navamsa && isCountedPushkara([g.nakshatra, g.pada])
         ? `\u2713 ${labels.nakshatra[g.nakshatra]} ${g.pada}` +
           (isVargottamaPada([g.nakshatra, g.pada]) ? ` (${labels.ui.vargottamaWord})` : "") +
-          ` \u00B7 ${labels.taraCategories[pushkaraTara([g.nakshatra, g.pada])]}` +
-          ` (${labels.quality[TARA_QUALITY[pushkaraTara([g.nakshatra, g.pada])]]})`
+          ` \u00B7 ${labels.taraCategories[pushkaraTara([g.nakshatra, g.pada])]}`
         : "–",
       inKaalaPakai.has(g.name) ? labels.ui.kaalaPakaiYes : "–",
     ];
