@@ -23,6 +23,7 @@ let state = {
   readingTopic: "pushkaraNavamsa",
   upasanaRasi: "", // rasi index picked in the Upasana Deivam box, as a string
   kaalaPakaiPlanet: "", // planet picked in the Kaala Pakai box
+  pariharamTopic: 0, // index into PARIHARAMS shown on the Pariharam page
   peyarchiPlanet: "", // planet filter on the Peyarchi tab; "" = all
 };
 
@@ -156,7 +157,7 @@ function applyLanguage() {
   document.getElementById("lblBack").textContent = labels.ui.back;
   document.getElementById("lblTopHome").textContent = labels.ui.topHome;
   document.getElementById("lblTopPariharam").textContent = labels.ui.topPariharam;
-  document.getElementById("lblPariharamTitle").textContent = labels.ui.topPariharam;
+  document.getElementById("lblPariharamNav").textContent = labels.ui.topPariharam;
   if (!document.getElementById("pariharamSection").classList.contains("hidden")) renderPariharam();
   document.querySelectorAll(".side-nav-topic").forEach((btn) => {
     btn.textContent = READING_TOPICS[btn.dataset.topic].title[state.lang];
@@ -369,6 +370,8 @@ function showPariharamPage() {
     document.getElementById(id).classList.add("hidden");
   }
   document.querySelectorAll(".side-nav-topic").forEach((b) => b.classList.remove("active"));
+  document.getElementById("sideNav").classList.add("hidden");
+  document.getElementById("pariharamNav").classList.remove("hidden");
   document.getElementById("pariharamSection").classList.remove("hidden");
   setTopTab("pariharam");
   renderPariharam();
@@ -376,30 +379,53 @@ function showPariharamPage() {
 
 function showHomePage() {
   document.getElementById("pariharamSection").classList.add("hidden");
+  document.getElementById("pariharamNav").classList.add("hidden");
+  document.getElementById("sideNav").classList.remove("hidden");
   hideReadingPage();
   setTopTab("home");
 }
 
+// The Pariharam page: its own side nav of pariharams, and the one picked. The names to
+// recite are shown in English and Tamil together, whatever the language setting.
 function renderPariharam() {
+  const nav = document.getElementById("pariharamNavList");
+  nav.innerHTML = "";
+  PARIHARAMS.forEach((p, i) => {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "pariharam-topic" + (i === state.pariharamTopic ? " active" : "");
+    btn.textContent = p.title[state.lang];
+    btn.addEventListener("click", () => {
+      state.pariharamTopic = i;
+      renderPariharam();
+    });
+    li.appendChild(btn);
+    nav.appendChild(li);
+  });
+
+  const p = PARIHARAMS[state.pariharamTopic];
+  document.getElementById("lblPariharamTitle").textContent = p.title[state.lang];
   const container = document.getElementById("pariharamContent");
   container.innerHTML = "";
-  for (const p of PARIHARAMS) {
-    const block = document.createElement("div");
-    block.className = "pariharam-block";
-    const title = document.createElement("h3");
-    title.textContent = p.title[state.lang];
-    const intro = document.createElement("p");
-    intro.textContent = p.intro[state.lang];
-    const ol = document.createElement("ol");
-    ol.className = "pariharam-names";
-    for (const name of p.names) {
-      const li = document.createElement("li");
-      li.textContent = name[state.lang];
-      ol.appendChild(li);
-    }
-    block.append(title, intro, ol);
-    container.appendChild(block);
+  const intro = document.createElement("p");
+  intro.className = "pariharam-intro";
+  intro.textContent = p.intro[state.lang];
+  const ol = document.createElement("ol");
+  ol.className = "pariharam-names";
+  for (const name of p.names) {
+    const li = document.createElement("li");
+    const en = document.createElement("span");
+    en.className = "pariharam-name-en";
+    en.textContent = name.en;
+    const ta = document.createElement("span");
+    ta.className = "pariharam-name-ta";
+    ta.lang = "ta";
+    ta.textContent = name.ta;
+    li.append(en, ta);
+    ol.appendChild(li);
   }
+  container.append(intro, ol);
 }
 
 function renderReadingPage(topicKey) {

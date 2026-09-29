@@ -233,7 +233,7 @@ const KAALA_PAKAI = {
 // Pariharams shown on the Pariharam page, in order; as given by the user.
 const PARIHARAMS = [
   {
-    title: { en: "For richness and selvam", ta: "செல்வம் பெற" },
+    title: { en: "Richness and Selvam", ta: "செல்வமும் வளமும்" },
     intro: {
       en: "To attain richness and selvam in life, recite these 7 names from the Lalitha Sahasranamam, given by Maha Periyavar:",
       ta: "வாழ்வில் செல்வமும் வளமும் பெற, மஹா பெரியவர் அருளிய லலிதா சஹஸ்ரநாமத்தின் இந்த 7 நாமங்களை ஜபிக்கவும்:",

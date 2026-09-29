@@ -118,13 +118,13 @@ body {
   margin: 0 0 0.6rem;
 }
 .side-nav-list { list-style: none; margin: 0; padding: 0; }
-.side-nav-topic {
+.side-nav-topic, .pariharam-topic {
   width: 100%; text-align: left; padding: 0.55rem 0.65rem; border: none; border-radius: 6px;
   background: none; color: var(--ink-soft); font-family: var(--font-body); font-size: 0.85rem;
   font-weight: 500; cursor: pointer; transition: background 0.12s, color 0.12s;
 }
-.side-nav-topic:hover { background: var(--cream-50); }
-.side-nav-topic.active { background: var(--cream-100); color: var(--maroon-700); font-weight: 600; }
+.side-nav-topic:hover, .pariharam-topic:hover { background: var(--cream-50); }
+.side-nav-topic.active, .pariharam-topic.active { background: var(--cream-100); color: var(--maroon-700); font-weight: 600; }
 
 .reading-back {
   border: none; background: none; color: var(--maroon-700); font-family: var(--font-body);
@@ -395,8 +395,10 @@ td.quality-neutral { color: var(--neutral); font-weight: 600; }
 .timing-now { color: var(--bad); font-weight: 600; }
 .timing-all summary { cursor: pointer; color: var(--gold-500); font-size: 0.85rem; }
 
-.pariharam-block { max-width: 640px; }
-.pariharam-block + .pariharam-block { margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid var(--line); }
-.pariharam-block h3 { margin: 0 0 0.4rem; color: var(--maroon-700); font-family: var(--font-display); }
-.pariharam-block p { margin: 0 0 0.6rem; line-height: 1.6; }
-.pariharam-names { margin: 0; padding-left: 1.6rem; line-height: 1.9; font-size: 1.02rem; font-weight: 500; color: var(--ink); }
+#pariharamContent { max-width: 680px; }
+.pariharam-intro { margin: 0 0 0.9rem; line-height: 1.6; }
+.pariharam-names { margin: 0; padding-left: 1.8rem; }
+.pariharam-names li { padding: 0.45rem 0; border-bottom: 1px solid var(--line); }
+.pariharam-names li:last-child { border-bottom: none; }
+.pariharam-name-en { display: block; font-size: 1.02rem; font-weight: 500; color: var(--ink); }
+.pariharam-name-ta { display: block; margin-top: 0.15rem; font-size: 1.02rem; color: var(--maroon-700); }
