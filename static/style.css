@@ -60,6 +60,15 @@ body {
   font-weight: 400;
 }
 
+.topbar-actions { display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap; }
+.top-tabs { display: flex; gap: 0.3rem; }
+.top-tab {
+  padding: 0.4rem 0.9rem; border-radius: 999px; border: 1px solid transparent;
+  background: none; color: var(--gold-100); font-family: var(--font-body); font-size: 0.88rem; cursor: pointer;
+}
+.top-tab:hover { color: white; border-color: rgba(255,255,255,0.35); }
+.top-tab.active { background: rgba(255,255,255,0.15); color: white; font-weight: 600; }
+
 #langToggle {
   padding: 0.4rem 0.8rem;
   border-radius: 999px;
@@ -385,3 +394,9 @@ td.quality-neutral { color: var(--neutral); font-weight: 600; }
 .timing-list { margin: 0.2rem 0 0.4rem; padding-left: 1.2rem; font-variant-numeric: tabular-nums; }
 .timing-now { color: var(--bad); font-weight: 600; }
 .timing-all summary { cursor: pointer; color: var(--gold-500); font-size: 0.85rem; }
+
+.pariharam-block { max-width: 640px; }
+.pariharam-block + .pariharam-block { margin-top: 1.5rem; padding-top: 1.2rem; border-top: 1px solid var(--line); }
+.pariharam-block h3 { margin: 0 0 0.4rem; color: var(--maroon-700); font-family: var(--font-display); }
+.pariharam-block p { margin: 0 0 0.6rem; line-height: 1.6; }
+.pariharam-names { margin: 0; padding-left: 1.6rem; line-height: 1.9; font-size: 1.02rem; font-weight: 500; color: var(--ink); }

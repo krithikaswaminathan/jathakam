@@ -154,6 +154,10 @@ function applyLanguage() {
   document.getElementById("induLagnaHint").textContent = labels.ui.induLagnaHint;
   document.getElementById("lblReading").textContent = labels.ui.reading;
   document.getElementById("lblBack").textContent = labels.ui.back;
+  document.getElementById("lblTopHome").textContent = labels.ui.topHome;
+  document.getElementById("lblTopPariharam").textContent = labels.ui.topPariharam;
+  document.getElementById("lblPariharamTitle").textContent = labels.ui.topPariharam;
+  if (!document.getElementById("pariharamSection").classList.contains("hidden")) renderPariharam();
   document.querySelectorAll(".side-nav-topic").forEach((btn) => {
     btn.textContent = READING_TOPICS[btn.dataset.topic].title[state.lang];
   });
@@ -333,6 +337,8 @@ for (const key of Object.keys(READING_TOPICS)) {
 document.getElementById("readingBack").addEventListener("click", hideReadingPage);
 
 function showReadingPage(topicKey) {
+  document.getElementById("pariharamSection").classList.add("hidden");
+  setTopTab("home");
   document.getElementById("formSection").classList.add("hidden");
   document.getElementById("savedSection").classList.add("hidden");
   document.getElementById("resultSection").classList.add("hidden");
@@ -346,6 +352,54 @@ function hideReadingPage() {
   document.getElementById("formSection").classList.remove("hidden");
   document.getElementById("savedSection").classList.remove("hidden");
   if (state.chart) document.getElementById("resultSection").classList.remove("hidden");
+}
+
+// --- Top tabs: Jathakam (the chart and reading pages) and Pariharam ---
+
+function setTopTab(page) {
+  document.querySelectorAll(".top-tab").forEach((b) => b.classList.toggle("active", b.dataset.page === page));
+}
+
+document.querySelectorAll(".top-tab").forEach((btn) => {
+  btn.addEventListener("click", () => (btn.dataset.page === "pariharam" ? showPariharamPage() : showHomePage()));
+});
+
+function showPariharamPage() {
+  for (const id of ["formSection", "savedSection", "resultSection", "readingSection"]) {
+    document.getElementById(id).classList.add("hidden");
+  }
+  document.querySelectorAll(".side-nav-topic").forEach((b) => b.classList.remove("active"));
+  document.getElementById("pariharamSection").classList.remove("hidden");
+  setTopTab("pariharam");
+  renderPariharam();
+}
+
+function showHomePage() {
+  document.getElementById("pariharamSection").classList.add("hidden");
+  hideReadingPage();
+  setTopTab("home");
+}
+
+function renderPariharam() {
+  const container = document.getElementById("pariharamContent");
+  container.innerHTML = "";
+  for (const p of PARIHARAMS) {
+    const block = document.createElement("div");
+    block.className = "pariharam-block";
+    const title = document.createElement("h3");
+    title.textContent = p.title[state.lang];
+    const intro = document.createElement("p");
+    intro.textContent = p.intro[state.lang];
+    const ol = document.createElement("ol");
+    ol.className = "pariharam-names";
+    for (const name of p.names) {
+      const li = document.createElement("li");
+      li.textContent = name[state.lang];
+      ol.appendChild(li);
+    }
+    block.append(title, intro, ol);
+    container.appendChild(block);
+  }
 }
 
 function renderReadingPage(topicKey) {

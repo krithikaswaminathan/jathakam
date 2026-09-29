@@ -42,6 +42,9 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   Pancha Mahapurusha yogas, Ucham/Neecham, Pranapada, Thithi Soonyam, Mudakku, Soorya Chandraadhi
   Yoga, Jeevanam Yoga, Kaala Pakai, Moorthi Nirnayam, Drekkana Lords Aathipathyam
   and Navamsa Sashtashtagam.
+- **Pariharam**: a tab at the top, next to the language picker, with pariharams that do not need
+  a chart; the first is for richness and selvam: seven names from the Lalitha Sahasranamam given
+  by Maha Periyavar, in English and Tamil. More are added to `PARIHARAMS` in `static/labels.js`.
 - **Saved charts**: stored locally, recomputed on load, and deletable.
 
 ## Setup

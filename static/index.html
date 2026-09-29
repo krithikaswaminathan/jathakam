@@ -30,10 +30,16 @@
         <p id="pageTagline" class="tagline">your personal jathakam, cast in a moment</p>
       </div>
     </div>
-    <select id="langToggle">
-      <option value="en">English</option>
-      <option value="ta">தமிழ்</option>
-    </select>
+    <div class="topbar-actions">
+      <nav class="top-tabs">
+        <button type="button" class="top-tab active" data-page="home" id="lblTopHome">Jathakam</button>
+        <button type="button" class="top-tab" data-page="pariharam" id="lblTopPariharam">Pariharam</button>
+      </nav>
+      <select id="langToggle">
+        <option value="en">English</option>
+        <option value="ta">தமிழ்</option>
+      </select>
+    </div>
   </header>
   <div class="kolam-divider" aria-hidden="true"></div>
 
@@ -49,6 +55,11 @@
       <button type="button" id="readingBack" class="reading-back">&larr; <span id="lblBack">Back</span></button>
       <h2 id="readingTitle"></h2>
       <div id="readingContent"></div>
+    </section>
+
+    <section id="pariharamSection" class="card hidden">
+      <h2 id="lblPariharamTitle">Pariharam</h2>
+      <div id="pariharamContent"></div>
     </section>
 
     <section id="formSection" class="card">

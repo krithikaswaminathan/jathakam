@@ -49,6 +49,7 @@ const LABELS = {
       sashtashtagamNone: "No planet is 6th or 8th in D9: a huge plus in the jathakam.",
       sashtashtagamSummary: "6th or 8th in D9, bringing issues related to the planet and its houses",
       sashtashtagamNoLordship: "rules no house; sits in house {house}",
+      topHome: "Jathakam", topPariharam: "Pariharam",
       sashtashtagamTimingTitle: "When it shows",
       sashtashtagamTimingIntro: "{planet}: {star} pada {pada} ({rasi} {from} to {to}). Issues are likely while {planet} is in this pada:",
       sashtashtagamUpcoming: "Coming up", sashtashtagamAllPeriods: "All {n} periods, 2026 to 2031", sashtashtagamNowTag: "now",
@@ -136,6 +137,7 @@ const LABELS = {
       sashtashtagamNone: "எந்த கிரகமும் D9இல் 6 அல்லது 8ஆம் இடத்தில் இல்லை: ஜாதகத்திற்குப் பெரிய பலம்.",
       sashtashtagamSummary: "D9இல் 6 அல்லது 8ஆம் இடம்; அந்தக் கிரகம், அதன் வீடுகள் தொடர்பான பிரச்சினைகள்",
       sashtashtagamNoLordship: "எந்த வீட்டிற்கும் அதிபதி இல்லை; {house}ஆம் வீட்டில் உள்ளது",
+      topHome: "ஜாதகம்", topPariharam: "பரிகாரம்",
       sashtashtagamTimingTitle: "எப்போது வெளிப்படும்",
       sashtashtagamTimingIntro: "{planet}: {star} {pada}ஆம் பாதம் ({rasi} {from} முதல் {to} வரை). {planet} இந்தப் பாதத்தில் இருக்கும் காலத்தில் பிரச்சினைகள் வர வாய்ப்புள்ளது:",
       sashtashtagamUpcoming: "வரவிருப்பவை", sashtashtagamAllPeriods: "2026 முதல் 2031 வரை அனைத்து {n} காலங்கள்", sashtashtagamNowTag: "தற்போது",
@@ -227,6 +229,26 @@ const KAALA_PAKAI = {
     effect: { en: "Disrupts discipline and focus, introducing hidden spiritual dilemmas, boundary issues, or sudden isolation.", ta: "ஒழுக்கத்தையும் கவனத்தையும் குலைத்து, மறைந்த ஆன்மீகக் குழப்பங்கள், எல்லைப் பிரச்சினைகள் அல்லது திடீர் தனிமையை உண்டாக்கும்." },
   },
 };
+
+// Pariharams shown on the Pariharam page, in order; as given by the user.
+const PARIHARAMS = [
+  {
+    title: { en: "For richness and selvam", ta: "செல்வம் பெற" },
+    intro: {
+      en: "To attain richness and selvam in life, recite these 7 names from the Lalitha Sahasranamam, given by Maha Periyavar:",
+      ta: "வாழ்வில் செல்வமும் வளமும் பெற, மஹா பெரியவர் அருளிய லலிதா சஹஸ்ரநாமத்தின் இந்த 7 நாமங்களை ஜபிக்கவும்:",
+    },
+    names: [
+      { en: "Om Sri Matre Namaha", ta: "ஓம் ஸ்ரீ மாத்ரே நமஹ" },
+      { en: "Om Sri Vasudhayai Namaha", ta: "ஓம் ஸ்ரீ வஸுதாயை நமஹ" },
+      { en: "Om Sri Ashta Lakshmi Namaha", ta: "ஓம் ஸ்ரீ அஷ்ட லக்ஷ்மி நமஹ" },
+      { en: "Om Sri Sachamara Rama Vani Savya Dakshina Sevitayai Namaha", ta: "ஓம் ஸ்ரீ ஸசாமர ரமாவாணி ஸவ்ய தக்ஷிண ஸேவிதாயை நமஹ" },
+      { en: "Om Sri Kataksha Kimkari Bhuta Kamala Koti Sevitayai Namaha", ta: "ஓம் ஸ்ரீ கடாக்ஷ கிங்கரீ பூத கமலா கோடி ஸேவிதாயை நமஹ" },
+      { en: "Om Sri Shiva Shaktyaikya Rupinyai Namaha", ta: "ஓம் ஸ்ரீ சிவ சக்த்யைக்ய ரூபிண்யை நமஹ" },
+      { en: "Om Sri Lalithambikayai Namaha", ta: "ஓம் ஸ்ரீ லலிதாம்பிகாயை நமஹ" },
+    ],
+  },
+];
 
 const READING_TOPICS = {
   pushkaraNavamsa: {
