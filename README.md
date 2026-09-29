@@ -5,7 +5,8 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
 - **Birth details**: place-name search (Open-Meteo geocoding) fills in latitude, longitude and
   time zone; 12-hour time picker.
 - **Charts**: South Indian style rasi chart (D1) with retrograde marking and Gulika/Mandi placed
-  in the grid, plus divisional charts D2, D3, D7, D9, D10, D12 and D60.
+  in the grid, plus divisional charts D2, D3, D7, D9, D10, D12 and D60. In D1, a planet in a
+  Pushkara Navamsa pada carries its grade, A, B or C, or the word Present when it has no grade.
 - **Under the chart**: Indu Lagna, Pranapada, Tithi/Thithi Soonyam, Mudakku Rasi, Upasana
   Deivam and Kaala Pakai each sit in a collapsed box; click a title to open it.
 - **Special lagnas**: Indu Lagna and Pranapada Lagna.
@@ -14,7 +15,7 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
 - **Mudakku Rasi**: from the Sun's nakshatra pada, with its rasi and star lords, house and
   occupants, tagged in the D1 grid; flags when it is the lagna, which is said to weaken it.
 - **Graha details**: rasi and nakshatra lords, absolute and in-sign degrees, a Pushkara
-  Navamsa column that ticks only the padas that count and names the pada and its tara, and a Kaala Pakai column with a
+  Navamsa column that gives the grade (or Present) with the pada and its tara, and a Kaala Pakai column with a
   summary line above the table.
 - **Kaala Pakai**: grahas sitting in their Kaala Pakai rasi in the D1 chart, with the rasi,
   house and effect; a planet picker shows any graha's Kaala Pakai rasis.
@@ -149,4 +150,5 @@ python -m pytest tests/ -v
   Phalguni 3 and Uttara Bhadrapada 3; its own rule gives 4 and 2, which the app uses.
   A Pushkara pada's position among the nine padas of its rasi is read as a tara, and only the
   6th, 8th and 9th places (Sadhaka, Mitra and Ati-Mitra) are counted. That leaves nine padas, all
-  in fire and air signs and all on stars of the Sun, Rahu or Jupiter.
+  in fire and air signs and all on stars of the Sun, Rahu or Jupiter. The 8th place is graded A,
+  the 9th B and the 6th C. A planet in one of the other fifteen Pushkara padas shows as Present.
