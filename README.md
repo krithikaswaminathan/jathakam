@@ -14,15 +14,15 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
 - **Mudakku Rasi**: from the Sun's nakshatra pada, with its rasi and star lords, house and
   occupants, tagged in the D1 grid; flags when it is the lagna, which is said to weaken it.
 - **Graha details**: rasi and nakshatra lords, absolute and in-sign degrees, a Pushkara
-  Navamsa column naming the pada, whether it is vargottama and its tara quality, and a Kaala Pakai column with a
+  Navamsa column that ticks only the padas that count and names the pada and its tara, and a Kaala Pakai column with a
   summary line above the table.
 - **Kaala Pakai**: grahas sitting in their Kaala Pakai rasi in the D1 chart, with the rasi,
   house and effect; a planet picker shows any graha's Kaala Pakai rasis.
 - **Ucham / Neecham**: planets in exaltation or debilitation, with distance from the deep
   exaltation/debilitation degree.
 - **Dasa**: Vimshottari dasa down to Prana level, with the current period highlighted.
-- **Tara Balam** from the birth star, plus the quality of all 24 Pushkara padas (each pada's
-  position among the 9 in its rasi, read as a tara), highlighting those holding a planet.
+- **Tara Balam** from the birth star, plus the nine Pushkara padas that count (those in the 6th,
+  8th or 9th place of their rasi), highlighting any that hold a planet.
 - **Yogas and doshas**: Mangal Dosha, Gaja Kesari, Budhaditya, Chandra-Mangal, Kemadruma
   (simplified), Soorya Chandraadhi, Jeevanam (naming the planets that show the source of
   earnings) and the five Pancha Mahapurusha yogas, each marked Present or Not present.
@@ -147,5 +147,6 @@ python -m pytest tests/ -v
   and 8th, water the 1st and 3rd). The stars of the Sun and Jupiter hold 6 each; Venus, Saturn,
   the Moon and Rahu 3 each; Mars, Mercury and Ketu none. The paper's table prints Uttara
   Phalguni 3 and Uttara Bhadrapada 3; its own rule gives 4 and 2, which the app uses.
-  A Pushkara pada's quality is its position among the 9 padas of its rasi read as a tara (1 Janma
-  neutral; 2, 4, 6, 8, 9 good; 3, 5, 7 bad): 9 are good, 3 neutral and 12 bad.
+  A Pushkara pada's position among the nine padas of its rasi is read as a tara, and only the
+  6th, 8th and 9th places (Sadhaka, Mitra and Ati-Mitra) are counted. That leaves nine padas, all
+  in fire and air signs and all on stars of the Sun, Rahu or Jupiter.
