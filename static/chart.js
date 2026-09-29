@@ -24,6 +24,7 @@ let state = {
   upasanaRasi: "", // rasi index picked in the Upasana Deivam box, as a string
   kaalaPakaiPlanet: "", // planet picked in the Kaala Pakai box
   pariharamTopic: 0, // index into PARIHARAMS shown on the Pariharam page
+  prasannam: { place: null, chart: null }, // place: { latitude, longitude, timezone, label }; label null = device location
   peyarchiPlanet: "", // planet filter on the Peyarchi tab; "" = all
 };
 
@@ -159,6 +160,21 @@ function applyLanguage() {
   document.getElementById("lblTopPariharam").textContent = labels.ui.topPariharam;
   document.getElementById("lblPariharamNav").textContent = labels.ui.topPariharam;
   if (!document.getElementById("pariharamSection").classList.contains("hidden")) renderPariharam();
+  document.getElementById("lblTopPrasannam").textContent = labels.ui.topPrasannam;
+  document.getElementById("lblPrasannamTitle").textContent = labels.ui.topPrasannam;
+  document.getElementById("lblPrasTime").textContent = labels.ui.prasTime;
+  document.getElementById("lblPrasPlace").textContent = labels.ui.prasPlace;
+  document.getElementById("prasNow").textContent = labels.ui.prasNow;
+  document.getElementById("prasUseLocation").textContent = labels.ui.prasUseLocation;
+  document.getElementById("prasChangePlace").textContent = labels.ui.prasChangePlace;
+  document.getElementById("prasPlaceInput").placeholder = labels.ui.prasPlaceholder;
+  document.getElementById("lblChandraNadi").textContent = labels.ui.chandraNadi;
+  document.getElementById("thPrPlanet").textContent = labels.ui.colPlanet;
+  document.getElementById("thPrRasi").textContent = labels.ui.colRasi;
+  document.getElementById("thPrDeg").textContent = labels.ui.colDegInSign;
+  document.getElementById("thPrStar").textContent = labels.ui.colStar;
+  document.getElementById("thPrPada").textContent = labels.ui.colPada;
+  if (state.prasannam.chart) renderPrasannam();
   document.querySelectorAll(".side-nav-topic").forEach((btn) => {
     btn.textContent = READING_TOPICS[btn.dataset.topic].title[state.lang];
   });
@@ -339,6 +355,7 @@ document.getElementById("readingBack").addEventListener("click", hideReadingPage
 
 function showReadingPage(topicKey) {
   document.getElementById("pariharamSection").classList.add("hidden");
+  document.getElementById("prasannamSection").classList.add("hidden");
   setTopTab("home");
   document.getElementById("formSection").classList.add("hidden");
   document.getElementById("savedSection").classList.add("hidden");
@@ -362,28 +379,184 @@ function setTopTab(page) {
 }
 
 document.querySelectorAll(".top-tab").forEach((btn) => {
-  btn.addEventListener("click", () => (btn.dataset.page === "pariharam" ? showPariharamPage() : showHomePage()));
+  btn.addEventListener("click", () => showPage(btn.dataset.page));
 });
 
-function showPariharamPage() {
-  for (const id of ["formSection", "savedSection", "resultSection", "readingSection"]) {
-    document.getElementById(id).classList.add("hidden");
+const PAGE_SECTIONS = ["formSection", "savedSection", "resultSection", "readingSection", "pariharamSection", "prasannamSection"];
+
+// "home" is the birth-chart page (with the Reading side nav); the others replace it.
+function showPage(page) {
+  setTopTab(page);
+  document.getElementById("sideNav").classList.toggle("hidden", page !== "home");
+  document.getElementById("pariharamNav").classList.toggle("hidden", page !== "pariharam");
+  if (page === "home") {
+    document.getElementById("pariharamSection").classList.add("hidden");
+    document.getElementById("prasannamSection").classList.add("hidden");
+    hideReadingPage();
+    return;
   }
+  for (const id of PAGE_SECTIONS) document.getElementById(id).classList.add("hidden");
   document.querySelectorAll(".side-nav-topic").forEach((b) => b.classList.remove("active"));
-  document.getElementById("sideNav").classList.add("hidden");
-  document.getElementById("pariharamNav").classList.remove("hidden");
-  document.getElementById("pariharamSection").classList.remove("hidden");
-  setTopTab("pariharam");
-  renderPariharam();
+  if (page === "pariharam") {
+    document.getElementById("pariharamSection").classList.remove("hidden");
+    renderPariharam();
+  } else if (page === "prasannam") {
+    document.getElementById("prasannamSection").classList.remove("hidden");
+    startPrasannam();
+  }
 }
 
-function showHomePage() {
-  document.getElementById("pariharamSection").classList.add("hidden");
-  document.getElementById("pariharamNav").classList.add("hidden");
-  document.getElementById("sideNav").classList.remove("hidden");
-  hideReadingPage();
-  setTopTab("home");
+// --- Prasannam: the chart for this moment where you are, and the Moon's position (Chandra Nadi) ---
+
+function setPrasStatus(text) {
+  document.getElementById("prasStatus").textContent = text;
 }
+
+function startPrasannam() {
+  if (state.prasannam.place) castPrasannam();
+  else locatePrasannam();
+}
+
+function locatePrasannam() {
+  const labels = L();
+  if (!navigator.geolocation) {
+    showPrasSearch();
+    return;
+  }
+  setPrasStatus(labels.ui.prasLocating);
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      state.prasannam.place = {
+        latitude: pos.coords.latitude,
+        longitude: pos.coords.longitude,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        label: null,
+      };
+      document.getElementById("prasSearch").classList.add("hidden");
+      castPrasannam();
+    },
+    () => showPrasSearch(),
+    { timeout: 15000, maximumAge: 10 * 60 * 1000 }
+  );
+}
+
+function showPrasSearch() {
+  setPrasStatus(state.prasannam.place ? "" : L().ui.prasDenied);
+  document.getElementById("prasSearch").classList.remove("hidden");
+  document.getElementById("prasPlaceInput").focus();
+}
+
+async function castPrasannam() {
+  const labels = L();
+  const place = state.prasannam.place;
+  setPrasStatus(labels.ui.prasCasting);
+  const params = new URLSearchParams({ latitude: place.latitude, longitude: place.longitude, timezone: place.timezone });
+  const res = await fetch(`/api/prasannam?${params}`);
+  if (!res.ok) {
+    setPrasStatus(labels.ui.prasError + (await res.text()));
+    return;
+  }
+  state.prasannam.chart = await res.json();
+  setPrasStatus("");
+  renderPrasannam();
+}
+
+function renderPrasannam() {
+  const labels = L();
+  const chart = state.prasannam.chart;
+  const place = state.prasannam.place;
+  document.getElementById("prasResult").classList.remove("hidden");
+  document.getElementById("prasTime").textContent = `${fmtDateTime(chart.when)}:${chart.when.slice(17, 19)} (UTC${chart.when.slice(19)})`;
+  document.getElementById("prasPlace").textContent =
+    place.label ||
+    labels.ui.prasMyLocation.replace("{lat}", place.latitude.toFixed(4)).replace("{lon}", place.longitude.toFixed(4));
+
+  const moon = chart.d1.grahas.Moon;
+  document.getElementById("chandraNadiMain").textContent =
+    `${labels.nakshatra[moon.nakshatra]} ${labels.ui.padaWord} ${moon.pada} \u00B7 ${labels.rasi[moon.rasi]} ${formatDMS(moon.degree_in_sign)}`;
+  const rows = [
+    [labels.ui.prasMoonRasi, `${labels.rasi[moon.rasi]} (${labels.planets[moon.rasi_lord]})`],
+    [labels.ui.prasMoonStar, `${labels.nakshatra[moon.nakshatra]} (${labels.planets[moon.star_lord]})`],
+    [labels.ui.prasMoonPada, String(moon.pada)],
+    [labels.ui.prasMoonDegree, formatDMS(moon.degree_in_sign)],
+    [labels.ui.prasMoonAbs, formatDMS(moon.longitude)],
+    [labels.ui.lagna, `${labels.rasi[chart.d1.lagna_rasi]} ${formatDMS(chart.lagna_longitude % 30)}`],
+  ];
+  const body = document.getElementById("chandraNadiBody");
+  body.innerHTML = "";
+  for (const [k, v] of rows) {
+    const tr = document.createElement("tr");
+    for (const text of [k, v]) {
+      const td = document.createElement("td");
+      td.textContent = text;
+      tr.appendChild(td);
+    }
+    body.appendChild(tr);
+  }
+
+  drawGrid(document.getElementById("prasGrid"), chart.d1, { centerLabel: labels.ui.topPrasannam });
+
+  const tbody = document.getElementById("prasBody");
+  tbody.innerHTML = "";
+  for (const g of Object.values(chart.d1.grahas)) {
+    const tr = document.createElement("tr");
+    const isRetrogradeEligible = g.retrograde && !NODES_NOT_MARKED_RETROGRADE.has(g.name);
+    for (const text of [
+      labels.planets[g.name] + (isRetrogradeEligible ? " (R)" : ""),
+      labels.rasi[g.rasi],
+      formatDMS(g.degree_in_sign),
+      labels.nakshatra[g.nakshatra],
+      String(g.pada),
+    ]) {
+      const td = document.createElement("td");
+      td.textContent = text;
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+}
+
+document.getElementById("prasNow").addEventListener("click", () => startPrasannam());
+document.getElementById("prasUseLocation").addEventListener("click", () => {
+  state.prasannam.place = null;
+  locatePrasannam();
+});
+document.getElementById("prasChangePlace").addEventListener("click", showPrasSearch);
+
+let prasSearchTimer = null;
+document.getElementById("prasPlaceInput").addEventListener("input", (e) => {
+  clearTimeout(prasSearchTimer);
+  const query = e.target.value.trim();
+  const list = document.getElementById("prasPlaceResults");
+  if (query.length < 2) {
+    list.classList.add("hidden");
+    return;
+  }
+  prasSearchTimer = setTimeout(async () => {
+    const res = await fetch(`/api/geocode?query=${encodeURIComponent(query)}`);
+    const places = res.ok ? await res.json() : [];
+    list.innerHTML = "";
+    if (places.length === 0) {
+      const li = document.createElement("li");
+      li.className = "pob-no-results";
+      li.textContent = L().ui.pobNoResults;
+      list.appendChild(li);
+    }
+    for (const p of places) {
+      const li = document.createElement("li");
+      li.textContent = p.label;
+      li.addEventListener("click", () => {
+        state.prasannam.place = { latitude: p.latitude, longitude: p.longitude, timezone: p.timezone, label: p.label };
+        list.classList.add("hidden");
+        document.getElementById("prasSearch").classList.add("hidden");
+        e.target.value = "";
+        castPrasannam();
+      });
+      list.appendChild(li);
+    }
+    list.classList.remove("hidden");
+  }, 300);
+});
 
 // The Pariharam page: its own side nav of pariharams, and the one picked. The names to
 // recite are shown in English and Tamil together, whatever the language setting.
@@ -682,27 +855,29 @@ function chartOutFor(varga) {
 }
 
 function renderGrid() {
-  const grid = document.getElementById("chartGrid");
-  grid.innerHTML = "";
   const chart = chartOutFor(state.varga);
+  const isD1 = state.varga === "D1";
+  // Thithi Soonyam is sign-based and read from the D1 chart only
+  const soonyaRasis = new Set(isD1 && state.chart.tithi ? state.chart.tithi.soonya_rasis.map((r) => r.rasi) : []);
+  document.getElementById("soonyamLegend").classList.toggle("hidden", soonyaRasis.size === 0);
+  drawGrid(document.getElementById("chartGrid"), chart, {
+    // Gulika/Mandi are only computed for D1, not per-varga
+    extraPlanets: isD1 ? [state.chart.gulika, state.chart.mandi] : [],
+    soonyaRasis,
+    mudakkuRasi: isD1 && state.chart.mudakku ? state.chart.mudakku.rasi : null,
+    centerLabel: L().vargas[state.varga] || state.varga,
+  });
+}
+
+// Draws a South Indian chart into `grid`: used for the birth chart and the Prasannam chart.
+function drawGrid(grid, chart, { extraPlanets = [], soonyaRasis = new Set(), mudakkuRasi = null, centerLabel = "" } = {}) {
+  grid.innerHTML = "";
   const labels = L();
 
   const rasiToPlanets = {};
-  for (const [name, g] of Object.entries(chart.grahas)) {
+  for (const g of [...Object.values(chart.grahas), ...extraPlanets]) {
     (rasiToPlanets[g.rasi] = rasiToPlanets[g.rasi] || []).push(g);
   }
-  if (state.varga === "D1") {
-    // Gulika/Mandi are only computed for D1, not per-varga
-    for (const upagraha of [state.chart.gulika, state.chart.mandi]) {
-      (rasiToPlanets[upagraha.rasi] = rasiToPlanets[upagraha.rasi] || []).push(upagraha);
-    }
-  }
-
-  // Thithi Soonyam is sign-based and read from the D1 chart only
-  const soonyaRasis = new Set(
-    state.varga === "D1" && state.chart.tithi ? state.chart.tithi.soonya_rasis.map((r) => r.rasi) : []
-  );
-  document.getElementById("soonyamLegend").classList.toggle("hidden", soonyaRasis.size === 0);
 
   for (const pos of GRID_POSITIONS) {
     const cell = document.createElement("div");
@@ -716,7 +891,7 @@ function renderGrid() {
     nameDiv.className = "rasi-name";
     nameDiv.textContent = labels.rasi[pos.rasi];
     cell.appendChild(nameDiv);
-    if (state.varga === "D1" && state.chart.mudakku && state.chart.mudakku.rasi === pos.rasi) {
+    if (mudakkuRasi === pos.rasi) {
       const tag = document.createElement("div");
       tag.className = "mudakku-tag";
       tag.textContent = labels.ui.mudakkuTag;
@@ -742,9 +917,9 @@ function renderGrid() {
   ganeshaImg.src = "ganesha.svg";
   ganeshaImg.alt = "";
   ganeshaImg.className = "ganesha-icon";
-  const vargaLabel = document.createElement("div");
-  vargaLabel.textContent = labels.vargas[state.varga] || state.varga;
-  center.append(ganeshaImg, vargaLabel);
+  const label = document.createElement("div");
+  label.textContent = centerLabel;
+  center.append(ganeshaImg, label);
   grid.appendChild(center);
 }
 

@@ -402,3 +402,19 @@ td.quality-neutral { color: var(--neutral); font-weight: 600; }
 .pariharam-names li:last-child { border-bottom: none; }
 .pariharam-name-en { display: block; font-size: 1.02rem; font-weight: 500; color: var(--ink); }
 .pariharam-name-ta { display: block; margin-top: 0.15rem; font-size: 1.02rem; color: var(--maroon-700); }
+
+.pras-meta { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1.1rem; font-size: 0.92rem; }
+.pras-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.3rem; }
+.pras-btn {
+  padding: 0.4rem 0.95rem; border-radius: 999px; border: 1px solid var(--maroon-700);
+  background: var(--maroon-700); color: white; font: inherit; font-size: 0.85rem; cursor: pointer;
+}
+.pras-btn.secondary { background: white; color: var(--maroon-700); }
+#prasSearch input { width: 100%; max-width: 360px; padding: 0.5rem 0.7rem; border: 1px solid var(--line); border-radius: 8px; font: inherit; }
+.chandra-nadi { margin-bottom: 1.2rem; padding: 0.9rem 1.1rem; border-radius: 10px; background: var(--cream-100); border-left: 4px solid var(--gold-500); }
+.chandra-nadi h3 { margin: 0 0 0.3rem; font-family: var(--font-display); color: var(--maroon-700); font-size: 1.05rem; }
+.chandra-nadi-main { font-size: 1.15rem; font-weight: 600; color: var(--maroon-700); margin-bottom: 0.5rem; }
+.chandra-nadi-table { width: auto; }
+.chandra-nadi-table td { padding: 0.25rem 1.2rem 0.25rem 0; border-bottom: none; font-size: 0.9rem; }
+.chandra-nadi-table td:first-child { color: var(--ink-soft); }
+#prasGrid { margin-bottom: 1.2rem; }

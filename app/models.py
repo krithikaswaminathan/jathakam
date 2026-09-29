@@ -198,3 +198,12 @@ class ChartSummary(BaseModel):
     name: str
     dob: date
     created_at: datetime
+
+
+class PrasannamResponse(BaseModel):
+    when: datetime  # the moment cast, in the requested time zone
+    latitude: float
+    longitude: float
+    timezone: str
+    lagna_longitude: float
+    d1: ChartOut

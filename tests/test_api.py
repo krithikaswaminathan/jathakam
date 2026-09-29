@@ -100,3 +100,30 @@ def test_delete_chart(client):
 
 def test_delete_missing_chart_is_404(client):
     assert client.delete("/api/charts/999").status_code == 404
+
+
+def test_prasannam_at_a_given_moment(client):
+    # Jupiter's entry into Capricorn, 20 Nov 2020 12:41:55 IST (Astroshala): the Moon was in Capricorn.
+    body = client.get(
+        "/api/prasannam",
+        params={"latitude": 13.08784, "longitude": 80.27847, "timezone": "Asia/Kolkata", "at": "2020-11-20T12:41:55+05:30"},
+    ).json()
+    assert body["when"] == "2020-11-20T12:41:55+05:30"
+    moon = body["d1"]["grahas"]["Moon"]
+    assert moon["rasi"] == 9 and 0 <= moon["degree_in_sign"] < 30 and 1 <= moon["pada"] <= 4
+    assert moon["nakshatra"] in (20, 21, 22)  # Capricorn holds Uttarashada 2-4, Shravana, Dhanishta 1-2
+    # The app's ephemeris puts Jupiter's ingress 42 minutes later (13:23 IST), so it is still
+    # at the very end of Sagittarius here.
+    jupiter = body["d1"]["grahas"]["Jupiter"]
+    assert jupiter["rasi"] == 8 and jupiter["degree_in_sign"] > 29.99
+    assert body["d1"]["lagna_rasi"] == int(body["lagna_longitude"] // 30)
+
+
+def test_prasannam_now_uses_the_time_zone(client):
+    body = client.get("/api/prasannam", params={"latitude": 13.08, "longitude": 80.27, "timezone": "Asia/Kolkata"}).json()
+    assert body["when"].endswith("+05:30") and len(body["d1"]["grahas"]) == 9
+
+
+def test_prasannam_rejects_an_unknown_time_zone(client):
+    res = client.get("/api/prasannam", params={"latitude": 13.08, "longitude": 80.27, "timezone": "Not/AZone"})
+    assert res.status_code == 400

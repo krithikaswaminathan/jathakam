@@ -34,6 +34,7 @@
       <nav class="top-tabs">
         <button type="button" class="top-tab active" data-page="home" id="lblTopHome">Jathakam</button>
         <button type="button" class="top-tab" data-page="pariharam" id="lblTopPariharam">Pariharam</button>
+        <button type="button" class="top-tab" data-page="prasannam" id="lblTopPrasannam">Prasannam</button>
       </nav>
       <select id="langToggle">
         <option value="en">English</option>
@@ -64,6 +65,39 @@
     <section id="pariharamSection" class="card hidden">
       <h2 id="lblPariharamTitle">Pariharam</h2>
       <div id="pariharamContent"></div>
+    </section>
+
+    <section id="prasannamSection" class="card hidden">
+      <h2 id="lblPrasannamTitle">Prasannam</h2>
+      <div class="pras-meta">
+        <div><span id="lblPrasTime" class="info-label">Time</span>: <span id="prasTime"></span></div>
+        <div><span id="lblPrasPlace" class="info-label">Place</span>: <span id="prasPlace"></span></div>
+        <div class="pras-actions">
+          <button type="button" id="prasNow" class="pras-btn">Now</button>
+          <button type="button" id="prasUseLocation" class="pras-btn secondary">Use my location</button>
+          <button type="button" id="prasChangePlace" class="pras-btn secondary">Change place</button>
+        </div>
+        <div id="prasStatus" class="info-hint"></div>
+        <div id="prasSearch" class="pob-field hidden">
+          <input type="text" id="prasPlaceInput" autocomplete="off" />
+          <ul id="prasPlaceResults" class="pob-results hidden"></ul>
+        </div>
+      </div>
+      <div id="prasResult" class="hidden">
+        <div class="chandra-nadi">
+          <h3 id="lblChandraNadi">Chandra Nadi</h3>
+          <div id="chandraNadiMain" class="chandra-nadi-main"></div>
+          <table class="chandra-nadi-table"><tbody id="chandraNadiBody"></tbody></table>
+        </div>
+        <div id="prasGrid" class="south-indian-grid"></div>
+        <table id="prasTable">
+          <thead><tr>
+            <th id="thPrPlanet">Planet</th><th id="thPrRasi">Rasi</th><th id="thPrDeg">Degree in Sign</th>
+            <th id="thPrStar">Star</th><th id="thPrPada">Pada</th>
+          </tr></thead>
+          <tbody id="prasBody"></tbody>
+        </table>
+      </div>
     </section>
 
     <section id="formSection" class="card">

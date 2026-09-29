@@ -1,5 +1,5 @@
 from datetime import datetime
-from zoneinfo import ZoneInfo
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
@@ -18,7 +18,13 @@ from app.dasa import compute_mahadasas, compute_sub_periods
 from app.db import SavedChart, delete_chart, get_chart, init_db, list_charts, save_chart
 from app.dignity import compute_dignities
 from app.drekkana_lords import compute_drekkana_lords
-from app.ephemeris import compute_ascendant, compute_graha_positions, init_ephemeris, to_julian_day_ut
+from app.ephemeris import (
+    compute_ascendant,
+    compute_graha_positions,
+    init_ephemeris,
+    jd_from_datetime,
+    to_julian_day_ut,
+)
 from app.geocode import search_places
 from app.models import (
     BirthRequest,
@@ -33,6 +39,7 @@ from app.models import (
     KaalaPakaiOut,
     MudakkuOut,
     PeyarchiOut,
+    PrasannamResponse,
     PlaceResult,
     SashtashtagamOut,
     SoonyaRasiOut,
@@ -240,6 +247,32 @@ def get_chart_by_id(chart_id: int) -> ChartResponse:
 def remove_chart(chart_id: int) -> None:
     if not delete_chart(chart_id):
         raise HTTPException(status_code=404, detail="Chart not found")
+
+
+@app.get("/api/prasannam", response_model=PrasannamResponse)
+def prasannam(latitude: float, longitude: float, timezone: str, at: datetime | None = None) -> PrasannamResponse:
+    """The chart for this moment (or `at`, used by tests) at the given place. Not saved."""
+    try:
+        tz = ZoneInfo(timezone)
+    except (ZoneInfoNotFoundError, ValueError):
+        raise HTTPException(status_code=400, detail="Unknown time zone")
+    when = datetime.now(tz) if at is None else (at if at.tzinfo else at.replace(tzinfo=tz)).astimezone(tz)
+    jd_ut = jd_from_datetime(when)
+    positions = compute_graha_positions(jd_ut)
+    lagna_longitude = compute_ascendant(jd_ut, latitude, longitude)
+    d1 = build_chart(
+        lagna_longitude,
+        {n: lon for n, (lon, _speed) in positions.items()},
+        {n: speed for n, (_lon, speed) in positions.items()},
+    )
+    return PrasannamResponse(
+        when=when.replace(microsecond=0),
+        latitude=latitude,
+        longitude=longitude,
+        timezone=timezone,
+        lagna_longitude=lagna_longitude,
+        d1=_to_chart_out(d1),
+    )
 
 
 @app.post("/api/dasa/expand", response_model=list[DasaPeriodOut])
