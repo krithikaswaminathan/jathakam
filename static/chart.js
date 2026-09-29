@@ -1006,6 +1006,18 @@ async function autoExpandCurrentChain(rows, depth) {
   await autoExpandCurrentChain(childRows, depth + 1);
 }
 
+// For the Mahadasa of a planet sitting in an A, B or C Pushkara pada, a tag saying whether the dasa works.
+function pushkaraDasaNote(lord) {
+  const g = state.chart.d1.grahas[lord];
+  const p = [g.nakshatra, g.pada];
+  if (!isCountedPushkara(p)) return null;
+  const works = pushkaraDasaWorks(lord, p);
+  const tag = document.createElement("span");
+  tag.className = "pushkara-dasa-tag" + (works ? "" : " fails");
+  tag.textContent = (works ? L().ui.pushkaraDasaTag : L().ui.pushkaraDasaTagFails).replace("{grade}", pushkaraGrade(p));
+  return tag;
+}
+
 function makeDasaRow(period, depth) {
   const tr = document.createElement("tr");
   tr.className = depth === 0 ? "expandable" : `expandable child-row depth-${depth}`;
@@ -1020,6 +1032,8 @@ function makeDasaRow(period, depth) {
   levelSpan.className = "dasa-level-tag";
   levelSpan.textContent = L().dasaLevels[period.level] || period.level;
   lordTd.append(lordSpan, levelSpan);
+  const pushkaraNote = depth === 0 ? pushkaraDasaNote(period.lord) : null;
+  if (pushkaraNote) lordTd.appendChild(pushkaraNote);
   const startTd = document.createElement("td");
   startTd.textContent = fmtDate(period.start);
   const endTd = document.createElement("td");
@@ -1205,7 +1219,10 @@ function renderGrahaDetails() {
       labels.planets[g.star_lord] || g.star_lord,
       pushkaraGrade([g.nakshatra, g.pada])
         ? `${gradeText(state.lang, pushkaraGrade([g.nakshatra, g.pada]))} \u00B7 ${labels.nakshatra[g.nakshatra]} ${g.pada}` +
-          (isVargottamaPada([g.nakshatra, g.pada]) ? ` (${labels.ui.vargottamaWord})` : "")
+          (isVargottamaPada([g.nakshatra, g.pada]) ? ` (${labels.ui.vargottamaWord})` : "") +
+          (isCountedPushkara([g.nakshatra, g.pada]) && DASA_PLANETS.includes(g.name)
+            ? ` \u00B7 ${pushkaraDasaWorks(g.name, [g.nakshatra, g.pada]) ? labels.ui.pushkaraDasaWorks : labels.ui.pushkaraDasaFails}`
+            : "")
         : "–",
       inKaalaPakai.has(g.name) ? labels.ui.kaalaPakaiYes : "–",
     ];

@@ -268,3 +268,33 @@ def test_pushkara_grades_by_place_in_rasi():
     assert sorted(k for k, g in grades.items() if g == "B") == [(2, 1), (11, 1), (20, 1)]  # Krittika 1, U.Phalguni 1, U.Ashadha 1
     assert sorted(k for k, g in grades.items() if g == "C") == [(5, 4), (14, 4), (23, 4)]  # Ardra 4, Swati 4, Shatabhisha 4
     assert list(grades.values()).count("Present") == 15
+
+
+def _dasa_works(planet: str, nakshatra: int) -> bool:
+    # Count in Vimshottari order from the planet (1) to the pada's star lord: 2, 6, 8 or 9 works.
+    count = (nakshatra % 9 - DASA_ORDER.index(planet)) % 9 + 1
+    return count in (2, 6, 8, 9)
+
+
+def test_pushkara_dasa_rule_users_example():
+    # Saturn in Punarvasu 2: from Saturn, Jupiter (Punarvasu's lord) is 9th, so Saturn's dasa works.
+    assert _dasa_works("Saturn", 6)
+    assert not _dasa_works("Jupiter", 6)  # the star lord itself counts 1
+
+
+def test_pushkara_dasa_planets_by_star_lord():
+    def works(nak):
+        return sorted(p for p in DASA_ORDER if _dasa_works(p, nak))
+
+    assert works(6) == sorted(["Rahu", "Venus", "Mercury", "Saturn"])  # Jupiter's stars, grade A
+    assert works(2) == sorted(["Venus", "Jupiter", "Mars", "Moon"])  # Sun's stars, grade B
+    assert works(5) == sorted(["Mars", "Ketu", "Saturn", "Jupiter"])  # Rahu's stars, grade C
+
+
+def test_reading_page_uses_the_same_dasa_counts():
+    import re
+
+    js = open("static/labels.js", encoding="utf-8").read()
+    assert re.search(r"const PUSHKARA_DASA_COUNTS = \[2, 6, 8, 9\];", js)
+    cycle = js[js.index("const STAR_LORD_CYCLE = [") : js.index("];", js.index("const STAR_LORD_CYCLE = ["))]
+    assert re.findall(r'"(\w+)"', cycle) == DASA_ORDER

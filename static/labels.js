@@ -53,6 +53,8 @@ const LABELS = {
       pushkaraQualityTitle: "Pushkara Navamsa padas that count",
       pushkaraQualityIntro: "Only the Pushkara padas in the 6th, 8th and 9th place of their rasi are counted and graded A, B or C. There are nine of them, and any that hold a planet in this chart are highlighted.",
       colPosition: "Position in rasi", colTara: "Tara", colQuality: "Quality", colPlanetsHere: "Planets here", colPushkaraPada: "Pushkara pada",
+      pushkaraDasaWorks: "dasa works", pushkaraDasaFails: "dasa doesn't work",
+      pushkaraDasaTag: "Pushkara {grade}, dasa works", pushkaraDasaTagFails: "Pushkara {grade}, dasa doesn't work",
       colGrade: "Grade", pushkaraLegend: "Pushkara Navamsa. A, B and C are the grade, for the 8th, 9th and 6th pada of the rasi, and Present means one of the other Pushkara padas, with no grade.",
       prasNow: "Now", prasUseLocation: "Use my location", prasChangePlace: "Change place",
       prasTime: "Time", prasPlace: "Place", prasMyLocation: "Your location ({lat}, {lon})",
@@ -154,6 +156,8 @@ const LABELS = {
       pushkaraQualityTitle: "கணக்கில் வரும் புஷ்கர பாதங்கள்",
       pushkaraQualityIntro: "தன் ராசியில் 6, 8, 9ஆம் இடங்களில் உள்ள புஷ்கர பாதங்கள் மட்டுமே கணக்கில் கொள்ளப்பட்டு A, B, C என்று தரம் பிரிக்கப்படுகின்றன. இப்படி ஒன்பது பாதங்கள் உள்ளன. இந்த ஜாதகத்தில் கிரகம் உள்ளவை குறிக்கப்பட்டுள்ளன.",
       colPosition: "ராசியில் இடம்", colTara: "தாரை", colQuality: "தரம்", colPlanetsHere: "இங்குள்ள கிரகங்கள்", colPushkaraPada: "புஷ்கர பாதம்",
+      pushkaraDasaWorks: "தசை பலன் தரும்", pushkaraDasaFails: "தசை பலன் தராது",
+      pushkaraDasaTag: "புஷ்கர {grade}, தசை பலன் தரும்", pushkaraDasaTagFails: "புஷ்கர {grade}, தசை பலன் தராது",
       colGrade: "தரம்", pushkaraLegend: "புஷ்கர நவாம்சம். A, B, C என்பவை ராசியின் 8, 9, 6ஆம் பாதங்களுக்கான தரம். உள்ளது என்றால் தரம் இல்லாத மற்ற புஷ்கர பாதம்.",
       prasNow: "இப்போது", prasUseLocation: "என் இருப்பிடம்", prasChangePlace: "இடத்தை மாற்று",
       prasTime: "நேரம்", prasPlace: "இடம்", prasMyLocation: "உங்கள் இருப்பிடம் ({lat}, {lon})",
@@ -298,13 +302,23 @@ const padaPositionInRasi = (p) => (padaIndex(p) % 9) + 1;
 const pushkaraTara = (p) => TARA_ORDER[padaPositionInRasi(p) - 1];
 // Only the Pushkara padas in the 6th, 8th and 9th place of their rasi (good taras) are counted.
 const COUNTED_PUSHKARA_POSITIONS = [6, 8, 9];
-const isCountedPushkara = (p) => COUNTED_PUSHKARA_POSITIONS.includes(padaPositionInRasi(p));
+const isPushkaraPada = ([nak, pada]) => PUSHKARA_PADAS.some(([n, p]) => n === nak && p === pada);
+// A pada counts only if it is one of the 24 Pushkara padas AND sits 6th, 8th or 9th in its rasi.
+const isCountedPushkara = (p) => isPushkaraPada(p) && COUNTED_PUSHKARA_POSITIONS.includes(padaPositionInRasi(p));
 const COUNTED_PUSHKARA_PADAS = PUSHKARA_PADAS.filter(isCountedPushkara);
 // The user's grades by place in the rasi. The other 15 Pushkara padas are shown as "Present".
 const PUSHKARA_GRADE_BY_POSITION = { 8: "A", 9: "B", 6: "C" };
-const isPushkaraPada = ([nak, pada]) => PUSHKARA_PADAS.some(([n, p]) => n === nak && p === pada);
 const pushkaraGrade = (p) => (isPushkaraPada(p) ? PUSHKARA_GRADE_BY_POSITION[padaPositionInRasi(p)] || "Present" : null);
 const PRESENT_WORD = { en: "Present", ta: "உள்ளது" };
+// A planet in an A, B or C pada gives the Pushkara benefit in its own Mahadasa when, counting in the
+// Udu Maha Dasai (Vimshottari) order from the planet (as 1) to the pada's star lord, the lord comes
+// 2nd, 6th, 8th or 9th. The star lord itself (1st) does not.
+const PUSHKARA_DASA_COUNTS = [2, 6, 8, 9];
+const pushkaraDasaCount = (planet, p) => ((p[0] % 9) - STAR_LORD_CYCLE.indexOf(planet) + 9) % 9 + 1;
+const pushkaraDasaWorks = (planet, p) => PUSHKARA_DASA_COUNTS.includes(pushkaraDasaCount(planet, p));
+const DASA_PLANETS = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn", "Rahu", "Ketu"];
+const pushkaraDasaPlanets = (lordIndex) =>
+  DASA_PLANETS.filter((planet) => PUSHKARA_DASA_COUNTS.includes(((lordIndex - STAR_LORD_CYCLE.indexOf(planet) + 9) % 9) + 1));
 const gradeText = (lang, grade) => (grade === "Present" ? PRESENT_WORD[lang] : grade);
 const ORDINAL = { en: (n) => n + ({ 1: "st", 2: "nd", 3: "rd" }[n] || "th"), ta: (n) => `${n}ஆம்` };
 const VARGOTTAMA_WORD = { en: "vargottama", ta: "வர்கோத்தமம்" };
@@ -352,6 +366,30 @@ const READING_TOPICS = {
           bothLangs((lang) => ORDINAL[lang](padaPositionInRasi(p))),
           bothLangs(() => pushkaraGrade(p)),
         ]),
+      },
+      {
+        heading: { en: "When the dasa gives the benefit", ta: "தசை எப்போது பலன் தரும்" },
+        text: {
+          en: "A planet in an A, B or C pada gives its Pushkara benefit during its own Mahadasa only when it gets along with the pada's star lord. To check, count in the Udu Maha Dasai order, Ketu, Venus, Sun, Moon, Mars, Rahu, Jupiter, Saturn and Mercury, starting from the planet as 1 and going to the star lord. If the star lord comes 2nd, 6th, 8th or 9th, the dasa works. Say Saturn sits in Punarvasu 2, whose star lord is Jupiter. Counting from Saturn, Jupiter comes 9th, so Saturn's dasa works. If the planet is the star lord itself the count is 1, and the dasa doesn't work. The table shows, for each star lord, which planets' dasas work.",
+          ta: "A, B அல்லது C பாதத்தில் உள்ள கிரகம், அந்தப் பாதத்தின் நட்சத்திர அதிபதியுடன் இணக்கமாக இருந்தால் மட்டுமே தன் மகா தசையில் புஷ்கர பலனைத் தரும். இதைப் பார்க்க, உடு மகா தசை வரிசையில், அதாவது கேது, சுக்ரன், சூரியன், சந்திரன், செவ்வாய், ராகு, குரு, சனி, புதன் என்ற வரிசையில், அந்தக் கிரகத்தை 1 என்று எடுத்து நட்சத்திர அதிபதி வரை எண்ணவும். நட்சத்திர அதிபதி 2, 6, 8 அல்லது 9ஆவதாக வந்தால் தசை பலன் தரும். உதாரணமாக புனர்பூசம் 2இல் சனி இருக்கிறது என்று வைத்துக்கொள்வோம். அதன் நட்சத்திர அதிபதி குரு. சனியிலிருந்து எண்ணினால் குரு 9ஆவதாக வருகிறது, எனவே சனி தசை பலன் தரும். கிரகமே நட்சத்திர அதிபதியாக இருந்தால் எண்ணிக்கை 1, அப்போது தசை பலன் தராது. ஒவ்வொரு நட்சத்திர அதிபதிக்கும் எந்தக் கிரகங்களின் தசை பலன் தரும் என்பதை அட்டவணை காட்டுகிறது.",
+        },
+        tableHeader: [
+          { en: "Grade", ta: "தரம்" }, { en: "Padas", ta: "பாதங்கள்" }, { en: "Star lord", ta: "நட்சத்திர அதிபதி" }, { en: "Planets whose dasa works", ta: "தசை பலன் தரும் கிரகங்கள்" },
+        ],
+        table: ["A", "B", "C"].map((grade) => {
+          const padas = COUNTED_PUSHKARA_PADAS.filter((p) => pushkaraGrade(p) === grade);
+          const lordIndex = padas[0][0] % 9;
+          return [
+            bothLangs(() => grade),
+            bothLangs((lang) => padas.map(([n, p]) => `${LABELS[lang].nakshatra[n]} ${p}`).join(", ")),
+            bothLangs((lang) => LABELS[lang].planets[STAR_LORD_CYCLE[lordIndex]]),
+            bothLangs((lang) =>
+              pushkaraDasaPlanets(lordIndex)
+                .map((planet) => `${LABELS[lang].planets[planet]} (${ORDINAL[lang](((lordIndex - STAR_LORD_CYCLE.indexOf(planet) + 9) % 9) + 1)})`)
+                .join(", ")
+            ),
+          ];
+        }),
       },
       {
         heading: { en: "Why Mars, Mercury and Ketu have none", ta: "செவ்வாய், புதன், கேதுவுக்கு ஏன் இல்லை" },

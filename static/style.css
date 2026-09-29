@@ -426,3 +426,8 @@ td.quality-neutral { color: var(--neutral); font-weight: 600; }
   background: var(--gold-500); color: white; font-size: 0.66rem; font-weight: 700; line-height: 1.35; vertical-align: 1px;
 }
 .pushkara-tag.present, .grid-cell .planets span.pushkara-tag.present { background: white; color: var(--gold-500); border: 1px solid var(--gold-500); font-weight: 600; }
+.pushkara-dasa-tag {
+  display: inline-block; margin-left: 0.5rem; padding: 0.05rem 0.45rem; border-radius: 999px;
+  background: var(--gold-500); color: white; font-size: 0.68rem; font-weight: 600;
+}
+.pushkara-dasa-tag.fails { background: white; color: var(--ink-soft); border: 1px solid var(--line); }
