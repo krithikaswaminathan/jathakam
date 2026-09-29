@@ -254,3 +254,17 @@ def test_reading_page_counts_the_same_positions():
 
     js = open("static/labels.js", encoding="utf-8").read()
     assert re.search(r"const COUNTED_PUSHKARA_POSITIONS = \[6, 8, 9\];", js)
+
+
+def test_pushkara_grades_by_place_in_rasi():
+    # The user's grades: A = 8th place, B = 9th, C = 6th. Other Pushkara padas are "Present".
+    import re
+
+    js = open("static/labels.js", encoding="utf-8").read()
+    assert re.search(r'const PUSHKARA_GRADE_BY_POSITION = \{ 8: "A", 9: "B", 6: "C" \};', js)
+    grade = {8: "A", 9: "B", 6: "C"}
+    grades = {(n, p): grade.get(((n * 4 + p - 1) % 9) + 1, "Present") for n, p in PAPER_PUSHKARA_PADAS}
+    assert sorted(k for k, g in grades.items() if g == "A") == [(6, 2), (15, 2), (24, 2)]  # Punarvasu 2, Vishakha 2, P.Bhadrapada 2
+    assert sorted(k for k, g in grades.items() if g == "B") == [(2, 1), (11, 1), (20, 1)]  # Krittika 1, U.Phalguni 1, U.Ashadha 1
+    assert sorted(k for k, g in grades.items() if g == "C") == [(5, 4), (14, 4), (23, 4)]  # Ardra 4, Swati 4, Shatabhisha 4
+    assert list(grades.values()).count("Present") == 15

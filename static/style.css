@@ -420,3 +420,9 @@ td.quality-neutral { color: var(--neutral); font-weight: 600; }
 #prasGrid { margin-bottom: 1.2rem; }
 .reading-subhead { margin: 1.4rem 0 0.5rem; font-family: var(--font-display); font-size: 1.02rem; color: var(--maroon-700); }
 #taraTab { overflow-x: auto; }
+
+.pushkara-tag, .grid-cell .planets span.pushkara-tag {
+  display: inline-block; margin-left: 0.25rem; padding: 0 0.3rem; border-radius: 4px;
+  background: var(--gold-500); color: white; font-size: 0.66rem; font-weight: 700; line-height: 1.35; vertical-align: 1px;
+}
+.pushkara-tag.present, .grid-cell .planets span.pushkara-tag.present { background: white; color: var(--gold-500); border: 1px solid var(--gold-500); font-weight: 600; }

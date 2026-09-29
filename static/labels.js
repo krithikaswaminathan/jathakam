@@ -32,45 +32,46 @@ const LABELS = {
       induLagna: "Indu Lagna", induLagnaHint: "Wealth ascendant — sign lord in parentheses",
       reading: "Reading", sources: "Sources", back: "Back",
       yogaFromMoon: "Not formed from Lagna, but present counting from the Moon.",
-      sooryaChandraadhiCalc: "Sun is in house {house} from the lagna; rasi {house} from Mesha is {target}; the Moon is in {moon}.",
-      jeevanamCalc: "Moon is in {moon}, rasi {n} from Mesha; house {n} from the lagna is {target}; planets there: {planets}.",
-      jeevanamEarning: "Earnings come through: {planets}.", noneWord: "none",
+      sooryaChandraadhiCalc: "The Sun is in house {house} from the lagna, and rasi number {house} counting from Mesha is {target}. The Moon is in {moon}.",
+      jeevanamCalc: "The Moon is in {moon}, rasi number {n} counting from Mesha. House {n} from the lagna is {target}, and it holds {planets}.",
+      jeevanamEarning: "Earnings come through {planets}.", noneWord: "none",
       peyarchiTab: "Moorthy", colEnters: "Enters", colWhen: "Date and time", colMoonThen: "Moon then",
       colCount: "Count", colMoorthi: "Moorthi", peyarchiAll: "All planets", rahuKetu: "Rahu / Ketu",
       peyarchiRetro: "(retrograde, back)", peyarchiReentry: "(re-entry)", peyarchiNow: "Now",
       peyarchiCarried: "began before 2026 and still running then",
       drekkanaTab: "Drekkana Lords Aathipathyam", colDrekkana: "Drekkana", colController: "Controller", colControllerIn: "Controller in",
       colFromPlanet: "From planet", colResult: "Result", drekkanaOrdinal: ["1st", "2nd", "3rd"],
-      drekkanaWeak: "⚠ {n}th from it: cannot perform well", drekkanaOk: "Fine", drekkanaOwn: "Its own controller",
+      drekkanaWeak: "\u26A0 {n}th from it, so it cannot perform well", drekkanaOk: "Fine", drekkanaOwn: "Its own controller",
       drekkanaNone: "No planet's controller is 6th or 8th from it.", drekkanaSummary: "Weakened by their controller",
-      drekkanaPariharam: "Pariharam: Vakkarakali Amman",
+      drekkanaPariharam: "Pariharam \u00B7 Vakkarakali Amman",
       sashtashtagamTab: "Navamsa Sashtashtagam", colD1Rasi: "D1 rasi", colD1House: "D1 house", colD9Rasi: "D9 rasi",
       colAathipathyam: "Rules in D1 (aathipathyam)", sashtashtagamWeak: "⚠ {n}th in D9", sashtashtagamOk: "Fine",
-      sashtashtagamNone: "No planet is 6th or 8th in D9: a huge plus in the jathakam.",
+      sashtashtagamNone: "No planet is 6th or 8th in D9, which is a huge plus in the jathakam.",
       sashtashtagamSummary: "6th or 8th in D9, bringing issues related to the planet and its houses",
-      sashtashtagamNoLordship: "rules no house; sits in house {house}",
+      sashtashtagamNoLordship: "rules no house, sits in house {house}",
       topHome: "Jathakam", topPariharam: "Pariharam", topPrasannam: "Prasannam", vargottamaWord: "vargottama",
       pushkaraQualityTitle: "Pushkara Navamsa padas that count",
       pushkaraQualityIntro: "Only the Pushkara padas in the 6th, 8th and 9th place of their rasi are counted, because those fall on a good tara. There are nine of them, and any that hold a planet in this chart are highlighted.",
       colPosition: "Position in rasi", colTara: "Tara", colQuality: "Quality", colPlanetsHere: "Planets here", colPushkaraPada: "Pushkara pada",
+      colGrade: "Grade", pushkaraLegend: "Pushkara Navamsa. A, B and C are the grade, for the 8th, 9th and 6th pada of the rasi, and Present means one of the other Pushkara padas, with no grade.",
       prasNow: "Now", prasUseLocation: "Use my location", prasChangePlace: "Change place",
       prasTime: "Time", prasPlace: "Place", prasMyLocation: "Your location ({lat}, {lon})",
       prasLocating: "Finding your location\u2026", prasCasting: "Casting the chart\u2026",
-      prasDenied: "Your location is not available. Type the place you are in:",
+      prasDenied: "We couldn't get your location. Type the place you are in below.",
       prasPlaceholder: "Start typing a city...", prasError: "Could not cast the chart: ",
       chandraNadi: "Chandra Nadi", prasMoonRasi: "Rasi it is crossing", prasMoonStar: "Star",
       prasMoonPada: "Pada", prasMoonDegree: "Degree in the rasi", prasMoonAbs: "Absolute degree",
       prasMoonHint: "The Moon's position at the moment of the prasannam.",
       sashtashtagamTimingTitle: "When it shows",
-      sashtashtagamTimingIntro: "{planet}: {star} pada {pada} ({rasi} {from} to {to}). Issues are likely while {planet} is in this pada:",
+      sashtashtagamTimingIntro: "For {planet}, the sensitive point is {star} pada {pada}, from {rasi} {from} to {to}. Issues are likely while {planet} is passing through it.",
       sashtashtagamUpcoming: "Coming up", sashtashtagamAllPeriods: "All {n} periods, 2026 to 2031", sashtashtagamNowTag: "now",
       sashtashtagamNoTransit: "{planet} does not reach this pada between 2026 and 2031.",
       sashtashtagamNoneLeft: "No more periods before the end of 2031.",
-      sashtashtagamNextShort: "next in {star} pada {pada}: {when}",
+      sashtashtagamNextShort: "next in {star} pada {pada}, {when}",
       sashtashtagamNote: "Each planet's D9 rasi counted from its D1 rasi (the D1 rasi is the 1st). A planet 6th or 8th brings issues related to the planet and to the houses it rules in D1. Rahu and Ketu rule no house, so the house they sit in is shown.",
       houseMeanings: ["self, body, health", "wealth, family, speech", "courage, younger siblings, short travel", "mother, home, vehicles, education", "children, intelligence, poorva punya", "debts, disease, enemies", "spouse, partnerships", "longevity, obstacles, sudden events", "father, fortune, dharma", "career, status", "gains, elder siblings", "losses, expenses, foreign lands, moksha"],
-      drekkanaNote: "Drekkana: up to 10° the controller is the lord of the planet's own rasi, over 10° up to 20° the lord of the 5th rasi, over 20° the lord of the 9th. If the controller is in the 6th or 8th rasi from the planet, the planet cannot perform well. Rahu and Ketu are checked too, but never act as controllers.",
-      peyarchiNote: "Moorthi counts from your janma rasi ({janma}) to the Moon's rasi at the moment of each peyarchi, 2026 to 2031. Times are in the birth place's time zone. Dates follow the Thirukanitha method; Vakya panchangam dates can differ.",
+      drekkanaNote: "Up to 10° the controller is the lord of the planet's own rasi. Over 10° and up to 20° it is the lord of the 5th rasi, and over 20° the lord of the 9th. If the controller sits 6th or 8th from the planet, the planet cannot perform well. Rahu and Ketu are checked too, but they never act as controllers.",
+      peyarchiNote: "The Moorthi is counted from your janma rasi ({janma}) to the Moon's rasi at the moment of each peyarchi, from 2026 to 2031. Times are in the birth place's time zone. The dates follow the Thirukanitha method, so a Vakya panchangam may give slightly different dates.",
       dignityTab: "Ucham / Neecham", colState: "State", colDeep: "Deep point", colDistance: "From deep point",
       dignityUcham: "Ucham (exalted)", dignityNeecham: "Neecham (debilitated)",
       dignityNone: "No planet is in its exaltation or debilitation sign.",
@@ -82,11 +83,11 @@ const LABELS = {
       soonyamHint: "Void rasis for the birth tithi. Planets in them, and their lords, are said to give weaker results.",
       soonyamLegend: "Thithi Soonyam rasi",
       upasana: "Upasana Deivam", upasanaPick: "Choose a rasi",
-      upasanaCalc: "{planet} is in {from}; the 11th rasi from it is {rasi}.",
-      upasanaNoGender: "The calculation counts from Jupiter for a man or Venus for a woman; choose a rasi to look it up.",
-      upasanaHint: "For a man, count 11 rasis from Jupiter; for a woman, from Venus (its own rasi is the 1st). Choose another rasi to look it up.",
+      upasanaCalc: "{planet} is in {from}, and the 11th rasi from there is {rasi}.",
+      upasanaNoGender: "The calculation counts from Jupiter for a man or Venus for a woman. Choose a rasi below to look it up.",
+      upasanaHint: "For a man, count 11 rasis from Jupiter, and for a woman count from Venus, taking its own rasi as the 1st. You can also choose any other rasi to look it up.",
       mudakku: "Mudakku Rasi", mudakkuTag: "Mudakku", starLordWord: "star lord", padaWord: "pada",
-      mudakkuHint: "From the Sun's pada, count padas to the same pada of Moolam; count the same again from there. Planets here, the rasi lord and the star lord are said to be blocked.",
+      mudakkuHint: "Count padas from the Sun's pada to the same pada of Moolam, then count the same number again from there. Planets in that rasi, the rasi lord and the star lord are said to be blocked.",
       mudakkuLagna: "The Mudakku rasi is the lagna, which is said to weaken the Mudakku effect.",
       kaalaPakai: "Kaala Pakai", colKaalaPakai: "Kaala Pakai", kaalaPakaiYes: "\u26A0 Yes",
       kaalaPakaiNone: "No planet is in Kaala Pakai.", kaalaPakaiPick: "Choose a planet", kaalaPakaiRasis: "Kaala Pakai rasi",
@@ -132,45 +133,46 @@ const LABELS = {
       induLagna: "இந்து லக்னம்", induLagnaHint: "செல்வ லக்னம் — அடைப்புக்குறிக்குள் ராசி அதிபதி",
       reading: "வாசிப்பு", sources: "மூலங்கள்", back: "பின்செல்",
       yogaFromMoon: "லக்னத்திலிருந்து அமையவில்லை, ஆனால் சந்திரனிலிருந்து எண்ணும்போது உள்ளது.",
-      sooryaChandraadhiCalc: "சூரியன் லக்னத்திலிருந்து {house}ஆம் வீட்டில் உள்ளது; மேஷத்திலிருந்து {house}ஆம் ராசி {target}; சந்திரன் {moon} ராசியில் உள்ளது.",
-      jeevanamCalc: "சந்திரன் {moon} ராசியில், மேஷத்திலிருந்து {n}ஆம் ராசி; லக்னத்திலிருந்து {n}ஆம் வீடு {target}; அங்குள்ள கிரகங்கள்: {planets}.",
-      jeevanamEarning: "சம்பாத்தியம் வரும் வழி: {planets}.", noneWord: "இல்லை",
+      sooryaChandraadhiCalc: "சூரியன் லக்னத்திலிருந்து {house}ஆம் வீட்டில் உள்ளது. மேஷத்திலிருந்து {house}ஆம் ராசி {target}. சந்திரன் {moon} ராசியில் உள்ளது.",
+      jeevanamCalc: "சந்திரன் {moon} ராசியில் உள்ளது, இது மேஷத்திலிருந்து {n}ஆம் ராசி. லக்னத்திலிருந்து {n}ஆம் வீடு {target}, அங்கு உள்ள கிரகங்கள் {planets}.",
+      jeevanamEarning: "சம்பாத்தியம் {planets} வழியாக வரும்.", noneWord: "இல்லை",
       peyarchiTab: "மூர்த்தி", colEnters: "நுழையும் ராசி", colWhen: "தேதி, நேரம்", colMoonThen: "அப்போது சந்திரன்",
       colCount: "எண்ணிக்கை", colMoorthi: "மூர்த்தி", peyarchiAll: "அனைத்து கிரகங்கள்", rahuKetu: "ராகு / கேது",
       peyarchiRetro: "(வக்கிரம், பின்னோக்கி)", peyarchiReentry: "(மீண்டும் நுழைவு)", peyarchiNow: "தற்போது",
       peyarchiCarried: "2026க்கு முன் தொடங்கி, அப்போதும் நடப்பில்",
       drekkanaTab: "திரேக்காண அதிபதிகள் ஆதிபத்யம்", colDrekkana: "திரேக்காணம்", colController: "அதிபதி", colControllerIn: "அதிபதி நிற்கும் ராசி",
       colFromPlanet: "கிரகத்திலிருந்து", colResult: "பலன்", drekkanaOrdinal: ["1ஆம்", "2ஆம்", "3ஆம்"],
-      drekkanaWeak: "⚠ {n}ஆம் இடம்: சரியாகச் செயல்பட இயலாது", drekkanaOk: "சரி", drekkanaOwn: "தானே அதிபதி",
+      drekkanaWeak: "\u26A0 {n}ஆம் இடம், அதனால் சரியாகச் செயல்பட இயலாது", drekkanaOk: "சரி", drekkanaOwn: "தானே அதிபதி",
       drekkanaNone: "எந்த கிரகத்தின் அதிபதியும் அதற்கு 6 அல்லது 8ஆம் இடத்தில் இல்லை.", drekkanaSummary: "அதிபதியால் பலம் குறைந்தவை",
-      drekkanaPariharam: "பரிகாரம்: வக்கிரகாளி அம்மன்",
+      drekkanaPariharam: "பரிகாரம் \u00B7 வக்கிரகாளி அம்மன்",
       sashtashtagamTab: "நவாம்ச சஷ்டாஷ்டகம்", colD1Rasi: "D1 ராசி", colD1House: "D1 வீடு", colD9Rasi: "D9 ராசி",
       colAathipathyam: "D1 ஆதிபத்யம்", sashtashtagamWeak: "⚠ D9இல் {n}ஆம் இடம்", sashtashtagamOk: "சரி",
-      sashtashtagamNone: "எந்த கிரகமும் D9இல் 6 அல்லது 8ஆம் இடத்தில் இல்லை: ஜாதகத்திற்குப் பெரிய பலம்.",
-      sashtashtagamSummary: "D9இல் 6 அல்லது 8ஆம் இடம்; அந்தக் கிரகம், அதன் வீடுகள் தொடர்பான பிரச்சினைகள்",
-      sashtashtagamNoLordship: "எந்த வீட்டிற்கும் அதிபதி இல்லை; {house}ஆம் வீட்டில் உள்ளது",
+      sashtashtagamNone: "எந்தக் கிரகமும் D9இல் 6 அல்லது 8ஆம் இடத்தில் இல்லை. இது ஜாதகத்திற்குப் பெரிய பலம்.",
+      sashtashtagamSummary: "D9இல் 6 அல்லது 8ஆம் இடம், அந்தக் கிரகம், அதன் வீடுகள் தொடர்பான பிரச்சினைகள்",
+      sashtashtagamNoLordship: "எந்த வீட்டிற்கும் அதிபதி இல்லை, {house}ஆம் வீட்டில் உள்ளது",
       topHome: "ஜாதகம்", topPariharam: "பரிகாரம்", topPrasannam: "பிரசன்னம்", vargottamaWord: "வர்கோத்தமம்",
       pushkaraQualityTitle: "கணக்கில் வரும் புஷ்கர பாதங்கள்",
       pushkaraQualityIntro: "தன் ராசியில் 6, 8, 9ஆம் இடங்களில் உள்ள புஷ்கர பாதங்கள் மட்டுமே கணக்கில் கொள்ளப்படுகின்றன, ஏனெனில் அவை நல்ல தாரையில் விழுகின்றன. இப்படி ஒன்பது பாதங்கள் உள்ளன. இந்த ஜாதகத்தில் கிரகம் உள்ளவை குறிக்கப்பட்டுள்ளன.",
       colPosition: "ராசியில் இடம்", colTara: "தாரை", colQuality: "தரம்", colPlanetsHere: "இங்குள்ள கிரகங்கள்", colPushkaraPada: "புஷ்கர பாதம்",
+      colGrade: "தரம்", pushkaraLegend: "புஷ்கர நவாம்சம். A, B, C என்பவை ராசியின் 8, 9, 6ஆம் பாதங்களுக்கான தரம். உள்ளது என்றால் தரம் இல்லாத மற்ற புஷ்கர பாதம்.",
       prasNow: "இப்போது", prasUseLocation: "என் இருப்பிடம்", prasChangePlace: "இடத்தை மாற்று",
       prasTime: "நேரம்", prasPlace: "இடம்", prasMyLocation: "உங்கள் இருப்பிடம் ({lat}, {lon})",
       prasLocating: "உங்கள் இருப்பிடத்தைக் கண்டறிகிறது\u2026", prasCasting: "ஜாதகம் கணிக்கப்படுகிறது\u2026",
-      prasDenied: "உங்கள் இருப்பிடம் கிடைக்கவில்லை. நீங்கள் இருக்கும் ஊரைத் தட்டச்சு செய்யவும்:",
+      prasDenied: "உங்கள் இருப்பிடம் கிடைக்கவில்லை. நீங்கள் இருக்கும் ஊரைக் கீழே தட்டச்சு செய்யவும்.",
       prasPlaceholder: "ஊரின் பெயரைத் தட்டச்சு செய்யவும்...", prasError: "ஜாதகம் கணிக்க இயலவில்லை: ",
       chandraNadi: "சந்திர நாடி", prasMoonRasi: "கடக்கும் ராசி", prasMoonStar: "நட்சத்திரம்",
       prasMoonPada: "பாதம்", prasMoonDegree: "ராசியில் பாகை", prasMoonAbs: "முழு பாகை",
       prasMoonHint: "பிரசன்னம் பார்க்கும் நேரத்தில் சந்திரனின் நிலை.",
       sashtashtagamTimingTitle: "எப்போது வெளிப்படும்",
-      sashtashtagamTimingIntro: "{planet}: {star} {pada}ஆம் பாதம் ({rasi} {from} முதல் {to} வரை). {planet} இந்தப் பாதத்தில் இருக்கும் காலத்தில் பிரச்சினைகள் வர வாய்ப்புள்ளது:",
+      sashtashtagamTimingIntro: "{planet} கிரகத்திற்கு உணர்திறன் மிக்க இடம் {star} {pada}ஆம் பாதம், {rasi} {from} முதல் {to} வரை. {planet} இந்தப் பாதத்தைக் கடக்கும் காலத்தில் பிரச்சினைகள் வர வாய்ப்புள்ளது.",
       sashtashtagamUpcoming: "வரவிருப்பவை", sashtashtagamAllPeriods: "2026 முதல் 2031 வரை அனைத்து {n} காலங்கள்", sashtashtagamNowTag: "தற்போது",
       sashtashtagamNoTransit: "2026 முதல் 2031 வரை {planet} இந்தப் பாதத்திற்கு வருவதில்லை.",
       sashtashtagamNoneLeft: "2031 முடிவுக்குள் மேலும் காலங்கள் இல்லை.",
-      sashtashtagamNextShort: "அடுத்து {star} {pada}ஆம் பாதத்தில்: {when}",
+      sashtashtagamNextShort: "அடுத்து {star} {pada}ஆம் பாதத்தில், {when}",
       sashtashtagamNote: "ஒவ்வொரு கிரகத்தின் D9 ராசியும் அதன் D1 ராசியிலிருந்து (D1 ராசி = 1) எண்ணப்படுகிறது. 6 அல்லது 8ஆம் இடத்தில் இருந்தால், அந்தக் கிரகம் மற்றும் D1இல் அது அதிபதியாக உள்ள வீடுகள் தொடர்பான பிரச்சினைகள் வரும். ராகு, கேது எந்த வீட்டிற்கும் அதிபதி இல்லாததால், அவை நிற்கும் வீடு காட்டப்படுகிறது.",
       houseMeanings: ["சுயம், உடல், ஆரோக்கியம்", "செல்வம், குடும்பம், வாக்கு", "தைரியம், இளைய உடன்பிறப்புகள், குறுகிய பயணம்", "தாய், வீடு, வாகனம், கல்வி", "குழந்தைகள், புத்தி, பூர்வ புண்ணியம்", "கடன், நோய், எதிரிகள்", "வாழ்க்கைத் துணை, கூட்டாண்மை", "ஆயுள், தடைகள், திடீர் நிகழ்வுகள்", "தந்தை, பாக்கியம், தர்மம்", "தொழில், அந்தஸ்து", "லாபம், மூத்த உடன்பிறப்புகள்", "விரயம், செலவு, வெளிநாடு, மோட்சம்"],
-      drekkanaNote: "திரேக்காணம்: 10° வரை கிரகம் நின்ற ராசியின் அதிபதி, 10°க்கு மேல் 20° வரை 5ஆம் ராசியின் அதிபதி, 20°க்கு மேல் 9ஆம் ராசியின் அதிபதி. அந்த அதிபதி கிரகத்திலிருந்து 6 அல்லது 8ஆம் ராசியில் இருந்தால், அந்தக் கிரகம் சரியாகச் செயல்பட இயலாது. ராகு, கேதுவும் பார்க்கப்படுகின்றன, ஆனால் அவை அதிபதி ஆகாது.",
-      peyarchiNote: "ஒவ்வொரு பெயர்ச்சியின் போதும் சந்திரன் நின்ற ராசியை உங்கள் ஜென்ம ராசியிலிருந்து ({janma}) எண்ணி மூர்த்தி கணக்கிடப்படுகிறது, 2026 முதல் 2031 வரை. நேரங்கள் பிறந்த ஊரின் நேர மண்டலத்தில். தேதிகள் திருக்கணித முறைப்படி; வாக்கிய பஞ்சாங்கத் தேதிகள் மாறுபடலாம்.",
+      drekkanaNote: "10° வரை கிரகம் நின்ற ராசியின் அதிபதியே அதை இயக்குபவர். 10°க்கு மேல் 20° வரை 5ஆம் ராசியின் அதிபதி, 20°க்கு மேல் 9ஆம் ராசியின் அதிபதி. அந்த அதிபதி கிரகத்திலிருந்து 6 அல்லது 8ஆம் ராசியில் இருந்தால், அந்தக் கிரகம் சரியாகச் செயல்பட இயலாது. ராகு, கேதுவும் பார்க்கப்படுகின்றன, ஆனால் அவை ஒருபோதும் அதிபதி ஆகாது.",
+      peyarchiNote: "ஒவ்வொரு பெயர்ச்சியின் போதும் சந்திரன் நின்ற ராசியை உங்கள் ஜென்ம ராசியிலிருந்து ({janma}) எண்ணி மூர்த்தி கணக்கிடப்படுகிறது, 2026 முதல் 2031 வரை. நேரங்கள் பிறந்த ஊரின் நேர மண்டலத்தில் உள்ளன. தேதிகள் திருக்கணித முறைப்படி அமைந்தவை, அதனால் வாக்கிய பஞ்சாங்கத் தேதிகள் சற்று மாறுபடலாம்.",
       dignityTab: "உச்சம் / நீசம்", colState: "நிலை", colDeep: "உச்ச பாகை", colDistance: "உச்ச பாகையிலிருந்து",
       dignityUcham: "உச்சம்", dignityNeecham: "நீசம்",
       dignityNone: "எந்த கிரகமும் உச்ச அல்லது நீச ராசியில் இல்லை.",
@@ -182,8 +184,8 @@ const LABELS = {
       soonyamHint: "பிறந்த திதிக்கான சூன்ய ராசிகள். அவற்றில் உள்ள கிரகங்களும் அவற்றின் அதிபதிகளும் பலம் குறைந்த பலன்களைத் தருவதாகக் கூறப்படுகிறது.",
       soonyamLegend: "திதி சூன்ய ராசி",
       upasana: "உபாசனை தெய்வம்", upasanaPick: "ராசியைத் தேர்ந்தெடுக்கவும்",
-      upasanaCalc: "{planet} {from} ராசியில் உள்ளது; அதிலிருந்து 11ஆம் ராசி {rasi}.",
-      upasanaNoGender: "ஆணுக்கு குருவிலிருந்தும், பெண்ணுக்கு சுக்ரனிலிருந்தும் எண்ணப்படும்; ராசியைத் தேர்ந்தெடுத்துப் பார்க்கவும்.",
+      upasanaCalc: "{planet} {from} ராசியில் உள்ளது. அதிலிருந்து 11ஆம் ராசி {rasi}.",
+      upasanaNoGender: "ஆணுக்கு குருவிலிருந்தும், பெண்ணுக்கு சுக்ரனிலிருந்தும் எண்ணப்படும். ராசியைத் தேர்ந்தெடுத்துப் பார்க்கவும்.",
       upasanaHint: "ஆணுக்கு குரு நின்ற ராசியிலிருந்தும், பெண்ணுக்கு சுக்ரன் நின்ற ராசியிலிருந்தும் (அதுவே 1) 11ஆம் ராசி. வேறு ராசியைத் தேர்ந்தெடுத்தும் பார்க்கலாம்.",
       mudakku: "முடக்கு ராசி", mudakkuTag: "முடக்கு", starLordWord: "நட்சத்திர அதிபதி", padaWord: "பாதம்",
       mudakkuHint: "சூரியன் நின்ற பாதத்திலிருந்து மூலத்தின் அதே பாதம் வரை பாதங்களை எண்ணி, அதே எண்ணிக்கையை அங்கிருந்து எண்ணவும். இங்குள்ள கிரகங்கள், ராசி அதிபதி, நட்சத்திர அதிபதி முடங்குவதாகக் கூறப்படுகிறது.",
@@ -259,8 +261,8 @@ const PARIHARAMS = [
   {
     title: { en: "Richness and Selvam", ta: "செல்வமும் வளமும்" },
     intro: {
-      en: "To attain richness and selvam in life, recite these 7 names from the Lalitha Sahasranamam, given by Maha Periyavar:",
-      ta: "வாழ்வில் செல்வமும் வளமும் பெற, மஹா பெரியவர் அருளிய லலிதா சஹஸ்ரநாமத்தின் இந்த 7 நாமங்களை ஜபிக்கவும்:",
+      en: "To attain richness and selvam in life, recite these 7 names from the Lalitha Sahasranamam, as given by Maha Periyavar.",
+      ta: "வாழ்வில் செல்வமும் வளமும் பெற, மஹா பெரியவர் அருளிய லலிதா சஹஸ்ரநாமத்தின் இந்த 7 நாமங்களை ஜபிக்கவும்.",
     },
     names: [
       { en: "Om Sri Matre Namaha", ta: "ஓம் ஸ்ரீ மாத்ரே நமஹ" },
@@ -298,11 +300,17 @@ const pushkaraTara = (p) => TARA_ORDER[padaPositionInRasi(p) - 1];
 const COUNTED_PUSHKARA_POSITIONS = [6, 8, 9];
 const isCountedPushkara = (p) => COUNTED_PUSHKARA_POSITIONS.includes(padaPositionInRasi(p));
 const COUNTED_PUSHKARA_PADAS = PUSHKARA_PADAS.filter(isCountedPushkara);
+// The user's grades by place in the rasi. The other 15 Pushkara padas are shown as "Present".
+const PUSHKARA_GRADE_BY_POSITION = { 8: "A", 9: "B", 6: "C" };
+const isPushkaraPada = ([nak, pada]) => PUSHKARA_PADAS.some(([n, p]) => n === nak && p === pada);
+const pushkaraGrade = (p) => (isPushkaraPada(p) ? PUSHKARA_GRADE_BY_POSITION[padaPositionInRasi(p)] || "Present" : null);
+const PRESENT_WORD = { en: "Present", ta: "உள்ளது" };
+const gradeText = (lang, grade) => (grade === "Present" ? PRESENT_WORD[lang] : grade);
 const ORDINAL = { en: (n) => n + ({ 1: "st", 2: "nd", 3: "rd" }[n] || "th"), ta: (n) => `${n}ஆம்` };
 const pushkaraTaraText = (lang, p) => `${ORDINAL[lang](padaPositionInRasi(p))}, ${LABELS[lang].taraCategories[pushkaraTara(p)]}`;
 const VARGOTTAMA_WORD = { en: "vargottama", ta: "வர்கோத்தமம்" };
 const pushkaraPadaText = (lang, p) =>
-  (isCountedPushkara(p) ? "\u2713 " : "") +
+  (isCountedPushkara(p) ? `${pushkaraGrade(p)} \u00B7 ` : "") +
   `${LABELS[lang].nakshatra[p[0]]} ${p[1]} \u00B7 ${LABELS[lang].planets[STAR_LORD_CYCLE[p[0] % 9]]}` +
   (isVargottamaPada(p) ? ` (${VARGOTTAMA_WORD[lang]})` : "") +
   ` \u00B7 ${pushkaraTaraText(lang, p)}`;
@@ -311,8 +319,8 @@ const READING_TOPICS = {
   pushkaraNavamsa: {
     title: { en: "Pushkara Navamsa", ta: "புஷ்கர நவாம்சம்" },
     intro: {
-      en: "Pushkara means sacred or nourishing. Of the 108 navamsas, or nakshatra padas, 24 are known as Pushkara Navamsas, two in every rasi. They don't all help equally, though. What decides a pada's strength is where it sits among the nine padas of its rasi, and only the padas in the 6th, 8th and 9th places are counted here. A planet sitting in one of those in the D1 chart is said to give good results in its dasa and bhukti, even when it is otherwise weak. All 24 are listed below with their star lords, and the ones that count are ticked.",
-      ta: "புஷ்கரம் என்றால் புனிதமானது, ஊட்டமளிப்பது என்று பொருள். 108 நவாம்சங்களில், அதாவது நட்சத்திரப் பாதங்களில், 24 புஷ்கர நவாம்சங்கள் என்று அழைக்கப்படுகின்றன. ஒவ்வொரு ராசியிலும் இரண்டு உள்ளன. ஆனால் இவை எல்லாமே ஒரே அளவில் உதவுவதில்லை. ஒரு பாதம் தன் ராசியின் ஒன்பது பாதங்களில் எந்த இடத்தில் உள்ளது என்பதே அதன் பலத்தைத் தீர்மானிக்கிறது. இங்கு 6, 8, 9ஆம் இடங்களில் உள்ள பாதங்கள் மட்டுமே கணக்கில் கொள்ளப்படுகின்றன. D1 கட்டத்தில் அப்படிப்பட்ட பாதத்தில் உள்ள கிரகம், வேறு வகையில் பலம் குறைந்திருந்தாலும், தன் தசை, புக்தியில் நல்ல பலன்களைத் தரும் என்று கூறப்படுகிறது. 24 பாதங்களும் அவற்றின் நட்சத்திர அதிபதிகளுடன் கீழே உள்ளன. கணக்கில் கொள்ளப்படுபவை ✓ என்று குறிக்கப்பட்டுள்ளன.",
+      en: "Pushkara means sacred or nourishing. Of the 108 navamsas, or nakshatra padas, 24 are known as Pushkara Navamsas, two in every rasi. They don't all help equally, though. What decides a pada's strength is where it sits among the nine padas of its rasi, and only the padas in the 6th, 8th and 9th places are counted here. A planet sitting in one of those in the D1 chart is said to give good results in its dasa and bhukti, even when it is otherwise weak. All 24 are listed below with their star lords, and the ones that count carry their grade, A, B or C.",
+      ta: "புஷ்கரம் என்றால் புனிதமானது, ஊட்டமளிப்பது என்று பொருள். 108 நவாம்சங்களில், அதாவது நட்சத்திரப் பாதங்களில், 24 புஷ்கர நவாம்சங்கள் என்று அழைக்கப்படுகின்றன. ஒவ்வொரு ராசியிலும் இரண்டு உள்ளன. ஆனால் இவை எல்லாமே ஒரே அளவில் உதவுவதில்லை. ஒரு பாதம் தன் ராசியின் ஒன்பது பாதங்களில் எந்த இடத்தில் உள்ளது என்பதே அதன் பலத்தைத் தீர்மானிக்கிறது. இங்கு 6, 8, 9ஆம் இடங்களில் உள்ள பாதங்கள் மட்டுமே கணக்கில் கொள்ளப்படுகின்றன. D1 கட்டத்தில் அப்படிப்பட்ட பாதத்தில் உள்ள கிரகம், வேறு வகையில் பலம் குறைந்திருந்தாலும், தன் தசை, புக்தியில் நல்ல பலன்களைத் தரும் என்று கூறப்படுகிறது. 24 பாதங்களும் அவற்றின் நட்சத்திர அதிபதிகளுடன் கீழே உள்ளன. கணக்கில் கொள்ளப்படுபவை A, B, C என்ற தரத்துடன் குறிக்கப்பட்டுள்ளன.",
     },
     tableHeader: [
       { en: "Rasi", ta: "ராசி" }, { en: "First Pushkara pada", ta: "முதல் புஷ்கர பாதம்" }, { en: "Second Pushkara pada", ta: "இரண்டாம் புஷ்கர பாதம்" },
@@ -326,8 +334,8 @@ const READING_TOPICS = {
       {
         heading: { en: "Which padas count", ta: "எந்தப் பாதங்கள் கணக்கில் வரும்" },
         text: {
-          en: "To judge a Pushkara pada, count where it sits among the nine padas of its rasi and read that number the way Tara Balam does. The 6th is Sadhaka, the 8th is Mitra and the 9th is Ati-Mitra, and these three are good. The 1st is Janma, which is neutral, while the 3rd, 5th and 7th are Vipat, Pratyak and Vadha, which are bad. Bharani 3, for example, is the 7th pada of Mesham. That makes it Vadha, so it isn't counted, and the same goes for all three of Venus's padas. Only the padas in the 6th, 8th and 9th places are taken into account, which leaves nine of the 24.",
-          ta: "ஒரு புஷ்கர பாதத்தை மதிப்பிட, அது தன் ராசியின் ஒன்பது பாதங்களில் எத்தனையாவது என்று எண்ணி, அந்த எண்ணைத் தாரா பலம் போலப் படிக்கவும். 6ஆம் இடம் சாதகம், 8ஆம் இடம் மித்ரம், 9ஆம் இடம் அதிமித்ரம். இந்த மூன்றும் நல்லவை. 1ஆம் இடம் ஜென்மம், இது சமமானது. 3, 5, 7ஆம் இடங்கள் விபத், பிரத்யக், வதம். இவை கெட்டவை. உதாரணமாக பரணி 3 மேஷத்தின் 7ஆம் பாதம். அது வதம் என்பதால் கணக்கில் கொள்ளப்படுவதில்லை. சுக்ரனின் மூன்று பாதங்களுக்கும் இதே நிலைதான். 6, 8, 9ஆம் இடங்களில் உள்ள பாதங்கள் மட்டுமே கணக்கில் கொள்ளப்படுகின்றன. அப்படிப் பார்த்தால் 24இல் ஒன்பது மட்டுமே மிஞ்சுகின்றன.",
+          en: "To judge a Pushkara pada, count where it sits among the nine padas of its rasi and read that number the way Tara Balam does. The 6th is Sadhaka, the 8th is Mitra and the 9th is Ati-Mitra, and these three are good. The 1st is Janma, which is neutral, while the 3rd, 5th and 7th are Vipat, Pratyak and Vadha, which are bad. Bharani 3, for example, is the 7th pada of Mesham. That makes it Vadha, so it isn't counted, and the same goes for all three of Venus's padas. Only the padas in the 6th, 8th and 9th places are taken into account, which leaves nine of the 24. The 8th place is graded A, the 9th B and the 6th C. A planet in any of the other fifteen Pushkara padas is still shown as Present, just without a grade.",
+          ta: "ஒரு புஷ்கர பாதத்தை மதிப்பிட, அது தன் ராசியின் ஒன்பது பாதங்களில் எத்தனையாவது என்று எண்ணி, அந்த எண்ணைத் தாரா பலம் போலப் படிக்கவும். 6ஆம் இடம் சாதகம், 8ஆம் இடம் மித்ரம், 9ஆம் இடம் அதிமித்ரம். இந்த மூன்றும் நல்லவை. 1ஆம் இடம் ஜென்மம், இது சமமானது. 3, 5, 7ஆம் இடங்கள் விபத், பிரத்யக், வதம். இவை கெட்டவை. உதாரணமாக பரணி 3 மேஷத்தின் 7ஆம் பாதம். அது வதம் என்பதால் கணக்கில் கொள்ளப்படுவதில்லை. சுக்ரனின் மூன்று பாதங்களுக்கும் இதே நிலைதான். 6, 8, 9ஆம் இடங்களில் உள்ள பாதங்கள் மட்டுமே கணக்கில் கொள்ளப்படுகின்றன. அப்படிப் பார்த்தால் 24இல் ஒன்பது மட்டுமே மிஞ்சுகின்றன. 8ஆம் இடம் A தரம், 9ஆம் இடம் B தரம், 6ஆம் இடம் C தரம். மற்ற பதினைந்து புஷ்கர பாதங்களில் உள்ள கிரகம் தரம் இல்லாமல் உள்ளது என்று மட்டும் காட்டப்படும்.",
         },
       },
       {
@@ -337,13 +345,14 @@ const READING_TOPICS = {
           ta: "கணக்கில் கொள்ளப்படும் ஒன்பது பாதங்களும் அக்னி, வாயு ராசிகளில் மட்டுமே உள்ளன. ஒவ்வொரு அக்னி ராசியும் தன் 9ஆம் பாதத்தைத் தருகிறது. ஒவ்வொரு வாயு ராசியும் 6, 8ஆம் பாதங்களைத் தருகிறது. இவை அனைத்தும் சூரியன், ராகு அல்லது குருவின் நட்சத்திரங்களைச் சேர்ந்தவை. நவாம்சக் கட்டத்தில் இவை தனுசு, மீனம் அல்லது ரிஷபத்தில் விழுகின்றன. உத்திராடம் 1 வர்கோத்தமமும் கூட. ராசி, நவாம்சம் இரண்டிலும் தனுசுவில் இருப்பதால் இதுவே எல்லாவற்றிலும் வலிமையானது. பூமி, நீர் ராசிகளில் கணக்கில் வரும் பாதம் இல்லை. அதனால் ரோகிணி 2, புனர்பூசம் 4 வர்கோத்தமமாக இருந்தாலும் கணக்கில் வருவதில்லை. புனர்பூசம் 2, சுவாதி 4, விசாகம் 2 ஆகியவை நவாம்சத்தில் தம் ராசிக்கு 12, 6, 8ஆம் இடங்களில் விழுகின்றன. கட்டுரை சொல்வது போல, அப்படி அமைந்தால் புகழுடன் சில சிரமங்களும் வரலாம். கிரகத்தின் இயல்பு, அது இருக்கும் வீடு, உடன் இருக்கும் கிரகங்கள் ஆகியவையே இறுதிப் பலனைத் தீர்மானிக்கின்றன.",
         },
         tableHeader: [
-          { en: "Rasi", ta: "ராசி" }, { en: "Pushkara pada", ta: "புஷ்கர பாதம்" }, { en: "Star lord", ta: "நட்சத்திர அதிபதி" }, { en: "Place in the rasi", ta: "ராசியில் இடம்" },
+          { en: "Rasi", ta: "ராசி" }, { en: "Pushkara pada", ta: "புஷ்கர பாதம்" }, { en: "Star lord", ta: "நட்சத்திர அதிபதி" }, { en: "Place in the rasi", ta: "ராசியில் இடம்" }, { en: "Grade", ta: "தரம்" },
         ],
         table: COUNTED_PUSHKARA_PADAS.map((p) => [
           bothLangs((lang) => LABELS[lang].rasi[Math.floor(padaIndex(p) / 9)]),
           bothLangs((lang) => `${LABELS[lang].nakshatra[p[0]]} ${p[1]}` + (isVargottamaPada(p) ? ` (${VARGOTTAMA_WORD[lang]})` : "")),
           bothLangs((lang) => LABELS[lang].planets[STAR_LORD_CYCLE[p[0] % 9]]),
           bothLangs((lang) => pushkaraTaraText(lang, p)),
+          bothLangs(() => pushkaraGrade(p)),
         ]),
       },
       {
@@ -406,8 +415,8 @@ const READING_TOPICS = {
   dignity: {
     title: { en: "Ucham and Neecham", ta: "உச்சம் மற்றும் நீசம்" },
     intro: {
-      en: "A planet in its sign of exaltation (ucham) is strengthened; in its sign of debilitation (neecham, always the opposite sign) it is weakened. The deep point is the exact degree where the effect peaks; the debilitation deep point is the same degree in the opposite sign.",
-      ta: "ஒரு கிரகம் தனது உச்ச ராசியில் இருந்தால் பலம் பெறுகிறது; நீச ராசியில் (எப்போதும் எதிர் ராசி) இருந்தால் பலவீனமடைகிறது. உச்ச பாகை என்பது பலன் உச்சத்தை அடையும் துல்லியமான பாகை; நீச பாகை எதிர் ராசியில் அதே பாகையாகும்.",
+      en: "A planet in its sign of exaltation (ucham) gains strength, and in its sign of debilitation (neecham, always the opposite sign) it grows weak. The deep point is the exact degree where the effect is strongest, and the debilitation deep point is the same degree in the opposite sign.",
+      ta: "ஒரு கிரகம் தனது உச்ச ராசியில் இருந்தால் பலம் பெறுகிறது, நீச ராசியில் (எப்போதும் எதிர் ராசி) இருந்தால் பலவீனமடைகிறது. உச்ச பாகை என்பது பலன் உச்சத்தை அடையும் துல்லியமான பாகை. நீச பாகை எதிர் ராசியில் அதே பாகையாகும்.",
     },
     tableHeader: [
       { en: "Planet", ta: "கிரகம்" }, { en: "Ucham", ta: "உச்சம்" }, { en: "Neecham", ta: "நீசம்" },
@@ -424,8 +433,8 @@ const READING_TOPICS = {
       [{ en: "Ketu (BPHS)", ta: "கேது (BPHS)" }, { en: "Scorpio", ta: "விருச்சிகம்" }, { en: "Taurus", ta: "ரிஷபம்" }],
     ],
     note: {
-      en: "Rahu and Ketu are disputed: BPHS gives Taurus/Scorpio as used here, Sanjay Rath gives Gemini/Sagittarius, and the Saptarishis treat both as exalted in Scorpio. Neecha Bhanga, the classical cancellation of a debilitation, is not modeled.",
-      ta: "ராகு, கேது குறித்து கருத்து வேறுபாடு உள்ளது: இங்கு பயன்படுத்தப்படுவது BPHS கூறும் ரிஷபம்/விருச்சிகம்; சஞ்சய் ரத் மிதுனம்/தனுசு என்கிறார்; சப்தரிஷிகள் இருவரும் விருச்சிகத்தில் உச்சம் என்கின்றனர். நீச பங்கம் கணக்கிடப்படவில்லை.",
+      en: "Rahu and Ketu are disputed. BPHS gives Taurus and Scorpio, which the app uses, Sanjay Rath gives Gemini and Sagittarius, and the Saptarishis treat both as exalted in Scorpio. Neecha Bhanga, the classical cancellation of a debilitation, is not modeled.",
+      ta: "ராகு, கேது குறித்துக் கருத்து வேறுபாடு உள்ளது. இங்கு பயன்படுத்தப்படுவது BPHS கூறும் ரிஷபம், விருச்சிகம். சஞ்சய் ரத் மிதுனம், தனுசு என்கிறார். சப்தரிஷிகள் இருவரும் விருச்சிகத்தில் உச்சம் என்கின்றனர். நீச பங்கம் கணக்கிடப்படவில்லை.",
     },
     sources: [
       { title: "Brihat Parashara Hora Sastra, Chapter 3", url: "https://yourastroguide.wordpress.com/2012/09/01/brihat-parashara-hora-sashtra-chapter-3/" },
@@ -435,8 +444,8 @@ const READING_TOPICS = {
   pranapada: {
     title: { en: "Pranapada Lagna", ta: "பிராணபத லக்னம்" },
     intro: {
-      en: "Pranapada is a special lagna derived from the time elapsed since sunrise, traditionally linked to the breath (prana). It is used in birth-time rectification. The elapsed time is converted to vighatis (1 hour = 150), divided by 15 to give signs and degrees (so it moves about 5\u00B0 per minute), and added to the Sun's longitude with a correction that depends on the Sun's sign type:",
-      ta: "பிராணபதம் என்பது சூரிய உதயத்திலிருந்து கடந்த நேரத்தைக் கொண்டு கணக்கிடப்படும் சிறப்பு லக்னம்; மரபுப்படி சுவாசத்துடன் (பிராணன்) தொடர்புடையது. பிறந்த நேரத்தைச் சரிசெய்யப் பயன்படுகிறது. கடந்த நேரம் விகடிகைகளாக (1 மணி = 150) மாற்றப்பட்டு, 15-ஆல் வகுக்கப்பட்டு ராசி, பாகைகளாகிறது (நிமிடத்திற்கு சுமார் 5\u00B0 நகரும்); சூரியனின் ராசி வகைக்கு ஏற்ற திருத்தத்துடன் சூரியனின் பாகையுடன் கூட்டப்படுகிறது:",
+      en: "Pranapada is a special lagna worked out from the time that has passed since sunrise, and it is traditionally linked to the breath (prana). It is used to rectify the birth time. The elapsed time is turned into vighatis, 150 to an hour, and divided by 15 to give signs and degrees, so it moves about 5\u00B0 a minute. That is then added to the Sun's longitude along with a correction for the Sun's sign type, shown below.",
+      ta: "பிராணபதம் என்பது சூரிய உதயத்திலிருந்து கடந்த நேரத்தைக் கொண்டு கணக்கிடப்படும் சிறப்பு லக்னம். மரபுப்படி இது சுவாசத்துடன் (பிராணன்) தொடர்புடையது. பிறந்த நேரத்தைச் சரிசெய்ய இது பயன்படுகிறது. கடந்த நேரம் விகடிகைகளாக, மணிக்கு 150 என்ற கணக்கில், மாற்றப்பட்டு, 15-ஆல் வகுக்கப்பட்டு ராசி, பாகைகளாகிறது. அதனால் இது நிமிடத்திற்குச் சுமார் 5\u00B0 நகரும். பிறகு சூரியனின் ராசி வகைக்கு ஏற்ற திருத்தத்துடன் சூரியனின் பாகையுடன் கூட்டப்படுகிறது. அந்தத் திருத்தம் கீழே உள்ளது.",
     },
     tableHeader: [
       { en: "Sun in a...", ta: "சூரியன் உள்ள ராசி" }, { en: "Add", ta: "கூட்டுக" },
@@ -448,7 +457,7 @@ const READING_TOPICS = {
     ],
     note: {
       en: "Because it moves so fast, a one-minute change in birth time shifts it by 5\u00B0, and the sunrise convention matters as much. Here sunrise is the true (geometric-with-refraction) sunrise, the same one used for Gulika and Mandi. A birth before that day's sunrise is counted from the previous day's sunrise.",
-      ta: "இது மிக வேகமாக நகர்வதால், பிறந்த நேரத்தில் ஒரு நிமிட மாற்றம் 5\u00B0 மாற்றத்தை ஏற்படுத்தும்; சூரிய உதய முறையும் அதே அளவு முக்கியம். இங்கு குளிகன், மாந்திக்குப் பயன்படுத்தும் அதே உண்மையான சூரிய உதயம் பயன்படுத்தப்படுகிறது. அன்றைய சூரிய உதயத்திற்கு முன் பிறந்தால் முந்தைய நாளின் சூரிய உதயத்திலிருந்து கணக்கிடப்படும்.",
+      ta: "இது மிக வேகமாக நகர்வதால், பிறந்த நேரத்தில் ஒரு நிமிட மாற்றம் 5\u00B0 மாற்றத்தை ஏற்படுத்தும். சூரிய உதயத்தைக் கணக்கிடும் முறையும் அதே அளவு முக்கியம். இங்கு குளிகன், மாந்திக்குப் பயன்படுத்தும் அதே உண்மையான சூரிய உதயம் பயன்படுத்தப்படுகிறது. அன்றைய சூரிய உதயத்திற்கு முன் பிறந்தால் முந்தைய நாளின் சூரிய உதயத்திலிருந்து கணக்கிடப்படும்.",
     },
     sources: [
       { title: "BPHS Pranapada \u2014 BP Lama Jyotishavidya", url: "https://barbarapijan.com/bpa/Amsha/pada_pranapada_BPHS.htm" },
@@ -458,8 +467,8 @@ const READING_TOPICS = {
   thithiSoonyam: {
     title: { en: "Thithi Soonyam", ta: "திதி சூன்யம்" },
     intro: {
-      en: "Each tithi (lunar day) makes certain rasis \u201Cvoid\u201D (soonyam). Planets placed in those rasis, and the lords of those rasis, are said to give weaker results, even when they are benefics. The same table is used for Shukla and Krishna paksha:",
-      ta: "ஒவ்வொரு திதியும் சில ராசிகளை \u201Cசூன்யம்\u201D ஆக்குகிறது. அந்த ராசிகளில் உள்ள கிரகங்களும், அந்த ராசிகளின் அதிபதிகளும், சுப கிரகங்களாக இருந்தாலும், பலம் குறைந்த பலன்களைத் தருவதாகக் கூறப்படுகிறது. வளர்பிறை, தேய்பிறை இரண்டிற்கும் ஒரே அட்டவணை:",
+      en: "Each tithi (lunar day) makes certain rasis \u201Cvoid\u201D, or soonyam. Planets placed in those rasis, and the lords of those rasis, are said to give weaker results, even when they are benefics. The same table is used for both Shukla and Krishna paksha.",
+      ta: "ஒவ்வொரு திதியும் சில ராசிகளை \u201Cசூன்யம்\u201D ஆக்குகிறது. அந்த ராசிகளில் உள்ள கிரகங்களும், அந்த ராசிகளின் அதிபதிகளும், சுப கிரகங்களாக இருந்தாலும், பலம் குறைந்த பலன்களைத் தருவதாகக் கூறப்படுகிறது. வளர்பிறை, தேய்பிறை இரண்டிற்கும் ஒரே அட்டவணைதான்.",
     },
     tableHeader: [
       { en: "Tithi", ta: "திதி" }, { en: "Soonya rasis", ta: "சூன்ய ராசிகள்" },
@@ -478,8 +487,8 @@ const READING_TOPICS = {
       [{ en: "Pournami, Amavasai", ta: "பௌர்ணமி, அமாவாசை" }, { en: "None", ta: "இல்லை" }],
     ],
     note: {
-      en: "Commonly read as milder when a soonya rasi falls in the 6th, 8th or 12th house, and natural malefics (Mars, Saturn, Rahu, Ketu) are less affected. The tithi is the Moon's lead over the Sun in 12\u00B0 steps. Sources give no classical text for this table; it comes from the South Indian panchanga tradition.",
-      ta: "சூன்ய ராசி 6, 8, 12 ஆம் வீடுகளில் விழுந்தால் பாதிப்பு குறைவு என்றும், இயற்கை பாப கிரகங்கள் (செவ்வாய், சனி, ராகு, கேது) குறைவாகப் பாதிக்கப்படும் என்றும் கருதப்படுகிறது. திதி என்பது சூரியனை விட சந்திரன் முன்னிருக்கும் தூரம், 12\u00B0 படிகளில். இந்த அட்டவணைக்கு ஆதாரங்கள் செவ்வியல் நூலைக் குறிப்பிடவில்லை; இது தென்னிந்திய பஞ்சாங்க மரபிலிருந்து வருகிறது.",
+      en: "It is usually read as milder when a soonya rasi falls in the 6th, 8th or 12th house, and the natural malefics (Mars, Saturn, Rahu, Ketu) are less affected. The tithi is the Moon's lead over the Sun in 12\u00B0 steps. Sources give no classical text for this table, which comes from the South Indian panchanga tradition.",
+      ta: "சூன்ய ராசி 6, 8, 12 ஆம் வீடுகளில் விழுந்தால் பாதிப்பு குறைவு என்றும், இயற்கை பாப கிரகங்கள் (செவ்வாய், சனி, ராகு, கேது) குறைவாகப் பாதிக்கப்படும் என்றும் கருதப்படுகிறது. திதி என்பது சூரியனை விட சந்திரன் முன்னிருக்கும் தூரம், 12\u00B0 படிகளில். இந்த அட்டவணைக்கு ஆதாரங்கள் செவ்வியல் நூலைக் குறிப்பிடவில்லை. இது தென்னிந்திய பஞ்சாங்க மரபிலிருந்து வருகிறது.",
     },
     sources: [
       { title: "Tithi Shoonya or Daghda Rasi (SMAFIR)", url: "http://tuningmymelody.blogspot.com/2019/03/concept-of-daghda-rasi-or-tithi-shoonya.html" },
@@ -490,8 +499,8 @@ const READING_TOPICS = {
   mudakku: {
     title: { en: "Mudakku Rasi", ta: "முடக்கு ராசி" },
     intro: {
-      en: "Take the pada (quarter) of the nakshatra the Sun is in, and count padas from it to the same pada of Moolam, counting both. Count the same number of padas again starting from that Moolam pada (it = 1). The pada you land on gives the Mudakku nakshatra, and the rasi that pada is in is the Mudakku rasi. Planets in that rasi, its rasi lord and the star lord are said to be blocked (முடக்கம்) and give fewer good results. Example:",
-      ta: "சூரியன் நின்ற நட்சத்திரத்தின் பாதத்திலிருந்து மூலத்தின் அதே பாதம் வரை (இரண்டையும் சேர்த்து) பாதங்களை எண்ணவும். அதே எண்ணிக்கையை அந்த மூல பாதத்திலிருந்து (அது = 1) மீண்டும் எண்ணவும். வந்து சேரும் பாதத்தின் நட்சத்திரம் முடக்கு நட்சத்திரம்; அந்தப் பாதம் உள்ள ராசி முடக்கு ராசி. அந்த ராசியில் உள்ள கிரகங்கள், ராசி அதிபதி, நட்சத்திர அதிபதி முடங்கி, நல்ல பலன்களைக் குறைவாகத் தருவதாகக் கூறப்படுகிறது. உதாரணம்:",
+      en: "Take the pada (quarter) of the nakshatra the Sun is in, and count padas from it to the same pada of Moolam, counting both. Count the same number of padas again starting from that Moolam pada (it = 1). The pada you land on gives the Mudakku nakshatra, and the rasi that pada is in is the Mudakku rasi. Planets in that rasi, its rasi lord and the star lord are said to be blocked (முடக்கம்) and give fewer good results. A few examples follow.",
+      ta: "சூரியன் நின்ற நட்சத்திரத்தின் பாதத்திலிருந்து மூலத்தின் அதே பாதம் வரை (இரண்டையும் சேர்த்து) பாதங்களை எண்ணவும். அதே எண்ணிக்கையை அந்த மூல பாதத்திலிருந்து (அது = 1) மீண்டும் எண்ணவும். வந்து சேரும் பாதத்தின் நட்சத்திரம் முடக்கு நட்சத்திரம். அந்தப் பாதம் உள்ள ராசி முடக்கு ராசி. அந்த ராசியில் உள்ள கிரகங்கள், ராசி அதிபதி, நட்சத்திர அதிபதி முடங்கி, நல்ல பலன்களைக் குறைவாகத் தருவதாகக் கூறப்படுகிறது. சில உதாரணங்கள் கீழே.",
     },
     tableHeader: [
       { en: "Sun's pada", ta: "சூரியன் பாதம்" }, { en: "Padas to Moolam", ta: "மூலம் வரை பாதங்கள்" }, { en: "Mudakku pada", ta: "முடக்கு பாதம்" }, { en: "Mudakku rasi", ta: "முடக்கு ராசி" },
@@ -502,8 +511,8 @@ const READING_TOPICS = {
       [{ en: "Moolam 2", ta: "மூலம் 2" }, { en: "1", ta: "1" }, { en: "Moolam 2", ta: "மூலம் 2" }, { en: "Sagittarius", ta: "தனுசு" }],
     ],
     note: {
-      en: "A pada is 3\u00B020\u2032 and never spans two signs, so the rasi is always clear. Some published versions count whole stars and start the second count from Pooradam instead, which lands one star later. Said to weaken when the Mudakku rasi is the lagna (flagged here); other conditions such as Saturn's or a strong Jupiter's aspect, and timing by the lord's transit, are not modeled.",
-      ta: "ஒரு பாதம் 3\u00B020\u2032; அது இரு ராசிகளில் பரவாது, எனவே ராசி எப்போதும் தெளிவு. சில நூல்கள் முழு நட்சத்திரங்களாக எண்ணி, இரண்டாவது எண்ணிக்கையை பூராடத்திலிருந்து தொடங்குகின்றன; அது ஒரு நட்சத்திரம் தள்ளி வரும். முடக்கு ராசி லக்னமாக இருந்தால் பலன் குறையும் (இங்கு குறிக்கப்படுகிறது); சனி அல்லது பலமுள்ள குருவின் பார்வை, அதிபதியின் கோசாரம் போன்றவை கணக்கிடப்படவில்லை.",
+      en: "A pada is 3\u00B020\u2032 and never spans two signs, so the rasi is always clear. Some published versions count whole stars and start the second count from Pooradam instead, which lands one star later. The effect is said to weaken when the Mudakku rasi is the lagna, which the app flags. Other conditions, such as Saturn's or a strong Jupiter's aspect, and timing by the lord's transit, are not modeled.",
+      ta: "ஒரு பாதம் 3\u00B020\u2032. அது இரு ராசிகளில் பரவாது, எனவே ராசி எப்போதும் தெளிவு. சில நூல்கள் முழு நட்சத்திரங்களாக எண்ணி, இரண்டாவது எண்ணிக்கையை பூராடத்திலிருந்து தொடங்குகின்றன. அப்படி எண்ணினால் ஒரு நட்சத்திரம் தள்ளி வரும். முடக்கு ராசி லக்னமாக இருந்தால் பலன் குறையும், இதைச் செயலி குறிக்கிறது. சனி அல்லது பலமுள்ள குருவின் பார்வை, அதிபதியின் கோசாரம் போன்றவை கணக்கிடப்படவில்லை.",
     },
     sources: [
       { title: "சோதிட ரீதியான முடக்கு (Virakesari)", url: "https://www.virakesari.lk/article/143534" },
@@ -514,8 +523,8 @@ const READING_TOPICS = {
   sooryaChandraadhi: {
     title: { en: "Soorya Chandraadhi Yoga", ta: "சூரிய சந்திராதி யோகம்" },
     intro: {
-      en: "In the rasi chart (D1), count the Sun's house from the lagna (the lagna is the 1st). Count the same number of rasis from Mesha (Mesha is the 1st). If the Moon is in that rasi, the chart has Soorya Chandraadhi Yoga. Examples:",
-      ta: "ராசி கட்டத்தில் (D1), லக்னத்திலிருந்து (லக்னம் = 1) சூரியன் நிற்கும் வீட்டை எண்ணவும். அதே எண்ணிக்கையை மேஷத்திலிருந்து (மேஷம் = 1) எண்ணவும். அந்த ராசியில் சந்திரன் இருந்தால், சூரிய சந்திராதி யோகம் உண்டு. உதாரணம்:",
+      en: "In the rasi chart (D1), count the Sun's house from the lagna (the lagna is the 1st). Count the same number of rasis from Mesha (Mesha is the 1st). If the Moon is in that rasi, the chart has Soorya Chandraadhi Yoga. Here are a few examples.",
+      ta: "ராசி கட்டத்தில் (D1), லக்னத்திலிருந்து (லக்னம் = 1) சூரியன் நிற்கும் வீட்டை எண்ணவும். அதே எண்ணிக்கையை மேஷத்திலிருந்து (மேஷம் = 1) எண்ணவும். அந்த ராசியில் சந்திரன் இருந்தால், சூரிய சந்திராதி யோகம் உண்டு. சில உதாரணங்கள் கீழே.",
     },
     tableHeader: [
       { en: "Sun's house", ta: "சூரியன் வீடு" }, { en: "Rasi from Mesha", ta: "மேஷத்திலிருந்து ராசி" }, { en: "Moon in", ta: "சந்திரன்" }, { en: "Yoga", ta: "யோகம்" },
@@ -526,15 +535,15 @@ const READING_TOPICS = {
       [{ en: "4", ta: "4" }, { en: "Cancer", ta: "கடகம்" }, { en: "Taurus", ta: "ரிஷபம்" }, { en: "Not present", ta: "இல்லை" }],
     ],
     note: {
-      en: "As given by the user; no written source. Only the rasi counts, not the degree.",
-      ta: "பயனர் தந்த விதி; எழுத்து மூலம் இல்லை. பாகை அல்ல, ராசி மட்டுமே கணக்கில் கொள்ளப்படுகிறது.",
+      en: "This rule was given by the user and has no written source. Only the rasi counts, not the degree.",
+      ta: "இது பயனர் தந்த விதி, எழுத்து மூலம் இல்லை. பாகை அல்ல, ராசி மட்டுமே கணக்கில் கொள்ளப்படுகிறது.",
     },
   },
   navamsaSashtashtagam: {
     title: { en: "Navamsa Sashtashtagam", ta: "நவாம்ச சஷ்டாஷ்டகம்" },
     intro: {
-      en: "For each of the nine planets, count from its rasi in the D1 chart to its rasi in the navamsa (D9), the D1 rasi being the 1st. If no planet lands 6th or 8th, it is a huge plus in the jathakam. A planet that does brings issues related to the planet itself and to the houses (bhavams) it rules in D1, its aathipathyam. The pariharam is Vakkarakali Amman. What each house stands for:",
-      ta: "ஒன்பது கிரகங்களுக்கும், D1 கட்டத்தில் அது நிற்கும் ராசியிலிருந்து (அதுவே 1) நவாம்சத்தில் (D9) அது நிற்கும் ராசி வரை எண்ணவும். எந்தக் கிரகமும் 6 அல்லது 8ஆம் இடத்தில் வராவிட்டால், ஜாதகத்திற்குப் பெரிய பலம். வந்தால், அந்தக் கிரகம் மற்றும் D1இல் அது அதிபதியாக உள்ள வீடுகள் (ஆதிபத்யம்) தொடர்பான பிரச்சினைகள் வரும். பரிகாரம் வக்கிரகாளி அம்மன். ஒவ்வொரு வீடும் குறிப்பவை:",
+      en: "For each of the nine planets, count from its rasi in the D1 chart to its rasi in the navamsa (D9), the D1 rasi being the 1st. If no planet lands 6th or 8th, it is a huge plus in the jathakam. A planet that does brings issues related to the planet itself and to the houses (bhavams) it rules in D1, its aathipathyam. The pariharam is Vakkarakali Amman. The table below shows what each house stands for.",
+      ta: "ஒன்பது கிரகங்களுக்கும், D1 கட்டத்தில் அது நிற்கும் ராசியிலிருந்து (அதுவே 1) நவாம்சத்தில் (D9) அது நிற்கும் ராசி வரை எண்ணவும். எந்தக் கிரகமும் 6 அல்லது 8ஆம் இடத்தில் வராவிட்டால், ஜாதகத்திற்குப் பெரிய பலம். வந்தால், அந்தக் கிரகம் மற்றும் D1இல் அது அதிபதியாக உள்ள வீடுகள் (ஆதிபத்யம்) தொடர்பான பிரச்சினைகள் வரும். பரிகாரம் வக்கிரகாளி அம்மன். ஒவ்வொரு வீடும் எதைக் குறிக்கிறது என்பது கீழே உள்ளது.",
     },
     tableHeader: [{ en: "House", ta: "வீடு" }, { en: "Stands for", ta: "குறிப்பவை" }],
     table: LABELS.en.ui.houseMeanings.map((en, i) => [
@@ -542,34 +551,34 @@ const READING_TOPICS = {
       { en, ta: LABELS.ta.ui.houseMeanings[i] },
     ]),
     note: {
-      en: "As given by the user; no written source. Example: a Sun in Dhanus in D1 and Rishabam in D9 is 6th, so with a Dhanus lagna it touches the Sun and the 9th house it rules (father, fortune, dharma). The issue shows while the planet, in transit, is in the nakshatra pada of its navamsa position (its longitude times 9): the Sun's navamsa is Rishabam 20°18', Rohini pada 4, which the Sun crosses around 5 to 8 June each year. That is hours for the Moon, days for the Sun and months for Saturn; the tab lists every period from 2026 to 2031. Rahu and Ketu rule no house, so the house they sit in is shown.",
-      ta: "பயனர் தந்த விதி; எழுத்து மூலம் இல்லை. உதாரணம்: D1இல் தனுசு, D9இல் ரிஷபத்தில் உள்ள சூரியன் 6ஆம் இடம்; தனுசு லக்னத்திற்கு அது சூரியனையும் அது அதிபதியான 9ஆம் வீட்டையும் (தந்தை, பாக்கியம், தர்மம்) பாதிக்கும். கோசாரத்தில் அந்தக் கிரகம் தன் நவாம்ச நிலையின் (பாகை × 9) நட்சத்திரப் பாதத்தில் இருக்கும்போது பிரச்சினை வெளிப்படும்: சூரியனின் நவாம்சம் ரிஷபம் 20°18', ரோகிணி 4ஆம் பாதம்; ஒவ்வொரு ஆண்டும் ஜூன் 5 முதல் 8 வரை சூரியன் அதைக் கடக்கிறது. சந்திரனுக்கு மணிநேரங்கள், சூரியனுக்கு நாட்கள், சனிக்கு மாதங்கள்; 2026 முதல் 2031 வரையிலான அனைத்துக் காலங்களும் காட்டப்படுகின்றன. ராகு, கேது எந்த வீட்டிற்கும் அதிபதி இல்லாததால், அவை நிற்கும் வீடு காட்டப்படுகிறது.",
+      en: "This rule was given by the user and has no written source. Take a Sun in Dhanus in D1 and Rishabam in D9. That is the 6th, so with a Dhanus lagna it touches the Sun and the 9th house it rules, which covers father, fortune and dharma. The issue shows up while the planet, in transit, passes through the nakshatra pada of its navamsa position (its longitude times 9). The Sun's navamsa is Rishabam 20\u00B018', which is Rohini pada 4, and the Sun crosses it around 5 to 8 June every year. For the Moon that lasts a few hours, for the Sun a few days and for Saturn several months, and the tab lists every period from 2026 to 2031. Rahu and Ketu rule no house, so the house they sit in is shown instead.",
+      ta: "இது பயனர் தந்த விதி, எழுத்து மூலம் இல்லை. உதாரணமாக D1இல் தனுசு, D9இல் ரிஷபத்தில் உள்ள சூரியனை எடுத்துக்கொள்ளுங்கள். அது 6ஆம் இடம். தனுசு லக்னத்திற்கு அது சூரியனையும், அது அதிபதியான 9ஆம் வீட்டையும் (தந்தை, பாக்கியம், தர்மம்) பாதிக்கும். கோசாரத்தில் அந்தக் கிரகம் தன் நவாம்ச நிலையின் (பாகை × 9) நட்சத்திரப் பாதத்தைக் கடக்கும்போது பிரச்சினை வெளிப்படும். சூரியனின் நவாம்சம் ரிஷபம் 20\u00B018', அதாவது ரோகிணி 4ஆம் பாதம். ஒவ்வொரு ஆண்டும் ஜூன் 5 முதல் 8 வரை சூரியன் அதைக் கடக்கிறது. சந்திரனுக்கு இது சில மணிநேரங்கள், சூரியனுக்குச் சில நாட்கள், சனிக்குப் பல மாதங்கள். 2026 முதல் 2031 வரையிலான அனைத்துக் காலங்களும் காட்டப்படுகின்றன. ராகு, கேது எந்த வீட்டிற்கும் அதிபதி இல்லாததால், அவை நிற்கும் வீடு காட்டப்படுகிறது.",
     },
   },
   drekkanaLords: {
     title: { en: "Drekkana Lords Aathipathyam", ta: "திரேக்காண அதிபதிகள் ஆதிபத்யம்" },
     intro: {
-      en: "Each planet's degree in its rasi picks its drekkana, and the drekkana's lord is the planet's controller: up to 10°, the lord of the planet's own rasi (1st); over 10° up to 20°, the lord of the 5th rasi from it; over 20°, the lord of the 9th. If the controller sits in the 6th or 8th rasi from the planet, the planet cannot perform well; the pariharam is Vakkarakali Amman. Example, Saturn in Rishabam (6th from it is Thulam, 8th is Dhanus):",
-      ta: "ஒவ்வொரு கிரகமும் ராசியில் நிற்கும் பாகை அதன் திரேக்காணத்தைத் தீர்மானிக்கும்; அந்தத் திரேக்காணத்தின் அதிபதியே கிரகத்தை இயக்குபவர்: 10° வரை கிரகம் நின்ற ராசியின் (1ஆம்) அதிபதி; 10°க்கு மேல் 20° வரை அதிலிருந்து 5ஆம் ராசியின் அதிபதி; 20°க்கு மேல் 9ஆம் ராசியின் அதிபதி. அந்த அதிபதி கிரகத்திலிருந்து 6 அல்லது 8ஆம் ராசியில் இருந்தால், அந்தக் கிரகம் சரியாகச் செயல்பட இயலாது; பரிகாரம் வக்கிரகாளி அம்மன். உதாரணம், ரிஷபத்தில் சனி (அதிலிருந்து 6ஆம் ராசி துலாம், 8ஆம் ராசி தனுசு):",
+      en: "Each planet's degree in its rasi picks its drekkana, and the lord of that drekkana is the planet's controller. Up to 10° it is the lord of the planet's own rasi, over 10° and up to 20° the lord of the 5th rasi from it, and over 20° the lord of the 9th. If the controller sits in the 6th or 8th rasi from the planet, the planet cannot perform well, and the pariharam is Vakkarakali Amman. Take Saturn in Rishabam as an example. The 6th from it is Thulam and the 8th is Dhanus.",
+      ta: "ஒவ்வொரு கிரகமும் ராசியில் நிற்கும் பாகை அதன் திரேக்காணத்தைத் தீர்மானிக்கும். அந்தத் திரேக்காணத்தின் அதிபதியே கிரகத்தை இயக்குபவர். 10° வரை கிரகம் நின்ற ராசியின் அதிபதி, 10°க்கு மேல் 20° வரை அதிலிருந்து 5ஆம் ராசியின் அதிபதி, 20°க்கு மேல் 9ஆம் ராசியின் அதிபதி. அந்த அதிபதி கிரகத்திலிருந்து 6 அல்லது 8ஆம் ராசியில் இருந்தால், அந்தக் கிரகம் சரியாகச் செயல்பட இயலாது. இதற்குப் பரிகாரம் வக்கிரகாளி அம்மன். உதாரணமாக ரிஷபத்தில் உள்ள சனியை எடுத்துக்கொள்ளுங்கள். அதிலிருந்து 6ஆம் ராசி துலாம், 8ஆம் ராசி தனுசு.",
     },
     tableHeader: [
       { en: "Saturn's degree", ta: "சனியின் பாகை" }, { en: "Drekkana", ta: "திரேக்காணம்" }, { en: "Controller", ta: "அதிபதி" }, { en: "Weakened if the controller is in", ta: "அதிபதி இங்கிருந்தால் பலம் குறையும்" },
     ],
     table: [
-      [{ en: "0° to 10°", ta: "0° முதல் 10°" }, { en: "1st: Rishabam", ta: "1ஆம்: ரிஷபம்" }, { en: "Venus", ta: "சுக்ரன்" }, { en: "Libra or Sagittarius", ta: "துலாம் அல்லது தனுசு" }],
-      [{ en: "10.01° to 20°", ta: "10.01° முதல் 20°" }, { en: "2nd: Kanni", ta: "2ஆம்: கன்னி" }, { en: "Mercury", ta: "புதன்" }, { en: "Libra or Sagittarius", ta: "துலாம் அல்லது தனுசு" }],
-      [{ en: "20.01° to 30°", ta: "20.01° முதல் 30°" }, { en: "3rd: Makaram", ta: "3ஆம்: மகரம்" }, { en: "Saturn itself", ta: "சனியே" }, { en: "Never", ta: "ஒருபோதும் இல்லை" }],
+      [{ en: "0° to 10°", ta: "0° முதல் 10°" }, { en: "1st, Rishabam", ta: "1ஆம், ரிஷபம்" }, { en: "Venus", ta: "சுக்ரன்" }, { en: "Libra or Sagittarius", ta: "துலாம் அல்லது தனுசு" }],
+      [{ en: "10.01° to 20°", ta: "10.01° முதல் 20°" }, { en: "2nd, Kanni", ta: "2ஆம், கன்னி" }, { en: "Mercury", ta: "புதன்" }, { en: "Libra or Sagittarius", ta: "துலாம் அல்லது தனுசு" }],
+      [{ en: "20.01° to 30°", ta: "20.01° முதல் 30°" }, { en: "3rd, Makaram", ta: "3ஆம், மகரம்" }, { en: "Saturn itself", ta: "சனியே" }, { en: "Never", ta: "ஒருபோதும் இல்லை" }],
     ],
     note: {
-      en: "As given by the user; no written source. Exactly 10° counts as the 1st drekkana and exactly 20° as the 2nd, degrees taken to the hundredth; the usual convention starts the next drekkana at 10° and 20°. All nine planets are checked; Rahu and Ketu rule no rasi, so they are never controllers.",
-      ta: "பயனர் தந்த விதி; எழுத்து மூலம் இல்லை. சரியாக 10° என்பது 1ஆம் திரேக்காணம், சரியாக 20° என்பது 2ஆம் திரேக்காணம் (பாகை இரண்டு தசம இடங்கள் வரை); வழக்கமான முறையில் 10°, 20° அடுத்த திரேக்காணத்தின் தொடக்கம். ஒன்பது கிரகங்களும் பார்க்கப்படுகின்றன; ராகு, கேதுவுக்கு ராசி ஆதிபத்யம் இல்லாததால் அவை அதிபதி ஆகாது.",
+      en: "This rule was given by the user and has no written source. Exactly 10° counts as the 1st drekkana and exactly 20° as the 2nd, with degrees taken to the hundredth. The usual convention starts the next drekkana at 10° and 20° instead. All nine planets are checked, but Rahu and Ketu rule no rasi, so they are never controllers.",
+      ta: "இது பயனர் தந்த விதி, எழுத்து மூலம் இல்லை. சரியாக 10° என்பது 1ஆம் திரேக்காணம், சரியாக 20° என்பது 2ஆம் திரேக்காணம் (பாகை இரண்டு தசம இடங்கள் வரை). வழக்கமான முறையில் 10°, 20° அடுத்த திரேக்காணத்தின் தொடக்கம். ஒன்பது கிரகங்களும் பார்க்கப்படுகின்றன, ஆனால் ராகு, கேதுவுக்கு ராசி ஆதிபத்யம் இல்லாததால் அவை அதிபதி ஆகாது.",
     },
   },
   moorthiNirnayam: {
     title: { en: "Moorthi Nirnayam", ta: "மூர்த்தி நிர்ணயம்" },
     intro: {
-      en: "When Saturn, Jupiter or Rahu/Ketu changes rasi (peyarchi), note the rasi the Moon is in at that moment. Count from your janma rasi (the Moon's rasi at birth) to that rasi, the janma rasi being the 1st. The count gives the Moorthi, which sets how well that transit goes for you:",
-      ta: "சனி, குரு அல்லது ராகு/கேது ராசி மாறும் (பெயர்ச்சி) நேரத்தில் சந்திரன் எந்த ராசியில் உள்ளது என்று பார்க்கவும். உங்கள் ஜென்ம ராசியிலிருந்து (பிறந்தபோது சந்திரன் நின்ற ராசி, அதுவே 1) அந்த ராசி வரை எண்ணவும். அந்த எண்ணிக்கை மூர்த்தியைத் தரும்; அந்தப் பெயர்ச்சி உங்களுக்கு எப்படி அமையும் என்பதை அது காட்டும்:",
+      en: "When Saturn, Jupiter or Rahu/Ketu changes rasi (peyarchi), note the rasi the Moon is in at that moment. Count from your janma rasi (the Moon's rasi at birth) to that rasi, the janma rasi being the 1st. The count gives the Moorthi, which shows how well that transit will go for you.",
+      ta: "சனி, குரு அல்லது ராகு/கேது ராசி மாறும் (பெயர்ச்சி) நேரத்தில் சந்திரன் எந்த ராசியில் உள்ளது என்று பார்க்கவும். உங்கள் ஜென்ம ராசியிலிருந்து (பிறந்தபோது சந்திரன் நின்ற ராசி, அதுவே 1) அந்த ராசி வரை எண்ணவும். அந்த எண்ணிக்கை மூர்த்தியைத் தரும். அந்தப் பெயர்ச்சி உங்களுக்கு எப்படி அமையும் என்பதை அது காட்டும்.",
     },
     tableHeader: [
       { en: "Count from janma rasi", ta: "ஜென்ம ராசியிலிருந்து எண்ணிக்கை" }, { en: "Moorthi", ta: "மூர்த்தி" }, { en: "Result", ta: "பலன்" },
@@ -581,8 +590,8 @@ const READING_TOPICS = {
       [{ en: "4, 8, 12", ta: "4, 8, 12" }, { en: "Loha (iron)", ta: "லோஹ (இரும்பு)" }, { en: "Unfavourable", ta: "சாதகமில்லை" }],
     ],
     note: {
-      en: "Example from the source: Jupiter entered Capricorn on 20 Nov 2020 with the Moon also in Capricorn, so for a Capricorn janma rasi it was Swarna and for Aries (10th) Thamira. When Saturn or Jupiter slips back into the previous rasi while retrograde, and when it enters again, each is listed with its own Moorthi. Rahu and Ketu always change rasi together.",
-      ta: "மூலத்தின் உதாரணம்: 20 நவம்பர் 2020 அன்று குரு மகரத்தில் நுழைந்தபோது சந்திரனும் மகரத்தில் இருந்தது; எனவே மகர ராசிக்கு சுவர்ண மூர்த்தி, மேஷத்திற்கு (10ஆம்) தாமிர மூர்த்தி. சனி அல்லது குரு வக்கிரமாகி முந்தைய ராசிக்குத் திரும்பும்போதும், மீண்டும் நுழையும்போதும், ஒவ்வொன்றும் தனி மூர்த்தியுடன் காட்டப்படுகிறது. ராகுவும் கேதுவும் எப்போதும் ஒன்றாக ராசி மாறுகின்றன.",
+      en: "Here is the example from the source. Jupiter entered Capricorn on 20 Nov 2020 with the Moon also in Capricorn, so for a Capricorn janma rasi it was Swarna, and for Aries, the 10th, it was Thamira. When Saturn or Jupiter slips back into the previous rasi while retrograde, and when it enters again, each is listed with its own Moorthi. Rahu and Ketu always change rasi together.",
+      ta: "மூலத்தில் உள்ள உதாரணம் இது. 20 நவம்பர் 2020 அன்று குரு மகரத்தில் நுழைந்தபோது சந்திரனும் மகரத்தில் இருந்தது. எனவே மகர ராசிக்குச் சுவர்ண மூர்த்தி, 10ஆம் ராசியான மேஷத்திற்குத் தாமிர மூர்த்தி. சனி அல்லது குரு வக்கிரமாகி முந்தைய ராசிக்குத் திரும்பும்போதும், மீண்டும் நுழையும்போதும், ஒவ்வொன்றும் தனி மூர்த்தியுடன் காட்டப்படுகிறது. ராகுவும் கேதுவும் எப்போதும் ஒன்றாக ராசி மாறுகின்றன.",
     },
     sources: [
       { title: "Moorti Nirnaya: a traditional approach to check transit results (Astroshala)", url: "https://astroshala.com/moorti-nirnaya-a-traditional-and-authentic-approach-to-check-planetary-transit-results/" },
@@ -591,27 +600,27 @@ const READING_TOPICS = {
   jeevanam: {
     title: { en: "Jeevanam Yoga", ta: "ஜீவன யோகம்" },
     intro: {
-      en: "In the rasi chart (D1), number the Moon's rasi from Mesha as in the Kaala Purusha chart (Mesha = 1, Simha = 5). Count that many houses from the lagna (the lagna is the 1st). If one or more planets are in that house, the chart has Jeevanam Yoga, and those planets show how the native earns. The Moon itself counts, so a Mesha lagna chart always has it. Examples:",
-      ta: "ராசி கட்டத்தில் (D1), கால புருஷ சக்கரப்படி சந்திரன் நின்ற ராசியின் எண்ணை மேஷத்திலிருந்து எடுக்கவும் (மேஷம் = 1, சிம்மம் = 5). அத்தனை வீடுகளை லக்னத்திலிருந்து (லக்னம் = 1) எண்ணவும். அந்த வீட்டில் ஒன்று அல்லது அதற்கு மேற்பட்ட கிரகங்கள் இருந்தால் ஜீவன யோகம் உண்டு; அந்தக் கிரகங்கள் ஜாதகர் சம்பாதிக்கும் வழியைக் காட்டும். சந்திரனும் கணக்கில் சேரும், எனவே மேஷ லக்னத்திற்கு இந்த யோகம் எப்போதும் உண்டு. உதாரணம்:",
+      en: "In the rasi chart (D1), number the Moon's rasi from Mesha as in the Kaala Purusha chart (Mesha = 1, Simha = 5). Count that many houses from the lagna (the lagna is the 1st). If one or more planets are in that house, the chart has Jeevanam Yoga, and those planets show how the native earns. The Moon itself counts, so a Mesha lagna chart always has it. Here are a few examples.",
+      ta: "ராசி கட்டத்தில் (D1), கால புருஷ சக்கரப்படி சந்திரன் நின்ற ராசியின் எண்ணை மேஷத்திலிருந்து எடுக்கவும் (மேஷம் = 1, சிம்மம் = 5). அத்தனை வீடுகளை லக்னத்திலிருந்து (லக்னம் = 1) எண்ணவும். அந்த வீட்டில் ஒன்று அல்லது அதற்கு மேற்பட்ட கிரகங்கள் இருந்தால் ஜீவன யோகம் உண்டு. அந்தக் கிரகங்கள் ஜாதகர் சம்பாதிக்கும் வழியைக் காட்டும். சந்திரனும் கணக்கில் சேரும், எனவே மேஷ லக்னத்திற்கு இந்த யோகம் எப்போதும் உண்டு. சில உதாரணங்கள் கீழே.",
     },
     tableHeader: [
       { en: "Moon in", ta: "சந்திரன்" }, { en: "Lagna", ta: "லக்னம்" }, { en: "House to check", ta: "பார்க்க வேண்டிய வீடு" }, { en: "Yoga", ta: "யோகம்" },
     ],
     table: [
-      [{ en: "Leo (5)", ta: "சிம்மம் (5)" }, { en: "Aries", ta: "மேஷம்" }, { en: "5th, Leo: the Moon is there", ta: "5ஆம் வீடு, சிம்மம்: சந்திரன் அங்கே" }, { en: "Present", ta: "உள்ளது" }],
-      [{ en: "Leo (5)", ta: "சிம்மம் (5)" }, { en: "Virgo", ta: "கன்னி" }, { en: "5th, Capricorn: Saturn there", ta: "5ஆம் வீடு, மகரம்: சனி அங்கே" }, { en: "Present, earning through Saturn", ta: "உள்ளது, சனி வழியாக சம்பாத்தியம்" }],
-      [{ en: "Taurus (2)", ta: "ரிஷபம் (2)" }, { en: "Sagittarius", ta: "தனுசு" }, { en: "2nd, Capricorn: empty", ta: "2ஆம் வீடு, மகரம்: காலி" }, { en: "Not present", ta: "இல்லை" }],
+      [{ en: "Leo (5)", ta: "சிம்மம் (5)" }, { en: "Aries", ta: "மேஷம்" }, { en: "5th, Leo, with the Moon in it", ta: "5ஆம் வீடு, சிம்மம், அங்கே சந்திரன்" }, { en: "Present", ta: "உள்ளது" }],
+      [{ en: "Leo (5)", ta: "சிம்மம் (5)" }, { en: "Virgo", ta: "கன்னி" }, { en: "5th, Capricorn, with Saturn in it", ta: "5ஆம் வீடு, மகரம், அங்கே சனி" }, { en: "Present, earning through Saturn", ta: "உள்ளது, சனி வழியாக சம்பாத்தியம்" }],
+      [{ en: "Taurus (2)", ta: "ரிஷபம் (2)" }, { en: "Sagittarius", ta: "தனுசு" }, { en: "2nd, Capricorn, empty", ta: "2ஆம் வீடு, மகரம், காலி" }, { en: "Not present", ta: "இல்லை" }],
     ],
     note: {
-      en: "As given by the user; no written source. The nine grahas count (Rahu and Ketu included); Gulika and Mandi do not.",
-      ta: "பயனர் தந்த விதி; எழுத்து மூலம் இல்லை. ஒன்பது கிரகங்களும் (ராகு, கேது உட்பட) கணக்கில் சேரும்; குளிகன், மாந்தி சேராது.",
+      en: "This rule was given by the user and has no written source. All nine grahas count, Rahu and Ketu included, but Gulika and Mandi do not.",
+      ta: "இது பயனர் தந்த விதி, எழுத்து மூலம் இல்லை. ஒன்பது கிரகங்களும், ராகு, கேது உட்பட, கணக்கில் சேரும். குளிகன், மாந்தி சேராது.",
     },
   },
   kaalaPakai: {
     title: { en: "Kaala Pakai", ta: "கால பகை" },
     intro: {
       en: "Each graha is said to be at odds (pakai) with certain rasis. When it sits in one of them in the rasi chart (D1), its significations are troubled as below. Ketu has no Kaala Pakai rasi, and no graha has Simha (Leo).",
-      ta: "ஒவ்வொரு கிரகமும் சில ராசிகளுடன் பகையாக இருப்பதாகக் கூறப்படுகிறது. ராசி கட்டத்தில் (D1) அந்த ராசியில் இருந்தால், அதன் காரகத்துவங்கள் கீழே உள்ளபடி பாதிக்கப்படும். கேதுவுக்குக் கால பகை ராசி இல்லை; சிம்மம் எந்த கிரகத்திற்கும் கால பகை இல்லை.",
+      ta: "ஒவ்வொரு கிரகமும் சில ராசிகளுடன் பகையாக இருப்பதாகக் கூறப்படுகிறது. ராசி கட்டத்தில் (D1) அந்த ராசியில் இருந்தால், அதன் காரகத்துவங்கள் கீழே உள்ளபடி பாதிக்கப்படும். கேதுவுக்குக் கால பகை ராசி இல்லை. சிம்மம் எந்த கிரகத்திற்கும் கால பகை இல்லை.",
     },
     tableHeader: [
       { en: "Planet", ta: "கிரகம்" }, { en: "Kaala Pakai rasi", ta: "கால பகை ராசி" }, { en: "Effect", ta: "பலன்" },
@@ -622,8 +631,8 @@ const READING_TOPICS = {
       k.effect,
     ]),
     note: {
-      en: "From a video; no written source. Only the rasi counts, not the degree.",
-      ta: "ஒரு காணொளியிலிருந்து; எழுத்து மூலம் இல்லை. பாகை அல்ல, ராசி மட்டுமே கணக்கில் கொள்ளப்படுகிறது.",
+      en: "This comes from a video and has no written source. Only the rasi counts, not the degree.",
+      ta: "இது ஒரு காணொளியிலிருந்து எடுக்கப்பட்டது, எழுத்து மூலம் இல்லை. பாகை அல்ல, ராசி மட்டுமே கணக்கில் கொள்ளப்படுகிறது.",
     },
   },
 };

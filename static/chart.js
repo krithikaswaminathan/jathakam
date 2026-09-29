@@ -882,11 +882,17 @@ function renderGrid() {
     soonyaRasis,
     mudakkuRasi: isD1 && state.chart.mudakku ? state.chart.mudakku.rasi : null,
     centerLabel: L().vargas[state.varga] || state.varga,
+    pushkara: isD1,
   });
+  const anyPushkara = isD1 && [...Object.values(chart.grahas), state.chart.gulika, state.chart.mandi].some(
+    (g) => pushkaraGrade([g.nakshatra, g.pada])
+  );
+  document.getElementById("pushkaraLegend").classList.toggle("hidden", !anyPushkara);
+  document.getElementById("pushkaraLegendText").textContent = L().ui.pushkaraLegend;
 }
 
 // Draws a South Indian chart into `grid`: used for the birth chart and the Prasannam chart.
-function drawGrid(grid, chart, { extraPlanets = [], soonyaRasis = new Set(), mudakkuRasi = null, centerLabel = "" } = {}) {
+function drawGrid(grid, chart, { extraPlanets = [], soonyaRasis = new Set(), mudakkuRasi = null, centerLabel = "", pushkara = false } = {}) {
   grid.innerHTML = "";
   const labels = L();
 
@@ -921,6 +927,13 @@ function drawGrid(grid, chart, { extraPlanets = [], soonyaRasis = new Set(), mud
       const isRetrogradeEligible = g.retrograde && !NODES_NOT_MARKED_RETROGRADE.has(g.name);
       span.textContent = (labels.planetAbbr[g.name] || g.name) + (isRetrogradeEligible ? " (R)" : "");
       if (UPAGRAHA_NAMES.has(g.name)) span.classList.add("upagraha");
+      const grade = pushkara ? pushkaraGrade([g.nakshatra, g.pada]) : null;
+      if (grade) {
+        const tag = document.createElement("span");
+        tag.className = "pushkara-tag" + (grade === "Present" ? " present" : "");
+        tag.textContent = gradeText(state.lang, grade);
+        span.appendChild(tag);
+      }
       planetsDiv.appendChild(span);
     }
     cell.appendChild(planetsDiv);
@@ -1141,6 +1154,7 @@ function renderPushkaraQuality() {
   document.getElementById("thPqTara").textContent = labels.ui.colTara;
   document.getElementById("thPqQuality").textContent = labels.ui.colStarLord;
   document.getElementById("thPqPlanets").textContent = labels.ui.colPlanetsHere;
+  document.getElementById("thPqGrade").textContent = labels.ui.colGrade;
 
   const bodies = [...Object.values(state.chart.d1.grahas), state.chart.gulika, state.chart.mandi];
   const tbody = document.getElementById("pushkaraQualityBody");
@@ -1156,6 +1170,7 @@ function renderPushkaraQuality() {
       String(padaPositionInRasi(p)),
       labels.taraCategories[pushkaraTara(p)],
       labels.planets[STAR_LORD_CYCLE[nak % 9]],
+      pushkaraGrade(p),
       here.join(", ") || "\u2013",
     ]) {
       const td = document.createElement("td");
@@ -1192,8 +1207,8 @@ function renderGrahaDetails() {
       labels.nakshatra[g.nakshatra],
       g.pada,
       labels.planets[g.star_lord] || g.star_lord,
-      g.pushkara_navamsa && isCountedPushkara([g.nakshatra, g.pada])
-        ? `\u2713 ${labels.nakshatra[g.nakshatra]} ${g.pada}` +
+      pushkaraGrade([g.nakshatra, g.pada])
+        ? `${gradeText(state.lang, pushkaraGrade([g.nakshatra, g.pada]))} \u00B7 ${labels.nakshatra[g.nakshatra]} ${g.pada}` +
           (isVargottamaPada([g.nakshatra, g.pada]) ? ` (${labels.ui.vargottamaWord})` : "") +
           ` \u00B7 ${labels.taraCategories[pushkaraTara([g.nakshatra, g.pada])]}`
         : "–",
