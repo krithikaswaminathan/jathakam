@@ -51,7 +51,7 @@ const LABELS = {
       sashtashtagamNoLordship: "rules no house, sits in house {house}",
       topHome: "Jathakam", topPariharam: "Pariharam", topPrasannam: "Prasannam", vargottamaWord: "vargottama",
       pushkaraQualityTitle: "Pushkara Navamsa padas that count",
-      pushkaraQualityIntro: "Only the Pushkara padas in the 6th, 8th and 9th place of their rasi are counted, because those fall on a good tara. There are nine of them, and any that hold a planet in this chart are highlighted.",
+      pushkaraQualityIntro: "Only the Pushkara padas in the 6th, 8th and 9th place of their rasi are counted and graded A, B or C. There are nine of them, and any that hold a planet in this chart are highlighted.",
       colPosition: "Position in rasi", colTara: "Tara", colQuality: "Quality", colPlanetsHere: "Planets here", colPushkaraPada: "Pushkara pada",
       colGrade: "Grade", pushkaraLegend: "Pushkara Navamsa. A, B and C are the grade, for the 8th, 9th and 6th pada of the rasi, and Present means one of the other Pushkara padas, with no grade.",
       prasNow: "Now", prasUseLocation: "Use my location", prasChangePlace: "Change place",
@@ -152,7 +152,7 @@ const LABELS = {
       sashtashtagamNoLordship: "எந்த வீட்டிற்கும் அதிபதி இல்லை, {house}ஆம் வீட்டில் உள்ளது",
       topHome: "ஜாதகம்", topPariharam: "பரிகாரம்", topPrasannam: "பிரசன்னம்", vargottamaWord: "வர்கோத்தமம்",
       pushkaraQualityTitle: "கணக்கில் வரும் புஷ்கர பாதங்கள்",
-      pushkaraQualityIntro: "தன் ராசியில் 6, 8, 9ஆம் இடங்களில் உள்ள புஷ்கர பாதங்கள் மட்டுமே கணக்கில் கொள்ளப்படுகின்றன, ஏனெனில் அவை நல்ல தாரையில் விழுகின்றன. இப்படி ஒன்பது பாதங்கள் உள்ளன. இந்த ஜாதகத்தில் கிரகம் உள்ளவை குறிக்கப்பட்டுள்ளன.",
+      pushkaraQualityIntro: "தன் ராசியில் 6, 8, 9ஆம் இடங்களில் உள்ள புஷ்கர பாதங்கள் மட்டுமே கணக்கில் கொள்ளப்பட்டு A, B, C என்று தரம் பிரிக்கப்படுகின்றன. இப்படி ஒன்பது பாதங்கள் உள்ளன. இந்த ஜாதகத்தில் கிரகம் உள்ளவை குறிக்கப்பட்டுள்ளன.",
       colPosition: "ராசியில் இடம்", colTara: "தாரை", colQuality: "தரம்", colPlanetsHere: "இங்குள்ள கிரகங்கள்", colPushkaraPada: "புஷ்கர பாதம்",
       colGrade: "தரம்", pushkaraLegend: "புஷ்கர நவாம்சம். A, B, C என்பவை ராசியின் 8, 9, 6ஆம் பாதங்களுக்கான தரம். உள்ளது என்றால் தரம் இல்லாத மற்ற புஷ்கர பாதம்.",
       prasNow: "இப்போது", prasUseLocation: "என் இருப்பிடம்", prasChangePlace: "இடத்தை மாற்று",
@@ -307,13 +307,11 @@ const pushkaraGrade = (p) => (isPushkaraPada(p) ? PUSHKARA_GRADE_BY_POSITION[pad
 const PRESENT_WORD = { en: "Present", ta: "உள்ளது" };
 const gradeText = (lang, grade) => (grade === "Present" ? PRESENT_WORD[lang] : grade);
 const ORDINAL = { en: (n) => n + ({ 1: "st", 2: "nd", 3: "rd" }[n] || "th"), ta: (n) => `${n}ஆம்` };
-const pushkaraTaraText = (lang, p) => `${ORDINAL[lang](padaPositionInRasi(p))}, ${LABELS[lang].taraCategories[pushkaraTara(p)]}`;
 const VARGOTTAMA_WORD = { en: "vargottama", ta: "வர்கோத்தமம்" };
 const pushkaraPadaText = (lang, p) =>
   (isCountedPushkara(p) ? `${pushkaraGrade(p)} \u00B7 ` : "") +
   `${LABELS[lang].nakshatra[p[0]]} ${p[1]} \u00B7 ${LABELS[lang].planets[STAR_LORD_CYCLE[p[0] % 9]]}` +
-  (isVargottamaPada(p) ? ` (${VARGOTTAMA_WORD[lang]})` : "") +
-  ` \u00B7 ${pushkaraTaraText(lang, p)}`;
+  (isVargottamaPada(p) ? ` (${VARGOTTAMA_WORD[lang]})` : "");
 
 const READING_TOPICS = {
   pushkaraNavamsa: {
@@ -351,7 +349,7 @@ const READING_TOPICS = {
           bothLangs((lang) => LABELS[lang].rasi[Math.floor(padaIndex(p) / 9)]),
           bothLangs((lang) => `${LABELS[lang].nakshatra[p[0]]} ${p[1]}` + (isVargottamaPada(p) ? ` (${VARGOTTAMA_WORD[lang]})` : "")),
           bothLangs((lang) => LABELS[lang].planets[STAR_LORD_CYCLE[p[0] % 9]]),
-          bothLangs((lang) => pushkaraTaraText(lang, p)),
+          bothLangs((lang) => ORDINAL[lang](padaPositionInRasi(p))),
           bothLangs(() => pushkaraGrade(p)),
         ]),
       },

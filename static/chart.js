@@ -1150,8 +1150,6 @@ function renderPushkaraQuality() {
   document.getElementById("pushkaraQualityIntro").textContent = labels.ui.pushkaraQualityIntro;
   document.getElementById("thPqRasi").textContent = labels.ui.colRasi;
   document.getElementById("thPqPada").textContent = labels.ui.colPushkaraPada;
-  document.getElementById("thPqPos").textContent = labels.ui.colPosition;
-  document.getElementById("thPqTara").textContent = labels.ui.colTara;
   document.getElementById("thPqQuality").textContent = labels.ui.colStarLord;
   document.getElementById("thPqPlanets").textContent = labels.ui.colPlanetsHere;
   document.getElementById("thPqGrade").textContent = labels.ui.colGrade;
@@ -1167,8 +1165,6 @@ function renderPushkaraQuality() {
     for (const text of [
       labels.rasi[Math.floor(padaIndex(p) / 9)],
       `${labels.nakshatra[nak]} ${pada}` + (isVargottamaPada(p) ? ` (${labels.ui.vargottamaWord})` : ""),
-      String(padaPositionInRasi(p)),
-      labels.taraCategories[pushkaraTara(p)],
       labels.planets[STAR_LORD_CYCLE[nak % 9]],
       pushkaraGrade(p),
       here.join(", ") || "\u2013",
@@ -1209,8 +1205,7 @@ function renderGrahaDetails() {
       labels.planets[g.star_lord] || g.star_lord,
       pushkaraGrade([g.nakshatra, g.pada])
         ? `${gradeText(state.lang, pushkaraGrade([g.nakshatra, g.pada]))} \u00B7 ${labels.nakshatra[g.nakshatra]} ${g.pada}` +
-          (isVargottamaPada([g.nakshatra, g.pada]) ? ` (${labels.ui.vargottamaWord})` : "") +
-          ` \u00B7 ${labels.taraCategories[pushkaraTara([g.nakshatra, g.pada])]}`
+          (isVargottamaPada([g.nakshatra, g.pada]) ? ` (${labels.ui.vargottamaWord})` : "")
         : "–",
       inKaalaPakai.has(g.name) ? labels.ui.kaalaPakaiYes : "–",
     ];
