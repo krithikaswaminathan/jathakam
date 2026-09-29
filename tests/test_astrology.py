@@ -213,3 +213,28 @@ def test_reading_page_lists_the_same_padas():
     js = open("static/labels.js", encoding="utf-8").read()
     block = js[js.index("const PUSHKARA_PADAS = [") : js.index("];", js.index("const PUSHKARA_PADAS = ["))]
     assert [(int(a), int(b)) for a, b in re.findall(r"\[(\d+), (\d)\]", block)] == PAPER_PUSHKARA_PADAS
+
+
+def test_pushkara_pada_quality_by_position_in_rasi():
+    # Each pada's position among the 9 of its rasi, read as a tara: 9 good, 3 neutral, 12 bad.
+    from collections import Counter
+
+    from app.constants import TARA_CATEGORIES, TARA_QUALITY
+
+    positions = [((nak * 4 + pada - 1) % 9) + 1 for nak, pada in PAPER_PUSHKARA_PADAS]
+    assert positions == [7, 9, 3, 5, 6, 8, 1, 3, 7, 9, 3, 5, 6, 8, 1, 3, 7, 9, 3, 5, 6, 8, 1, 3]
+    qualities = [TARA_QUALITY[TARA_CATEGORIES[p - 1]] for p in positions]
+    assert Counter(qualities) == {"good": 9, "neutral": 3, "bad": 12}
+    assert qualities[0] == "bad"  # Bharani 3, 7th in Mesham: Vadha
+
+
+def test_reading_page_tara_order_matches_constants():
+    import re
+
+    from app.constants import TARA_CATEGORIES, TARA_QUALITY
+
+    js = open("static/labels.js", encoding="utf-8").read()
+    order = js[js.index("const TARA_ORDER = [") : js.index("];", js.index("const TARA_ORDER = ["))]
+    assert re.findall(r'"([A-Za-z-]+)"', order) == TARA_CATEGORIES
+    for name, quality in TARA_QUALITY.items():
+        assert re.search(rf'"?{re.escape(name)}"?: "{quality}"', js), name

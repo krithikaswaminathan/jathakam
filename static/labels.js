@@ -50,6 +50,9 @@ const LABELS = {
       sashtashtagamSummary: "6th or 8th in D9, bringing issues related to the planet and its houses",
       sashtashtagamNoLordship: "rules no house; sits in house {house}",
       topHome: "Jathakam", topPariharam: "Pariharam", topPrasannam: "Prasannam", vargottamaWord: "vargottama",
+      pushkaraQualityTitle: "Pushkara Navamsa quality",
+      pushkaraQualityIntro: "Each Pushkara pada's position among the 9 padas of its rasi, read as a tara: the 7th is Vadha, bad; the 9th is Ati-Mitra, good. Rows with a planet of this chart are highlighted.",
+      colPosition: "Position in rasi", colTara: "Tara", colQuality: "Quality", colPlanetsHere: "Planets here", colPushkaraPada: "Pushkara pada",
       prasNow: "Now", prasUseLocation: "Use my location", prasChangePlace: "Change place",
       prasTime: "Time", prasPlace: "Place", prasMyLocation: "Your location ({lat}, {lon})",
       prasLocating: "Finding your location\u2026", prasCasting: "Casting the chart\u2026",
@@ -92,6 +95,7 @@ const LABELS = {
     tithiNames: ["Prathamai", "Dwitiyai", "Tritiyai", "Chaturthi", "Panchami", "Shashti", "Saptami", "Ashtami", "Navami", "Dasami", "Ekadasi", "Dwadasi", "Trayodasi", "Chaturdasi"],
     paksha: { shukla: "Shukla", krishna: "Krishna" },
     pournami: "Pournami", amavasai: "Amavasai",
+    quality: { good: "Good", bad: "Bad", neutral: "Neutral" },
     moorthi: { Swarna: "Swarna (gold)", Rajatha: "Rajatha (silver)", Thamira: "Thamira (copper)", Loha: "Loha (iron)" },
     moorthiResult: { Swarna: "very favourable", Rajatha: "favourable", Thamira: "average", Loha: "unfavourable" },
   },
@@ -146,6 +150,9 @@ const LABELS = {
       sashtashtagamSummary: "D9இல் 6 அல்லது 8ஆம் இடம்; அந்தக் கிரகம், அதன் வீடுகள் தொடர்பான பிரச்சினைகள்",
       sashtashtagamNoLordship: "எந்த வீட்டிற்கும் அதிபதி இல்லை; {house}ஆம் வீட்டில் உள்ளது",
       topHome: "ஜாதகம்", topPariharam: "பரிகாரம்", topPrasannam: "பிரசன்னம்", vargottamaWord: "வர்கோத்தமம்",
+      pushkaraQualityTitle: "புஷ்கர நவாம்சத் தரம்",
+      pushkaraQualityIntro: "ஒவ்வொரு புஷ்கர பாதமும் தன் ராசியின் 9 பாதங்களில் எத்தனையாவது என்பது தாரையாகப் பார்க்கப்படுகிறது: 7ஆம் இடம் வதம், கெட்டது; 9ஆம் இடம் அதிமித்ரம், நல்லது. இந்த ஜாதகத்தின் கிரகம் உள்ள வரிகள் குறிக்கப்பட்டுள்ளன.",
+      colPosition: "ராசியில் இடம்", colTara: "தாரை", colQuality: "தரம்", colPlanetsHere: "இங்குள்ள கிரகங்கள்", colPushkaraPada: "புஷ்கர பாதம்",
       prasNow: "இப்போது", prasUseLocation: "என் இருப்பிடம்", prasChangePlace: "இடத்தை மாற்று",
       prasTime: "நேரம்", prasPlace: "இடம்", prasMyLocation: "உங்கள் இருப்பிடம் ({lat}, {lon})",
       prasLocating: "உங்கள் இருப்பிடத்தைக் கண்டறிகிறது\u2026", prasCasting: "ஜாதகம் கணிக்கப்படுகிறது\u2026",
@@ -188,6 +195,7 @@ const LABELS = {
     tithiNames: ["பிரதமை", "துவிதியை", "திருதியை", "சதுர்த்தி", "பஞ்சமி", "சஷ்டி", "சப்தமி", "அஷ்டமி", "நவமி", "தசமி", "ஏகாதசி", "துவாதசி", "திரயோதசி", "சதுர்த்தசி"],
     paksha: { shukla: "வளர்பிறை", krishna: "தேய்பிறை" },
     pournami: "பௌர்ணமி", amavasai: "அமாவாசை",
+    quality: { good: "நல்லது", bad: "கெட்டது", neutral: "சமம்" },
     moorthi: { Swarna: "சுவர்ண (தங்கம்)", Rajatha: "ரஜத (வெள்ளி)", Thamira: "தாமிர (செம்பு)", Loha: "லோஹ (இரும்பு)" },
     moorthiResult: { Swarna: "மிக நல்லது", Rajatha: "நல்லது", Thamira: "சுமார்", Loha: "சாதகமில்லை" },
   },
@@ -277,10 +285,22 @@ const STAR_LORD_CYCLE = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupite
 const padaIndex = ([nak, pada]) => nak * 4 + pada - 1;
 const isVargottamaPada = (p) => Math.floor(padaIndex(p) / 9) === padaIndex(p) % 12;
 const bothLangs = (fn) => ({ en: fn("en"), ta: fn("ta") });
+// A Pushkara pada's quality: its position among the 9 padas of its rasi (1..9), read as a tara.
+// Must match TARA_CATEGORIES and TARA_QUALITY in app/constants.py.
+const TARA_ORDER = ["Janma", "Sampat", "Vipat", "Kshema", "Pratyak", "Sadhaka", "Vadha", "Mitra", "Ati-Mitra"];
+const TARA_QUALITY = {
+  Janma: "neutral", Sampat: "good", Vipat: "bad", Kshema: "good", Pratyak: "bad",
+  Sadhaka: "good", Vadha: "bad", Mitra: "good", "Ati-Mitra": "good",
+};
+const padaPositionInRasi = (p) => (padaIndex(p) % 9) + 1;
+const pushkaraTara = (p) => TARA_ORDER[padaPositionInRasi(p) - 1];
+const pushkaraTaraText = (lang, p) =>
+  `${padaPositionInRasi(p)}: ${LABELS[lang].taraCategories[pushkaraTara(p)]} (${LABELS[lang].quality[TARA_QUALITY[pushkaraTara(p)]]})`;
 const VARGOTTAMA_WORD = { en: "vargottama", ta: "வர்கோத்தமம்" };
 const pushkaraPadaText = (lang, p) =>
   `${LABELS[lang].nakshatra[p[0]]} ${p[1]} \u00B7 ${LABELS[lang].planets[STAR_LORD_CYCLE[p[0] % 9]]}` +
-  (isVargottamaPada(p) ? ` (${VARGOTTAMA_WORD[lang]})` : "");
+  (isVargottamaPada(p) ? ` (${VARGOTTAMA_WORD[lang]})` : "") +
+  ` \u2014 ${pushkaraTaraText(lang, p)}`;
 
 const READING_TOPICS = {
   pushkaraNavamsa: {
@@ -317,6 +337,13 @@ const READING_TOPICS = {
             bothLangs(() => String(padas.length)),
           ];
         }),
+      },
+      {
+        heading: { en: "Quality by position (Tara Balam)", ta: "இடத்தின்படி தரம் (தாரா பலம்)" },
+        text: {
+          en: "Number a Pushkara pada by its position among the 9 padas of its rasi and read that number as a tara, as in Tara Balam: 1 Janma (neutral), 2 Sampat, 4 Kshema, 6 Sadhaka, 8 Mitra and 9 Ati-Mitra (good), 3 Vipat, 5 Pratyak and 7 Vadha (bad). Bharani 3 is the 7th pada of Mesham, Vadha, so it is bad, as are all three of Venus's padas. Air signs' Pushkara padas (6th and 8th) are both good; earth signs' (3rd and 5th) both bad; fire signs' are one good (9th) and one bad (7th); water signs' one neutral (1st) and one bad (3rd). In all, 9 are good, 3 neutral and 12 bad.",
+          ta: "ஒரு புஷ்கர பாதம் தன் ராசியின் 9 பாதங்களில் எத்தனையாவது என்பதை, தாரா பலம் போல் தாரையாகப் படிக்கவும்: 1 ஜென்மம் (சமம்), 2 சம்பத், 4 க்ஷேமம், 6 சாதகம், 8 மித்ரம், 9 அதிமித்ரம் (நல்லது), 3 விபத், 5 பிரத்யக், 7 வதம் (கெட்டது). பரணி 3 மேஷத்தின் 7ஆம் பாதம், வதம், எனவே கெட்டது; சுக்ரனின் மூன்று பாதங்களும் அப்படியே. வாயு ராசிகளின் புஷ்கர பாதங்கள் (6, 8) இரண்டும் நல்லவை; பூமி ராசிகளின் (3, 5) இரண்டும் கெட்டவை; அக்னி ராசிகளுக்கு ஒன்று நல்லது (9), ஒன்று கெட்டது (7); நீர் ராசிகளுக்கு ஒன்று சமம் (1), ஒன்று கெட்டது (3). மொத்தம் 9 நல்லவை, 3 சமம், 12 கெட்டவை.",
+        },
       },
       {
         heading: { en: "Placement and strength", ta: "அமைவும் பலமும்" },
