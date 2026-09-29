@@ -152,3 +152,6 @@ python -m pytest tests/ -v
   6th, 8th and 9th places (Sadhaka, Mitra and Ati-Mitra) are counted. That leaves nine padas, all
   in fire and air signs and all on stars of the Sun, Rahu or Jupiter. The 8th place is graded A,
   the 9th B and the 6th C. A planet in one of the other fifteen Pushkara padas shows as Present.
+  A planet in an A, B or C pada gives the benefit in its own Mahadasa only when, counting in the
+  Udu Maha Dasai (Vimshottari) order from the planet as 1 to the pada's star lord, the lord comes
+  2nd, 6th, 8th or 9th. The Dasa tab and Graha Details say whether the dasa works.
