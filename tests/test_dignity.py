@@ -69,3 +69,61 @@ def test_krithika_chart_has_moon_ucham_and_saturn_neecham_only():
     }
     result = compute_dignities(build_chart(250.0, longitudes, SPEEDS))
     assert {(e.planet, e.state) for e in result} == {("Moon", "ucham"), ("Saturn", "neecham")}
+
+
+# Paramoccham / paramaneecham padas worked out from the BPHS deep degrees. Five of the seven fall in
+# a 2nd or 4th pada and only the Sun and Jupiter in a 1st or 3rd, as the Varaha Mihira article notes.
+PARAMOCCHAM_PADAS = {
+    "Sun": (0, 3), "Moon": (2, 2), "Mars": (22, 2), "Mercury": (12, 2),
+    "Jupiter": (7, 1), "Venus": (26, 4), "Saturn": (14, 4),
+}
+PARAMANEECHAM_PADAS = {
+    "Sun": (14, 1), "Moon": (15, 4), "Mars": (8, 4), "Mercury": (25, 4),
+    "Jupiter": (20, 3), "Venus": (13, 2), "Saturn": (1, 2),
+}
+
+
+def test_deep_point_padas():
+    from app.constants import DIGNITY
+    from app.dignity import deep_point_pada
+
+    for planet, (exalt, debil, deep) in DIGNITY.items():
+        if deep is None:
+            continue
+        assert deep_point_pada(exalt, deep) == PARAMOCCHAM_PADAS[planet], planet
+        assert deep_point_pada(debil, deep) == PARAMANEECHAM_PADAS[planet], planet
+    padas = [p for _, p in PARAMOCCHAM_PADAS.values()]
+    assert sum(p in (2, 4) for p in padas) == 5
+
+
+def test_parama_lasts_one_degree_ending_at_the_deep_degree():
+    # Sun's deep degree is 10: 9.001 to 10.000 is paramoccham, 9.0 and 10.01 are not.
+    for deg, expected in [(9.0, False), (9.001, True), (10.0, True), (10.01, False)]:
+        sun = by_planet(compute_dignities(chart_with({"Sun": (0, deg)})))["Sun"]
+        assert sun.parama is expected, deg
+    saturn = by_planet(compute_dignities(chart_with({"Saturn": (0, 19.5)})))["Saturn"]
+    assert saturn.state == "neecham" and saturn.parama  # paramaneecham, Mesham 19-20
+
+
+def test_entry_gives_the_planets_own_pada_and_the_deep_pada():
+    moon = by_planet(compute_dignities(chart_with({"Moon": (1, 5.75)})))["Moon"]
+    assert (moon.nakshatra, moon.pada) == (2, 3)  # Krittika 3, as in the saved chart
+    assert (moon.deep_nakshatra, moon.deep_pada) == (2, 2)  # paramoccham in Krittika 2
+    assert not moon.parama
+
+
+def test_rahu_and_ketu_get_only_their_pada():
+    rahu = by_planet(compute_dignities(chart_with({"Rahu": (1, 12.0)})))["Rahu"]
+    assert rahu.state == "ucham" and rahu.deep_degree is None and not rahu.parama
+    assert (rahu.nakshatra, rahu.pada, rahu.deep_nakshatra) == (3, 1, None)  # Rohini 1
+
+
+def test_reading_page_table_matches_constants():
+    import re
+
+    from app.constants import DIGNITY
+
+    js = open("static/labels.js", encoding="utf-8").read()
+    block = js[js.index("const DIGNITY_TABLE = {") : js.index("};", js.index("const DIGNITY_TABLE = {"))]
+    rows = dict((p, (int(r), None if d == "null" else float(d))) for p, r, d in re.findall(r"(\w+): \[(\d+), (\w+|\d+)\]", block))
+    assert rows == {p: (exalt, deep) for p, (exalt, _debil, deep) in DIGNITY.items()}

@@ -69,6 +69,11 @@ class DignityOut(BaseModel):
     degree_in_sign: float
     deep_degree: float | None
     degrees_from_deep: float | None
+    nakshatra: int = 0
+    pada: int = 1
+    parama: bool = False
+    deep_nakshatra: int | None = None
+    deep_pada: int | None = None
 
 
 class SoonyaRasiOut(BaseModel):

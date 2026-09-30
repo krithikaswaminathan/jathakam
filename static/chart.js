@@ -109,6 +109,7 @@ function applyLanguage() {
   document.getElementById("thDgState").textContent = labels.ui.colState;
   document.getElementById("thDgRasi").textContent = labels.ui.colRasi;
   document.getElementById("thDgDeg").textContent = labels.ui.colDegInSign;
+  document.getElementById("thDgPada").textContent = labels.ui.colPada;
   document.getElementById("thDgDeep").textContent = labels.ui.colDeep;
   document.getElementById("thDgDist").textContent = labels.ui.colDistance;
   document.getElementById("dignityNote").textContent = labels.ui.dignityNote;
@@ -1235,6 +1236,12 @@ function renderGrahaDetails() {
   }
 }
 
+function dignityStateText(e) {
+  const ui = L().ui;
+  if (e.state === "ucham") return e.parama ? ui.dignityParamoccham : ui.dignityUcham;
+  return e.parama ? ui.dignityParamaneecham : ui.dignityNeecham;
+}
+
 function renderDignity() {
   const labels = L();
   const entries = state.chart.dignities || [];
@@ -1248,18 +1255,21 @@ function renderDignity() {
     return;
   }
   summary.textContent = entries
-    .map((e) => `${labels.planets[e.planet] || e.planet}: ${e.state === "ucham" ? labels.ui.dignityUcham : labels.ui.dignityNeecham}`)
+    .map((e) => `${labels.planets[e.planet] || e.planet} ${dignityStateText(e)}`)
     .join("  \u00B7  ");
   table.classList.remove("hidden");
   for (const e of entries) {
     const tr = document.createElement("tr");
-    tr.className = e.state === "ucham" ? "dignity-ucham" : "dignity-neecham";
+    tr.className = (e.state === "ucham" ? "dignity-ucham" : "dignity-neecham") + (e.parama ? " dignity-parama" : "");
     const cells = [
       labels.planets[e.planet] || e.planet,
-      e.state === "ucham" ? labels.ui.dignityUcham : labels.ui.dignityNeecham,
+      dignityStateText(e),
       labels.rasi[e.rasi],
       formatDMS(e.degree_in_sign),
-      e.deep_degree === null ? "\u2013" : formatDMS(e.deep_degree),
+      `${labels.nakshatra[e.nakshatra]} ${e.pada}`,
+      e.deep_degree === null
+        ? "\u2013"
+        : `${formatDMS(e.deep_degree)} \u00B7 ${labels.nakshatra[e.deep_nakshatra]} ${e.deep_pada}`,
       e.degrees_from_deep === null ? "\u2013" : formatDMS(e.degrees_from_deep),
     ];
     for (const value of cells) {

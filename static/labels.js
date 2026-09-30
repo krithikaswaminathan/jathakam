@@ -76,8 +76,9 @@ const LABELS = {
       peyarchiNote: "The Moorthi is counted from your janma rasi ({janma}) to the Moon's rasi at the moment of each peyarchi, from 2026 to 2031. Times are in the birth place's time zone. The dates follow the Thirukanitha method, so a Vakya panchangam may give slightly different dates.",
       dignityTab: "Ucham / Neecham", colState: "State", colDeep: "Deep point", colDistance: "From deep point",
       dignityUcham: "Ucham (exalted)", dignityNeecham: "Neecham (debilitated)",
+      dignityParamoccham: "Paramoccham (the peak)", dignityParamaneecham: "Paramaneecham (the lowest point)",
       dignityNone: "No planet is in its exaltation or debilitation sign.",
-      dignityNote: "Sign-based, main chart only. Rahu and Ketu use the BPHS reading (traditions differ). Neecha Bhanga, the cancellation of a debilitation, is not modeled.",
+      dignityNote: "This looks at the rasi chart only. Paramoccham and paramaneecham last a single degree that ends at the deep degree, so for the Sun it runs from just past 9\u00B0 to 10\u00B0. Rahu and Ketu use the BPHS signs and have no agreed deep degree, so only the pada they sit in is shown. Neecha Bhanga, the cancellation of a debilitation, is not modeled.",
       pranapada: "Pranapada Lagna", houseWord: "house",
       pranapadaHint: "Moves about 5\u00B0 per minute of birth time, so it is very sensitive to the exact time and sunrise.",
       yogaPresent: "Present", yogaAbsent: "Not present", yogaSummary: "Present in this chart",
@@ -179,8 +180,9 @@ const LABELS = {
       peyarchiNote: "ஒவ்வொரு பெயர்ச்சியின் போதும் சந்திரன் நின்ற ராசியை உங்கள் ஜென்ம ராசியிலிருந்து ({janma}) எண்ணி மூர்த்தி கணக்கிடப்படுகிறது, 2026 முதல் 2031 வரை. நேரங்கள் பிறந்த ஊரின் நேர மண்டலத்தில் உள்ளன. தேதிகள் திருக்கணித முறைப்படி அமைந்தவை, அதனால் வாக்கிய பஞ்சாங்கத் தேதிகள் சற்று மாறுபடலாம்.",
       dignityTab: "உச்சம் / நீசம்", colState: "நிலை", colDeep: "உச்ச பாகை", colDistance: "உச்ச பாகையிலிருந்து",
       dignityUcham: "உச்சம்", dignityNeecham: "நீசம்",
+      dignityParamoccham: "பரமோச்சம் (உச்சத்தின் சிகரம்)", dignityParamaneecham: "பரம நீசம் (நீசத்தின் அடிமட்டம்)",
       dignityNone: "எந்த கிரகமும் உச்ச அல்லது நீச ராசியில் இல்லை.",
-      dignityNote: "ராசி அடிப்படையிலானது, ராசி சக்கரத்திற்கு மட்டும். ராகு, கேதுவுக்கு பராசர ஹோரை (BPHS) கருத்து பயன்படுத்தப்படுகிறது (மரபுகள் வேறுபடும்). நீச பங்கம் கணக்கிடப்படவில்லை.",
+      dignityNote: "இது ராசி கட்டத்தை மட்டுமே பார்க்கிறது. பரமோச்சமும் பரம நீசமும் ஒரே ஒரு பாகை மட்டுமே நீடிக்கும், அது உச்ச பாகையில் முடிகிறது. சூரியனுக்கு இது 9\u00B0க்குச் சற்று மேலிருந்து 10\u00B0 வரை. ராகு, கேதுவுக்கு BPHS ராசிகள் பயன்படுத்தப்படுகின்றன, ஒப்புக்கொள்ளப்பட்ட உச்ச பாகை இல்லை, அதனால் அவை நிற்கும் பாதம் மட்டுமே காட்டப்படுகிறது. நீச பங்கம் கணக்கிடப்படவில்லை.",
       pranapada: "பிராணபத லக்னம்", houseWord: "வீடு",
       pranapadaHint: "பிறந்த நேரத்தின் ஒவ்வொரு நிமிடத்திற்கும் சுமார் 5\u00B0 நகர்வதால், துல்லியமான நேரம் மற்றும் சூரிய உதயத்தைப் பொறுத்து மிகவும் மாறும்.",
       yogaPresent: "உள்ளது", yogaAbsent: "இல்லை", yogaSummary: "இந்த ஜாதகத்தில் உள்ளவை",
@@ -327,6 +329,22 @@ const pushkaraPadaText = (lang, p) =>
   `${LABELS[lang].nakshatra[p[0]]} ${p[1]} \u00B7 ${LABELS[lang].planets[STAR_LORD_CYCLE[p[0] % 9]]}` +
   (isVargottamaPada(p) ? ` (${VARGOTTAMA_WORD[lang]})` : "");
 
+// Exaltation rasi and deep degree per planet (BPHS 3.49-50), mirroring DIGNITY in app/constants.py.
+// Neecham is the 7th rasi at the same degree. Rahu and Ketu have signs but no agreed deep degree.
+const DIGNITY_TABLE = {
+  Sun: [0, 10], Moon: [1, 3], Mars: [9, 28], Mercury: [5, 15], Jupiter: [3, 5], Venus: [11, 27], Saturn: [6, 20],
+  Rahu: [1, null], Ketu: [7, null],
+};
+// The pada holding a deep point, taken just below the degree, since the one-degree span ends there.
+const deepPointPada = (rasi, degree) => {
+  const lon = rasi * 30 + degree - 1e-6;
+  return [Math.floor(lon / (360 / 27)), Math.floor((lon % (360 / 27)) / (360 / 108)) + 1];
+};
+const deepPointText = (lang, rasi, degree) => {
+  const [nak, pada] = deepPointPada(rasi, degree);
+  return `${LABELS[lang].rasi[rasi]} ${degree}\u00B0 \u00B7 ${LABELS[lang].nakshatra[nak]} ${pada}`;
+};
+
 const READING_TOPICS = {
   pushkaraNavamsa: {
     title: { en: "Pushkara Navamsa", ta: "புஷ்கர நவாம்சம்" },
@@ -451,28 +469,26 @@ const READING_TOPICS = {
   dignity: {
     title: { en: "Ucham and Neecham", ta: "உச்சம் மற்றும் நீசம்" },
     intro: {
-      en: "A planet in its sign of exaltation (ucham) gains strength, and in its sign of debilitation (neecham, always the opposite sign) it grows weak. The deep point is the exact degree where the effect is strongest, and the debilitation deep point is the same degree in the opposite sign.",
-      ta: "ஒரு கிரகம் தனது உச்ச ராசியில் இருந்தால் பலம் பெறுகிறது, நீச ராசியில் (எப்போதும் எதிர் ராசி) இருந்தால் பலவீனமடைகிறது. உச்ச பாகை என்பது பலன் உச்சத்தை அடையும் துல்லியமான பாகை. நீச பாகை எதிர் ராசியில் அதே பாகையாகும்.",
+      en: "Parashara gives every planet a rasi where it is exalted, its ucham, and seven rasis away a rasi where it is debilitated, its neecham. Inside the ucham rasi there is one exact degree where the exaltation peaks, the paramoccham, and the same degree in the neecham rasi is the lowest point, the paramaneecham. Varaha Mihira likens the ucham to the summit of a mountain and the neecham to the bottom of a trench. The peak lasts just one degree and ends at that degree, so for the Sun, whose paramoccham is 10\u00B0 of Mesham, it runs from just past 9\u00B0 to 10\u00B0. Climbing towards the summit a planet is full of drive, and once past it the energy starts to ease. The table gives each planet's paramoccham and paramaneecham with the nakshatra pada where they fall.",
+      ta: "பராசரர் ஒவ்வொரு கிரகத்திற்கும் அது உச்சம் பெறும் ஒரு ராசியையும், அதிலிருந்து ஏழாவது ராசியில் அது நீசம் பெறும் ராசியையும் தருகிறார். உச்ச ராசிக்குள் உச்சம் சிகரத்தை அடையும் ஒரு துல்லியமான பாகை உண்டு, அதுவே பரமோச்சம். நீச ராசியில் அதே பாகை அடிமட்டம், அதுவே பரம நீசம். வராஹ மிஹிரர் உச்சத்தை மலையின் உச்சிக்கும் நீசத்தைப் பள்ளத்தின் அடிக்கும் ஒப்பிடுகிறார். சிகரம் ஒரே ஒரு பாகை மட்டுமே நீடிக்கும், அந்தப் பாகையில் முடியும். சூரியனின் பரமோச்சம் மேஷம் 10\u00B0, எனவே அது 9\u00B0க்குச் சற்று மேலிருந்து 10\u00B0 வரை. சிகரத்தை நோக்கி ஏறும்போது கிரகம் முழு உத்வேகத்துடன் இருக்கும், அதைக் கடந்ததும் அந்த வேகம் தணியத் தொடங்கும். ஒவ்வொரு கிரகத்தின் பரமோச்சமும் பரம நீசமும், அவை விழும் நட்சத்திரப் பாதத்துடன், அட்டவணையில் உள்ளன.",
     },
     tableHeader: [
-      { en: "Planet", ta: "கிரகம்" }, { en: "Ucham", ta: "உச்சம்" }, { en: "Neecham", ta: "நீசம்" },
+      { en: "Planet", ta: "கிரகம்" }, { en: "Ucham", ta: "உச்சம்" }, { en: "Paramoccham", ta: "பரமோச்சம்" },
+      { en: "Neecham", ta: "நீசம்" }, { en: "Paramaneecham", ta: "பரம நீசம்" },
     ],
-    table: [
-      [{ en: "Sun", ta: "சூரியன்" }, { en: "Aries 10\u00B0", ta: "மேஷம் 10\u00B0" }, { en: "Libra", ta: "துலாம்" }],
-      [{ en: "Moon", ta: "சந்திரன்" }, { en: "Taurus 3\u00B0", ta: "ரிஷபம் 3\u00B0" }, { en: "Scorpio", ta: "விருச்சிகம்" }],
-      [{ en: "Mars", ta: "செவ்வாய்" }, { en: "Capricorn 28\u00B0", ta: "மகரம் 28\u00B0" }, { en: "Cancer", ta: "கடகம்" }],
-      [{ en: "Mercury", ta: "புதன்" }, { en: "Virgo 15\u00B0", ta: "கன்னி 15\u00B0" }, { en: "Pisces", ta: "மீனம்" }],
-      [{ en: "Jupiter", ta: "குரு" }, { en: "Cancer 5\u00B0", ta: "கடகம் 5\u00B0" }, { en: "Capricorn", ta: "மகரம்" }],
-      [{ en: "Venus", ta: "சுக்ரன்" }, { en: "Pisces 27\u00B0", ta: "மீனம் 27\u00B0" }, { en: "Virgo", ta: "கன்னி" }],
-      [{ en: "Saturn", ta: "சனி" }, { en: "Libra 20\u00B0", ta: "துலாம் 20\u00B0" }, { en: "Aries", ta: "மேஷம்" }],
-      [{ en: "Rahu (BPHS)", ta: "ராகு (BPHS)" }, { en: "Taurus", ta: "ரிஷபம்" }, { en: "Scorpio", ta: "விருச்சிகம்" }],
-      [{ en: "Ketu (BPHS)", ta: "கேது (BPHS)" }, { en: "Scorpio", ta: "விருச்சிகம்" }, { en: "Taurus", ta: "ரிஷபம்" }],
-    ],
+    table: Object.entries(DIGNITY_TABLE).map(([planet, [rasi, deg]]) => [
+      bothLangs((lang) => LABELS[lang].planets[planet] + (deg === null ? " (BPHS)" : "")),
+      bothLangs((lang) => LABELS[lang].rasi[rasi]),
+      bothLangs((lang) => (deg === null ? "\u2013" : deepPointText(lang, rasi, deg))),
+      bothLangs((lang) => LABELS[lang].rasi[(rasi + 6) % 12]),
+      bothLangs((lang) => (deg === null ? "\u2013" : deepPointText(lang, (rasi + 6) % 12, deg))),
+    ]),
     note: {
-      en: "Rahu and Ketu are disputed. BPHS gives Taurus and Scorpio, which the app uses, Sanjay Rath gives Gemini and Sagittarius, and the Saptarishis treat both as exalted in Scorpio. Neecha Bhanga, the classical cancellation of a debilitation, is not modeled.",
-      ta: "ராகு, கேது குறித்துக் கருத்து வேறுபாடு உள்ளது. இங்கு பயன்படுத்தப்படுவது BPHS கூறும் ரிஷபம், விருச்சிகம். சஞ்சய் ரத் மிதுனம், தனுசு என்கிறார். சப்தரிஷிகள் இருவரும் விருச்சிகத்தில் உச்சம் என்கின்றனர். நீச பங்கம் கணக்கிடப்படவில்லை.",
+      en: "Five of the seven planets reach their peak and their lowest point in a 2nd or 4th pada, and only the Sun and Jupiter do so in a 1st or 3rd pada. Rahu and Ketu are disputed. BPHS gives Taurus and Scorpio, which the app uses, while Sanjay Rath gives Gemini and Sagittarius and the Saptarishis treat both as exalted in Scorpio. With no agreed deep degree, the app shows only the pada they sit in. Neecha Bhanga, the classical cancellation of a debilitation, is not modeled.",
+      ta: "ஏழு கிரகங்களில் ஐந்து, தம் சிகரத்தையும் அடிமட்டத்தையும் 2 அல்லது 4ஆம் பாதத்தில் அடைகின்றன. சூரியனும் குருவும் மட்டுமே 1 அல்லது 3ஆம் பாதத்தில் அடைகின்றன. ராகு, கேது குறித்துக் கருத்து வேறுபாடு உள்ளது. BPHS ரிஷபம், விருச்சிகம் என்கிறது, செயலி அதையே பயன்படுத்துகிறது. சஞ்சய் ரத் மிதுனம், தனுசு என்கிறார், சப்தரிஷிகள் இருவரும் விருச்சிகத்தில் உச்சம் என்கின்றனர். ஒப்புக்கொள்ளப்பட்ட உச்ச பாகை இல்லாததால், அவை நிற்கும் பாதம் மட்டுமே காட்டப்படுகிறது. நீச பங்கம் கணக்கிடப்படவில்லை.",
     },
     sources: [
+      { title: "Varaha Mihira, \u201CReflections on Uccha and Neecha of Grahas\u201D (Thoughts on Jyotish, 2016)", url: "https://medium.com/thoughts-on-jyotish/reflections-on-uccha-and-neecha-of-grahas-28287f3b33b6" },
       { title: "Brihat Parashara Hora Sastra, Chapter 3", url: "https://yourastroguide.wordpress.com/2012/09/01/brihat-parashara-hora-sashtra-chapter-3/" },
       { title: "Saptarishis on exaltation/debilitation of Rahu & Ketu", url: "https://madhivanan.in/rahu-ketu-exalted-scorpio/" },
     ],
