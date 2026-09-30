@@ -13,7 +13,13 @@ from app.astrology import (
     longitude_to_rasi,
     make_graha_position,
 )
-from app.constants import PEYARCHI_END_YEAR, PEYARCHI_START_YEAR, RASI_LORDS
+from app.constants import (
+    HIDDEN_TRANSIT_END_YEAR,
+    HIDDEN_TRANSIT_START_YEAR,
+    PEYARCHI_END_YEAR,
+    PEYARCHI_START_YEAR,
+    RASI_LORDS,
+)
 from app.dasa import compute_mahadasas, compute_sub_periods
 from app.db import SavedChart, delete_chart, get_chart, init_db, list_charts, save_chart
 from app.dignity import compute_dignities
@@ -40,6 +46,7 @@ from app.models import (
     HiddenDignityOut,
     KaalaPakaiOut,
     MudakkuOut,
+    NodeTransitOut,
     PeyarchiOut,
     PrasannamResponse,
     PlaceResult,
@@ -178,7 +185,7 @@ def _build_chart_response(
         peyarchis=_peyarchis_out(d1.grahas["Moon"].rasi, timezone),
         drekkana_lords=[DrekkanaLordOut(**vars(e)) for e in compute_drekkana_lords(d1)],
         navamsa_sashtashtagam=_sashtashtagam_out(d1, vargas["D9"], timezone),
-        hidden_dignities=[HiddenDignityOut(**vars(e)) for e in compute_hidden_dignities(d1)],
+        hidden_dignities=_hidden_dignities_out(d1, timezone),
     )
 
 
@@ -195,6 +202,17 @@ def _sashtashtagam_out(d1: ChartData, d9: ChartData, timezone_name: str) -> list
         fields = {**vars(e), "point": vars(e.point) if e.point else None}
         fields["transits"] = [TransitWindowOut(start=w.start.astimezone(tz), end=w.end.astimezone(tz)) for w in e.transits]
         out.append(SashtashtagamOut(**fields))
+    return out
+
+
+def _hidden_dignities_out(d1: ChartData, timezone_name: str) -> list[HiddenDignityOut]:
+    tz = ZoneInfo(timezone_name)
+    out = []
+    start = datetime(HIDDEN_TRANSIT_START_YEAR, 1, 1, tzinfo=tz)
+    end = datetime(HIDDEN_TRANSIT_END_YEAR + 1, 1, 1, tzinfo=tz)
+    for e in compute_hidden_dignities(d1, start, end):
+        transits = [NodeTransitOut(node=t.node, start=t.start.astimezone(tz), end=t.end.astimezone(tz)) for t in e.transits]
+        out.append(HiddenDignityOut(**{**vars(e), "transits": transits}))
     return out
 
 

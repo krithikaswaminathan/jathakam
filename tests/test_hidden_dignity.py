@@ -68,3 +68,33 @@ def test_reading_page_moolatrikonam_padas_match():
     rows = {p: (int(n), int(q)) for p, n, q in re.findall(r"(\w+): \[(\d+), (\d)\]", block)}
     assert rows == {p: moolatrikona_pada(p) for p in rows}
     assert len(rows) == 7
+
+
+def test_house_is_counted_from_the_lagna():
+    chart = _chart({"Sun": (18, 2)})
+    chart.lagna_rasi = 8  # Dhanus lagna
+    ucham = _find(compute_hidden_dignities(chart), "Sun", "ucham")
+    assert (ucham.hidden_rasi, ucham.house) == (4, 9)  # Magha 1 in Simham, the 9th
+
+
+def test_rahu_and_ketu_transits_over_the_suns_hidden_padas():
+    import os
+    from datetime import date, datetime, timedelta, timezone
+
+    import pytest
+
+    if not os.path.exists("ephe/sepl_18.se1"):
+        pytest.skip("Swiss Ephemeris data files not present in ephe/")
+    from app.ephemeris import init_ephemeris
+
+    init_ephemeris("ephe")
+    ist = timezone(timedelta(hours=5, minutes=30))
+    chart = _chart({"Sun": (18, 2)})
+    chart.lagna_rasi = 8
+    entries = compute_hidden_dignities(chart, datetime(2026, 1, 1, tzinfo=ist), datetime(2031, 1, 1, tzinfo=ist))
+    days = lambda t: (t.node, t.start.astimezone(ist).date(), t.end.astimezone(ist).date())
+    # Ketu over Magha 1 and Rahu over Dhanishta 3 (exactly opposite) from 4 Oct to 5 Dec 2026.
+    assert [days(t) for t in _find(entries, "Sun", "ucham").transits] == [("Ketu", date(2026, 10, 4), date(2026, 12, 5))]
+    assert [days(t) for t in _find(entries, "Sun", "neecham").transits] == [("Rahu", date(2026, 10, 4), date(2026, 12, 5))]
+    assert _find(entries, "Sun", "moolatrikonam").transits == []  # Ashwini 3 is not reached by the end of 2030
+

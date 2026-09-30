@@ -164,6 +164,12 @@ class SashtashtagamOut(BaseModel):
     transits: list[TransitWindowOut] = []
 
 
+class NodeTransitOut(BaseModel):
+    node: str
+    start: datetime  # in the chart's time zone
+    end: datetime
+
+
 class HiddenDignityOut(BaseModel):
     planet: str
     kind: str
@@ -175,6 +181,8 @@ class HiddenDignityOut(BaseModel):
     hidden_nakshatra: int
     hidden_pada: int
     hidden_rasi: int
+    house: int = 1
+    transits: list[NodeTransitOut] = []
 
 
 class ChartResponse(BaseModel):

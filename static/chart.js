@@ -641,7 +641,11 @@ function renderHiddenDignity(container) {
   }
   heading.textContent = labels.ui.hiddenChartHeading.replace("{name}", state.chart.name);
   const pada = (nak, p) => `${labels.nakshatra[nak]} ${p}`;
-  const header = [labels.ui.colPlanet, labels.ui.colHides, labels.ui.colA, labels.ui.colB, labels.ui.colC, labels.ui.colHiddenIn];
+  const nodeName = (node) => labels.planets[node];
+  const header = [
+    labels.ui.colPlanet, labels.ui.colHides, labels.ui.colA, labels.ui.colB, labels.ui.colC,
+    labels.ui.colHiddenIn, labels.ui.colBhavam, labels.ui.colNodesOver,
+  ];
   const rows = state.chart.hidden_dignities.map((e, i, all) => [
     i > 0 && all[i - 1].planet === e.planet ? "" : labels.planets[e.planet],
     labels.hiddenKind[e.kind],
@@ -649,11 +653,45 @@ function renderHiddenDignity(container) {
     pada(e.b_nakshatra, e.b_pada),
     String(e.count),
     `${pada(e.hidden_nakshatra, e.hidden_pada)} \u00B7 ${labels.rasi[e.hidden_rasi]}`,
+    String(e.house),
+    e.transits.map((t) => `${nodeName(t.node)} ${fmtDate(t.start)} \u2192 ${fmtDate(t.end)}`).join("\n") || "\u2013",
   ]);
   const toCells = (list) => list.map((text) => ({ [state.lang]: text }));
   const table = readingTable(toCells(header), rows.map(toCells));
   table.classList.add("hidden-dignity-table");
   container.appendChild(table);
+
+  // Every pass still to come, soonest first, spelled out.
+  const now = new Date();
+  const ahead = state.chart.hidden_dignities
+    .flatMap((e) => e.transits.filter((t) => new Date(t.end) >= now).map((t) => ({ e, t })))
+    .sort((x, y) => new Date(x.t.start) - new Date(y.t.start));
+  const tensionHead = document.createElement("h3");
+  tensionHead.className = "reading-subhead";
+  tensionHead.textContent = labels.ui.tensionHeading;
+  container.appendChild(tensionHead);
+  if (ahead.length === 0) {
+    const p = document.createElement("p");
+    p.textContent = labels.ui.tensionNone;
+    container.appendChild(p);
+    return;
+  }
+  const list = document.createElement("ul");
+  list.className = "tension-list";
+  for (const { e, t } of ahead) {
+    const li = document.createElement("li");
+    li.textContent = labels.ui.tensionLine
+      .replace("{node}", nodeName(t.node))
+      .replace("{when}", `${fmtDate(t.start)} \u2192 ${fmtDate(t.end)}`)
+      .replace("{pada}", pada(e.hidden_nakshatra, e.hidden_pada))
+      .replaceAll("{planet}", labels.planets[e.planet])
+      .replace("{kind}", labels.hiddenKind[e.kind].toLowerCase())
+      .replace("{karakas}", labels.karakathvam[e.planet])
+      .replace("{house}", ORDINAL[state.lang](e.house))
+      .replace("{meaning}", labels.ui.houseMeanings[e.house - 1]);
+    list.appendChild(li);
+  }
+  container.appendChild(list);
 }
 
 function renderReadingPage(topicKey) {
@@ -684,6 +722,7 @@ function renderReadingPage(topicKey) {
     if (section.table) container.appendChild(readingTable(section.tableHeader, section.table));
   }
 
+  container.classList.toggle("wide", Boolean(topic.chartTable));
   if (topic.chartTable === "hiddenDignity") renderHiddenDignity(container);
 
   if (topic.note) {
