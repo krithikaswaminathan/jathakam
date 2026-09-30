@@ -152,6 +152,6 @@ MOORTHI_BY_COUNT = {
 PEYARCHI_START_YEAR = 2026
 PEYARCHI_END_YEAR = 2031
 
-# Rahu and Ketu transits over the hidden ucham, neecham and moolatrikonam padas: Jan 2026 to Dec 2030.
+# Rahu and Ketu transits over the hidden ucham, neecham and moolatrikonam padas: Jan 2026 to Dec 2035.
 HIDDEN_TRANSIT_START_YEAR = 2026
-HIDDEN_TRANSIT_END_YEAR = 2030
+HIDDEN_TRANSIT_END_YEAR = 2035

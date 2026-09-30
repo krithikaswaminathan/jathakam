@@ -98,3 +98,25 @@ def test_rahu_and_ketu_transits_over_the_suns_hidden_padas():
     assert [days(t) for t in _find(entries, "Sun", "neecham").transits] == [("Rahu", date(2026, 10, 4), date(2026, 12, 5))]
     assert _find(entries, "Sun", "moolatrikonam").transits == []  # Ashwini 3 is not reached by the end of 2030
 
+
+
+def test_window_up_to_2035_picks_up_the_2032_crossing():
+    import os
+    from datetime import date, datetime, timedelta, timezone
+
+    import pytest
+
+    if not os.path.exists("ephe/sepl_18.se1"):
+        pytest.skip("Swiss Ephemeris data files not present in ephe/")
+    from app.constants import HIDDEN_TRANSIT_END_YEAR
+    from app.ephemeris import init_ephemeris
+
+    assert HIDDEN_TRANSIT_END_YEAR == 2035
+    init_ephemeris("ephe")
+    ist = timezone(timedelta(hours=5, minutes=30))
+    chart = _chart({"Sun": (18, 2)})
+    entries = compute_hidden_dignities(chart, datetime(2026, 1, 1, tzinfo=ist), datetime(2036, 1, 1, tzinfo=ist))
+    days = lambda t: (t.node, t.start.astimezone(ist).date(), t.end.astimezone(ist).date())
+    # Ketu over Ashwini 3 (the Sun's hidden moolatrikonam) in Aug to Oct 2032; the 2036 crossings fall outside.
+    assert [days(t) for t in _find(entries, "Sun", "moolatrikonam").transits] == [("Ketu", date(2032, 8, 11), date(2032, 10, 13))]
+    assert len(_find(entries, "Sun", "ucham").transits) == 1
