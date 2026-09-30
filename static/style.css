@@ -436,3 +436,4 @@ tr.dignity-parama td { background: var(--gold-100); font-weight: 600; }
 #hiddenTab { overflow-x: auto; }
 #hiddenWhereTable td:not(:first-child):not(:nth-child(2)) { font-weight: 600; color: var(--maroon-700); }
 #hiddenTransitTable td:nth-child(6) { white-space: nowrap; }
+th .th-key { display: block; margin-top: 0.15rem; font-size: 0.68rem; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--ink-soft); }

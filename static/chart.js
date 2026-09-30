@@ -1300,9 +1300,15 @@ function renderHiddenDignity() {
   setText("lblHiddenFilter", ui.colPlanet);
   setText("thHwPlanet", ui.colPlanet);
   setText("thHwSits", ui.colSitsIn);
-  setText("thHwUcham", labels.hiddenKind.ucham);
-  setText("thHwNeecham", labels.hiddenKind.neecham);
-  setText("thHwMt", labels.hiddenKind.moolatrikonam);
+  // Each hidden column says how its cells read: pada, rasi, bhavam.
+  for (const [id, kind] of [["thHwUcham", "ucham"], ["thHwNeecham", "neecham"], ["thHwMt", "moolatrikonam"]]) {
+    const th = document.getElementById(id);
+    th.textContent = labels.hiddenKind[kind];
+    const key = document.createElement("span");
+    key.className = "th-key";
+    key.textContent = ui.hiddenCellKey;
+    th.appendChild(key);
+  }
   for (const [id, key] of [["thHtPlanet", "colPlanet"], ["thHtKind", "colHides"], ["thHtPada", "colHiddenIn"],
     ["thHtBhavam", "colBhavam"], ["thHtNode", "colNode"], ["thHtWhen", "colWhen"], ["thHtTension", "colTensionIn"]]) {
     setText(id, ui[key]);
