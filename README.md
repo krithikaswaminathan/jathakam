@@ -53,12 +53,12 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
 - **Prasannam**: a tab at the top that casts the chart for this moment where you are (the
   browser's location, or a place you type if location is not allowed), draws it, and gives the
   Chandra Nadi: the Moon's star, pada, exact degree and the rasi it is crossing. Nothing is saved.
-- **Hidden Ucham and Neecham**: a side-nav page showing where each planet hides its ucham,
-  neecham and moolatrikonam. Count the padas from the planet's Kaala Purusha pada (A) to where it
-  sits (B), both counted, to get C, then count C padas again from B. Rahu and Ketu have no
-  moolatrikonam here. Each hidden pada shows its bhavam and every pass of transit Rahu or Ketu
-  over it from January 2026 to December 2030, when it brings tension in the hiding planet's
-  karakathvam and in that bhavam.
+- **Hidden Ucham / Neecham** tab, after Ucham / Neecham and laid out like Moorthy: where each
+  planet hides its ucham, neecham and moolatrikonam (count the padas from its Kaala Purusha pada
+  A to where it sits B, both counted, to get C, then count C padas again from B), with the bhavam,
+  and every pass of transit Rahu or Ketu over those padas from January 2026 to December 2030,
+  when it brings tension in the hiding planet's karakathvam and that bhavam. A Now or Next line,
+  a planet filter and the running pass highlighted. The Reading page explains the method.
 - **Saved charts**: stored locally, recomputed on load, and deletable.
 
 ## Setup
