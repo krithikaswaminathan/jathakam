@@ -159,5 +159,5 @@ python -m pytest tests/ -v
 - Ucham and neecham follow BPHS 3.49 and 3.50, and paramoccham and paramaneecham follow Varaha
   Mihira's "Reflections on Uccha and Neecha of Grahas" (Thoughts on Jyotish, 2016). The peak or
   lowest point lasts one degree ending at the deep degree, so the Sun's paramoccham runs from just
-  past 9° to 10° of Mesham. Rahu and Ketu have signs but no agreed deep degree, so only their pada
-  is shown.
+  past 9° to 10° of Mesham. Rahu (exalted in Taurus) and Ketu (in Scorpio) peak at 3°, like the
+  Moon, as given by the user, putting Rahu's paramoccham in Krittika 2 and Ketu's in Vishakha 4.

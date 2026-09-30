@@ -78,7 +78,7 @@ const LABELS = {
       dignityUcham: "Ucham (exalted)", dignityNeecham: "Neecham (debilitated)",
       dignityParamoccham: "Paramoccham (the peak)", dignityParamaneecham: "Paramaneecham (the lowest point)",
       dignityNone: "No planet is in its exaltation or debilitation sign.",
-      dignityNote: "This looks at the rasi chart only. Paramoccham and paramaneecham last a single degree that ends at the deep degree, so for the Sun it runs from just past 9\u00B0 to 10\u00B0. Rahu and Ketu use the BPHS signs and have no agreed deep degree, so only the pada they sit in is shown. Neecha Bhanga, the cancellation of a debilitation, is not modeled.",
+      dignityNote: "This looks at the rasi chart only. Paramoccham and paramaneecham last a single degree that ends at the deep degree, so for the Sun it runs from just past 9\u00B0 to 10\u00B0. Rahu and Ketu peak at 3\u00B0, like the Moon. Neecha Bhanga, the cancellation of a debilitation, is not modeled.",
       pranapada: "Pranapada Lagna", houseWord: "house",
       pranapadaHint: "Moves about 5\u00B0 per minute of birth time, so it is very sensitive to the exact time and sunrise.",
       yogaPresent: "Present", yogaAbsent: "Not present", yogaSummary: "Present in this chart",
@@ -182,7 +182,7 @@ const LABELS = {
       dignityUcham: "உச்சம்", dignityNeecham: "நீசம்",
       dignityParamoccham: "பரமோச்சம் (உச்சத்தின் சிகரம்)", dignityParamaneecham: "பரம நீசம் (நீசத்தின் அடிமட்டம்)",
       dignityNone: "எந்த கிரகமும் உச்ச அல்லது நீச ராசியில் இல்லை.",
-      dignityNote: "இது ராசி கட்டத்தை மட்டுமே பார்க்கிறது. பரமோச்சமும் பரம நீசமும் ஒரே ஒரு பாகை மட்டுமே நீடிக்கும், அது உச்ச பாகையில் முடிகிறது. சூரியனுக்கு இது 9\u00B0க்குச் சற்று மேலிருந்து 10\u00B0 வரை. ராகு, கேதுவுக்கு BPHS ராசிகள் பயன்படுத்தப்படுகின்றன, ஒப்புக்கொள்ளப்பட்ட உச்ச பாகை இல்லை, அதனால் அவை நிற்கும் பாதம் மட்டுமே காட்டப்படுகிறது. நீச பங்கம் கணக்கிடப்படவில்லை.",
+      dignityNote: "இது ராசி கட்டத்தை மட்டுமே பார்க்கிறது. பரமோச்சமும் பரம நீசமும் ஒரே ஒரு பாகை மட்டுமே நீடிக்கும், அது உச்ச பாகையில் முடிகிறது. சூரியனுக்கு இது 9\u00B0க்குச் சற்று மேலிருந்து 10\u00B0 வரை. ராகு, கேது சந்திரனைப் போல 3\u00B0இல் சிகரத்தை அடைகின்றன. நீச பங்கம் கணக்கிடப்படவில்லை.",
       pranapada: "பிராணபத லக்னம்", houseWord: "வீடு",
       pranapadaHint: "பிறந்த நேரத்தின் ஒவ்வொரு நிமிடத்திற்கும் சுமார் 5\u00B0 நகர்வதால், துல்லியமான நேரம் மற்றும் சூரிய உதயத்தைப் பொறுத்து மிகவும் மாறும்.",
       yogaPresent: "உள்ளது", yogaAbsent: "இல்லை", yogaSummary: "இந்த ஜாதகத்தில் உள்ளவை",
@@ -330,10 +330,10 @@ const pushkaraPadaText = (lang, p) =>
   (isVargottamaPada(p) ? ` (${VARGOTTAMA_WORD[lang]})` : "");
 
 // Exaltation rasi and deep degree per planet (BPHS 3.49-50), mirroring DIGNITY in app/constants.py.
-// Neecham is the 7th rasi at the same degree. Rahu and Ketu have signs but no agreed deep degree.
+// Neecham is the 7th rasi at the same degree. Rahu and Ketu take the Moon's 3 degrees, as given by the user.
 const DIGNITY_TABLE = {
   Sun: [0, 10], Moon: [1, 3], Mars: [9, 28], Mercury: [5, 15], Jupiter: [3, 5], Venus: [11, 27], Saturn: [6, 20],
-  Rahu: [1, null], Ketu: [7, null],
+  Rahu: [1, 3], Ketu: [7, 3],
 };
 // The pada holding a deep point, taken just below the degree, since the one-degree span ends there.
 const deepPointPada = (rasi, degree) => {
@@ -484,8 +484,8 @@ const READING_TOPICS = {
       bothLangs((lang) => (deg === null ? "\u2013" : deepPointText(lang, (rasi + 6) % 12, deg))),
     ]),
     note: {
-      en: "Five of the seven planets reach their peak and their lowest point in a 2nd or 4th pada, and only the Sun and Jupiter do so in a 1st or 3rd pada. Rahu and Ketu are disputed. BPHS gives Taurus and Scorpio, which the app uses, while Sanjay Rath gives Gemini and Sagittarius and the Saptarishis treat both as exalted in Scorpio. With no agreed deep degree, the app shows only the pada they sit in. Neecha Bhanga, the classical cancellation of a debilitation, is not modeled.",
-      ta: "ஏழு கிரகங்களில் ஐந்து, தம் சிகரத்தையும் அடிமட்டத்தையும் 2 அல்லது 4ஆம் பாதத்தில் அடைகின்றன. சூரியனும் குருவும் மட்டுமே 1 அல்லது 3ஆம் பாதத்தில் அடைகின்றன. ராகு, கேது குறித்துக் கருத்து வேறுபாடு உள்ளது. BPHS ரிஷபம், விருச்சிகம் என்கிறது, செயலி அதையே பயன்படுத்துகிறது. சஞ்சய் ரத் மிதுனம், தனுசு என்கிறார், சப்தரிஷிகள் இருவரும் விருச்சிகத்தில் உச்சம் என்கின்றனர். ஒப்புக்கொள்ளப்பட்ட உச்ச பாகை இல்லாததால், அவை நிற்கும் பாதம் மட்டுமே காட்டப்படுகிறது. நீச பங்கம் கணக்கிடப்படவில்லை.",
+      en: "Five of the seven planets reach their peak and their lowest point in a 2nd or 4th pada, and only the Sun and Jupiter do so in a 1st or 3rd pada. Rahu is exalted in Taurus and Ketu in Scorpio, following BPHS, and both peak at 3\u00B0 like the Moon. That puts Rahu's paramoccham in Krittika 2 and Ketu's in Vishakha 4, with each one's paramaneecham in the other pada. BPHS itself names no degree for Rahu and Ketu, so this 3\u00B0 reading is the user's, and other traditions differ. Sanjay Rath, for example, gives Gemini and Sagittarius, and the Saptarishis treat both as exalted in Scorpio. Neecha Bhanga, the classical cancellation of a debilitation, is not modeled.",
+      ta: "ஏழு கிரகங்களில் ஐந்து, தம் சிகரத்தையும் அடிமட்டத்தையும் 2 அல்லது 4ஆம் பாதத்தில் அடைகின்றன. சூரியனும் குருவும் மட்டுமே 1 அல்லது 3ஆம் பாதத்தில் அடைகின்றன. BPHS படி ராகு ரிஷபத்திலும் கேது விருச்சிகத்திலும் உச்சம் பெறுகின்றன. இரண்டும் சந்திரனைப் போல 3\u00B0இல் சிகரத்தை அடைகின்றன. அதனால் ராகுவின் பரமோச்சம் கார்த்திகை 2இலும் கேதுவின் பரமோச்சம் விசாகம் 4இலும் விழுகிறது, ஒன்றின் பரம நீசம் மற்றதன் பாதத்தில். BPHS ராகு, கேதுவுக்குப் பாகை எதையும் குறிப்பிடவில்லை, எனவே இந்த 3\u00B0 கருத்து பயனருடையது, மற்ற மரபுகள் வேறுபடுகின்றன. உதாரணமாக சஞ்சய் ரத் மிதுனம், தனுசு என்கிறார், சப்தரிஷிகள் இருவரும் விருச்சிகத்தில் உச்சம் என்கின்றனர். நீச பங்கம் கணக்கிடப்படவில்லை.",
     },
     sources: [
       { title: "Varaha Mihira, \u201CReflections on Uccha and Neecha of Grahas\u201D (Thoughts on Jyotish, 2016)", url: "https://medium.com/thoughts-on-jyotish/reflections-on-uccha-and-neecha-of-grahas-28287f3b33b6" },

@@ -51,7 +51,7 @@ def test_nodes_follow_bphs_convention_without_deep_degree():
     result = by_planet(compute_dignities(chart))
     assert result["Rahu"].state == "ucham"  # Rahu exalted in Taurus
     assert result["Ketu"].state == "ucham"  # Ketu exalted in Scorpio
-    assert result["Rahu"].degrees_from_deep is None
+    assert result["Rahu"].degrees_from_deep == 9.0  # deep point 3deg
     swapped = by_planet(compute_dignities(chart_with({"Rahu": (7, 12.0), "Ketu": (1, 12.0)})))
     assert swapped["Rahu"].state == "neecham"
     assert swapped["Ketu"].state == "neecham"
@@ -76,10 +76,12 @@ def test_krithika_chart_has_moon_ucham_and_saturn_neecham_only():
 PARAMOCCHAM_PADAS = {
     "Sun": (0, 3), "Moon": (2, 2), "Mars": (22, 2), "Mercury": (12, 2),
     "Jupiter": (7, 1), "Venus": (26, 4), "Saturn": (14, 4),
+    "Rahu": (2, 2), "Ketu": (15, 4),  # Krittika 2 and Vishakha 4, as the user gave
 }
 PARAMANEECHAM_PADAS = {
     "Sun": (14, 1), "Moon": (15, 4), "Mars": (8, 4), "Mercury": (25, 4),
     "Jupiter": (20, 3), "Venus": (13, 2), "Saturn": (1, 2),
+    "Rahu": (15, 4), "Ketu": (2, 2),
 }
 
 
@@ -88,12 +90,10 @@ def test_deep_point_padas():
     from app.dignity import deep_point_pada
 
     for planet, (exalt, debil, deep) in DIGNITY.items():
-        if deep is None:
-            continue
         assert deep_point_pada(exalt, deep) == PARAMOCCHAM_PADAS[planet], planet
         assert deep_point_pada(debil, deep) == PARAMANEECHAM_PADAS[planet], planet
-    padas = [p for _, p in PARAMOCCHAM_PADAS.values()]
-    assert sum(p in (2, 4) for p in padas) == 5
+    seven = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"]
+    assert sum(PARAMOCCHAM_PADAS[p][1] in (2, 4) for p in seven) == 5
 
 
 def test_parama_lasts_one_degree_ending_at_the_deep_degree():
@@ -112,10 +112,14 @@ def test_entry_gives_the_planets_own_pada_and_the_deep_pada():
     assert not moon.parama
 
 
-def test_rahu_and_ketu_get_only_their_pada():
-    rahu = by_planet(compute_dignities(chart_with({"Rahu": (1, 12.0)})))["Rahu"]
-    assert rahu.state == "ucham" and rahu.deep_degree is None and not rahu.parama
-    assert (rahu.nakshatra, rahu.pada, rahu.deep_nakshatra) == (3, 1, None)  # Rohini 1
+def test_rahu_and_ketu_peak_at_three_degrees():
+    rahu = by_planet(compute_dignities(chart_with({"Rahu": (1, 2.5), "Ketu": (7, 2.5)})))
+    assert rahu["Rahu"].state == "ucham" and rahu["Rahu"].parama  # paramoccham, Taurus 2-3
+    assert (rahu["Rahu"].deep_nakshatra, rahu["Rahu"].deep_pada) == (2, 2)  # Krittika 2
+    assert rahu["Ketu"].state == "ucham" and rahu["Ketu"].parama
+    assert (rahu["Ketu"].deep_nakshatra, rahu["Ketu"].deep_pada) == (15, 4)  # Vishakha 4
+    later = by_planet(compute_dignities(chart_with({"Rahu": (1, 12.0)})))["Rahu"]
+    assert not later.parama and (later.nakshatra, later.pada) == (3, 1)  # Rohini 1
 
 
 def test_reading_page_table_matches_constants():

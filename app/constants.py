@@ -62,9 +62,9 @@ SATURN_NIGHT_SEGMENT = {0: 3, 1: 2, 2: 1, 3: 7, 4: 6, 5: 5, 6: 4}
 INDU_KALA = {"Sun": 30, "Moon": 16, "Mars": 6, "Mercury": 8, "Jupiter": 10, "Venus": 12, "Saturn": 1}
 
 # Dignity: planet -> (exaltation rasi, debilitation rasi, deep exaltation degree).
-# Debilitation is the opposite sign at the same degree. Rahu/Ketu follow the BPHS
-# reading (Rahu exalted Taurus, Ketu exalted Scorpio); other traditions differ
-# (e.g. Gemini/Sagittarius) so they have no agreed deep degree.
+# Debilitation is the opposite sign at the same degree. The seven grahas' degrees are
+# BPHS 3.49-50. Rahu (exalted Taurus) and Ketu (exalted Scorpio) take the Moon's 3deg, as
+# given by the user; BPHS names no degree for them and other traditions differ.
 DIGNITY = {
     "Sun": (0, 6, 10.0),
     "Moon": (1, 7, 3.0),
@@ -73,8 +73,8 @@ DIGNITY = {
     "Jupiter": (3, 9, 5.0),
     "Venus": (11, 5, 27.0),
     "Saturn": (6, 0, 20.0),
-    "Rahu": (1, 7, None),
-    "Ketu": (7, 1, None),
+    "Rahu": (1, 7, 3.0),
+    "Ketu": (7, 1, 3.0),
 }
 
 # Pancha Mahapurusha yogas: planet -> (yoga name, own-sign rasis, exaltation rasi).
