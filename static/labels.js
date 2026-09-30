@@ -50,6 +50,9 @@ const LABELS = {
       sashtashtagamSummary: "6th or 8th in D9, bringing issues related to the planet and its houses",
       sashtashtagamNoLordship: "rules no house, sits in house {house}",
       topHome: "Jathakam", topPariharam: "Pariharam", topPrasannam: "Prasannam", vargottamaWord: "vargottama",
+      hiddenChartHeading: "In {name}'s chart", hiddenChartHeadingNone: "Your chart",
+      hiddenNoChart: "Calculate or load a chart to see where its planets hide their ucham, neecham and moolatrikonam.",
+      colHides: "Hides its", colA: "A, Kaala Purusha pada", colB: "B, where it sits", colC: "C, padas", colHiddenIn: "Hidden in",
       pushkaraQualityTitle: "Pushkara Navamsa padas that count",
       pushkaraQualityIntro: "Only the Pushkara padas in the 6th, 8th and 9th place of their rasi are counted and graded A, B or C. There are nine of them, and any that hold a planet in this chart are highlighted.",
       colPosition: "Position in rasi", colTara: "Tara", colQuality: "Quality", colPlanetsHere: "Planets here", colPushkaraPada: "Pushkara pada",
@@ -100,6 +103,7 @@ const LABELS = {
     paksha: { shukla: "Shukla", krishna: "Krishna" },
     pournami: "Pournami", amavasai: "Amavasai",
     quality: { good: "Good", bad: "Bad", neutral: "Neutral" },
+    hiddenKind: { ucham: "Ucham", neecham: "Neecham", moolatrikonam: "Moolatrikonam" },
     moorthi: { Swarna: "Swarna (gold)", Rajatha: "Rajatha (silver)", Thamira: "Thamira (copper)", Loha: "Loha (iron)" },
     moorthiResult: { Swarna: "very favourable", Rajatha: "favourable", Thamira: "average", Loha: "unfavourable" },
   },
@@ -154,6 +158,9 @@ const LABELS = {
       sashtashtagamSummary: "D9இல் 6 அல்லது 8ஆம் இடம், அந்தக் கிரகம், அதன் வீடுகள் தொடர்பான பிரச்சினைகள்",
       sashtashtagamNoLordship: "எந்த வீட்டிற்கும் அதிபதி இல்லை, {house}ஆம் வீட்டில் உள்ளது",
       topHome: "ஜாதகம்", topPariharam: "பரிகாரம்", topPrasannam: "பிரசன்னம்", vargottamaWord: "வர்கோத்தமம்",
+      hiddenChartHeading: "{name} அவர்களின் ஜாதகத்தில்", hiddenChartHeadingNone: "உங்கள் ஜாதகம்",
+      hiddenNoChart: "கிரகங்கள் தம் உச்சம், நீசம், மூலத்திரிகோணத்தை எங்கே மறைக்கின்றன என்று பார்க்க, ஒரு ஜாதகத்தைக் கணிக்கவும் அல்லது திறக்கவும்.",
+      colHides: "மறைக்கும் நிலை", colA: "A, கால புருஷ பாதம்", colB: "B, ஜாதகத்தில் உள்ள பாதம்", colC: "C, பாதங்கள்", colHiddenIn: "மறைந்திருக்கும் இடம்",
       pushkaraQualityTitle: "கணக்கில் வரும் புஷ்கர பாதங்கள்",
       pushkaraQualityIntro: "தன் ராசியில் 6, 8, 9ஆம் இடங்களில் உள்ள புஷ்கர பாதங்கள் மட்டுமே கணக்கில் கொள்ளப்பட்டு A, B, C என்று தரம் பிரிக்கப்படுகின்றன. இப்படி ஒன்பது பாதங்கள் உள்ளன. இந்த ஜாதகத்தில் கிரகம் உள்ளவை குறிக்கப்பட்டுள்ளன.",
       colPosition: "ராசியில் இடம்", colTara: "தாரை", colQuality: "தரம்", colPlanetsHere: "இங்குள்ள கிரகங்கள்", colPushkaraPada: "புஷ்கர பாதம்",
@@ -204,6 +211,7 @@ const LABELS = {
     paksha: { shukla: "வளர்பிறை", krishna: "தேய்பிறை" },
     pournami: "பௌர்ணமி", amavasai: "அமாவாசை",
     quality: { good: "நல்லது", bad: "கெட்டது", neutral: "சமம்" },
+    hiddenKind: { ucham: "உச்சம்", neecham: "நீசம்", moolatrikonam: "மூலத்திரிகோணம்" },
     moorthi: { Swarna: "சுவர்ண (தங்கம்)", Rajatha: "ரஜத (வெள்ளி)", Thamira: "தாமிர (செம்பு)", Loha: "லோஹ (இரும்பு)" },
     moorthiResult: { Swarna: "மிக நல்லது", Rajatha: "நல்லது", Thamira: "சுமார்", Loha: "சாதகமில்லை" },
   },
@@ -344,6 +352,13 @@ const deepPointText = (lang, rasi, degree) => {
   const [nak, pada] = deepPointPada(rasi, degree);
   return `${LABELS[lang].rasi[rasi]} ${degree}\u00B0 \u00B7 ${LABELS[lang].nakshatra[nak]} ${pada}`;
 };
+
+// First pada of each planet's moolatrikonam (BPHS ranges), mirroring app/hidden_dignity.py.
+// Rahu and Ketu have none here.
+const MOOLATRIKONA_FIRST_PADA = {
+  Sun: [9, 1], Moon: [2, 2], Mars: [0, 1], Mercury: [12, 2], Jupiter: [18, 1], Venus: [13, 3], Saturn: [22, 3],
+};
+const padaName = (lang, [nak, pada]) => `${LABELS[lang].nakshatra[nak]} ${pada}`;
 
 const READING_TOPICS = {
   pushkaraNavamsa: {
@@ -492,6 +507,27 @@ const READING_TOPICS = {
       { title: "Brihat Parashara Hora Sastra, Chapter 3", url: "https://yourastroguide.wordpress.com/2012/09/01/brihat-parashara-hora-sashtra-chapter-3/" },
       { title: "Saptarishis on exaltation/debilitation of Rahu & Ketu", url: "https://madhivanan.in/rahu-ketu-exalted-scorpio/" },
     ],
+  },
+  hiddenDignity: {
+    title: { en: "Hidden Ucham and Neecham", ta: "மறைந்திருக்கும் உச்சம், நீசம்" },
+    intro: {
+      en: "Every planet has a pada in the Kaala Purusha chart where it is exalted, one where it is debilitated and one where its moolatrikonam begins. In a birth chart the planet carries each of these hidden somewhere else, and this page finds where. Take the planet's Kaala Purusha pada and call it A. The pada the planet sits in, in the birth chart, is B. Count the padas from A to B, counting both, and call that number C. Then count C padas again, starting from B as the first. The pada you land on is where the planet hides its ucham, neecham or moolatrikonam. For example, a Sun in Mula 2 is 72 padas on from its ucham pada, Ashwini 3. Counting 72 again from Mula 2 lands on Magha 1, so that Sun hides its ucham in Magha 1. The A padas for each planet are below.",
+      ta: "ஒவ்வொரு கிரகத்திற்கும் கால புருஷ சக்கரத்தில் அது உச்சம் பெறும் ஒரு பாதம், நீசம் பெறும் ஒரு பாதம், மூலத்திரிகோணம் தொடங்கும் ஒரு பாதம் உண்டு. ஒருவரின் ஜாதகத்தில் அந்தக் கிரகம் இவற்றை வேறு ஓர் இடத்தில் மறைத்து வைத்திருக்கிறது. அந்த இடத்தை இந்தப் பக்கம் கண்டுபிடிக்கிறது. கிரகத்தின் கால புருஷ பாதத்தை A என்று கொள்ளுங்கள். ஜாதகத்தில் அந்தக் கிரகம் நிற்கும் பாதம் B. A முதல் B வரை, இரண்டையும் சேர்த்து, பாதங்களை எண்ணுங்கள். அந்த எண்ணிக்கை C. பிறகு B யை முதலாவதாகக் கொண்டு மீண்டும் C பாதங்களை எண்ணுங்கள். வந்து சேரும் பாதமே அந்தக் கிரகம் தன் உச்சம், நீசம் அல்லது மூலத்திரிகோணத்தை மறைத்து வைத்திருக்கும் இடம். உதாரணமாக மூலம் 2இல் உள்ள சூரியன், தன் உச்ச பாதமான அஸ்வினி 3இலிருந்து 72 பாதங்கள் தள்ளி இருக்கிறது. மூலம் 2இலிருந்து மீண்டும் 72 எண்ணினால் மகம் 1 வருகிறது. எனவே அந்தச் சூரியன் தன் உச்சத்தை மகம் 1இல் மறைத்து வைத்திருக்கிறது. ஒவ்வொரு கிரகத்தின் A பாதங்கள் கீழே உள்ளன.",
+    },
+    tableHeader: [
+      { en: "Planet", ta: "கிரகம்" }, { en: "Ucham pada", ta: "உச்ச பாதம்" }, { en: "Neecham pada", ta: "நீச பாதம்" }, { en: "Moolatrikonam pada", ta: "மூலத்திரிகோண பாதம்" },
+    ],
+    table: Object.entries(DIGNITY_TABLE).map(([planet, [rasi, deg]]) => [
+      bothLangs((lang) => LABELS[lang].planets[planet]),
+      bothLangs((lang) => padaName(lang, deepPointPada(rasi, deg))),
+      bothLangs((lang) => padaName(lang, deepPointPada((rasi + 6) % 12, deg))),
+      bothLangs((lang) => (MOOLATRIKONA_FIRST_PADA[planet] ? padaName(lang, MOOLATRIKONA_FIRST_PADA[planet]) : "\u2013")),
+    ]),
+    chartTable: "hiddenDignity",
+    note: {
+      en: "The ucham and neecham padas are the paramoccham and paramaneecham padas, and the moolatrikonam pada is the first pada of each planet's moolatrikonam as BPHS gives it. The Sun's runs from 0\u00B0 to 20\u00B0 of Simham, the Moon's from just after 3\u00B0 of Rishabam, Mars's from 0\u00B0 to 12\u00B0 of Mesham, Mercury's from 16\u00B0 to 20\u00B0 of Kanni, Jupiter's from 0\u00B0 to 10\u00B0 of Dhanus, Venus's from 0\u00B0 to 15\u00B0 of Thulam and Saturn's from 0\u00B0 to 20\u00B0 of Kumbham. For the Moon and Mercury that first pada is the same as their ucham pada. Rahu and Ketu have no moolatrikonam here. This method was given by the user and has no written source.",
+      ta: "உச்ச, நீச பாதங்கள் என்பவை பரமோச்ச, பரம நீச பாதங்கள். மூலத்திரிகோண பாதம் என்பது BPHS கூறும் ஒவ்வொரு கிரகத்தின் மூலத்திரிகோணத்தின் முதல் பாதம். சூரியனுக்குச் சிம்மம் 0\u00B0 முதல் 20\u00B0 வரை, சந்திரனுக்கு ரிஷபம் 3\u00B0க்குச் சற்று பிறகிருந்து, செவ்வாய்க்கு மேஷம் 0\u00B0 முதல் 12\u00B0 வரை, புதனுக்குக் கன்னி 16\u00B0 முதல் 20\u00B0 வரை, குருவுக்குத் தனுசு 0\u00B0 முதல் 10\u00B0 வரை, சுக்ரனுக்குத் துலாம் 0\u00B0 முதல் 15\u00B0 வரை, சனிக்குக் கும்பம் 0\u00B0 முதல் 20\u00B0 வரை. சந்திரனுக்கும் புதனுக்கும் அந்த முதல் பாதம் அவற்றின் உச்ச பாதமே. ராகு, கேதுவுக்கு இங்கு மூலத்திரிகோணம் இல்லை. இது பயனர் தந்த முறை, எழுத்து மூலம் இல்லை.",
+    },
   },
   pranapada: {
     title: { en: "Pranapada Lagna", ta: "பிராணபத லக்னம்" },

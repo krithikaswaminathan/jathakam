@@ -626,6 +626,36 @@ function readingTable(header, rows) {
   return table;
 }
 
+// The loaded chart's hidden ucham, neecham and moolatrikonam, one block of rows per planet.
+function renderHiddenDignity(container) {
+  const labels = L();
+  const heading = document.createElement("h3");
+  heading.className = "reading-subhead";
+  container.appendChild(heading);
+  if (!state.chart) {
+    heading.textContent = labels.ui.hiddenChartHeadingNone;
+    const p = document.createElement("p");
+    p.textContent = labels.ui.hiddenNoChart;
+    container.appendChild(p);
+    return;
+  }
+  heading.textContent = labels.ui.hiddenChartHeading.replace("{name}", state.chart.name);
+  const pada = (nak, p) => `${labels.nakshatra[nak]} ${p}`;
+  const header = [labels.ui.colPlanet, labels.ui.colHides, labels.ui.colA, labels.ui.colB, labels.ui.colC, labels.ui.colHiddenIn];
+  const rows = state.chart.hidden_dignities.map((e, i, all) => [
+    i > 0 && all[i - 1].planet === e.planet ? "" : labels.planets[e.planet],
+    labels.hiddenKind[e.kind],
+    pada(e.a_nakshatra, e.a_pada),
+    pada(e.b_nakshatra, e.b_pada),
+    String(e.count),
+    `${pada(e.hidden_nakshatra, e.hidden_pada)} \u00B7 ${labels.rasi[e.hidden_rasi]}`,
+  ]);
+  const toCells = (list) => list.map((text) => ({ [state.lang]: text }));
+  const table = readingTable(toCells(header), rows.map(toCells));
+  table.classList.add("hidden-dignity-table");
+  container.appendChild(table);
+}
+
 function renderReadingPage(topicKey) {
   const topic = READING_TOPICS[topicKey];
   const container = document.getElementById("readingContent");
@@ -653,6 +683,8 @@ function renderReadingPage(topicKey) {
     }
     if (section.table) container.appendChild(readingTable(section.tableHeader, section.table));
   }
+
+  if (topic.chartTable === "hiddenDignity") renderHiddenDignity(container);
 
   if (topic.note) {
     const note = document.createElement("p");

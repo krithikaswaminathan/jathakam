@@ -433,3 +433,4 @@ td.quality-neutral { color: var(--neutral); font-weight: 600; }
 .pushkara-dasa-tag.fails { background: white; color: var(--ink-soft); border: 1px solid var(--line); }
 tr.dignity-parama td { background: var(--gold-100); font-weight: 600; }
 #dignityTab { overflow-x: auto; }
+.hidden-dignity-table td:last-child { font-weight: 600; color: var(--maroon-700); }

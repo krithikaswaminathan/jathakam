@@ -164,6 +164,19 @@ class SashtashtagamOut(BaseModel):
     transits: list[TransitWindowOut] = []
 
 
+class HiddenDignityOut(BaseModel):
+    planet: str
+    kind: str
+    a_nakshatra: int
+    a_pada: int
+    b_nakshatra: int
+    b_pada: int
+    count: int
+    hidden_nakshatra: int
+    hidden_pada: int
+    hidden_rasi: int
+
+
 class ChartResponse(BaseModel):
     id: int
     name: str
@@ -189,6 +202,7 @@ class ChartResponse(BaseModel):
     peyarchis: list[PeyarchiOut] = []
     drekkana_lords: list[DrekkanaLordOut] = []
     navamsa_sashtashtagam: list[SashtashtagamOut] = []
+    hidden_dignities: list[HiddenDignityOut] = []
 
 
 class DasaExpandRequest(BaseModel):

@@ -26,6 +26,7 @@ from app.ephemeris import (
     to_julian_day_ut,
 )
 from app.geocode import search_places
+from app.hidden_dignity import compute_hidden_dignities
 from app.models import (
     BirthRequest,
     ChartOut,
@@ -36,6 +37,7 @@ from app.models import (
     DignityOut,
     DrekkanaLordOut,
     GrahaOut,
+    HiddenDignityOut,
     KaalaPakaiOut,
     MudakkuOut,
     PeyarchiOut,
@@ -176,6 +178,7 @@ def _build_chart_response(
         peyarchis=_peyarchis_out(d1.grahas["Moon"].rasi, timezone),
         drekkana_lords=[DrekkanaLordOut(**vars(e)) for e in compute_drekkana_lords(d1)],
         navamsa_sashtashtagam=_sashtashtagam_out(d1, vargas["D9"], timezone),
+        hidden_dignities=[HiddenDignityOut(**vars(e)) for e in compute_hidden_dignities(d1)],
     )
 
 

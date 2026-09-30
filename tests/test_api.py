@@ -72,6 +72,12 @@ def test_old_saved_charts_load_with_all_current_features(client):
     assert len(sashtashtagam["Sun"]["transits"]) == 6  # every June, 2026 to 2031
     assert sashtashtagam["Sun"]["transits"][0]["start"].startswith("2026-06-05T")
     assert sashtashtagam["Moon"]["point"] is None and sashtashtagam["Moon"]["transits"] == []
+    hidden = {(e["planet"], e["kind"]): e for e in body["hidden_dignities"]}
+    sun = hidden[("Sun", "ucham")]  # Sun in Mula 2: 72 padas from Ashwini 3, hides its ucham in Magha 1
+    assert (sun["b_nakshatra"], sun["b_pada"], sun["count"], sun["hidden_nakshatra"], sun["hidden_pada"]) == (18, 2, 72, 9, 1)
+    assert (hidden[("Sun", "neecham")]["hidden_nakshatra"], hidden[("Sun", "neecham")]["hidden_pada"]) == (22, 3)
+    assert (hidden[("Moon", "ucham")]["hidden_nakshatra"], hidden[("Moon", "ucham")]["hidden_pada"]) == (2, 4)
+    assert ("Rahu", "moolatrikonam") not in hidden and len(hidden) == 25
     peyarchis = body["peyarchis"]
     assert [p["planet"] for p in peyarchis if p["in_effect_at_start"]] == ["Saturn", "Rahu", "Jupiter"]
     assert peyarchis[0]["when"] == "2025-03-29T21:45:09+05:30"  # Saturn into Pisces, in the chart's time zone
