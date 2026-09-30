@@ -56,7 +56,9 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
 - **Hidden Ucham and Neecham**: a side-nav page showing where each planet hides its ucham,
   neecham and moolatrikonam. Count the padas from the planet's Kaala Purusha pada (A) to where it
   sits (B), both counted, to get C, then count C padas again from B. Rahu and Ketu have no
-  moolatrikonam here.
+  moolatrikonam here. Each hidden pada shows its bhavam and every pass of transit Rahu or Ketu
+  over it from January 2026 to December 2030, when it brings tension in the hiding planet's
+  karakathvam and in that bhavam.
 - **Saved charts**: stored locally, recomputed on load, and deletable.
 
 ## Setup
