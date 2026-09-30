@@ -150,6 +150,7 @@
         <button class="tab-btn" data-tab="taraTab" id="lblTaraTab">Tara Balam</button>
         <button class="tab-btn" data-tab="detailsTab" id="lblDetailsTab">Graha Details</button>
         <button class="tab-btn" data-tab="dignityTab" id="lblDignityTab">Ucham / Neecham</button>
+        <button class="tab-btn" data-tab="hiddenTab" id="lblHiddenTab">Hidden Ucham / Neecham</button>
         <button class="tab-btn" data-tab="peyarchiTab" id="lblPeyarchiTab">Moorthy</button>
         <button class="tab-btn" data-tab="drekkanaTab" id="lblDrekkanaTab">Drekkana Lords Aathipathyam</button>
         <button class="tab-btn" data-tab="sashtashtagamTab" id="lblSashtashtagamTab">Navamsa Sashtashtagam</button>
@@ -256,6 +257,30 @@
           <tbody id="dignityBody"></tbody>
         </table>
         <p id="dignityNote" class="reading-note"></p>
+      </div>
+
+      <div id="hiddenTab" class="tab-panel">
+        <div id="hiddenSummary" class="yoga-summary"></div>
+        <h3 id="lblHiddenWhere" class="timing-title">Where each planet hides them</h3>
+        <table id="hiddenWhereTable">
+          <thead><tr>
+            <th id="thHwPlanet">Planet</th><th id="thHwSits">Sits in</th><th id="thHwUcham">Ucham</th>
+            <th id="thHwNeecham">Neecham</th><th id="thHwMt">Moolatrikonam</th>
+          </tr></thead>
+          <tbody id="hiddenWhereBody"></tbody>
+        </table>
+        <h3 id="lblHiddenTransits" class="timing-title">Rahu and Ketu over the hidden padas</h3>
+        <div class="peyarchi-filter"><label for="hiddenFilter" id="lblHiddenFilter" class="info-label">Planet</label>
+          <select id="hiddenFilter" class="upasana-select"></select></div>
+        <table id="hiddenTransitTable">
+          <thead><tr>
+            <th id="thHtPlanet">Planet</th><th id="thHtKind">Hides its</th><th id="thHtPada">Hidden in</th>
+            <th id="thHtBhavam">Bhavam</th><th id="thHtNode">Rahu / Ketu</th><th id="thHtWhen">Date and time</th>
+            <th id="thHtTension">Tension in</th>
+          </tr></thead>
+          <tbody id="hiddenTransitBody"></tbody>
+        </table>
+        <p id="hiddenNote" class="reading-note"></p>
       </div>
 
       <div id="peyarchiTab" class="tab-panel">

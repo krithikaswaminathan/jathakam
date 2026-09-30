@@ -24,6 +24,7 @@ let state = {
   upasanaRasi: "", // rasi index picked in the Upasana Deivam box, as a string
   kaalaPakaiPlanet: "", // planet picked in the Kaala Pakai box
   pariharamTopic: 0, // index into PARIHARAMS shown on the Pariharam page
+  hiddenPlanet: "", // planet filter on the Hidden Ucham / Neecham tab; "" = all
   prasannam: { place: null, chart: null }, // place: { latitude, longitude, timezone, label }; label null = device location
   peyarchiPlanet: "", // planet filter on the Peyarchi tab; "" = all
 };
@@ -626,74 +627,6 @@ function readingTable(header, rows) {
   return table;
 }
 
-// The loaded chart's hidden ucham, neecham and moolatrikonam, one block of rows per planet.
-function renderHiddenDignity(container) {
-  const labels = L();
-  const heading = document.createElement("h3");
-  heading.className = "reading-subhead";
-  container.appendChild(heading);
-  if (!state.chart) {
-    heading.textContent = labels.ui.hiddenChartHeadingNone;
-    const p = document.createElement("p");
-    p.textContent = labels.ui.hiddenNoChart;
-    container.appendChild(p);
-    return;
-  }
-  heading.textContent = labels.ui.hiddenChartHeading.replace("{name}", state.chart.name);
-  const pada = (nak, p) => `${labels.nakshatra[nak]} ${p}`;
-  const nodeName = (node) => labels.planets[node];
-  const header = [
-    labels.ui.colPlanet, labels.ui.colHides, labels.ui.colA, labels.ui.colB, labels.ui.colC,
-    labels.ui.colHiddenIn, labels.ui.colBhavam, labels.ui.colNodesOver,
-  ];
-  const rows = state.chart.hidden_dignities.map((e, i, all) => [
-    i > 0 && all[i - 1].planet === e.planet ? "" : labels.planets[e.planet],
-    labels.hiddenKind[e.kind],
-    pada(e.a_nakshatra, e.a_pada),
-    pada(e.b_nakshatra, e.b_pada),
-    String(e.count),
-    `${pada(e.hidden_nakshatra, e.hidden_pada)} \u00B7 ${labels.rasi[e.hidden_rasi]}`,
-    String(e.house),
-    e.transits.map((t) => `${nodeName(t.node)} ${fmtDate(t.start)} \u2192 ${fmtDate(t.end)}`).join("\n") || "\u2013",
-  ]);
-  const toCells = (list) => list.map((text) => ({ [state.lang]: text }));
-  const table = readingTable(toCells(header), rows.map(toCells));
-  table.classList.add("hidden-dignity-table");
-  container.appendChild(table);
-
-  // Every pass still to come, soonest first, spelled out.
-  const now = new Date();
-  const ahead = state.chart.hidden_dignities
-    .flatMap((e) => e.transits.filter((t) => new Date(t.end) >= now).map((t) => ({ e, t })))
-    .sort((x, y) => new Date(x.t.start) - new Date(y.t.start));
-  const tensionHead = document.createElement("h3");
-  tensionHead.className = "reading-subhead";
-  tensionHead.textContent = labels.ui.tensionHeading;
-  container.appendChild(tensionHead);
-  if (ahead.length === 0) {
-    const p = document.createElement("p");
-    p.textContent = labels.ui.tensionNone;
-    container.appendChild(p);
-    return;
-  }
-  const list = document.createElement("ul");
-  list.className = "tension-list";
-  for (const { e, t } of ahead) {
-    const li = document.createElement("li");
-    li.textContent = labels.ui.tensionLine
-      .replace("{node}", nodeName(t.node))
-      .replace("{when}", `${fmtDate(t.start)} \u2192 ${fmtDate(t.end)}`)
-      .replace("{pada}", pada(e.hidden_nakshatra, e.hidden_pada))
-      .replaceAll("{planet}", labels.planets[e.planet])
-      .replace("{kind}", labels.hiddenKind[e.kind].toLowerCase())
-      .replace("{karakas}", labels.karakathvam[e.planet])
-      .replace("{house}", ORDINAL[state.lang](e.house))
-      .replace("{meaning}", labels.ui.houseMeanings[e.house - 1]);
-    list.appendChild(li);
-  }
-  container.appendChild(list);
-}
-
 function renderReadingPage(topicKey) {
   const topic = READING_TOPICS[topicKey];
   const container = document.getElementById("readingContent");
@@ -722,8 +655,6 @@ function renderReadingPage(topicKey) {
     if (section.table) container.appendChild(readingTable(section.tableHeader, section.table));
   }
 
-  container.classList.toggle("wide", Boolean(topic.chartTable));
-  if (topic.chartTable === "hiddenDignity") renderHiddenDignity(container);
 
   if (topic.note) {
     const note = document.createElement("p");
@@ -781,6 +712,7 @@ function renderAll() {
   renderTaraBalam();
   renderGrahaDetails();
   renderDignity();
+  renderHiddenDignity();
   renderPeyarchi();
   renderDrekkanaLords();
   renderSashtashtagam();
@@ -1348,6 +1280,130 @@ function renderDignity() {
       td.textContent = value;
       tr.appendChild(td);
     }
+    tbody.appendChild(tr);
+  }
+}
+
+// Where each planet hides its ucham, neecham and moolatrikonam, and every pass of transit Rahu or
+// Ketu over those padas up to 2030, laid out like the Moorthy tab.
+function renderHiddenDignity() {
+  const labels = L();
+  const ui = labels.ui;
+  const entries = state.chart.hidden_dignities;
+  const pada = (nak, p) => `${labels.nakshatra[nak]} ${p}`;
+  const hiddenAt = (e) => `${pada(e.hidden_nakshatra, e.hidden_pada)} \u00B7 ${labels.rasi[e.hidden_rasi]}`;
+  const setText = (id, text) => (document.getElementById(id).textContent = text);
+
+  setText("lblHiddenTab", ui.hiddenTab);
+  setText("lblHiddenWhere", ui.hiddenWhereTitle);
+  setText("lblHiddenTransits", ui.hiddenTransitsTitle);
+  setText("lblHiddenFilter", ui.colPlanet);
+  setText("thHwPlanet", ui.colPlanet);
+  setText("thHwSits", ui.colSitsIn);
+  setText("thHwUcham", labels.hiddenKind.ucham);
+  setText("thHwNeecham", labels.hiddenKind.neecham);
+  setText("thHwMt", labels.hiddenKind.moolatrikonam);
+  for (const [id, key] of [["thHtPlanet", "colPlanet"], ["thHtKind", "colHides"], ["thHtPada", "colHiddenIn"],
+    ["thHtBhavam", "colBhavam"], ["thHtNode", "colNode"], ["thHtWhen", "colWhen"], ["thHtTension", "colTensionIn"]]) {
+    setText(id, ui[key]);
+  }
+  setText("hiddenNote", ui.hiddenNote);
+  setText("thHtWhen", ui.colDates);
+
+  // Where each planet hides them: one row per planet.
+  const whereBody = document.getElementById("hiddenWhereBody");
+  whereBody.innerHTML = "";
+  for (const planet of DASA_PLANETS) {
+    const mine = entries.filter((e) => e.planet === planet);
+    if (!mine.length) continue;
+    const cell = (kind) => {
+      const e = mine.find((x) => x.kind === kind);
+      return e ? `${hiddenAt(e)} \u00B7 ${ORDINAL[state.lang](e.house)}` : "\u2013";
+    };
+    const tr = document.createElement("tr");
+    for (const text of [labels.planets[planet], pada(mine[0].b_nakshatra, mine[0].b_pada), cell("ucham"), cell("neecham"), cell("moolatrikonam")]) {
+      const td = document.createElement("td");
+      td.textContent = text;
+      tr.appendChild(td);
+    }
+    whereBody.appendChild(tr);
+  }
+
+  // Every Rahu or Ketu pass, by date, with the running one highlighted.
+  const now = new Date();
+  const passes = entries
+    .flatMap((e) => e.transits.map((t) => ({ e, t })))
+    .sort((x, y) => new Date(x.t.start) - new Date(y.t.start));
+  const running = passes.filter(({ t }) => new Date(t.start) <= now && now <= new Date(t.end));
+  const next = passes.find(({ t }) => new Date(t.start) > now);
+  const line = ({ e, t }) =>
+    ui.hiddenSummaryLine
+      .replace("{node}", labels.planets[t.node])
+      .replace("{pada}", pada(e.hidden_nakshatra, e.hidden_pada))
+      .replace("{planet}", labels.planets[e.planet])
+      .replace("{kind}", labels.hiddenKind[e.kind].toLowerCase());
+  setText(
+    "hiddenSummary",
+    running.length
+      ? `${ui.peyarchiNow}: ` + running.map(line).join("  \u00B7  ")
+      : next
+        ? `${ui.hiddenNext}, ${fmtDate(next.t.start)}: ${line(next)}`
+        : ui.hiddenNoTransits
+  );
+
+  const select = document.getElementById("hiddenFilter");
+  select.innerHTML = "";
+  for (const planet of ["", ...DASA_PLANETS]) {
+    const opt = document.createElement("option");
+    opt.value = planet;
+    opt.textContent = planet ? labels.planets[planet] : ui.peyarchiAll;
+    select.appendChild(opt);
+  }
+  select.value = state.hiddenPlanet;
+  select.onchange = () => {
+    state.hiddenPlanet = select.value;
+    renderHiddenDignity();
+  };
+
+  const tbody = document.getElementById("hiddenTransitBody");
+  tbody.innerHTML = "";
+  for (const pass of passes) {
+    const { e, t } = pass;
+    if (state.hiddenPlanet && e.planet !== state.hiddenPlanet) continue;
+    const tr = document.createElement("tr");
+    if (running.includes(pass)) tr.className = "current-period";
+    const tension = [
+      ui.tensionKaraka.replace("{planet}", labels.planets[e.planet]).replace("{karakas}", labels.karakathvam[e.planet]),
+      ui.tensionBhavam.replace("{house}", ORDINAL[state.lang](e.house)).replace("{meaning}", ui.houseMeanings[e.house - 1]),
+    ];
+    const cells = [
+      [labels.planets[e.planet]],
+      [labels.hiddenKind[e.kind]],
+      [hiddenAt(e)],
+      [String(e.house)],
+      [labels.planets[t.node]],
+      [`${fmtDate(t.start)} \u2192 ${fmtDate(t.end)}`],
+      tension,
+    ];
+    for (const [main, sub] of cells) {
+      const td = document.createElement("td");
+      td.textContent = main;
+      if (sub) {
+        const span = document.createElement("span");
+        span.className = "peyarchi-sub";
+        span.textContent = sub;
+        td.appendChild(span);
+      }
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+  if (!passes.length) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 7;
+    td.textContent = ui.hiddenNoTransits;
+    tr.appendChild(td);
     tbody.appendChild(tr);
   }
 }
