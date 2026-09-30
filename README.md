@@ -19,8 +19,9 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   summary line above the table.
 - **Kaala Pakai**: grahas sitting in their Kaala Pakai rasi in the D1 chart, with the rasi,
   house and effect; a planet picker shows any graha's Kaala Pakai rasis.
-- **Ucham / Neecham**: planets in exaltation or debilitation, with distance from the deep
-  exaltation/debilitation degree.
+- **Ucham / Neecham**: planets in exaltation or debilitation, with the pada they sit in, the deep
+  point and its pada, the distance from it, and whether they are in paramoccham or
+  paramaneecham, the single degree that ends at the deep degree.
 - **Dasa**: Vimshottari dasa down to Prana level, with the current period highlighted.
 - **Tara Balam** from the birth star, plus the nine Pushkara padas that count (those in the 6th,
   8th or 9th place of their rasi), highlighting any that hold a planet.
@@ -155,3 +156,8 @@ python -m pytest tests/ -v
   A planet in an A, B or C pada gives the benefit in its own Mahadasa only when, counting in the
   Udu Maha Dasai (Vimshottari) order from the planet as 1 to the pada's star lord, the lord comes
   2nd, 6th, 8th or 9th. The Dasa tab and Graha Details say whether the dasa works.
+- Ucham and neecham follow BPHS 3.49 and 3.50, and paramoccham and paramaneecham follow Varaha
+  Mihira's "Reflections on Uccha and Neecha of Grahas" (Thoughts on Jyotish, 2016). The peak or
+  lowest point lasts one degree ending at the deep degree, so the Sun's paramoccham runs from just
+  past 9° to 10° of Mesham. Rahu and Ketu have signs but no agreed deep degree, so only their pada
+  is shown.
