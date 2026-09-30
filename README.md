@@ -53,6 +53,10 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
 - **Prasannam**: a tab at the top that casts the chart for this moment where you are (the
   browser's location, or a place you type if location is not allowed), draws it, and gives the
   Chandra Nadi: the Moon's star, pada, exact degree and the rasi it is crossing. Nothing is saved.
+- **Hidden Ucham and Neecham**: a side-nav page showing where each planet hides its ucham,
+  neecham and moolatrikonam. Count the padas from the planet's Kaala Purusha pada (A) to where it
+  sits (B), both counted, to get C, then count C padas again from B. Rahu and Ketu have no
+  moolatrikonam here.
 - **Saved charts**: stored locally, recomputed on load, and deletable.
 
 ## Setup
