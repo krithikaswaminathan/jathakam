@@ -58,7 +58,9 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   A to where it sits B, both counted, to get C, then count C padas again from B), with the bhavam,
   and every pass of transit Rahu or Ketu over those padas from January 2026 to December 2035,
   when it brings tension in the hiding planet's karakathvam and that bhavam. A Now or Next line,
-  a planet filter and the running pass highlighted. The Reading page explains the method.
+  a planet filter and the running pass highlighted. Each pass gives its pariharam, the deity of
+  the rasi the hidden pada falls in (odd rasis male, even female), as the user listed them. The
+  Reading page explains the method and lists the twelve pariharams.
 - **Saved charts**: stored locally, recomputed on load, and deletable.
 
 ## Setup
