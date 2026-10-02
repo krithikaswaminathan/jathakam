@@ -66,6 +66,10 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   count from its D1 rasi (X, as 1) to its D12 rasi (Y) gives its career cadre, A (1, 4, 7, 10,
   effort and physical work), B (2, 5, 8, 11, knowledge work such as teaching or law) or C (3, 6,
   9, 12, service and volunteer work), with a tally of how many planets fall in each.
+- **Gandantham** tab and Reading page: the six junction padas (1st, 36th, 37th, 72nd, 73rd and
+  108th of the 108, where a water sign ends and a fire sign begins), the same six counted from the
+  chart's lagna pada, the planets in them at birth, and every pass of Guru, Sani, Rahu and Ketu
+  over them from 2026 to 2030.
 - **Saved charts**: stored locally, recomputed on load, and deletable.
 
 ## Setup
