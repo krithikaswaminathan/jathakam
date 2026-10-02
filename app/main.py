@@ -24,6 +24,7 @@ from app.dasa import compute_mahadasas, compute_sub_periods
 from app.db import SavedChart, delete_chart, get_chart, init_db, list_charts, save_chart
 from app.dignity import compute_dignities
 from app.drekkana_lords import compute_drekkana_lords
+from app.dwadasamsa_career import compute_career_cadres
 from app.ephemeris import (
     compute_ascendant,
     compute_graha_positions,
@@ -35,6 +36,7 @@ from app.geocode import search_places
 from app.hidden_dignity import compute_hidden_dignities
 from app.models import (
     BirthRequest,
+    CareerCadreOut,
     ChartOut,
     ChartResponse,
     ChartSummary,
@@ -186,6 +188,7 @@ def _build_chart_response(
         drekkana_lords=[DrekkanaLordOut(**vars(e)) for e in compute_drekkana_lords(d1)],
         navamsa_sashtashtagam=_sashtashtagam_out(d1, vargas["D9"], timezone),
         hidden_dignities=_hidden_dignities_out(d1, timezone),
+        career_cadres=[CareerCadreOut(**vars(e)) for e in compute_career_cadres(d1, vargas["D12"])],
     )
 
 

@@ -185,6 +185,15 @@ class HiddenDignityOut(BaseModel):
     transits: list[NodeTransitOut] = []
 
 
+class CareerCadreOut(BaseModel):
+    planet: str
+    d1_rasi: int
+    degree_in_sign: float
+    d12_rasi: int
+    count: int
+    cadre: str
+
+
 class ChartResponse(BaseModel):
     id: int
     name: str
@@ -211,6 +220,7 @@ class ChartResponse(BaseModel):
     drekkana_lords: list[DrekkanaLordOut] = []
     navamsa_sashtashtagam: list[SashtashtagamOut] = []
     hidden_dignities: list[HiddenDignityOut] = []
+    career_cadres: list[CareerCadreOut] = []
 
 
 class DasaExpandRequest(BaseModel):

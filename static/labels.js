@@ -54,6 +54,9 @@ const LABELS = {
       hiddenTransitsTitle: "Rahu and Ketu over the hidden padas, 2026 to 2035",
       colSitsIn: "Sits in", colHides: "Hides its", colHiddenIn: "Hidden in", colBhavam: "Bhavam",
       colNode: "Rahu / Ketu", colTensionIn: "Tension in", colDates: "Dates", hiddenCellKey: "pada \u00B7 rasi \u00B7 bhavam", colPariharam: "Pariharam", bhavamWord: "bhavam",
+      careerTab: "Dvadasamsham", colD12Rasi: "D12 rasi (Y)", colD1RasiX: "D1 rasi (X)", colCadre: "Cadre", colWork: "Kind of work",
+      cadreWord: "Cadre", careerSummary: "{a} in Cadre A \u00B7 {b} in Cadre B \u00B7 {c} in Cadre C",
+      careerNote: "For each planet, count from its rasi in D1 (X) to its rasi in D12 (Y), with X as the first. A count of 1, 4, 7 or 10 is Cadre A, 2, 5, 8 or 11 is Cadre B and 3, 6, 9 or 12 is Cadre C. The Reading page explains the method.",
       hiddenNext: "Next", hiddenSummaryLine: "{node} over {pada}, where {planet} hides its {kind}",
       tensionKaraka: "{planet}'s karakathvam ({karakas})", tensionBhavam: "the {house} bhavam ({meaning})",
       hiddenNoTransits: "Rahu and Ketu do not pass over any of these padas between 2026 and 2035.",
@@ -109,6 +112,12 @@ const LABELS = {
     pournami: "Pournami", amavasai: "Amavasai",
     quality: { good: "Good", bad: "Bad", neutral: "Neutral" },
     hiddenKind: { ucham: "Ucham", neecham: "Neecham", moolatrikonam: "Moolatrikonam" },
+    cadreName: { A: "effort", B: "knowledge", C: "service" },
+    cadreWork: {
+      A: "Effort, physical and hands-on work",
+      B: "Knowledge work, such as teachers, professors, advocates and other brain work",
+      C: "Service and volunteer-oriented work",
+    },
     karakathvam: {
       Sun: "father, father-in-law, first-born son, authority, government, health, soul",
       Moon: "mother, mind, emotions",
@@ -178,6 +187,9 @@ const LABELS = {
       hiddenTransitsTitle: "மறைந்த பாதங்களின் மீது ராகு, கேது, 2026 முதல் 2035 வரை",
       colSitsIn: "நிற்கும் பாதம்", colHides: "மறைக்கும் நிலை", colHiddenIn: "மறைந்திருக்கும் இடம்", colBhavam: "பாவம்",
       colNode: "ராகு / கேது", colTensionIn: "அழுத்தம்", colDates: "தேதிகள்", hiddenCellKey: "பாதம் \u00B7 ராசி \u00B7 பாவம்", colPariharam: "பரிகாரம்", bhavamWord: "பாவம்",
+      careerTab: "துவாதசாம்சம்", colD12Rasi: "D12 ராசி (Y)", colD1RasiX: "D1 ராசி (X)", colCadre: "பிரிவு", colWork: "வேலையின் வகை",
+      cadreWord: "பிரிவு", careerSummary: "A பிரிவில் {a} \u00B7 B பிரிவில் {b} \u00B7 C பிரிவில் {c}",
+      careerNote: "ஒவ்வொரு கிரகத்திற்கும், D1இல் அது நிற்கும் ராசியிலிருந்து (X, அதுவே 1) D12இல் அது நிற்கும் ராசி (Y) வரை எண்ணவும். 1, 4, 7, 10 என்றால் A பிரிவு, 2, 5, 8, 11 என்றால் B பிரிவு, 3, 6, 9, 12 என்றால் C பிரிவு. வாசிப்புப் பக்கம் இந்த முறையை விளக்குகிறது.",
       hiddenNext: "அடுத்து", hiddenSummaryLine: "{node} {pada} மீது, இங்கே {planet} தன் {kind} நிலையை மறைக்கிறது",
       tensionKaraka: "{planet} காரகத்துவம் ({karakas})", tensionBhavam: "{house} பாவம் ({meaning})",
       hiddenNoTransits: "2026 முதல் 2035 வரை ராகுவோ கேதுவோ இந்தப் பாதங்களின் மீது கடப்பதில்லை.",
@@ -233,6 +245,12 @@ const LABELS = {
     pournami: "பௌர்ணமி", amavasai: "அமாவாசை",
     quality: { good: "நல்லது", bad: "கெட்டது", neutral: "சமம்" },
     hiddenKind: { ucham: "உச்சம்", neecham: "நீசம்", moolatrikonam: "மூலத்திரிகோணம்" },
+    cadreName: { A: "உழைப்பு", B: "அறிவு", C: "சேவை" },
+    cadreWork: {
+      A: "உழைப்பு, உடல் உழைப்பு சார்ந்த வேலை",
+      B: "அறிவு சார்ந்த வேலை, ஆசிரியர்கள், பேராசிரியர்கள், வழக்கறிஞர்கள் போன்ற மூளை சார்ந்த பணி",
+      C: "சேவை, தன்னார்வ நோக்கிலான வேலை",
+    },
     karakathvam: {
       Sun: "தந்தை, மாமனார், மூத்த மகன், அதிகாரம், அரசு, ஆரோக்கியம், ஆன்மா",
       Moon: "தாய், மனம், உணர்ச்சிகள்",
@@ -607,6 +625,35 @@ const READING_TOPICS = {
     note: {
       en: "The ucham and neecham padas are the paramoccham and paramaneecham padas, and the moolatrikonam pada is the first pada of each planet's moolatrikonam as BPHS gives it. The Sun's runs from 0\u00B0 to 20\u00B0 of Simham, the Moon's from just after 3\u00B0 of Rishabam, Mars's from 0\u00B0 to 12\u00B0 of Mesham, Mercury's from 16\u00B0 to 20\u00B0 of Kanni, Jupiter's from 0\u00B0 to 10\u00B0 of Dhanus, Venus's from 0\u00B0 to 15\u00B0 of Thulam and Saturn's from 0\u00B0 to 20\u00B0 of Kumbham. For the Moon and Mercury that first pada is the same as their ucham pada. Rahu and Ketu have no moolatrikonam here. This method was given by the user and has no written source.",
       ta: "உச்ச, நீச பாதங்கள் என்பவை பரமோச்ச, பரம நீச பாதங்கள். மூலத்திரிகோண பாதம் என்பது BPHS கூறும் ஒவ்வொரு கிரகத்தின் மூலத்திரிகோணத்தின் முதல் பாதம். சூரியனுக்குச் சிம்மம் 0\u00B0 முதல் 20\u00B0 வரை, சந்திரனுக்கு ரிஷபம் 3\u00B0க்குச் சற்று பிறகிருந்து, செவ்வாய்க்கு மேஷம் 0\u00B0 முதல் 12\u00B0 வரை, புதனுக்குக் கன்னி 16\u00B0 முதல் 20\u00B0 வரை, குருவுக்குத் தனுசு 0\u00B0 முதல் 10\u00B0 வரை, சுக்ரனுக்குத் துலாம் 0\u00B0 முதல் 15\u00B0 வரை, சனிக்குக் கும்பம் 0\u00B0 முதல் 20\u00B0 வரை. சந்திரனுக்கும் புதனுக்கும் அந்த முதல் பாதம் அவற்றின் உச்ச பாதமே. ராகு, கேதுவுக்கு இங்கு மூலத்திரிகோணம் இல்லை. இது பயனர் தந்த முறை, எழுத்து மூலம் இல்லை.",
+    },
+  },
+  dwadasamsaCareer: {
+    title: { en: "Dwadasamsa Career", ta: "துவாதசாம்ச தொழில்" },
+    intro: {
+      en: "The Dwadasamsa (D12) points to the kind of work a person puts their effort into. For each of the nine planets, find its rasi in the rasi chart (D1) and call it X. Then find its rasi in the D12 chart and call it Y. Count from X to Y, taking X as the first. The count places the planet in one of three cadres. Every planet counts equally, so the chart shows how many planets fall in each cadre. Since a rasi's first dwadasamsa falls in the rasi itself, the count is also which 2\u00B030\u2032 part of its rasi the planet sits in, so the cadre can be read straight from its degree.",
+      ta: "துவாதசாம்சம் (D12) ஒருவர் எந்த வகை வேலையில் உழைப்பைச் செலுத்துவார் என்பதைக் காட்டுகிறது. ஒன்பது கிரகங்களுக்கும், ராசி கட்டத்தில் (D1) அது நிற்கும் ராசியை X என்று கொள்ளுங்கள். D12 கட்டத்தில் அது நிற்கும் ராசியை Y என்று கொள்ளுங்கள். X ஐ முதலாவதாகக் கொண்டு X முதல் Y வரை எண்ணுங்கள். அந்த எண்ணிக்கை அந்தக் கிரகத்தை மூன்று பிரிவுகளில் ஒன்றில் வைக்கிறது. எல்லாக் கிரகங்களும் சமமாகக் கணக்கில் வருகின்றன, எனவே ஒவ்வொரு பிரிவிலும் எத்தனை கிரகங்கள் என்பதை ஜாதகம் காட்டுகிறது. ஒரு ராசியின் முதல் துவாதசாம்சம் அதே ராசியில் விழுவதால், அந்த எண்ணிக்கை அந்தக் கிரகம் தன் ராசியின் எந்த 2\u00B030\u2032 பகுதியில் உள்ளது என்பதும் ஆகும். எனவே அதன் பாகையிலிருந்தே பிரிவை அறியலாம்.",
+    },
+    tableHeader: [
+      { en: "Cadre", ta: "பிரிவு" }, { en: "Count from X to Y", ta: "X முதல் Y வரை எண்ணிக்கை" },
+      { en: "Kind of work", ta: "வேலையின் வகை" }, { en: "Degrees in the rasi", ta: "ராசியில் பாகை" },
+    ],
+    table: ["A", "B", "C"].map((cadre, k) => [
+      bothLangs(() => cadre),
+      bothLangs(() => [1, 2, 3].map((start) => [start, start + 3, start + 6, start + 9])[k].join(", ")),
+      bothLangs((lang) => LABELS[lang].cadreWork[cadre]),
+      bothLangs((lang) =>
+        [0, 3, 6, 9]
+          .map((step) => {
+            const from = (k + step) * 2.5;
+            const fmt = (d) => (d % 1 ? `${Math.floor(d)}\u00B030\u2032` : `${d}\u00B0`);
+            return lang === "ta" ? `${fmt(from)} முதல் ${fmt(from + 2.5)} வரை` : `${fmt(from)} to ${fmt(from + 2.5)}`;
+          })
+          .join(", ")
+      ),
+    ]),
+    note: {
+      en: "For example, Saturn at 8\u00B047\u2032 of Mesham sits in the 4th part of its rasi, from 7\u00B030\u2032 to 10\u00B0. Its D12 rasi is Kadagam, the 4th from Mesham, so it is Cadre A. Gulika and Mandi are not counted. This method was given by the user and has no written source.",
+      ta: "உதாரணமாக மேஷம் 8\u00B047\u2032இல் உள்ள சனி தன் ராசியின் 4ஆம் பகுதியில், 7\u00B030\u2032 முதல் 10\u00B0 வரை, உள்ளது. அதன் D12 ராசி கடகம், மேஷத்திலிருந்து 4ஆம் ராசி, எனவே அது A பிரிவு. குளிகன், மாந்தி கணக்கில் இல்லை. இது பயனர் தந்த முறை, எழுத்து மூலம் இல்லை.",
     },
   },
   pranapada: {

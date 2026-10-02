@@ -438,3 +438,8 @@ tr.dignity-parama td { background: var(--gold-100); font-weight: 600; }
 #hiddenTransitTable td:nth-child(4) { white-space: nowrap; }
 #hiddenTransitTable td:nth-child(5) { min-width: 15rem; }
 th .th-key { display: block; margin-top: 0.15rem; font-size: 0.68rem; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--ink-soft); }
+#careerTab { overflow-x: auto; }
+#careerTable td:nth-child(5) { font-weight: 700; }
+tr.cadre-A td:nth-child(5) { color: var(--maroon-700); }
+tr.cadre-B td:nth-child(5) { color: var(--good); }
+tr.cadre-C td:nth-child(5) { color: var(--gold-500); }

@@ -718,6 +718,7 @@ function renderAll() {
   renderGrahaDetails();
   renderDignity();
   renderHiddenDignity();
+  renderCareerCadres();
   renderPeyarchi();
   renderDrekkanaLords();
   renderSashtashtagam();
@@ -1415,6 +1416,42 @@ function renderHiddenDignity() {
     td.colSpan = 6;
     td.textContent = ui.hiddenNoTransits;
     tr.appendChild(td);
+    tbody.appendChild(tr);
+  }
+}
+
+// Dvadasamsham: each planet's career cadre from its D1 rasi counted to its D12 rasi.
+function renderCareerCadres() {
+  const labels = L();
+  const ui = labels.ui;
+  const entries = state.chart.career_cadres;
+  const setText = (id, text) => (document.getElementById(id).textContent = text);
+  setText("lblCareerTab", ui.careerTab);
+  for (const [id, key] of [["thCrPlanet", "colPlanet"], ["thCrD1", "colD1RasiX"], ["thCrD12", "colD12Rasi"],
+    ["thCrCount", "colCount"], ["thCrCadre", "colCadre"], ["thCrWork", "colWork"]]) {
+    setText(id, ui[key]);
+  }
+  setText("careerNote", ui.careerNote);
+  const tally = (cadre) => entries.filter((e) => e.cadre === cadre).length;
+  setText("careerSummary", ui.careerSummary.replace("{a}", tally("A")).replace("{b}", tally("B")).replace("{c}", tally("C")));
+
+  const tbody = document.getElementById("careerBody");
+  tbody.innerHTML = "";
+  for (const e of entries) {
+    const tr = document.createElement("tr");
+    tr.className = `cadre-${e.cadre}`;
+    for (const text of [
+      labels.planets[e.planet],
+      `${labels.rasi[e.d1_rasi]} ${formatDMS(e.degree_in_sign)}`,
+      labels.rasi[e.d12_rasi],
+      String(e.count),
+      `${e.cadre}, ${labels.cadreName[e.cadre]}`,
+      labels.cadreWork[e.cadre],
+    ]) {
+      const td = document.createElement("td");
+      td.textContent = text;
+      tr.appendChild(td);
+    }
     tbody.appendChild(tr);
   }
 }
