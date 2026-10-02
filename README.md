@@ -62,6 +62,10 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   a planet filter and the running pass highlighted. Each pass gives its pariharam, the deity of
   the rasi the hidden pada falls in (odd rasis male, even female), as the user listed them. The
   Reading page explains the method and lists the twelve pariharams.
+- **Dvadasamsham** tab and a Dwadasamsa Career Reading page: for each of the nine planets, the
+  count from its D1 rasi (X, as 1) to its D12 rasi (Y) gives its career cadre, A (1, 4, 7, 10,
+  effort and physical work), B (2, 5, 8, 11, knowledge work such as teaching or law) or C (3, 6,
+  9, 12, service and volunteer work), with a tally of how many planets fall in each.
 - **Saved charts**: stored locally, recomputed on load, and deletable.
 
 ## Setup
