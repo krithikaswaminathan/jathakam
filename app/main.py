@@ -14,6 +14,8 @@ from app.astrology import (
     make_graha_position,
 )
 from app.constants import (
+    GANDANTHAM_END_YEAR,
+    GANDANTHAM_START_YEAR,
     HIDDEN_TRANSIT_END_YEAR,
     HIDDEN_TRANSIT_START_YEAR,
     PEYARCHI_END_YEAR,
@@ -25,6 +27,7 @@ from app.db import SavedChart, delete_chart, get_chart, init_db, list_charts, sa
 from app.dignity import compute_dignities
 from app.drekkana_lords import compute_drekkana_lords
 from app.dwadasamsa_career import compute_career_cadres
+from app.gandantham import compute_gandantham
 from app.ephemeris import (
     compute_ascendant,
     compute_graha_positions,
@@ -44,6 +47,7 @@ from app.models import (
     DasaPeriodOut,
     DignityOut,
     DrekkanaLordOut,
+    GandanthamOut,
     GrahaOut,
     HiddenDignityOut,
     KaalaPakaiOut,
@@ -189,6 +193,7 @@ def _build_chart_response(
         navamsa_sashtashtagam=_sashtashtagam_out(d1, vargas["D9"], timezone),
         hidden_dignities=_hidden_dignities_out(d1, timezone),
         career_cadres=[CareerCadreOut(**vars(e)) for e in compute_career_cadres(d1, vargas["D12"])],
+        gandantham=_gandantham_out(d1, lagna_longitude, timezone),
     )
 
 
@@ -206,6 +211,20 @@ def _sashtashtagam_out(d1: ChartData, d9: ChartData, timezone_name: str) -> list
         fields["transits"] = [TransitWindowOut(start=w.start.astimezone(tz), end=w.end.astimezone(tz)) for w in e.transits]
         out.append(SashtashtagamOut(**fields))
     return out
+
+
+def _gandantham_out(d1: ChartData, lagna_longitude: float, timezone_name: str) -> GandanthamOut:
+    tz = ZoneInfo(timezone_name)
+    start = datetime(GANDANTHAM_START_YEAR, 1, 1, tzinfo=tz)
+    end = datetime(GANDANTHAM_END_YEAR + 1, 1, 1, tzinfo=tz)
+    g = compute_gandantham(d1, lagna_longitude, start, end)
+    return GandanthamOut(
+        lagna_nakshatra=g.lagna_nakshatra,
+        lagna_pada=g.lagna_pada,
+        fixed=[vars(p) for p in g.fixed],
+        lagna=[vars(p) for p in g.lagna],
+        transits=[{**vars(t), "start": t.start.astimezone(tz), "end": t.end.astimezone(tz)} for t in g.transits],
+    )
 
 
 def _hidden_dignities_out(d1: ChartData, timezone_name: str) -> list[HiddenDignityOut]:

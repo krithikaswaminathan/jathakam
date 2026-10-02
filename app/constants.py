@@ -155,3 +155,7 @@ PEYARCHI_END_YEAR = 2031
 # Rahu and Ketu transits over the hidden ucham, neecham and moolatrikonam padas: Jan 2026 to Dec 2035.
 HIDDEN_TRANSIT_START_YEAR = 2026
 HIDDEN_TRANSIT_END_YEAR = 2035
+
+# Transits over the Gandantham padas: Jan 2026 to Dec 2030.
+GANDANTHAM_START_YEAR = 2026
+GANDANTHAM_END_YEAR = 2030

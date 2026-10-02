@@ -54,6 +54,12 @@ const LABELS = {
       hiddenTransitsTitle: "Rahu and Ketu over the hidden padas, 2026 to 2035",
       colSitsIn: "Sits in", colHides: "Hides its", colHiddenIn: "Hidden in", colBhavam: "Bhavam",
       colNode: "Rahu / Ketu", colTensionIn: "Tension in", colDates: "Dates", hiddenCellKey: "pada \u00B7 rasi \u00B7 bhavam", colPariharam: "Pariharam", bhavamWord: "bhavam",
+      gandanthamTab: "Gandantham", gandFixedTitle: "The Kaala Purusha Gandantham padas",
+      gandLagnaTitle: "Counted from the lagna, {pada}", gandTransitTitle: "Guru, Sani, Rahu and Ketu over these padas, 2026 to 2030",
+      colNo: "No.", colSet: "Counted from", gandFixed: "Kaala Purusha", gandLagna: "Lagna",
+      gandSummaryBirth: "At birth, {list}", gandAtPada: "{planet} in {pada}", gandSummaryNone: "No planet sits in a Gandantham pada at birth",
+      gandTransitLine: "{planet} over {pada}", gandNoTransits: "Guru, Sani, Rahu and Ketu do not cross these padas between 2026 and 2030.",
+      gandNote: "The six Gandantham padas are the 1st, 36th, 37th, 72nd, 73rd and 108th of the 108 padas, where a water sign ends and a fire sign begins. The same six are also counted from the chart's own lagna pada as the 1st. Planets sitting in any of them at birth are highlighted, and the table below lists every pass of Guru, Sani, Rahu and Ketu over them. The Reading page explains more.",
       careerTab: "Dvadasamsham", colD12Rasi: "D12 rasi (Y)", colD1RasiX: "D1 rasi (X)", colCadre: "Cadre", colWork: "Kind of work",
       cadreWord: "Cadre", careerSummary: "{a} in Cadre A \u00B7 {b} in Cadre B \u00B7 {c} in Cadre C",
       careerNote: "For each planet, count from its rasi in D1 (X) to its rasi in D12 (Y), with X as the first. A count of 1, 4, 7 or 10 is Cadre A, 2, 5, 8 or 11 is Cadre B and 3, 6, 9 or 12 is Cadre C. The Reading page explains the method.",
@@ -187,6 +193,12 @@ const LABELS = {
       hiddenTransitsTitle: "மறைந்த பாதங்களின் மீது ராகு, கேது, 2026 முதல் 2035 வரை",
       colSitsIn: "நிற்கும் பாதம்", colHides: "மறைக்கும் நிலை", colHiddenIn: "மறைந்திருக்கும் இடம்", colBhavam: "பாவம்",
       colNode: "ராகு / கேது", colTensionIn: "அழுத்தம்", colDates: "தேதிகள்", hiddenCellKey: "பாதம் \u00B7 ராசி \u00B7 பாவம்", colPariharam: "பரிகாரம்", bhavamWord: "பாவம்",
+      gandanthamTab: "கண்டாந்தம்", gandFixedTitle: "கால புருஷ கண்டாந்த பாதங்கள்",
+      gandLagnaTitle: "லக்னத்திலிருந்து எண்ணியவை, {pada}", gandTransitTitle: "இந்தப் பாதங்களின் மீது குரு, சனி, ராகு, கேது, 2026 முதல் 2030 வரை",
+      colNo: "எண்", colSet: "எண்ணும் முறை", gandFixed: "கால புருஷ", gandLagna: "லக்னம்",
+      gandSummaryBirth: "பிறப்பில், {list}", gandAtPada: "{planet} {pada}இல்", gandSummaryNone: "பிறப்பில் எந்தக் கிரகமும் கண்டாந்த பாதத்தில் இல்லை",
+      gandTransitLine: "{planet} {pada} மீது", gandNoTransits: "2026 முதல் 2030 வரை குரு, சனி, ராகு, கேது இந்தப் பாதங்களைக் கடப்பதில்லை.",
+      gandNote: "108 பாதங்களில் 1, 36, 37, 72, 73, 108ஆம் பாதங்கள் கண்டாந்த பாதங்கள். இங்கே நீர் ராசி முடிந்து அக்னி ராசி தொடங்குகிறது. இதே ஆறும் ஜாதகத்தின் லக்ன பாதத்தை 1 என்று கொண்டும் எண்ணப்படுகின்றன. பிறப்பில் இவற்றில் உள்ள கிரகங்கள் குறிக்கப்பட்டுள்ளன. கீழே உள்ள அட்டவணை இவற்றின் மீது குரு, சனி, ராகு, கேது கடக்கும் எல்லாக் காலங்களையும் காட்டுகிறது. வாசிப்புப் பக்கம் மேலும் விளக்குகிறது.",
       careerTab: "துவாதசாம்சம்", colD12Rasi: "D12 ராசி (Y)", colD1RasiX: "D1 ராசி (X)", colCadre: "பிரிவு", colWork: "வேலையின் வகை",
       cadreWord: "பிரிவு", careerSummary: "A பிரிவில் {a} \u00B7 B பிரிவில் {b} \u00B7 C பிரிவில் {c}",
       careerNote: "ஒவ்வொரு கிரகத்திற்கும், D1இல் அது நிற்கும் ராசியிலிருந்து (X, அதுவே 1) D12இல் அது நிற்கும் ராசி (Y) வரை எண்ணவும். 1, 4, 7, 10 என்றால் A பிரிவு, 2, 5, 8, 11 என்றால் B பிரிவு, 3, 6, 9, 12 என்றால் C பிரிவு. வாசிப்புப் பக்கம் இந்த முறையை விளக்குகிறது.",
@@ -625,6 +637,35 @@ const READING_TOPICS = {
     note: {
       en: "The ucham and neecham padas are the paramoccham and paramaneecham padas, and the moolatrikonam pada is the first pada of each planet's moolatrikonam as BPHS gives it. The Sun's runs from 0\u00B0 to 20\u00B0 of Simham, the Moon's from just after 3\u00B0 of Rishabam, Mars's from 0\u00B0 to 12\u00B0 of Mesham, Mercury's from 16\u00B0 to 20\u00B0 of Kanni, Jupiter's from 0\u00B0 to 10\u00B0 of Dhanus, Venus's from 0\u00B0 to 15\u00B0 of Thulam and Saturn's from 0\u00B0 to 20\u00B0 of Kumbham. For the Moon and Mercury that first pada is the same as their ucham pada. Rahu and Ketu have no moolatrikonam here. This method was given by the user and has no written source.",
       ta: "உச்ச, நீச பாதங்கள் என்பவை பரமோச்ச, பரம நீச பாதங்கள். மூலத்திரிகோண பாதம் என்பது BPHS கூறும் ஒவ்வொரு கிரகத்தின் மூலத்திரிகோணத்தின் முதல் பாதம். சூரியனுக்குச் சிம்மம் 0\u00B0 முதல் 20\u00B0 வரை, சந்திரனுக்கு ரிஷபம் 3\u00B0க்குச் சற்று பிறகிருந்து, செவ்வாய்க்கு மேஷம் 0\u00B0 முதல் 12\u00B0 வரை, புதனுக்குக் கன்னி 16\u00B0 முதல் 20\u00B0 வரை, குருவுக்குத் தனுசு 0\u00B0 முதல் 10\u00B0 வரை, சுக்ரனுக்குத் துலாம் 0\u00B0 முதல் 15\u00B0 வரை, சனிக்குக் கும்பம் 0\u00B0 முதல் 20\u00B0 வரை. சந்திரனுக்கும் புதனுக்கும் அந்த முதல் பாதம் அவற்றின் உச்ச பாதமே. ராகு, கேதுவுக்கு இங்கு மூலத்திரிகோணம் இல்லை. இது பயனர் தந்த முறை, எழுத்து மூலம் இல்லை.",
+    },
+  },
+  gandantham: {
+    title: { en: "Gandantham", ta: "கண்டாந்தம்" },
+    intro: {
+      en: "Gandantham padas are the knots of the zodiac, the junctions where a water sign ends and a fire sign begins. Kadagam gives way to Simham, Viruchigam to Dhanus and Meenam to Mesham. Traditionally these are treated as sensitive points. Of the 108 padas of the Kaala Purusha chart, counting Ashwini 1 as the first, the six Gandantham padas are these.",
+      ta: "கண்டாந்த பாதங்கள் ராசி சக்கரத்தின் முடிச்சுகள். இங்கே ஒரு நீர் ராசி முடிந்து ஒரு அக்னி ராசி தொடங்குகிறது. கடகம் சிம்மத்திற்கும், விருச்சிகம் தனுசுவுக்கும், மீனம் மேஷத்திற்கும் வழி விடுகின்றன. மரபுப்படி இவை உணர்திறன் மிக்க இடங்களாகக் கருதப்படுகின்றன. அஸ்வினி 1ஐ முதலாவதாகக் கொண்டு கால புருஷ சக்கரத்தின் 108 பாதங்களில் ஆறு கண்டாந்த பாதங்கள் இவை.",
+    },
+    tableHeader: [{ en: "No.", ta: "எண்" }, { en: "Pada", ta: "பாதம்" }, { en: "Where", ta: "இடம்" }],
+    table: [
+      [1, [0, 1], { en: "the start of Mesham", ta: "மேஷத்தின் தொடக்கம்" }],
+      [36, [8, 4], { en: "the end of Kadagam", ta: "கடகத்தின் முடிவு" }],
+      [37, [9, 1], { en: "the start of Simham", ta: "சிம்மத்தின் தொடக்கம்" }],
+      [72, [17, 4], { en: "the end of Viruchigam", ta: "விருச்சிகத்தின் முடிவு" }],
+      [73, [18, 1], { en: "the start of Dhanus", ta: "தனுசுவின் தொடக்கம்" }],
+      [108, [26, 4], { en: "the end of Meenam", ta: "மீனத்தின் முடிவு" }],
+    ].map(([no, p, where]) => [bothLangs(() => String(no)), bothLangs((lang) => padaName(lang, p)), where]),
+    sections: [
+      {
+        heading: { en: "Counted from the lagna", ta: "லக்னத்திலிருந்து எண்ணுதல்" },
+        text: {
+          en: "The same pattern is also found in every chart from its own lagna. Take the pada the lagna falls in as the 1st, and count the 36th, 37th, 72nd, 73rd and 108th padas from it. A planet sitting at birth in any of the six fixed padas or the six counted from the lagna is in Gandantham. The Gandantham tab shows this for a chart, and lists every pass of Guru, Sani, Rahu and Ketu over those padas from 2026 to 2030. Moving planets like the Moon cross them every month, so only these four slow planets are listed.",
+          ta: "இதே அமைப்பு ஒவ்வொரு ஜாதகத்திலும் அதன் லக்னத்திலிருந்தும் உண்டு. லக்னம் விழும் பாதத்தை முதலாவதாகக் கொண்டு, அதிலிருந்து 36, 37, 72, 73, 108ஆம் பாதங்களை எண்ணுங்கள். பிறப்பில் ஆறு நிலையான பாதங்களிலோ லக்னத்திலிருந்து எண்ணிய ஆறிலோ உள்ள கிரகம் கண்டாந்தத்தில் உள்ளது. ஒரு ஜாதகத்திற்கு இதையும், 2026 முதல் 2030 வரை இந்தப் பாதங்களின் மீது குரு, சனி, ராகு, கேது கடக்கும் எல்லாக் காலங்களையும் கண்டாந்தம் தாவல் காட்டுகிறது. சந்திரன் போன்ற வேகமான கிரகங்கள் ஒவ்வொரு மாதமும் இவற்றைக் கடப்பதால், மெதுவாக நகரும் இந்த நான்கு கிரகங்கள் மட்டுமே காட்டப்படுகின்றன.",
+        },
+      },
+    ],
+    note: {
+      en: "This method was given by the user. Only the nine planets are checked at birth, not Gulika or Mandi.",
+      ta: "இது பயனர் தந்த முறை. பிறப்பில் ஒன்பது கிரகங்கள் மட்டுமே பார்க்கப்படுகின்றன, குளிகன், மாந்தி அல்ல.",
     },
   },
   dwadasamsaCareer: {

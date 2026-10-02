@@ -194,6 +194,33 @@ class CareerCadreOut(BaseModel):
     cadre: str
 
 
+class GandanthamPadaOut(BaseModel):
+    number: int
+    nakshatra: int
+    pada: int
+    rasi: int
+    planets: list[str]
+
+
+class GandanthamTransitOut(BaseModel):
+    planet: str
+    source: str
+    number: int
+    nakshatra: int
+    pada: int
+    rasi: int
+    start: datetime  # in the chart's time zone
+    end: datetime
+
+
+class GandanthamOut(BaseModel):
+    lagna_nakshatra: int
+    lagna_pada: int
+    fixed: list[GandanthamPadaOut]
+    lagna: list[GandanthamPadaOut]
+    transits: list[GandanthamTransitOut]
+
+
 class ChartResponse(BaseModel):
     id: int
     name: str
@@ -221,6 +248,7 @@ class ChartResponse(BaseModel):
     navamsa_sashtashtagam: list[SashtashtagamOut] = []
     hidden_dignities: list[HiddenDignityOut] = []
     career_cadres: list[CareerCadreOut] = []
+    gandantham: GandanthamOut | None = None
 
 
 class DasaExpandRequest(BaseModel):

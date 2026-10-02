@@ -443,3 +443,5 @@ th .th-key { display: block; margin-top: 0.15rem; font-size: 0.68rem; font-weigh
 tr.cadre-A td:nth-child(5) { color: var(--maroon-700); }
 tr.cadre-B td:nth-child(5) { color: var(--good); }
 tr.cadre-C td:nth-child(5) { color: var(--gold-500); }
+#gandTab { overflow-x: auto; }
+#gandTransitTable td:nth-child(5) { white-space: nowrap; }

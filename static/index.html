@@ -155,6 +155,7 @@
         <button class="tab-btn" data-tab="drekkanaTab" id="lblDrekkanaTab">Drekkana Lords Aathipathyam</button>
         <button class="tab-btn" data-tab="sashtashtagamTab" id="lblSashtashtagamTab">Navamsa Sashtashtagam</button>
         <button class="tab-btn" data-tab="careerTab" id="lblCareerTab">Dvadasamsham</button>
+        <button class="tab-btn" data-tab="gandTab" id="lblGandTab">Gandantham</button>
       </div>
 
       <div id="chartTab" class="tab-panel active">
@@ -282,6 +283,31 @@
           <tbody id="hiddenTransitBody"></tbody>
         </table>
         <p id="hiddenNote" class="reading-note"></p>
+      </div>
+
+      <div id="gandTab" class="tab-panel">
+        <div id="gandSummary" class="yoga-summary"></div>
+        <h3 id="lblGandFixed" class="timing-title"></h3>
+        <table id="gandFixedTable" class="gand-table">
+          <thead><tr><th class="g-no"></th><th class="g-pada"></th><th class="g-rasi"></th><th class="g-planets"></th></tr></thead>
+          <tbody id="gandFixedBody"></tbody>
+        </table>
+        <h3 id="lblGandLagna" class="timing-title"></h3>
+        <table id="gandLagnaTable" class="gand-table">
+          <thead><tr><th class="g-no"></th><th class="g-pada"></th><th class="g-rasi"></th><th class="g-planets"></th></tr></thead>
+          <tbody id="gandLagnaBody"></tbody>
+        </table>
+        <h3 id="lblGandTransit" class="timing-title"></h3>
+        <div class="peyarchi-filter"><label for="gandFilter" id="lblGandFilter" class="info-label">Planet</label>
+          <select id="gandFilter" class="upasana-select"></select></div>
+        <table id="gandTransitTable">
+          <thead><tr>
+            <th id="thGtPlanet">Planet</th><th id="thGtSet">Counted from</th><th id="thGtPada">Pada</th>
+            <th id="thGtRasi">Rasi</th><th id="thGtWhen">Dates</th>
+          </tr></thead>
+          <tbody id="gandTransitBody"></tbody>
+        </table>
+        <p id="gandNote" class="reading-note"></p>
       </div>
 
       <div id="careerTab" class="tab-panel">

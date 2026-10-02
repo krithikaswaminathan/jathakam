@@ -80,6 +80,10 @@ def test_old_saved_charts_load_with_all_current_features(client):
     assert ("Rahu", "moolatrikonam") not in hidden and len(hidden) == 25
     cadres = {e["planet"]: e["cadre"] for e in body["career_cadres"]}
     assert cadres["Saturn"] == "A" and list(cadres.values()).count("C") == 5  # Saturn Mesham 8deg47'
+    gand = body["gandantham"]
+    assert (gand["lagna_nakshatra"], gand["lagna_pada"]) == (19, 1)  # Pooradam 1
+    assert [p["planets"] for p in gand["fixed"] if p["planets"]] == [["Venus"]]  # Kettai 4
+    assert len(gand["transits"]) == 25
     peyarchis = body["peyarchis"]
     assert [p["planet"] for p in peyarchis if p["in_effect_at_start"]] == ["Saturn", "Rahu", "Jupiter"]
     assert peyarchis[0]["when"] == "2025-03-29T21:45:09+05:30"  # Saturn into Pisces, in the chart's time zone

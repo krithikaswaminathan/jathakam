@@ -24,6 +24,7 @@ let state = {
   upasanaRasi: "", // rasi index picked in the Upasana Deivam box, as a string
   kaalaPakaiPlanet: "", // planet picked in the Kaala Pakai box
   pariharamTopic: 0, // index into PARIHARAMS shown on the Pariharam page
+  gandPlanet: "", // planet filter on the Gandantham tab; "" = all
   hiddenPlanet: "", // planet filter on the Hidden Ucham / Neecham tab; "" = all
   prasannam: { place: null, chart: null }, // place: { latitude, longitude, timezone, label }; label null = device location
   peyarchiPlanet: "", // planet filter on the Peyarchi tab; "" = all
@@ -719,6 +720,7 @@ function renderAll() {
   renderDignity();
   renderHiddenDignity();
   renderCareerCadres();
+  renderGandantham();
   renderPeyarchi();
   renderDrekkanaLords();
   renderSashtashtagam();
@@ -1415,6 +1417,99 @@ function renderHiddenDignity() {
     const td = document.createElement("td");
     td.colSpan = 6;
     td.textContent = ui.hiddenNoTransits;
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+  }
+}
+
+// Gandantham: the six junction padas, the same six counted from the lagna, planets in them at
+// birth, and every pass of Guru, Sani, Rahu and Ketu over them up to 2030 (laid out like Moorthy).
+function renderGandantham() {
+  const labels = L();
+  const ui = labels.ui;
+  const g = state.chart.gandantham;
+  const setText = (id, text) => (document.getElementById(id).textContent = text);
+  const pada = (nak, p) => `${labels.nakshatra[nak]} ${p}`;
+  setText("lblGandTab", ui.gandanthamTab);
+  setText("lblGandFixed", ui.gandFixedTitle);
+  setText("lblGandLagna", ui.gandLagnaTitle.replace("{pada}", pada(g.lagna_nakshatra, g.lagna_pada)));
+  setText("lblGandTransit", ui.gandTransitTitle);
+  setText("lblGandFilter", ui.colPlanet);
+  setText("gandNote", ui.gandNote);
+  for (const [id, key] of [["thGtPlanet", "colPlanet"], ["thGtSet", "colSet"], ["thGtPada", "colPada"], ["thGtRasi", "colRasi"], ["thGtWhen", "colDates"]]) {
+    setText(id, ui[key]);
+  }
+
+  const fillPadas = (tableId, bodyId, padas) => {
+    const head = document.querySelector(`#${tableId} thead tr`).children;
+    [ui.colNo, ui.colPada, ui.colRasi, ui.colPlanetsHere].forEach((text, i) => (head[i].textContent = text));
+    const tbody = document.getElementById(bodyId);
+    tbody.innerHTML = "";
+    for (const p of padas) {
+      const tr = document.createElement("tr");
+      if (p.planets.length) tr.className = "current-period";
+      for (const text of [String(p.number), pada(p.nakshatra, p.pada), labels.rasi[p.rasi], p.planets.map((n) => labels.planets[n]).join(", ") || "\u2013"]) {
+        const td = document.createElement("td");
+        td.textContent = text;
+        tr.appendChild(td);
+      }
+      tbody.appendChild(tr);
+    }
+  };
+  fillPadas("gandFixedTable", "gandFixedBody", g.fixed);
+  fillPadas("gandLagnaTable", "gandLagnaBody", g.lagna);
+
+  // Summary: planets at birth, then the running or next pass.
+  const atBirth = [...g.fixed, ...g.lagna].flatMap((p) =>
+    p.planets.map((n) => ui.gandAtPada.replace("{planet}", labels.planets[n]).replace("{pada}", pada(p.nakshatra, p.pada)))
+  );
+  const now = new Date();
+  const running = g.transits.filter((t) => new Date(t.start) <= now && now <= new Date(t.end));
+  const next = g.transits.find((t) => new Date(t.start) > now);
+  const line = (t) => ui.gandTransitLine.replace("{planet}", labels.planets[t.planet]).replace("{pada}", pada(t.nakshatra, t.pada));
+  const parts = [atBirth.length ? ui.gandSummaryBirth.replace("{list}", [...new Set(atBirth)].join(", ")) : ui.gandSummaryNone];
+  if (running.length) parts.push(`${ui.peyarchiNow}: ${running.map(line).join(", ")}`);
+  else if (next) parts.push(`${ui.hiddenNext}, ${fmtDate(next.start)}: ${line(next)}`);
+  setText("gandSummary", parts.join("  \u00B7  "));
+
+  const select = document.getElementById("gandFilter");
+  select.innerHTML = "";
+  for (const planet of ["", "Jupiter", "Saturn", "Rahu", "Ketu"]) {
+    const opt = document.createElement("option");
+    opt.value = planet;
+    opt.textContent = planet ? labels.planets[planet] : ui.peyarchiAll;
+    select.appendChild(opt);
+  }
+  select.value = state.gandPlanet;
+  select.onchange = () => {
+    state.gandPlanet = select.value;
+    renderGandantham();
+  };
+
+  const tbody = document.getElementById("gandTransitBody");
+  tbody.innerHTML = "";
+  for (const t of g.transits) {
+    if (state.gandPlanet && t.planet !== state.gandPlanet) continue;
+    const tr = document.createElement("tr");
+    if (running.includes(t)) tr.className = "current-period";
+    for (const text of [
+      labels.planets[t.planet],
+      `${t.source === "fixed" ? ui.gandFixed : ui.gandLagna} \u00B7 ${t.number}`,
+      pada(t.nakshatra, t.pada),
+      labels.rasi[t.rasi],
+      `${fmtDate(t.start)} \u2192 ${fmtDate(t.end)}`,
+    ]) {
+      const td = document.createElement("td");
+      td.textContent = text;
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+  if (!g.transits.length) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 5;
+    td.textContent = ui.gandNoTransits;
     tr.appendChild(td);
     tbody.appendChild(tr);
   }
