@@ -53,7 +53,7 @@ const LABELS = {
       hiddenTab: "Hidden Ucham / Neecham", hiddenWhereTitle: "Where each planet hides them",
       hiddenTransitsTitle: "Rahu and Ketu over the hidden padas, 2026 to 2035",
       colSitsIn: "Sits in", colHides: "Hides its", colHiddenIn: "Hidden in", colBhavam: "Bhavam",
-      colNode: "Rahu / Ketu", colTensionIn: "Tension in", colDates: "Dates", hiddenCellKey: "pada \u00B7 rasi \u00B7 bhavam",
+      colNode: "Rahu / Ketu", colTensionIn: "Tension in", colDates: "Dates", hiddenCellKey: "pada \u00B7 rasi \u00B7 bhavam", colPariharam: "Pariharam", bhavamWord: "bhavam",
       hiddenNext: "Next", hiddenSummaryLine: "{node} over {pada}, where {planet} hides its {kind}",
       tensionKaraka: "{planet}'s karakathvam ({karakas})", tensionBhavam: "the {house} bhavam ({meaning})",
       hiddenNoTransits: "Rahu and Ketu do not pass over any of these padas between 2026 and 2035.",
@@ -177,7 +177,7 @@ const LABELS = {
       hiddenTab: "மறைந்த உச்சம் / நீசம்", hiddenWhereTitle: "ஒவ்வொரு கிரகமும் எங்கே மறைக்கிறது",
       hiddenTransitsTitle: "மறைந்த பாதங்களின் மீது ராகு, கேது, 2026 முதல் 2035 வரை",
       colSitsIn: "நிற்கும் பாதம்", colHides: "மறைக்கும் நிலை", colHiddenIn: "மறைந்திருக்கும் இடம்", colBhavam: "பாவம்",
-      colNode: "ராகு / கேது", colTensionIn: "அழுத்தம்", colDates: "தேதிகள்", hiddenCellKey: "பாதம் \u00B7 ராசி \u00B7 பாவம்",
+      colNode: "ராகு / கேது", colTensionIn: "அழுத்தம்", colDates: "தேதிகள்", hiddenCellKey: "பாதம் \u00B7 ராசி \u00B7 பாவம்", colPariharam: "பரிகாரம்", bhavamWord: "பாவம்",
       hiddenNext: "அடுத்து", hiddenSummaryLine: "{node} {pada} மீது, இங்கே {planet} தன் {kind} நிலையை மறைக்கிறது",
       tensionKaraka: "{planet} காரகத்துவம் ({karakas})", tensionBhavam: "{house} பாவம் ({meaning})",
       hiddenNoTransits: "2026 முதல் 2035 வரை ராகுவோ கேதுவோ இந்தப் பாதங்களின் மீது கடப்பதில்லை.",
@@ -392,6 +392,25 @@ const MOOLATRIKONA_FIRST_PADA = {
 };
 const padaName = (lang, [nak, pada]) => `${LABELS[lang].nakshatra[nak]} ${pada}`;
 
+// Pariharam when transit Rahu or Ketu crosses a hidden pada: the deity of that pada's rasi
+// (0 = Mesham .. 11 = Meenam), as given by the user. Odd rasis are male, even rasis female.
+const RASI_PARIHARAM = [
+  { en: "Thiruvannamalai", ta: "திருவண்ணாமலை" },
+  { en: "Aandal, Srivilliputhur", ta: "ஆண்டாள், ஸ்ரீவில்லிபுத்தூர்" },
+  { en: "Thiruvathavoor, near Madurai", ta: "திருவாதவூர், மதுரை அருகில்" },
+  { en: "Madurai Meenakshi", ta: "மதுரை மீனாட்சி" },
+  { en: "Namakkal Narasimhaswamy temple", ta: "நாமக்கல் நரசிம்மசுவாமி கோவில்" },
+  { en: "Thiruvenkaadu, Swetharaneswarar and Brahmavidyambikai", ta: "திருவெண்காடு, ஸ்வேதாரண்யேஸ்வரர், பிரம்மவித்யாம்பிகை" },
+  { en: "Kabaleeswarar, Chennai", ta: "கபாலீஸ்வரர், சென்னை" },
+  { en: "Akilandeswari, Thiruvanaikaal", ta: "அகிலாண்டேஸ்வரி, திருவானைக்காவல்" },
+  { en: "Tiruchendur Murugan", ta: "திருச்செந்தூர் முருகன்" },
+  { en: "Kaatumannar Kovil", ta: "காட்டுமன்னார் கோவில்" },
+  { en: "Kutraleeswarar Kovil", ta: "குற்றாலநாதர் கோவில்" },
+  { en: "Kanyakumari Amman", ta: "கன்னியாகுமரி அம்மன்" },
+];
+const RASI_GENDER = { en: ["Male rasi", "Female rasi"], ta: ["ஆண் ராசி", "பெண் ராசி"] };
+const rasiGender = (lang, rasi) => RASI_GENDER[lang][rasi % 2];
+
 const READING_TOPICS = {
   pushkaraNavamsa: {
     title: { en: "Pushkara Navamsa", ta: "புஷ்கர நவாம்சம்" },
@@ -543,8 +562,8 @@ const READING_TOPICS = {
   hiddenDignity: {
     title: { en: "Hidden Ucham and Neecham", ta: "மறைந்திருக்கும் உச்சம், நீசம்" },
     intro: {
-      en: "Every planet has a pada in the Kaala Purusha chart where it is exalted, one where it is debilitated and one where its moolatrikonam begins. In a birth chart the planet carries each of these hidden somewhere else, and this page finds where. Take the planet's Kaala Purusha pada and call it A. The pada the planet sits in, in the birth chart, is B. Count the padas from A to B, counting both, and call that number C. Then count C padas again, starting from B as the first. The pada you land on is where the planet hides its ucham, neecham or moolatrikonam. For example, a Sun in Mula 2 is 72 padas on from its ucham pada, Ashwini 3. Counting 72 again from Mula 2 lands on Magha 1, so that Sun hides its ucham in Magha 1. When transit Rahu or Ketu passes over one of these hidden padas, it brings tension in the karakathvam of the planet hiding there and in the bhavam, the house from the lagna, that the pada falls in. The Hidden Ucham / Neecham tab shows this for a chart, with every such pass up to December 2035. The A padas for each planet are below.",
-      ta: "ஒவ்வொரு கிரகத்திற்கும் கால புருஷ சக்கரத்தில் அது உச்சம் பெறும் ஒரு பாதம், நீசம் பெறும் ஒரு பாதம், மூலத்திரிகோணம் தொடங்கும் ஒரு பாதம் உண்டு. ஒருவரின் ஜாதகத்தில் அந்தக் கிரகம் இவற்றை வேறு ஓர் இடத்தில் மறைத்து வைத்திருக்கிறது. அந்த இடத்தை இந்தப் பக்கம் கண்டுபிடிக்கிறது. கிரகத்தின் கால புருஷ பாதத்தை A என்று கொள்ளுங்கள். ஜாதகத்தில் அந்தக் கிரகம் நிற்கும் பாதம் B. A முதல் B வரை, இரண்டையும் சேர்த்து, பாதங்களை எண்ணுங்கள். அந்த எண்ணிக்கை C. பிறகு B யை முதலாவதாகக் கொண்டு மீண்டும் C பாதங்களை எண்ணுங்கள். வந்து சேரும் பாதமே அந்தக் கிரகம் தன் உச்சம், நீசம் அல்லது மூலத்திரிகோணத்தை மறைத்து வைத்திருக்கும் இடம். உதாரணமாக மூலம் 2இல் உள்ள சூரியன், தன் உச்ச பாதமான அஸ்வினி 3இலிருந்து 72 பாதங்கள் தள்ளி இருக்கிறது. மூலம் 2இலிருந்து மீண்டும் 72 எண்ணினால் மகம் 1 வருகிறது. எனவே அந்தச் சூரியன் தன் உச்சத்தை மகம் 1இல் மறைத்து வைத்திருக்கிறது. கோசார ராகு அல்லது கேது இந்த மறைந்த பாதங்களில் ஒன்றின் மீது கடக்கும்போது, அங்கு மறைந்திருக்கும் கிரகத்தின் காரகத்துவத்திலும், அந்தப் பாதம் விழும் பாவத்திலும், அதாவது லக்னத்திலிருந்து வரும் வீட்டிலும், அழுத்தம் உண்டாகும். ஒரு ஜாதகத்திற்கு இதையும், டிசம்பர் 2035 வரை இப்படி நிகழும் எல்லாக் காலங்களையும் மறைந்த உச்சம் / நீசம் தாவல் காட்டுகிறது. ஒவ்வொரு கிரகத்தின் A பாதங்கள் கீழே உள்ளன.",
+      en: "Every planet has a pada in the Kaala Purusha chart where it is exalted, one where it is debilitated and one where its moolatrikonam begins. In a birth chart the planet carries each of these hidden somewhere else, and this method finds where. Take the planet's Kaala Purusha pada and call it A. The pada the planet sits in, in the birth chart, is B. Count the padas from A to B, counting both, and call that number C. Then count C padas again, starting from B as the first. The pada you land on is where the planet hides its ucham, neecham or moolatrikonam. For example, a Sun in Mula 2 is 72 padas on from its ucham pada, Ashwini 3. Counting 72 again from Mula 2 lands on Magha 1, so that Sun hides its ucham in Magha 1. When transit Rahu or Ketu passes over one of these hidden padas, it brings tension in the karakathvam of the planet hiding there and in the bhavam, the house from the lagna, that the pada falls in. The Hidden Ucham / Neecham tab shows this for a chart, with every such pass up to December 2035. The A padas for each planet are below.",
+      ta: "ஒவ்வொரு கிரகத்திற்கும் கால புருஷ சக்கரத்தில் அது உச்சம் பெறும் ஒரு பாதம், நீசம் பெறும் ஒரு பாதம், மூலத்திரிகோணம் தொடங்கும் ஒரு பாதம் உண்டு. ஒருவரின் ஜாதகத்தில் அந்தக் கிரகம் இவற்றை வேறு ஓர் இடத்தில் மறைத்து வைத்திருக்கிறது. அந்த இடத்தை இந்த முறை கண்டுபிடிக்கிறது. கிரகத்தின் கால புருஷ பாதத்தை A என்று கொள்ளுங்கள். ஜாதகத்தில் அந்தக் கிரகம் நிற்கும் பாதம் B. A முதல் B வரை, இரண்டையும் சேர்த்து, பாதங்களை எண்ணுங்கள். அந்த எண்ணிக்கை C. பிறகு B யை முதலாவதாகக் கொண்டு மீண்டும் C பாதங்களை எண்ணுங்கள். வந்து சேரும் பாதமே அந்தக் கிரகம் தன் உச்சம், நீசம் அல்லது மூலத்திரிகோணத்தை மறைத்து வைத்திருக்கும் இடம். உதாரணமாக மூலம் 2இல் உள்ள சூரியன், தன் உச்ச பாதமான அஸ்வினி 3இலிருந்து 72 பாதங்கள் தள்ளி இருக்கிறது. மூலம் 2இலிருந்து மீண்டும் 72 எண்ணினால் மகம் 1 வருகிறது. எனவே அந்தச் சூரியன் தன் உச்சத்தை மகம் 1இல் மறைத்து வைத்திருக்கிறது. கோசார ராகு அல்லது கேது இந்த மறைந்த பாதங்களில் ஒன்றின் மீது கடக்கும்போது, அங்கு மறைந்திருக்கும் கிரகத்தின் காரகத்துவத்திலும், அந்தப் பாதம் விழும் பாவத்திலும், அதாவது லக்னத்திலிருந்து வரும் வீட்டிலும், அழுத்தம் உண்டாகும். ஒரு ஜாதகத்திற்கு இதையும், டிசம்பர் 2035 வரை இப்படி நிகழும் எல்லாக் காலங்களையும் மறைந்த உச்சம் / நீசம் தாவல் காட்டுகிறது. ஒவ்வொரு கிரகத்தின் A பாதங்கள் கீழே உள்ளன.",
     },
     tableHeader: [
       { en: "Planet", ta: "கிரகம்" }, { en: "Ucham pada", ta: "உச்ச பாதம்" }, { en: "Neecham pada", ta: "நீச பாதம்" }, { en: "Moolatrikonam pada", ta: "மூலத்திரிகோண பாதம்" },
@@ -555,6 +574,21 @@ const READING_TOPICS = {
       bothLangs((lang) => padaName(lang, deepPointPada((rasi + 6) % 12, deg))),
       bothLangs((lang) => (MOOLATRIKONA_FIRST_PADA[planet] ? padaName(lang, MOOLATRIKONA_FIRST_PADA[planet]) : "\u2013")),
     ]),
+    sections: [
+      {
+        heading: { en: "Pariharam when Rahu or Ketu crosses", ta: "ராகு அல்லது கேது கடக்கும்போது பரிகாரம்" },
+        text: {
+          en: "When transit Rahu or Ketu crosses one of these hidden padas, the pariharam is the deity of the rasi that pada falls in. The odd rasis, counted from Mesham, are male and the even rasis are female. The Hidden Ucham / Neecham tab gives the pariharam beside each crossing.",
+          ta: "கோசார ராகு அல்லது கேது இந்த மறைந்த பாதங்களில் ஒன்றைக் கடக்கும்போது, அந்தப் பாதம் விழும் ராசிக்குரிய தெய்வமே பரிகாரம். மேஷத்திலிருந்து எண்ணும்போது ஒற்றை ராசிகள் ஆண் ராசிகள், இரட்டை ராசிகள் பெண் ராசிகள். ஒவ்வொரு கடப்பிற்கும் அருகே மறைந்த உச்சம் / நீசம் தாவலில் பரிகாரம் தரப்பட்டுள்ளது.",
+        },
+        tableHeader: [{ en: "Rasi", ta: "ராசி" }, { en: "Male or female", ta: "ஆண் அல்லது பெண்" }, { en: "Pariharam", ta: "பரிகாரம்" }],
+        table: RASI_PARIHARAM.map((deity, r) => [
+          bothLangs((lang) => LABELS[lang].rasi[r]),
+          bothLangs((lang) => rasiGender(lang, r)),
+          deity,
+        ]),
+      },
+    ],
     note: {
       en: "The ucham and neecham padas are the paramoccham and paramaneecham padas, and the moolatrikonam pada is the first pada of each planet's moolatrikonam as BPHS gives it. The Sun's runs from 0\u00B0 to 20\u00B0 of Simham, the Moon's from just after 3\u00B0 of Rishabam, Mars's from 0\u00B0 to 12\u00B0 of Mesham, Mercury's from 16\u00B0 to 20\u00B0 of Kanni, Jupiter's from 0\u00B0 to 10\u00B0 of Dhanus, Venus's from 0\u00B0 to 15\u00B0 of Thulam and Saturn's from 0\u00B0 to 20\u00B0 of Kumbham. For the Moon and Mercury that first pada is the same as their ucham pada. Rahu and Ketu have no moolatrikonam here. This method was given by the user and has no written source.",
       ta: "உச்ச, நீச பாதங்கள் என்பவை பரமோச்ச, பரம நீச பாதங்கள். மூலத்திரிகோண பாதம் என்பது BPHS கூறும் ஒவ்வொரு கிரகத்தின் மூலத்திரிகோணத்தின் முதல் பாதம். சூரியனுக்குச் சிம்மம் 0\u00B0 முதல் 20\u00B0 வரை, சந்திரனுக்கு ரிஷபம் 3\u00B0க்குச் சற்று பிறகிருந்து, செவ்வாய்க்கு மேஷம் 0\u00B0 முதல் 12\u00B0 வரை, புதனுக்குக் கன்னி 16\u00B0 முதல் 20\u00B0 வரை, குருவுக்குத் தனுசு 0\u00B0 முதல் 10\u00B0 வரை, சுக்ரனுக்குத் துலாம் 0\u00B0 முதல் 15\u00B0 வரை, சனிக்குக் கும்பம் 0\u00B0 முதல் 20\u00B0 வரை. சந்திரனுக்கும் புதனுக்கும் அந்த முதல் பாதம் அவற்றின் உச்ச பாதமே. ராகு, கேதுவுக்கு இங்கு மூலத்திரிகோணம் இல்லை. இது பயனர் தந்த முறை, எழுத்து மூலம் இல்லை.",

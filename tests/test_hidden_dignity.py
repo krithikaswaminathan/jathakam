@@ -120,3 +120,14 @@ def test_window_up_to_2035_picks_up_the_2032_crossing():
     # Ketu over Ashwini 3 (the Sun's hidden moolatrikonam) in Aug to Oct 2032; the 2036 crossings fall outside.
     assert [days(t) for t in _find(entries, "Sun", "moolatrikonam").transits] == [("Ketu", date(2032, 8, 11), date(2032, 10, 13))]
     assert len(_find(entries, "Sun", "ucham").transits) == 1
+
+
+def test_rasi_pariharam_list_has_all_twelve():
+    import re
+
+    js = open("static/labels.js", encoding="utf-8").read()
+    block = js[js.index("const RASI_PARIHARAM = [") : js.index("];", js.index("const RASI_PARIHARAM = ["))]
+    deities = re.findall(r'\{ en: "([^"]+)", ta: "[^"]+" \}', block)
+    assert len(deities) == 12
+    assert deities[0] == "Thiruvannamalai" and deities[4] == "Namakkal Narasimhaswamy temple"
+    assert deities[11] == "Kanyakumari Amman"

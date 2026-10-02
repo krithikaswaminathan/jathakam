@@ -1309,12 +1309,13 @@ function renderHiddenDignity() {
     key.textContent = ui.hiddenCellKey;
     th.appendChild(key);
   }
-  for (const [id, key] of [["thHtPlanet", "colPlanet"], ["thHtKind", "colHides"], ["thHtPada", "colHiddenIn"],
-    ["thHtBhavam", "colBhavam"], ["thHtNode", "colNode"], ["thHtWhen", "colWhen"], ["thHtTension", "colTensionIn"]]) {
+  for (const [id, key] of [["thHtPlanet", "colPlanet"], ["thHtPada", "colHiddenIn"],
+    ["thHtNode", "colNode"], ["thHtTension", "colTensionIn"]]) {
     setText(id, ui[key]);
   }
   setText("hiddenNote", ui.hiddenNote);
   setText("thHtWhen", ui.colDates);
+  setText("thHtPariharam", ui.colPariharam);
 
   // Where each planet hides them: one row per planet.
   const whereBody = document.getElementById("hiddenWhereBody");
@@ -1383,13 +1384,12 @@ function renderHiddenDignity() {
       ui.tensionBhavam.replace("{house}", ORDINAL[state.lang](e.house)).replace("{meaning}", ui.houseMeanings[e.house - 1]),
     ];
     const cells = [
-      [labels.planets[e.planet]],
-      [labels.hiddenKind[e.kind]],
-      [hiddenAt(e)],
-      [String(e.house)],
+      [labels.planets[e.planet], labels.hiddenKind[e.kind]],
+      [hiddenAt(e), `${ORDINAL[state.lang](e.house)} ${ui.bhavamWord}`],
       [labels.planets[t.node]],
-      [`${fmtDate(t.start)} \u2192 ${fmtDate(t.end)}`],
+      [`${fmtDate(t.start)} \u2192`, fmtDate(t.end)],
       tension,
+      [RASI_PARIHARAM[e.hidden_rasi][state.lang], rasiGender(state.lang, e.hidden_rasi)],
     ];
     for (const [main, sub] of cells) {
       const td = document.createElement("td");
@@ -1407,7 +1407,7 @@ function renderHiddenDignity() {
   if (!passes.length) {
     const tr = document.createElement("tr");
     const td = document.createElement("td");
-    td.colSpan = 7;
+    td.colSpan = 6;
     td.textContent = ui.hiddenNoTransits;
     tr.appendChild(td);
     tbody.appendChild(tr);
