@@ -48,8 +48,9 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   and Navamsa Sashtashtagam.
 - **Pariharam**: a tab at the top, next to the language picker, with its own side nav of
   pariharams that do not need a chart. The first, Richness and Selvam, lists seven names from the
-  Lalitha Sahasranamam given by Maha Periyavar, each in English and Tamil together. More are
-  added to `PARIHARAMS` in `static/labels.js` and appear in the side nav.
+  Lalitha Sahasranamam given by Maha Periyavar, each in English and Tamil together. The second,
+  Rahu or Ketu over a hidden pada, lists the deity for each of the twelve rasis. More are added
+  to `PARIHARAMS` in `static/labels.js` and appear in the side nav.
 - **Prasannam**: a tab at the top that casts the chart for this moment where you are (the
   browser's location, or a place you type if location is not allowed), draws it, and gives the
   Chandra Nadi: the Moon's star, pada, exact degree and the rasi it is crossing. Nothing is saved.

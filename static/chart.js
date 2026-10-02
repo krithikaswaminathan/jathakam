@@ -586,6 +586,11 @@ function renderPariharam() {
   const intro = document.createElement("p");
   intro.className = "pariharam-intro";
   intro.textContent = p.intro[state.lang];
+  container.appendChild(intro);
+  if (p.table) {
+    container.appendChild(readingTable(p.tableHeader, p.table));
+    return;
+  }
   const ol = document.createElement("ol");
   ol.className = "pariharam-names";
   for (const name of p.names) {
@@ -600,7 +605,7 @@ function renderPariharam() {
     li.append(en, ta);
     ol.appendChild(li);
   }
-  container.append(intro, ol);
+  container.appendChild(ol);
 }
 
 function readingTable(header, rows) {

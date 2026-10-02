@@ -411,6 +411,21 @@ const RASI_PARIHARAM = [
 const RASI_GENDER = { en: ["Male rasi", "Female rasi"], ta: ["ஆண் ராசி", "பெண் ராசி"] };
 const rasiGender = (lang, rasi) => RASI_GENDER[lang][rasi % 2];
 
+// Listed on the Pariharam tab too. Added here because it uses the table above.
+PARIHARAMS.push({
+  title: { en: "Rahu or Ketu over a hidden pada", ta: "மறைந்த பாதத்தின் மீது ராகு அல்லது கேது" },
+  intro: {
+    en: "Every planet hides its ucham, neecham and moolatrikonam in a pada of the birth chart. When transit Rahu or Ketu crosses one of those padas it brings tension in that planet's karakathvam and in the bhavam the pada falls in. The pariharam is the deity of the rasi the pada is in. The odd rasis, counted from Mesham, are male and the even rasis are female. The Hidden Ucham / Neecham tab shows which padas and dates apply to a chart.",
+    ta: "ஒவ்வொரு கிரகமும் தன் உச்சம், நீசம், மூலத்திரிகோணத்தை ஜாதகத்தின் ஒரு பாதத்தில் மறைத்து வைத்திருக்கிறது. கோசார ராகு அல்லது கேது அந்தப் பாதங்களில் ஒன்றைக் கடக்கும்போது, அந்தக் கிரகத்தின் காரகத்துவத்திலும், அந்தப் பாதம் விழும் பாவத்திலும் அழுத்தம் உண்டாகும். அந்தப் பாதம் உள்ள ராசிக்குரிய தெய்வமே பரிகாரம். மேஷத்திலிருந்து எண்ணும்போது ஒற்றை ராசிகள் ஆண் ராசிகள், இரட்டை ராசிகள் பெண் ராசிகள். ஒரு ஜாதகத்திற்கு எந்தப் பாதங்கள், எந்தத் தேதிகள் என்பதை மறைந்த உச்சம் / நீசம் தாவல் காட்டுகிறது.",
+  },
+  tableHeader: [{ en: "Rasi", ta: "ராசி" }, { en: "Male or female", ta: "ஆண் அல்லது பெண்" }, { en: "Pariharam", ta: "பரிகாரம்" }],
+  table: RASI_PARIHARAM.map((deity, r) => [
+    bothLangs((lang) => LABELS[lang].rasi[r]),
+    bothLangs((lang) => rasiGender(lang, r)),
+    deity,
+  ]),
+});
+
 const READING_TOPICS = {
   pushkaraNavamsa: {
     title: { en: "Pushkara Navamsa", ta: "புஷ்கர நவாம்சம்" },
