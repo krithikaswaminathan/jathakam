@@ -14,7 +14,7 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   and occupants, hatched in the D1 grid.
 - **Mudakku Rasi**: from the Sun's nakshatra pada, with its rasi and star lords, house and
   occupants, tagged in the D1 grid; flags when it is the lagna, which is said to weaken it.
-- **Graha details**: rasi and nakshatra lords, absolute and in-sign degrees, a Pushkara
+- **Graha details**: the lagna and every planet with rasi and nakshatra lords, absolute and in-sign degrees, a Pushkara
   Navamsa column that gives the grade (or Present) with the pada and its tara, and a Kaala Pakai column with a
   summary line above the table.
 - **Kaala Pakai**: grahas sitting in their Kaala Pakai rasi in the D1 chart, with the rasi,

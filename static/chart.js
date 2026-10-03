@@ -235,6 +235,12 @@ async function deleteSavedChart(c) {
 
 async function loadChart(id) {
   const res = await fetch(`/api/charts/${id}`);
+  if (!res.ok) {
+    // e.g. deleted in another tab: say so and refresh the list instead of breaking the page
+    alert(L().ui.chartMissing);
+    await loadSavedCharts();
+    return;
+  }
   state.chart = await res.json();
   state.varga = "D1";
   state.upasanaRasi = state.chart.upasana ? String(state.chart.upasana.rasi) : "";
@@ -1215,13 +1221,14 @@ function renderGrahaDetails() {
     : labels.ui.kaalaPakaiNone;
   const inKaalaPakai = new Set(kaalaPakai.map((e) => e.planet));
 
-  const rows = [...Object.values(state.chart.d1.grahas), state.chart.gulika, state.chart.mandi];
+  const rows = [state.chart.lagna, ...Object.values(state.chart.d1.grahas), state.chart.gulika, state.chart.mandi].filter(Boolean);
   for (const g of rows) {
     const tr = document.createElement("tr");
     if (inKaalaPakai.has(g.name)) tr.className = "kaala-pakai";
+    if (g.name === "Lagna") tr.classList.add("lagna-row");
     const isRetrogradeEligible = g.retrograde && !NODES_NOT_MARKED_RETROGRADE.has(g.name);
     const cells = [
-      (labels.planets[g.name] || g.name) + (isRetrogradeEligible ? " (R)" : ""),
+      (g.name === "Lagna" ? labels.ui.lagna : labels.planets[g.name] || g.name) + (isRetrogradeEligible ? " (R)" : ""),
       labels.rasi[g.rasi],
       labels.planets[g.rasi_lord] || g.rasi_lord,
       formatDMS(g.longitude),

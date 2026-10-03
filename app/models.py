@@ -231,6 +231,7 @@ class ChartResponse(BaseModel):
     d1: ChartOut
     vargas: dict[str, ChartOut]
     gulika: GrahaOut
+    lagna: GrahaOut | None = None  # the ascendant itself, for the Graha Details table
     mandi: GrahaOut
     indu_lagna_rasi: int
     indu_lagna_lord: str

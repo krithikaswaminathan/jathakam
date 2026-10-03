@@ -84,6 +84,9 @@ def test_old_saved_charts_load_with_all_current_features(client):
     assert (gand["lagna_nakshatra"], gand["lagna_pada"]) == (19, 1)  # Pooradam 1
     assert [p["planets"] for p in gand["fixed"] if p["planets"]] == [["Venus"]]  # Kettai 4
     assert len(gand["transits"]) == 25
+    lagna = body["lagna"]  # Dhanus 14deg50', Pooradam 1, lords Jupiter and Venus
+    assert (lagna["rasi"], lagna["nakshatra"], lagna["pada"], lagna["house"]) == (8, 19, 1, 1)
+    assert (lagna["rasi_lord"], lagna["star_lord"]) == ("Jupiter", "Venus")
     peyarchis = body["peyarchis"]
     assert [p["planet"] for p in peyarchis if p["in_effect_at_start"]] == ["Saturn", "Rahu", "Jupiter"]
     assert peyarchis[0]["when"] == "2025-03-29T21:45:09+05:30"  # Saturn into Pisces, in the chart's time zone

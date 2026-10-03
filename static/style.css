@@ -445,3 +445,4 @@ tr.cadre-B td:nth-child(5) { color: var(--good); }
 tr.cadre-C td:nth-child(5) { color: var(--gold-500); }
 #gandTab { overflow-x: auto; }
 #gandTransitTable td:nth-child(5) { white-space: nowrap; }
+tr.lagna-row td { font-weight: 600; color: var(--maroon-700); }

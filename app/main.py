@@ -137,6 +137,7 @@ def _build_chart_response(
 
     gulika_longitude = compute_gulika_longitude(dob, tob, utc_offset, latitude, longitude)
     gulika = make_graha_position("Gulika", gulika_longitude, longitude_to_rasi(gulika_longitude), d1.lagna_rasi)
+    lagna = make_graha_position("Lagna", lagna_longitude, d1.lagna_rasi, d1.lagna_rasi)
     mandi_longitude = compute_mandi_longitude(dob, tob, utc_offset, latitude, longitude)
     mandi = make_graha_position("Mandi", mandi_longitude, longitude_to_rasi(mandi_longitude), d1.lagna_rasi)
 
@@ -164,6 +165,7 @@ def _build_chart_response(
         d1=_to_chart_out(d1),
         vargas={varga: _to_chart_out(c) for varga, c in vargas.items()},
         gulika=GrahaOut(**vars(gulika)),
+        lagna=GrahaOut(**vars(lagna)),
         mandi=GrahaOut(**vars(mandi)),
         indu_lagna_rasi=indu_lagna_rasi,
         indu_lagna_lord=RASI_LORDS[indu_lagna_rasi],
