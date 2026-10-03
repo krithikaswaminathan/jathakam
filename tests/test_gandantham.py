@@ -56,3 +56,12 @@ def test_slow_planet_transits_2026_to_2030():
     rahu_lagna = [(t.start.astimezone(IST).date(), t.nakshatra, t.pada) for t in lagna if t.planet == "Rahu"]
     assert rahu_lagna == [(date(2029, 3, 2), 19, 1), (date(2029, 5, 4), 18, 4)]  # over the lagna pada itself
     assert g.transits == sorted(g.transits, key=lambda t: t.start)
+
+
+def test_lagna_is_checked_against_the_fixed_padas():
+    # A lagna in Moolam 1 (Dhanus 1deg, index 72) is in the fixed pada no. 73.
+    g = compute_gandantham(_chart({}), 241.0)
+    assert [p.planets for p in g.fixed if p.number == 73] == [["Lagna"]]
+    assert not any("Lagna" in p.planets for p in g.lagna)  # not repeated in its own set
+    # The user's lagna, Pooradam 1, is not a Gandantham pada.
+    assert not any("Lagna" in p.planets for p in compute_gandantham(_chart({}), 254.83).fixed)

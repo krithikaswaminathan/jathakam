@@ -1448,7 +1448,8 @@ function renderGandantham() {
     for (const p of padas) {
       const tr = document.createElement("tr");
       if (p.planets.length) tr.className = "current-period";
-      for (const text of [String(p.number), pada(p.nakshatra, p.pada), labels.rasi[p.rasi], p.planets.map((n) => labels.planets[n]).join(", ") || "\u2013"]) {
+      const names = p.planets.map((n) => (n === "Lagna" ? ui.lagna : labels.planets[n]));
+      for (const text of [String(p.number), pada(p.nakshatra, p.pada), labels.rasi[p.rasi], names.join(", ") || "\u2013"]) {
         const td = document.createElement("td");
         td.textContent = text;
         tr.appendChild(td);
@@ -1461,7 +1462,7 @@ function renderGandantham() {
 
   // Summary: planets at birth, then the running or next pass.
   const atBirth = [...g.fixed, ...g.lagna].flatMap((p) =>
-    p.planets.map((n) => ui.gandAtPada.replace("{planet}", labels.planets[n]).replace("{pada}", pada(p.nakshatra, p.pada)))
+    p.planets.map((n) => ui.gandAtPada.replace("{planet}", n === "Lagna" ? ui.lagna : labels.planets[n]).replace("{pada}", pada(p.nakshatra, p.pada)))
   );
   const now = new Date();
   const running = g.transits.filter((t) => new Date(t.start) <= now && now <= new Date(t.end));

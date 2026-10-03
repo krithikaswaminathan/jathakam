@@ -25,7 +25,7 @@ class GandanthamPada:
     nakshatra: int
     pada: int
     rasi: int
-    planets: list[str]  # birth-chart planets sitting in it
+    planets: list[str]  # birth-chart planets sitting in it, and "Lagna" if the lagna is in a fixed pada
 
 
 @dataclass
@@ -53,12 +53,13 @@ def pada_index(longitude: float) -> int:
     return int((longitude % 360) // PADA_SPAN)
 
 
-def _padas(first_index: int, chart: ChartData) -> list[GandanthamPada]:
+def _padas(first_index: int, chart: ChartData, lagna_index: int | None = None) -> list[GandanthamPada]:
+    """With lagna_index, the lagna is checked like a planet (used for the fixed Kaala Purusha set)."""
     at = {name: g.nakshatra * 4 + g.pada - 1 for name, g in chart.grahas.items() if name in GRAHA_NAMES}
     out = []
     for number in NUMBERS:
         index = (first_index + number - 1) % PADAS
-        planets = [name for name in GRAHA_NAMES if at[name] == index]
+        planets = (["Lagna"] if lagna_index == index else []) + [name for name in GRAHA_NAMES if at[name] == index]
         out.append(GandanthamPada(number, index // 4, index % 4 + 1, index // 9, planets))
     return out
 
@@ -68,7 +69,8 @@ def compute_gandantham(
 ) -> Gandantham:
     """With start and end, also every pass of Jupiter, Saturn, Rahu and Ketu over both sets."""
     lagna_index = pada_index(lagna_longitude)
-    result = Gandantham(lagna_index // 4, lagna_index % 4 + 1, _padas(0, chart), _padas(lagna_index, chart))
+    # The lagna is always no. 1 of its own set, so it is only checked against the fixed six.
+    result = Gandantham(lagna_index // 4, lagna_index % 4 + 1, _padas(0, chart, lagna_index), _padas(lagna_index, chart))
     if start is None or end is None:
         return result
     for source, padas in (("fixed", result.fixed), ("lagna", result.lagna)):

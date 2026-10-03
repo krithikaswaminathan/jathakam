@@ -68,7 +68,7 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   9, 12, service and volunteer work), with a tally of how many planets fall in each.
 - **Gandantham** tab and Reading page: the six junction padas (1st, 36th, 37th, 72nd, 73rd and
   108th of the 108, where a water sign ends and a fire sign begins), the same six counted from the
-  chart's lagna pada, the planets in them at birth, and every pass of Guru, Sani, Rahu and Ketu
+  chart's lagna pada, the planets (and the lagna) in them at birth, and every pass of Guru, Sani, Rahu and Ketu
   over them from 2026 to 2030.
 - **Saved charts**: stored locally, recomputed on load, and deletable.
 

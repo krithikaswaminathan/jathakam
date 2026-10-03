@@ -664,8 +664,8 @@ const READING_TOPICS = {
       },
     ],
     note: {
-      en: "This method was given by the user. Only the nine planets are checked at birth, not Gulika or Mandi.",
-      ta: "இது பயனர் தந்த முறை. பிறப்பில் ஒன்பது கிரகங்கள் மட்டுமே பார்க்கப்படுகின்றன, குளிகன், மாந்தி அல்ல.",
+      en: "This method was given by the user. At birth the nine planets and the lagna are checked against the six fixed padas, and the nine planets against the six counted from the lagna. Gulika and Mandi are not checked.",
+      ta: "இது பயனர் தந்த முறை. பிறப்பில் ஒன்பது கிரகங்களும் லக்னமும் ஆறு நிலையான பாதங்களுடனும், ஒன்பது கிரகங்கள் லக்னத்திலிருந்து எண்ணிய ஆறுடனும் ஒப்பிடப்படுகின்றன. குளிகன், மாந்தி பார்க்கப்படுவதில்லை.",
     },
   },
   dwadasamsaCareer: {
