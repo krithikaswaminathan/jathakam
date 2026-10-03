@@ -1440,6 +1440,9 @@ function renderGandantham() {
     setText(id, ui[key]);
   }
 
+  // The lagna is always no. 1 of its own set, so it only counts as Gandantham when it is in a fixed pada.
+  const lagnaInGandantham = g.fixed.some((p) => p.planets.includes("Lagna"));
+  const counts = (p) => p.planets.some((n) => n !== "Lagna") || (p.planets.includes("Lagna") && lagnaInGandantham);
   const fillPadas = (tableId, bodyId, padas) => {
     const head = document.querySelector(`#${tableId} thead tr`).children;
     [ui.colNo, ui.colPada, ui.colRasi, ui.colPlanetsHere].forEach((text, i) => (head[i].textContent = text));
@@ -1447,7 +1450,7 @@ function renderGandantham() {
     tbody.innerHTML = "";
     for (const p of padas) {
       const tr = document.createElement("tr");
-      if (p.planets.length) tr.className = "current-period";
+      if (counts(p)) tr.className = "current-period";
       const names = p.planets.map((n) => (n === "Lagna" ? ui.lagna : labels.planets[n]));
       for (const text of [String(p.number), pada(p.nakshatra, p.pada), labels.rasi[p.rasi], names.join(", ") || "\u2013"]) {
         const td = document.createElement("td");
@@ -1462,11 +1465,18 @@ function renderGandantham() {
 
   // Summary: planets at birth, then the running or next pass.
   const atBirth = [...g.fixed, ...g.lagna].flatMap((p) =>
-    p.planets.map((n) => ui.gandAtPada.replace("{planet}", n === "Lagna" ? ui.lagna : labels.planets[n]).replace("{pada}", pada(p.nakshatra, p.pada)))
+    p.planets.filter((n) => n !== "Lagna" || lagnaInGandantham).map((n) => ui.gandAtPada.replace("{planet}", n === "Lagna" ? ui.lagna : labels.planets[n]).replace("{pada}", pada(p.nakshatra, p.pada)))
   );
+  // A pada in both sets (when the lagna sits on a junction) is one crossing, so merge those rows.
+  const passes = [];
+  for (const t of g.transits) {
+    const same = passes.find((x) => x.planet === t.planet && x.start === t.start && x.nakshatra === t.nakshatra && x.pada === t.pada);
+    if (same) same.labels.push([t.source, t.number]);
+    else passes.push({ ...t, labels: [[t.source, t.number]] });
+  }
   const now = new Date();
-  const running = g.transits.filter((t) => new Date(t.start) <= now && now <= new Date(t.end));
-  const next = g.transits.find((t) => new Date(t.start) > now);
+  const running = passes.filter((t) => new Date(t.start) <= now && now <= new Date(t.end));
+  const next = passes.find((t) => new Date(t.start) > now);
   const line = (t) => ui.gandTransitLine.replace("{planet}", labels.planets[t.planet]).replace("{pada}", pada(t.nakshatra, t.pada));
   const parts = [atBirth.length ? ui.gandSummaryBirth.replace("{list}", [...new Set(atBirth)].join(", ")) : ui.gandSummaryNone];
   if (running.length) parts.push(`${ui.peyarchiNow}: ${running.map(line).join(", ")}`);
@@ -1489,13 +1499,13 @@ function renderGandantham() {
 
   const tbody = document.getElementById("gandTransitBody");
   tbody.innerHTML = "";
-  for (const t of g.transits) {
+  for (const t of passes) {
     if (state.gandPlanet && t.planet !== state.gandPlanet) continue;
     const tr = document.createElement("tr");
     if (running.includes(t)) tr.className = "current-period";
     for (const text of [
       labels.planets[t.planet],
-      `${t.source === "fixed" ? ui.gandFixed : ui.gandLagna} \u00B7 ${t.number}`,
+      t.labels.map(([source, number]) => `${source === "fixed" ? ui.gandFixed : ui.gandLagna} \u00B7 ${number}`).join(", "),
       pada(t.nakshatra, t.pada),
       labels.rasi[t.rasi],
       `${fmtDate(t.start)} \u2192 ${fmtDate(t.end)}`,
@@ -1506,7 +1516,7 @@ function renderGandantham() {
     }
     tbody.appendChild(tr);
   }
-  if (!g.transits.length) {
+  if (!passes.length) {
     const tr = document.createElement("tr");
     const td = document.createElement("td");
     td.colSpan = 5;

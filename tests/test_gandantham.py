@@ -40,7 +40,7 @@ def test_birth_planets_in_the_padas():
     # Venus in Kettai 4 (index 71), as in the user's chart.
     g = compute_gandantham(_chart({"Venus": 71}), 254.83)
     assert [p.planets for p in g.fixed if p.planets] == [["Venus"]]
-    assert not any(p.planets for p in g.lagna)
+    assert not any(n != "Lagna" for p in g.lagna for n in p.planets)  # no planets, only the lagna on no. 1
 
 
 @pytest.mark.skipif(not os.path.exists("ephe/sepl_18.se1"), reason="Swiss Ephemeris data files not present in ephe/")
@@ -62,6 +62,15 @@ def test_lagna_is_checked_against_the_fixed_padas():
     # A lagna in Moolam 1 (Dhanus 1deg, index 72) is in the fixed pada no. 73.
     g = compute_gandantham(_chart({}), 241.0)
     assert [p.planets for p in g.fixed if p.number == 73] == [["Lagna"]]
-    assert not any("Lagna" in p.planets for p in g.lagna)  # not repeated in its own set
-    # The user's lagna, Pooradam 1, is not a Gandantham pada.
-    assert not any("Lagna" in p.planets for p in compute_gandantham(_chart({}), 254.83).fixed)
+    assert [p.number for p in g.lagna if "Lagna" in p.planets] == [1]  # always no. 1 of its own set
+    # The user's lagna, Pooradam 1, is not a Gandantham pada, though it is still no. 1 of its own set.
+    mine = compute_gandantham(_chart({}), 254.83)
+    assert not any("Lagna" in p.planets for p in mine.fixed)
+    assert mine.lagna[0].planets == ["Lagna"]
+
+
+def test_lagna_on_a_junction_gives_the_same_six_padas():
+    # Susheela's lagna is in Magam 1 (fixed no. 37), so her lagna-based six are the fixed six.
+    g = compute_gandantham(_chart({}), 121.0)
+    assert [p.planets for p in g.fixed if p.number == 37] == [["Lagna"]]
+    assert {(p.nakshatra, p.pada) for p in g.lagna} == {(p.nakshatra, p.pada) for p in g.fixed}
