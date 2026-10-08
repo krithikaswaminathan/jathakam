@@ -18,7 +18,9 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   Navamsa column that gives the grade (or Present) with the pada and its tara, and a Kaala Pakai column with a
   summary line above the table.
 - **Kaala Pakai**: grahas sitting in their Kaala Pakai rasi in the D1 chart, with the rasi,
-  house and effect; a planet picker shows any graha's Kaala Pakai rasis.
+  house, effect and pariharam where one is given (so far Saturn in Meenam: Kanyakumari Amman and
+  Neelayadakshi Amman, Nagapattinam); a planet picker shows any graha's Kaala Pakai rasis. The
+  Pariharam tab lists the Kaala Pakai pariharams too.
 - **Ucham / Neecham**: planets in exaltation or debilitation, with the pada they sit in, the deep
   point and its pada, the distance from it, and whether they are in paramoccham or
   paramaneecham, the single degree that ends at the deep degree.

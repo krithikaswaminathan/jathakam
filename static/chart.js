@@ -829,6 +829,13 @@ function renderKaalaPakai() {
     effect.className = "info-hint";
     effect.textContent = KAALA_PAKAI[e.planet].effect[state.lang];
     div.append(head, effect);
+    const pariharam = kaalaPakaiPariharamText(state.lang, e.planet);
+    if (pariharam) {
+      const line = document.createElement("div");
+      line.className = "kaala-pakai-pariharam";
+      line.textContent = pariharam;
+      div.appendChild(line);
+    }
     value.appendChild(div);
   }
 
@@ -852,6 +859,7 @@ function renderKaalaPakai() {
       ? `${labels.ui.kaalaPakaiRasis}: ${k.rasis.map((r) => labels.rasi[r]).join(", ")}`
       : "";
     document.getElementById("kaalaPakaiEffect").textContent = k ? k.effect[state.lang] : "";
+    document.getElementById("kaalaPakaiPariharamLine").textContent = k ? kaalaPakaiPariharamText(state.lang, state.kaalaPakaiPlanet) : "";
   };
   select.onchange = () => {
     state.kaalaPakaiPlanet = select.value;

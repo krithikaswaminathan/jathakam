@@ -23,7 +23,7 @@ const LABELS = {
       name: "Name", gender: "Gender", male: "Male", female: "Female", other: "Other",
       dob: "Date of Birth", tob: "Time of Birth", pob: "Place of Birth", pobPlaceholder: "Start typing a city...",
       pobNoResults: "No matching places found", pobSelectPrompt: "Please select a place from the list",
-      calculate: "Calculate Chart", savedCharts: "Saved Charts", loadChart: "Load", deleteChart: "Delete", deleteConfirm: "Delete this saved chart? This cannot be undone.", chartMissing: "That chart could not be found. It may have been deleted, so the list has been refreshed.", newChart: "New Chart",
+      calculate: "Calculate Chart", savedCharts: "Saved Charts", loadChart: "Load", deleteChart: "Delete", deleteConfirm: "Delete this saved chart? This cannot be undone.", pariharamWord: "Pariharam", andWord: "and", chartMissing: "That chart could not be found. It may have been deleted, so the list has been refreshed.", newChart: "New Chart",
       lagna: "Lagna", chartTab: "Chart", dasaTab: "Dasa", yogaTab: "Yogas", taraTab: "Tara Balam", detailsTab: "Graha Details",
       expand: "Expand", collapse: "Collapse", noYogas: "No yogas detected in this starter rule set.",
       colPlanet: "Planet", colRasi: "Rasi", colRasiLord: "Rasi Lord", colAbsDeg: "Absolute Degree",
@@ -162,7 +162,7 @@ const LABELS = {
       name: "பெயர்", gender: "பாலினம்", male: "ஆண்", female: "பெண்", other: "மற்றவை",
       dob: "பிறந்த தேதி", tob: "பிறந்த நேரம்", pob: "பிறந்த இடம்", pobPlaceholder: "ஒரு நகரத்தை தட்டச்சு செய்யவும்...",
       pobNoResults: "பொருந்தும் இடங்கள் இல்லை", pobSelectPrompt: "பட்டியலில் இருந்து ஒரு இடத்தைத் தேர்ந்தெடுக்கவும்",
-      calculate: "ஜாதகம் கணிக்க", savedCharts: "சேமித்த ஜாதகங்கள்", loadChart: "ஏற்று", deleteChart: "நீக்கு", deleteConfirm: "இந்த சேமித்த ஜாதகத்தை நீக்கவா? இதை மீட்க முடியாது.", chartMissing: "அந்த ஜாதகம் கிடைக்கவில்லை. அது நீக்கப்பட்டிருக்கலாம், எனவே பட்டியல் புதுப்பிக்கப்பட்டது.", newChart: "புதிய ஜாதகம்",
+      calculate: "ஜாதகம் கணிக்க", savedCharts: "சேமித்த ஜாதகங்கள்", loadChart: "ஏற்று", deleteChart: "நீக்கு", deleteConfirm: "இந்த சேமித்த ஜாதகத்தை நீக்கவா? இதை மீட்க முடியாது.", pariharamWord: "பரிகாரம்", andWord: "மற்றும்", chartMissing: "அந்த ஜாதகம் கிடைக்கவில்லை. அது நீக்கப்பட்டிருக்கலாம், எனவே பட்டியல் புதுப்பிக்கப்பட்டது.", newChart: "புதிய ஜாதகம்",
       lagna: "லக்னம்", chartTab: "ஜாதகம்", dasaTab: "தசை", yogaTab: "யோகங்கள்", taraTab: "தாரா பலம்", detailsTab: "கிரக விவரங்கள்",
       expand: "விரிவாக்கு", collapse: "சுருக்கு", noYogas: "இந்த ஆரம்ப விதிகளில் யோகங்கள் எதுவும் கண்டறியப்படவில்லை.",
       colPlanet: "கிரகம்", colRasi: "ராசி", colRasiLord: "ராசி அதிபதி", colAbsDeg: "முழு பாகை",
@@ -329,6 +329,11 @@ const KAALA_PAKAI = {
   Saturn: {
     rasis: [11],
     effect: { en: "Disrupts discipline and focus, introducing hidden spiritual dilemmas, boundary issues, or sudden isolation.", ta: "ஒழுக்கத்தையும் கவனத்தையும் குலைத்து, மறைந்த ஆன்மீகக் குழப்பங்கள், எல்லைப் பிரச்சினைகள் அல்லது திடீர் தனிமையை உண்டாக்கும்." },
+    // Pariharam, as given by the user. Other planets get theirs as the user gives them.
+    pariharam: [
+      { en: "Kanyakumari Amman, Kanyakumari", ta: "கன்னியாகுமரி அம்மன், கன்னியாகுமரி" },
+      { en: "Neelayadakshi Amman, Nagapattinam", ta: "நீலாயதாட்சி அம்மன், நாகப்பட்டினம்" },
+    ],
   },
 };
 
@@ -455,6 +460,28 @@ PARIHARAMS.push({
     deity,
   ]),
 });
+
+PARIHARAMS.push({
+  title: { en: "Kaala Pakai", ta: "கால பகை" },
+  intro: {
+    en: "A planet sitting in the rasi chart in one of its Kaala Pakai rasis is troubled in what it signifies. These are the pariharams given for it so far, and more will be added as they come.",
+    ta: "ராசி கட்டத்தில் தன் கால பகை ராசியில் உள்ள கிரகம், அது குறிக்கும் விஷயங்களில் பாதிக்கப்படும். இதுவரை தரப்பட்ட பரிகாரங்கள் இவை, மேலும் வர வர சேர்க்கப்படும்.",
+  },
+  tableHeader: [{ en: "Planet", ta: "கிரகம்" }, { en: "Kaala Pakai rasi", ta: "கால பகை ராசி" }, { en: "Pariharam", ta: "பரிகாரம்" }],
+  table: Object.entries(KAALA_PAKAI)
+    .filter(([, k]) => k.pariharam)
+    .map(([planet, k]) => [
+      bothLangs((lang) => LABELS[lang].planets[planet]),
+      bothLangs((lang) => k.rasis.map((r) => LABELS[lang].rasi[r]).join(", ")),
+      bothLangs((lang) => k.pariharam.map((t) => t[lang]).join(` ${LABELS[lang].ui.andWord} `)),
+    ]),
+});
+
+// "Pariharam · A and B" for a planet's Kaala Pakai, or "" when none has been given yet.
+const kaalaPakaiPariharamText = (lang, planet) => {
+  const temples = (KAALA_PAKAI[planet].pariharam || []).map((t) => t[lang]);
+  return temples.length ? `${LABELS[lang].ui.pariharamWord} \u00B7 ${temples.join(` ${LABELS[lang].ui.andWord} `)}` : "";
+};
 
 const READING_TOPICS = {
   pushkaraNavamsa: {
@@ -880,11 +907,13 @@ const READING_TOPICS = {
     },
     tableHeader: [
       { en: "Planet", ta: "கிரகம்" }, { en: "Kaala Pakai rasi", ta: "கால பகை ராசி" }, { en: "Effect", ta: "பலன்" },
+      { en: "Pariharam", ta: "பரிகாரம்" },
     ],
     table: Object.entries(KAALA_PAKAI).map(([planet, k]) => [
       { en: LABELS.en.planets[planet], ta: LABELS.ta.planets[planet] },
       { en: k.rasis.map((r) => LABELS.en.rasi[r]).join(", "), ta: k.rasis.map((r) => LABELS.ta.rasi[r]).join(", ") },
       k.effect,
+      bothLangs((lang) => (k.pariharam || []).map((t) => t[lang]).join(` ${LABELS[lang].ui.andWord} `) || "\u2013"),
     ]),
     note: {
       en: "This comes from a video and has no written source. Only the rasi counts, not the degree.",

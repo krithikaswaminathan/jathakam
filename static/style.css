@@ -446,3 +446,5 @@ tr.cadre-C td:nth-child(5) { color: var(--gold-500); }
 #gandTab { overflow-x: auto; }
 #gandTransitTable td:nth-child(5) { white-space: nowrap; }
 tr.lagna-row td { font-weight: 600; color: var(--maroon-700); }
+.kaala-pakai-pariharam { margin-top: 0.15rem; font-size: 0.85rem; font-weight: 600; color: var(--maroon-700); }
+.kaala-pakai-pariharam:empty { display: none; }
