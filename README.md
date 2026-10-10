@@ -64,6 +64,11 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   total in Chandramanam years and the same in Souramanam years. The other methods can be shown
   alongside for comparison. No date is ever shown, and the page says it is a traditional
   calculation, not a prediction.
+- **Jaimini Sutras**: a tab at the top with its own side nav of Jaimini calculators, each taking a
+  saved chart or birth details typed in (not saved), like Ayul Nirnayam. The first is the
+  **Upapada Lagna**, the arudha of the 12th house, read for marriage and the spouse. It shows the
+  steps, the Upapada and the planets in it, its lord and where it sits, and the 2nd rasi from the
+  Upapada with its planets and lord.
 - **Hidden Ucham / Neecham** tab, after Ucham / Neecham and laid out like Moorthy: where each
   planet hides its ucham, neecham and moolatrikonam (count the padas from its Kaala Purusha pada
   A to where it sits B, both counted, to get C, then count C padas again from B), with the bhavam,
@@ -207,3 +212,6 @@ python -m pytest tests/ -v
   Which of the lagna, Sun and Moon is strongest is the user's choice; the app does not judge it.
   Tested on eight known charts, no method was reliable on its own (Amsayu from 0 to 52 years
   out, Pindayu 1 to 20, Nisargayu 2 to 30).
+- Upapada Lagna: count from the 12th house (as 1) to its lord's rasi, then the same number again
+  from the lord's rasi. If that lands on the 12th house or the 7th from it, take the 10th rasi from
+  there. Kumbham is ruled by Saturn and Viruchigam by Mars (not Rahu or Ketu), as given by the user.
