@@ -183,5 +183,7 @@ def test_jaimini_for_a_saved_chart_and_birth_details(client):
     assert {"Saturn", "Jupiter"} <= set(ul["aspected_by"])
     assert [r["aspects"] for r in saved["rasi_drishti"]][10] == [0, 3, 6]
     assert saved == client.post("/api/jaimini", json={k: v for k, v in BIRTH.items() if k != "gender"}).json()
-    assert client.post("/api/jaimini", json=PADMINI).json()["upapada"]["rasi"] == 8  # Dhanusu
+    assert saved["arudha_lagna"]["rasi"] == 4  # Simham
+    padmini = client.post("/api/jaimini", json=PADMINI).json()
+    assert (padmini["upapada"]["rasi"], padmini["arudha_lagna"]["rasi"]) == (8, 11)  # Dhanusu, Meenam
     assert client.get("/api/jaimini/99999").status_code == 404

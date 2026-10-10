@@ -80,7 +80,7 @@ from app.pranapada import compute_pranapada_longitude
 from app.tara import compute_tara_balam
 from app.tithi import compute_tithi
 from app.timezone_utils import compute_utc_offset
-from app.upapada import compute_upapada
+from app.arudha import compute_arudha_lagna, compute_upapada
 from app.upasana import compute_upasana
 from app.upagraha import compute_gulika_longitude, compute_mandi_longitude
 from app.yogas import detect_all_yogas
@@ -373,6 +373,7 @@ def jaimini(req: AyulRequest) -> JaiminiResponse:
     return JaiminiResponse(
         name=req.name, dob=req.dob, tob=req.tob, pob_label=req.pob_label,
         lagna_rasi=d1.lagna_rasi, lagna_degree=lagna_longitude % 30,
+        arudha_lagna=vars(compute_arudha_lagna(d1)),
         upapada=vars(compute_upapada(d1)),
         rasi_drishti=[vars(r) for r in compute_rasi_drishti(d1)],
     )

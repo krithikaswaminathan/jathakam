@@ -350,9 +350,10 @@ class AyulResponse(BaseModel):
     nisargayu: PindayuOut  # same shape as Pindayu, with the natural years
 
 
-class UpapadaOut(BaseModel):
-    twelfth: int
-    twelfth_lord: str
+class ArudhaOut(BaseModel):
+    bhava: int
+    bhava_rasi: int
+    bhava_lord: str
     lord_rasi: int
     count: int
     landing: int
@@ -386,5 +387,6 @@ class JaiminiResponse(BaseModel):
     pob_label: str
     lagna_rasi: int
     lagna_degree: float
-    upapada: UpapadaOut
+    arudha_lagna: ArudhaOut
+    upapada: ArudhaOut
     rasi_drishti: list[RasiDrishtiOut]

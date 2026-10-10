@@ -33,7 +33,7 @@ let state = {
   ayul: { view: "calc", result: null, strong: null, methods: [] },
   // Jaimini Sutras: view is a key of JAIMINI_VIEWS; result is the last /api/jaimini response,
   // which every view reads.
-  jaimini: { view: "upapada", result: null },
+  jaimini: { view: "arudha", result: null },
 };
 
 function L() {
@@ -1018,7 +1018,8 @@ function renderAyulResult() {
 // --- Jaimini Sutras: its own side nav of calculators, all reading one /api/jaimini result ---
 
 const JAIMINI_VIEWS = {
-  upapada: { title: "upapadaTitle", intro: ["upapadaIntro", "upapadaMethod"], render: () => renderUpapadaResult() },
+  arudha: { title: "alTitle", intro: ["alIntro", "alMethod"], render: () => renderArudhaResult("arudha_lagna") },
+  upapada: { title: "upapadaTitle", intro: ["upapadaIntro", "upapadaMethod"], render: () => renderArudhaResult("upapada") },
   drishti: { title: "drishtiTitle", intro: ["drishtiIntro", "drishtiRules"], render: () => renderDrishtiResult() },
 };
 
@@ -1122,13 +1123,20 @@ function jaiminiHead(r) {
   return head;
 }
 
-function renderUpapadaResult() {
+// The label keys for each arudha. Only the Upapada also shows the 2nd rasi from it.
+const ARUDHA_TEXT = {
+  arudha_lagna: { step1: "alStep1", none: "alStepNone", same: "alStepSame", seventh: "alStepSeventh", is: "alIs", title: "alTitle", planets: "alRowPlanets", second: false },
+  upapada: { step1: "ulStep1", none: "ulStepNone", same: "ulStepTwelfth", seventh: "ulStepSeventh", is: "ulIs", title: "upapadaTitle", planets: "ulRowPlanets", second: true },
+};
+
+function renderArudhaResult(kind) {
   const container = document.getElementById("jaiminiResult");
   const chart = state.jaimini.result;
   container.classList.toggle("hidden", !chart);
   container.innerHTML = "";
   if (!chart) return;
-  const r = chart.upapada;
+  const r = chart[kind];
+  const text = ARUDHA_TEXT[kind];
   const labels = L();
   const ui = labels.ui;
   const rasi = (i) => labels.rasi[i];
@@ -1146,30 +1154,35 @@ function renderUpapadaResult() {
   box.className = "ayul-result-box";
   const big = document.createElement("div");
   big.className = "ul-summary";
-  big.textContent = fill(ui.ulIs, { rasi: rasi(r.rasi), ord: ORDINAL[state.lang](r.house) });
+  big.textContent = fill(ui[text.is], { rasi: rasi(r.rasi), ord: ORDINAL[state.lang](r.house) });
   box.appendChild(big);
   container.appendChild(box);
 
-  const last = { twelfth: ui.ulStepTwelfth, seventh: ui.ulStepSeventh }[r.exception] || ui.ulStepNone;
+  const last = ui[{ same: text.same, seventh: text.seventh }[r.exception] || text.none];
   const steps = [
-    fill(ui.ulStep1, { rasi: rasi(r.twelfth), lord: planet(r.twelfth_lord) }),
-    fill(ui.ulStep2, { lord: planet(r.twelfth_lord), rasi: rasi(r.lord_rasi), from: rasi(r.twelfth), n: r.count }),
+    fill(ui[text.step1], { rasi: rasi(r.bhava_rasi), lord: planet(r.bhava_lord) }),
+    fill(ui.ulStep2, { lord: planet(r.bhava_lord), rasi: rasi(r.lord_rasi), from: rasi(r.bhava_rasi), n: r.count }),
     fill(ui.ulStep3, { n: r.count, rasi: rasi(r.lord_rasi), landing: rasi(r.landing) }),
     fill(last, { landing: rasi(r.landing), ul: rasi(r.rasi) }),
   ];
   container.appendChild(simpleTable("ul-steps", steps.map((s, i) => [String(i + 1), s]), [ui.ulStepCol, ui.ulWorkingCol]));
 
   const lordIn = (lord, at) => fill(ui.ulLordIn, { lord: planet(lord), rasi: rasi(at), ord: house(at) });
-  container.appendChild(simpleTable("ul-details", [
-    [ui.upapadaTitle, `${rasi(r.rasi)} (${house(r.rasi)})`],
-    [ui.ulRowPlanets, planetList(r.planets)],
+  const rows = [
+    [ui[text.title], `${rasi(r.rasi)} (${house(r.rasi)})`],
+    [ui[text.planets], planetList(r.planets)],
     [ui.ulRowAspectedBy, aspectedBy(r.aspected_by)],
     [ui.ulRowLord, lordIn(r.lord, r.lord_sits_in)],
-    [ui.ulRowSecond, `${rasi(r.second)} (${house(r.second)})`],
-    [ui.ulRowSecondPlanets, planetList(r.second_planets)],
-    [ui.ulRowAspectedBy, aspectedBy(r.second_aspected_by)],
-    [ui.ulRowLord, lordIn(r.second_lord, r.second_lord_rasi)],
-  ]));
+  ];
+  if (text.second) {
+    rows.push(
+      [ui.ulRowSecond, `${rasi(r.second)} (${house(r.second)})`],
+      [ui.ulRowSecondPlanets, planetList(r.second_planets)],
+      [ui.ulRowAspectedBy, aspectedBy(r.second_aspected_by)],
+      [ui.ulRowLord, lordIn(r.second_lord, r.second_lord_rasi)],
+    );
+  }
+  container.appendChild(simpleTable("ul-details", rows));
 }
 
 // Rasi drishti: the table of which rasi aspects which is shown before any chart is picked (it is
