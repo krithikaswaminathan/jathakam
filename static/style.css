@@ -61,7 +61,7 @@ body {
 }
 
 .topbar-actions { display: flex; align-items: center; gap: 0.9rem; flex-wrap: wrap; }
-.top-tabs { display: flex; gap: 0.3rem; }
+.top-tabs { display: flex; flex-wrap: wrap; gap: 0.3rem; }
 .top-tab {
   padding: 0.4rem 0.9rem; border-radius: 999px; border: 1px solid transparent;
   background: none; color: var(--gold-100); font-family: var(--font-body); font-size: 0.88rem; cursor: pointer;
@@ -157,6 +157,7 @@ main {
 @media (max-width: 780px) {
   .app-body { flex-direction: column; }
   .side-nav { width: 100%; position: static; margin-top: 1.25rem; }
+  main { width: 100%; }
 }
 
 .card {
@@ -448,3 +449,32 @@ tr.cadre-C td:nth-child(5) { color: var(--gold-500); }
 tr.lagna-row td { font-weight: 600; color: var(--maroon-700); }
 .kaala-pakai-pariharam { margin-top: 0.15rem; font-size: 0.85rem; font-weight: 600; color: var(--maroon-700); }
 .kaala-pakai-pariharam:empty { display: none; }
+
+/* Ayul Nirnayam calculator */
+.ayul-intro { font-size: 0.92rem; color: var(--ink); line-height: 1.6; max-width: 680px; margin-top: 0; }
+#ayulForm { display: grid; gap: 1rem; margin-bottom: 1rem; }
+.ayul-choice { border: 1px solid var(--line); border-radius: 8px; padding: 0.6rem 0.9rem 0.75rem; margin: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem; }
+.ayul-choice legend { font-size: 0.82rem; font-weight: 600; color: var(--ink-soft); padding: 0 0.3rem; }
+.ayul-choice label { display: flex; align-items: center; gap: 0.4rem; font-size: 0.9rem; cursor: pointer; }
+.ayul-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; }
+.ayul-fields label { display: flex; flex-direction: column; font-size: 0.82rem; font-weight: 500; color: var(--ink-soft); gap: 0.35rem; }
+.ayul-fields input, .ayul-fields select {
+  padding: 0.55rem 0.7rem; border: 1px solid var(--line); border-radius: 8px; font-family: var(--font-body);
+  font-size: 0.95rem; color: var(--ink); background: var(--cream-50); min-width: 0;
+}
+.ayul-fields .tob-group select { flex: 1; padding: 0.55rem 0.5rem; }
+#ayulCalculate {
+  justify-self: start; padding: 0.65rem 1.6rem; background: linear-gradient(135deg, var(--maroon-700), var(--maroon-900));
+  color: white; border: none; border-radius: 8px; font-family: var(--font-body); font-weight: 600; font-size: 0.95rem; cursor: pointer;
+}
+.ayul-table-wrap { overflow-x: auto; margin-bottom: 0.8rem; }
+.ayul-fields.hidden { display: none; }
+.ayul-table td, .ayul-table th { white-space: nowrap; padding: 0.5rem 0.45rem; }
+.ayul-table td.ayul-why { white-space: normal; min-width: 8rem; max-width: 12rem; font-size: 0.8rem; color: var(--ink-soft); }
+.ayul-table tr.ayul-total td { font-weight: 700; color: var(--maroon-700); border-top: 2px solid var(--line); }
+.ayul-table td.ayul-c { font-weight: 600; }
+.ayul-result-box { margin: 0.4rem 0 0.9rem; padding: 0.8rem 1rem; border-radius: 8px; background: var(--gold-100); }
+.ayul-result-box .ayul-big { font-family: var(--font-display); font-size: 1.35rem; color: var(--maroon-900); }
+.ayul-result-box .ayul-steps { font-size: 0.85rem; color: var(--ink-soft); margin-top: 0.3rem; }
+.ayul-other { font-size: 0.85rem; color: var(--ink-soft); margin: 0 0 1rem; }
+.ayul-other button { border: none; background: none; color: var(--gold-500); font: inherit; cursor: pointer; padding: 0; text-decoration: underline; }

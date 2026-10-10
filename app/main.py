@@ -22,6 +22,7 @@ from app.constants import (
     PEYARCHI_START_YEAR,
     RASI_LORDS,
 )
+from app.amsayu import compute_amsayu
 from app.dasa import compute_mahadasas, compute_sub_periods
 from app.db import SavedChart, delete_chart, get_chart, init_db, list_charts, save_chart
 from app.dignity import compute_dignities
@@ -38,6 +39,9 @@ from app.ephemeris import (
 from app.geocode import search_places
 from app.hidden_dignity import compute_hidden_dignities
 from app.models import (
+    AmsayuOut,
+    AyulRequest,
+    AyulResponse,
     BirthRequest,
     CareerCadreOut,
     ChartOut,
@@ -54,6 +58,7 @@ from app.models import (
     MudakkuOut,
     NodeTransitOut,
     PeyarchiOut,
+    PindayuOut,
     PrasannamResponse,
     PlaceResult,
     SashtashtagamOut,
@@ -68,6 +73,7 @@ from app.kaala_pakai import compute_kaala_pakai
 from app.mudakku import compute_mudakku
 from app.navamsa_sashtashtagam import compute_navamsa_sashtashtagam
 from app.peyarchi import compute_peyarchis
+from app.pindayu import compute_pindayu
 from app.pranapada import compute_pranapada_longitude
 from app.tara import compute_tara_balam
 from app.tithi import compute_tithi
@@ -292,6 +298,56 @@ def get_chart_by_id(chart_id: int) -> ChartResponse:
 def remove_chart(chart_id: int) -> None:
     if not delete_chart(chart_id):
         raise HTTPException(status_code=404, detail="Chart not found")
+
+
+def _ayul_response(name: str, dob, tob, pob_label: str, latitude: float, longitude: float, timezone: str) -> AyulResponse:
+    """Amsayu and Pindayu for the Ayul Nirnayam calculator. The page shows the method the user picks."""
+    try:
+        utc_offset = compute_utc_offset(timezone, dob, tob)
+    except (ZoneInfoNotFoundError, ValueError):
+        raise HTTPException(status_code=400, detail="Unknown time zone")
+    jd_ut = to_julian_day_ut(dob, tob, utc_offset)
+    positions = compute_graha_positions(jd_ut)
+    longitudes = {n: lon for n, (lon, _speed) in positions.items()}
+    speeds = {n: speed for n, (_lon, speed) in positions.items()}
+    lagna_longitude = compute_ascendant(jd_ut, latitude, longitude)
+    d1 = build_chart(lagna_longitude, longitudes, speeds)
+    amsayu = compute_amsayu(
+        d1,
+        build_varga_chart("D9", lagna_longitude, longitudes, speeds),
+        build_varga_chart("D3", lagna_longitude, longitudes, speeds),
+        lagna_longitude,
+    )
+    pindayu = compute_pindayu(d1, lagna_longitude)
+
+    def row_out(row) -> dict:
+        retro = row.body in d1.grahas and d1.grahas[row.body].retrograde
+        return {**vars(row), "retrograde": retro, "haranams": [vars(h) for h in row.haranams]}
+
+    return AyulResponse(
+        name=name,
+        dob=dob,
+        tob=tob,
+        pob_label=pob_label,
+        lagna_rasi=d1.lagna_rasi,
+        lagna_degree=lagna_longitude % 30,
+        amsayu=AmsayuOut(**{**vars(amsayu), "rows": [row_out(r) for r in amsayu.rows]}),
+        pindayu=PindayuOut(**{**vars(pindayu), "rows": [row_out(r) for r in pindayu.rows]}),
+    )
+
+
+@app.post("/api/ayul", response_model=AyulResponse)
+def ayul(req: AyulRequest) -> AyulResponse:
+    return _ayul_response(req.name, req.dob, req.tob, req.pob_label, req.latitude, req.longitude, req.timezone)
+
+
+@app.get("/api/ayul/{chart_id}", response_model=AyulResponse)
+def ayul_for_saved_chart(chart_id: int) -> AyulResponse:
+    record = get_chart(chart_id)
+    if record is None:
+        raise HTTPException(status_code=404, detail="Chart not found")
+    return _ayul_response(record.name, record.dob, record.tob, record.pob_label,
+                          record.latitude, record.longitude, record.tz_name)
 
 
 @app.get("/api/prasannam", response_model=PrasannamResponse)

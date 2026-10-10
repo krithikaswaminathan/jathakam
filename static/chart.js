@@ -28,6 +28,10 @@ let state = {
   hiddenPlanet: "", // planet filter on the Hidden Ucham / Neecham tab; "" = all
   prasannam: { place: null, chart: null }, // place: { latitude, longitude, timezone, label }; label null = device location
   peyarchiPlanet: "", // planet filter on the Peyarchi tab; "" = all
+  // Ayul Nirnayam: view is "calc" or a key of AYUL_TOPICS; place is the entered birth place;
+  // result is the last /api/ayul response; strong is the pick ("lagna", "sun" or "moon"); methods
+  // are the ones shown, in order.
+  ayul: { view: "calc", place: null, result: null, strong: null, methods: [] },
 };
 
 function L() {
@@ -63,12 +67,22 @@ function readTob24Hour() {
 }
 
 function populateTobMinutes() {
-  const select = document.getElementById("tobMinute");
-  for (let m = 0; m < 60; m++) {
+  for (const id of ["tobMinute", "ayulMinute"]) {
+    const select = document.getElementById(id);
+    for (let m = 0; m < 60; m++) {
+      const opt = document.createElement("option");
+      opt.value = String(m);
+      opt.textContent = String(m).padStart(2, "0");
+      select.appendChild(opt);
+    }
+  }
+  const hour = document.getElementById("ayulHour");
+  for (let h = 1; h <= 12; h++) {
     const opt = document.createElement("option");
-    opt.value = String(m);
-    opt.textContent = String(m).padStart(2, "0");
-    select.appendChild(opt);
+    opt.value = String(h);
+    opt.textContent = String(h);
+    opt.selected = h === 12;
+    hour.appendChild(opt);
   }
 }
 
@@ -178,6 +192,7 @@ function applyLanguage() {
   document.getElementById("thPrStar").textContent = labels.ui.colStar;
   document.getElementById("thPrPada").textContent = labels.ui.colPada;
   if (state.prasannam.chart) renderPrasannam();
+  applyAyulLanguage();
   document.querySelectorAll(".side-nav-topic").forEach((btn) => {
     btn.textContent = READING_TOPICS[btn.dataset.topic].title[state.lang];
   });
@@ -195,6 +210,7 @@ async function loadSavedCharts() {
   const res = await fetch("/api/charts");
   state.savedCharts = await res.json();
   renderSavedList(state.savedCharts);
+  populateAyulCharts();
 }
 
 function renderSavedList(list) {
@@ -363,6 +379,7 @@ for (const key of Object.keys(READING_TOPICS)) {
 document.getElementById("readingBack").addEventListener("click", hideReadingPage);
 
 function showReadingPage(topicKey) {
+  document.getElementById("ayulSection").classList.add("hidden");
   document.getElementById("pariharamSection").classList.add("hidden");
   document.getElementById("prasannamSection").classList.add("hidden");
   setTopTab("home");
@@ -391,16 +408,18 @@ document.querySelectorAll(".top-tab").forEach((btn) => {
   btn.addEventListener("click", () => showPage(btn.dataset.page));
 });
 
-const PAGE_SECTIONS = ["formSection", "savedSection", "resultSection", "readingSection", "pariharamSection", "prasannamSection"];
+const PAGE_SECTIONS = ["formSection", "savedSection", "resultSection", "readingSection", "pariharamSection", "prasannamSection", "ayulSection"];
 
 // "home" is the birth-chart page (with the Reading side nav); the others replace it.
 function showPage(page) {
   setTopTab(page);
   document.getElementById("sideNav").classList.toggle("hidden", page !== "home");
   document.getElementById("pariharamNav").classList.toggle("hidden", page !== "pariharam");
+  document.getElementById("ayulNav").classList.toggle("hidden", page !== "ayul");
   if (page === "home") {
     document.getElementById("pariharamSection").classList.add("hidden");
     document.getElementById("prasannamSection").classList.add("hidden");
+    document.getElementById("ayulSection").classList.add("hidden");
     hideReadingPage();
     return;
   }
@@ -412,6 +431,9 @@ function showPage(page) {
   } else if (page === "prasannam") {
     document.getElementById("prasannamSection").classList.remove("hidden");
     startPrasannam();
+  } else if (page === "ayul") {
+    document.getElementById("ayulSection").classList.remove("hidden");
+    renderAyul();
   }
 }
 
@@ -615,6 +637,352 @@ function renderPariharam() {
   container.appendChild(ol);
 }
 
+// --- Ayul Nirnayam: its own side nav (the calculator, then a page on each method) ---
+
+// Nisargayu (the Moon) is not added yet, so both of the others are shown for comparison.
+const AYUL_STRONG_METHODS = { lagna: ["amsayu"], sun: ["pindayu"], moon: ["amsayu", "pindayu"] };
+
+function applyAyulLanguage() {
+  const ui = L().ui;
+  const set = (id, text) => { document.getElementById(id).textContent = text; };
+  set("lblTopAyul", ui.topAyul);
+  set("lblAyulNav", ui.topAyul);
+  set("ayulIntro", ui.ayulIntro);
+  set("lblAyulSource", ui.ayulSource);
+  set("lblAyulSaved", ui.ayulSaved);
+  set("lblAyulNew", ui.ayulNew);
+  set("lblAyulChart", ui.ayulChart);
+  set("lblAyulName", ui.name);
+  set("lblAyulDob", ui.dob);
+  set("lblAyulTob", ui.tob);
+  set("lblAyulPob", ui.pob);
+  document.getElementById("ayulPob").placeholder = ui.pobPlaceholder;
+  set("lblAyulStrong", ui.ayulStrong);
+  set("lblAyulStrongLagna", ui.ayulStrongLagna);
+  set("lblAyulStrongSun", ui.ayulStrongSun);
+  set("lblAyulStrongMoon", ui.ayulStrongMoon);
+  set("ayulCalculate", ui.ayulCalculate);
+  populateAyulCharts();
+  if (!document.getElementById("ayulSection").classList.contains("hidden")) renderAyul();
+}
+
+function populateAyulCharts() {
+  const select = document.getElementById("ayulChart");
+  const keep = select.value;
+  select.innerHTML = "";
+  const charts = state.savedCharts || [];
+  if (charts.length === 0) {
+    const opt = document.createElement("option");
+    opt.value = "";
+    opt.textContent = L().ui.ayulNoSaved;
+    select.appendChild(opt);
+  }
+  for (const c of charts) {
+    const opt = document.createElement("option");
+    opt.value = String(c.id);
+    opt.textContent = `${c.name} — ${c.dob}`;
+    select.appendChild(opt);
+  }
+  if (charts.some((c) => String(c.id) === keep)) select.value = keep;
+}
+
+function renderAyul() {
+  const ui = L().ui;
+  const nav = document.getElementById("ayulNavList");
+  nav.innerHTML = "";
+  for (const [key, title] of [["calc", ui.ayulCalcNav], ...Object.entries(AYUL_TOPICS).map(([k, t]) => [k, t.title[state.lang]])]) {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "pariharam-topic" + (key === state.ayul.view ? " active" : "");
+    btn.textContent = title;
+    btn.addEventListener("click", () => {
+      state.ayul.view = key;
+      renderAyul();
+    });
+    li.appendChild(btn);
+    nav.appendChild(li);
+  }
+
+  const isCalc = state.ayul.view === "calc";
+  document.getElementById("ayulCalc").classList.toggle("hidden", !isCalc);
+  const topicEl = document.getElementById("ayulTopic");
+  topicEl.classList.toggle("hidden", isCalc);
+  if (isCalc) {
+    document.getElementById("ayulTitle").textContent = ui.topAyul;
+    renderAyulResult();
+  } else {
+    const topic = AYUL_TOPICS[state.ayul.view];
+    document.getElementById("ayulTitle").textContent = topic.title[state.lang];
+    topicEl.innerHTML = "";
+    renderTopicBody(topicEl, topic);
+  }
+}
+
+document.querySelectorAll('input[name="ayulSource"]').forEach((radio) => {
+  radio.addEventListener("change", () => {
+    const fresh = document.querySelector('input[name="ayulSource"]:checked').value === "new";
+    document.getElementById("ayulSavedFields").classList.toggle("hidden", fresh);
+    document.getElementById("ayulNewFields").classList.toggle("hidden", !fresh);
+  });
+});
+
+document.getElementById("ayulForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const ui = L().ui;
+  const status = document.getElementById("ayulStatus");
+  const fresh = document.querySelector('input[name="ayulSource"]:checked').value === "new";
+  let res;
+  if (fresh) {
+    const dob = document.getElementById("ayulDob").value;
+    if (!dob || !state.ayul.place) {
+      status.textContent = ui.ayulNeedDetails;
+      return;
+    }
+    let hour = parseInt(document.getElementById("ayulHour").value, 10) % 12;
+    if (document.getElementById("ayulAmPm").value === "PM") hour += 12;
+    const minute = parseInt(document.getElementById("ayulMinute").value, 10);
+    const place = state.ayul.place;
+    status.textContent = ui.ayulWorking;
+    res = await fetch("/api/ayul", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: document.getElementById("ayulName").value.trim(),
+        dob,
+        tob: `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00`,
+        pob_label: place.label,
+        latitude: place.latitude,
+        longitude: place.longitude,
+        timezone: place.timezone,
+      }),
+    });
+  } else {
+    const id = document.getElementById("ayulChart").value;
+    if (!id) {
+      status.textContent = ui.ayulNoSaved;
+      return;
+    }
+    status.textContent = ui.ayulWorking;
+    res = await fetch(`/api/ayul/${id}`);
+  }
+  if (!res.ok) {
+    status.textContent = ui.ayulError + (await res.text());
+    return;
+  }
+  status.textContent = "";
+  state.ayul.result = await res.json();
+  state.ayul.strong = document.querySelector('input[name="ayulStrong"]:checked').value;
+  state.ayul.methods = [...AYUL_STRONG_METHODS[state.ayul.strong]];
+  renderAyulResult();
+});
+
+let ayulPobTimer = null;
+document.getElementById("ayulPob").addEventListener("input", (e) => {
+  state.ayul.place = null;
+  clearTimeout(ayulPobTimer);
+  const query = e.target.value.trim();
+  const list = document.getElementById("ayulPobResults");
+  if (query.length < 2) {
+    list.classList.add("hidden");
+    return;
+  }
+  ayulPobTimer = setTimeout(async () => {
+    const res = await fetch(`/api/geocode?query=${encodeURIComponent(query)}`);
+    const places = res.ok ? await res.json() : [];
+    list.innerHTML = "";
+    if (places.length === 0) {
+      const li = document.createElement("li");
+      li.className = "pob-no-results";
+      li.textContent = L().ui.pobNoResults;
+      list.appendChild(li);
+    }
+    for (const p of places) {
+      const li = document.createElement("li");
+      li.textContent = p.label;
+      li.addEventListener("click", () => {
+        state.ayul.place = p;
+        e.target.value = p.label;
+        list.classList.add("hidden");
+      });
+      list.appendChild(li);
+    }
+    list.classList.remove("hidden");
+  }, 300);
+});
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".ayul-pob")) document.getElementById("ayulPobResults").classList.add("hidden");
+});
+
+// Days of 360-day years (30-day months) as years, months and days.
+function ayulYmd(days, long = false) {
+  return L().ui[long ? "ayulYmdLong" : "ayulYmd"]
+    .replace("{y}", Math.floor(days / 360))
+    .replace("{m}", Math.floor((days % 360) / 30))
+    .replace("{d}", days % 30);
+}
+
+// Souramanam years as years, months and days of the solar year.
+function solarYmd(years) {
+  const y = Math.floor(years);
+  const monthsFull = (years - y) * 12;
+  let m = Math.floor(monthsFull);
+  let d = Math.round((monthsFull - m) * 30.4375);
+  if (d >= 30) { d = 0; m += 1; }
+  return L().ui.ayulYmdLong.replace("{y}", y + (m >= 12 ? 1 : 0)).replace("{m}", m % 12).replace("{d}", d);
+}
+
+function shareFraction(share) {
+  if (share >= 0.9999) return state.lang === "ta" ? "முழுவதும்" : "all";
+  const n = Math.round(1 / share);
+  return Math.abs(1 / n - share) < 1e-6 ? `1/${n}` : share.toFixed(3);
+}
+
+function ayulPlace(row) {
+  const labels = L();
+  return `${labels.rasi[row.rasi]} ${formatDMS(row.degree_in_sign)}${row.retrograde ? " (R)" : ""}`;
+}
+
+function ayulBodyName(row) {
+  return row.body === "Lagna" ? L().ui.lagna : L().planets[row.body];
+}
+
+function haranamText(row) {
+  const ui = L().ui;
+  if (!row.haranams.length) return "–";
+  const parts = row.haranams.map((h) =>
+    ui.ayulHaranam[h.kind].replace("{f}", shareFraction(h.share)).replace("{h}", h.house ? ORDINAL[state.lang](h.house) : "")
+  );
+  return `${parts.join(", ")} · ${ui.ayulLess.replace("{loss}", ayulYmd(row.loss_days))}`;
+}
+
+function ayulTable(headers, rows, total) {
+  const wrap = document.createElement("div");
+  wrap.className = "ayul-table-wrap";
+  const table = document.createElement("table");
+  table.className = "ayul-table";
+  const head = document.createElement("tr");
+  for (const h of headers) {
+    const th = document.createElement("th");
+    th.textContent = h;
+    head.appendChild(th);
+  }
+  table.appendChild(head);
+  for (const cells of [...rows, total]) {
+    const tr = document.createElement("tr");
+    if (cells === total) tr.className = "ayul-total";
+    cells.forEach(([text, cls]) => {
+      const td = document.createElement("td");
+      td.textContent = text;
+      if (cls) td.className = cls;
+      tr.appendChild(td);
+    });
+    table.appendChild(tr);
+  }
+  wrap.appendChild(table);
+  return wrap;
+}
+
+function amsayuBlock(a) {
+  const ui = L().ui;
+  const rows = a.rows.map((r) => {
+    let increase = "–";
+    if (r.increase) increase = `${r.increase.replace("x", "×")} ${r.increase_reasons.map((k) => ui.ayulReason[k]).join(", ")}`;
+    else if (r.increase_reasons.length) increase = r.increase_reasons.map((k) => ui.ayulReason[k]).join(", ");
+    return [
+      [ayulBodyName(r)], [ayulPlace(r)], [String(r.house)], [ayulYmd(r.a_days)], [increase, "ayul-why"],
+      [ayulYmd(r.b_days)], [haranamText(r), "ayul-why"], [ayulYmd(r.c_days), "ayul-c"],
+    ];
+  });
+  const total = [[ui.totalWord], [""], [""], [ayulYmd(a.a_days)], [""], [ayulYmd(a.b_days)], [""], [ayulYmd(a.c_days)]];
+  return ayulTable(
+    [ui.colPlanet, ui.colPosition, ui.colHouse, ui.colAOriginal, ui.colIncrease, ui.colB, ui.colHaranams, ui.colC], rows, total
+  );
+}
+
+function pindayuBlock(p) {
+  const ui = L().ui;
+  const rows = p.rows.map((r) => [
+    [ayulBodyName(r)], [ayulPlace(r)], [String(r.house)],
+    [r.share == null ? "–" : ui.ayulShareOf.replace("{share}", r.share.toFixed(3)).replace("{max}", r.max_years)],
+    [ayulYmd(r.a_days)], [haranamText(r), "ayul-why"], [ayulYmd(r.c_days), "ayul-c"],
+  ]);
+  const total = [[ui.totalWord], [""], [""], [""], [ayulYmd(p.a_days)], [""], [ayulYmd(p.c_days)]];
+  return ayulTable([ui.colPlanet, ui.colPosition, ui.colHouse, ui.colShare, ui.colYears, ui.colHaranams, ui.colAfterHaranams], rows, total);
+}
+
+function ayulMethodSection(method) {
+  const ui = L().ui;
+  const data = state.ayul.result[method];
+  const name = method === "amsayu" ? ui.ayulAmsayu : ui.ayulPindayu;
+  const section = document.createElement("div");
+  const h3 = document.createElement("h3");
+  h3.className = "timing-title";
+  h3.textContent = name;
+  section.appendChild(h3);
+
+  const box = document.createElement("div");
+  box.className = "ayul-result-box";
+  const lead = document.createElement("div");
+  lead.textContent = ui.ayulComesTo.replace("{method}", name);
+  const big = document.createElement("div");
+  big.className = "ayul-big";
+  big.textContent = solarYmd(data.solar_years);
+  const steps = document.createElement("div");
+  steps.className = "ayul-steps";
+  steps.textContent = ui.ayulSteps
+    .replace("{c}", ayulYmd(data.c_days, true))
+    .replace("{days}", data.c_days.toLocaleString("en-IN"))
+    .replace("{solar}", data.solar_years.toFixed(2));
+  box.append(lead, big, steps);
+  section.appendChild(box);
+  section.appendChild(method === "amsayu" ? amsayuBlock(data) : pindayuBlock(data));
+  return section;
+}
+
+function renderAyulResult() {
+  const container = document.getElementById("ayulResult");
+  const r = state.ayul.result;
+  container.classList.toggle("hidden", !r);
+  container.innerHTML = "";
+  if (!r) return;
+  const labels = L();
+  const ui = labels.ui;
+
+  const head = document.createElement("div");
+  head.className = "yoga-summary";
+  const who = [r.name, r.dob, r.tob.slice(0, 5), r.pob_label].filter(Boolean).join(" · ");
+  head.textContent = `${who} · ${ui.lagna} ${labels.rasi[r.lagna_rasi]} ${formatDMS(r.lagna_degree)}`;
+  container.appendChild(head);
+
+  if (state.ayul.strong === "moon") {
+    const p = document.createElement("p");
+    p.className = "ayul-other";
+    p.textContent = ui.ayulNisarga;
+    container.appendChild(p);
+  }
+  for (const method of state.ayul.methods) container.appendChild(ayulMethodSection(method));
+  const other = ["amsayu", "pindayu"].find((m) => !state.ayul.methods.includes(m));
+  if (other) {
+    const p = document.createElement("p");
+    p.className = "ayul-other";
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = ui.ayulCompare.replace("{method}", other === "amsayu" ? ui.ayulAmsayu : ui.ayulPindayu);
+    btn.addEventListener("click", () => {
+      state.ayul.methods.push(other);
+      renderAyulResult();
+    });
+    p.appendChild(btn);
+    container.appendChild(p);
+  }
+
+  const note = document.createElement("p");
+  note.className = "reading-note";
+  note.textContent = ui.ayulNote;
+  container.appendChild(note);
+}
+
 function readingTable(header, rows) {
   const table = document.createElement("table");
   table.className = "reading-table";
@@ -644,9 +1012,12 @@ function renderReadingPage(topicKey) {
   const container = document.getElementById("readingContent");
   container.innerHTML = "";
   if (!topic) return;
-
   document.getElementById("readingTitle").textContent = topic.title[state.lang];
+  renderTopicBody(container, topic);
+}
 
+// The text, tables, note and sources of a reading topic (also used for the Ayul Nirnayam pages).
+function renderTopicBody(container, topic) {
   const intro = document.createElement("p");
   intro.textContent = topic.intro[state.lang];
   container.appendChild(intro);

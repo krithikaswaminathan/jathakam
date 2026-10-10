@@ -49,7 +49,23 @@ const LABELS = {
       sashtashtagamNone: "No planet is 6th or 8th in D9, which is a huge plus in the jathakam.",
       sashtashtagamSummary: "6th or 8th in D9, bringing issues related to the planet and its houses",
       sashtashtagamNoLordship: "rules no house, sits in house {house}",
-      topHome: "Jathakam", topPariharam: "Pariharam", topPrasannam: "Prasannam", vargottamaWord: "vargottama",
+      topHome: "Jathakam", topPariharam: "Pariharam", topPrasannam: "Prasannam",
+      topAyul: "Ayul Nirnayam", ayulCalcNav: "Calculator",
+      ayulIntro: "Work out the classical span of life from a chart. Pick a saved chart or enter the birth details, then choose which of the lagna, the Sun and the Moon is the strongest in the chart. Brihat Parashara Hora Shastra uses Amsayu when the lagna is the strongest, Pindayu when the Sun is and Nisargayu when the Moon is.",
+      ayulSource: "Whose chart", ayulSaved: "A saved chart", ayulNew: "Enter birth details", ayulChart: "Saved chart", ayulNoSaved: "No saved charts yet",
+      ayulStrong: "Which is the strongest", ayulStrongLagna: "Lagna (Amsayu)", ayulStrongSun: "Sun (Pindayu)", ayulStrongMoon: "Moon (Nisargayu)",
+      ayulCalculate: "Calculate", ayulWorking: "Working it out...", ayulNeedDetails: "Please enter the date, time and place of birth", ayulError: "Could not work it out. ",
+      ayulAmsayu: "Amsayu", ayulPindayu: "Pindayu", ayulComesTo: "{method} comes to",
+      ayulYmd: "{y}y {m}m {d}d", ayulYmdLong: "{y} years {m} months {d} days",
+      ayulSteps: "The total is {c} in Chandramanam years of 360 days. Dividing its {days} days by 365.2654 gives {solar} Souramanam years.",
+      ayulCompare: "Compare with {method}",
+      ayulNisarga: "Nisargayu, for when the Moon is the strongest, is not added yet. We will work it out on screen first. Amsayu and Pindayu are below for comparison.",
+      ayulNote: "This is a traditional calculation from the classical texts, not a prediction. Tested against known charts it came close for some and was many years out for others, so it is no guide to anyone's actual span of life.",
+      colHouse: "House", colAOriginal: "A original", colIncrease: "Increase", colB: "B", colHaranams: "Haranams", colC: "C",
+      colShare: "Share of full years", colYears: "Years", colAfterHaranams: "After haranams", totalWord: "Total",
+      ayulShareOf: "{share} of {max}", ayulLess: "less {loss}",
+      ayulReason: { ucham: "ucham", vakram: "vakram", own_house: "own house", vargottamam: "vargottamam", own_navamsa: "own house in navamsa", own_drekkana: "own house in drekkana", last_degree: "29\u00B0 or more, no increase" },
+      ayulHaranam: { chakrapata: "Chakrapata {f} ({h} house)", ashtanga: "Ashtanga {f}", shatru: "Shatru Kshetra {f}" }, vargottamaWord: "vargottama",
       hiddenTab: "Hidden Ucham / Neecham", hiddenWhereTitle: "Where each planet hides them",
       hiddenTransitsTitle: "Rahu and Ketu over the hidden padas, 2026 to 2035",
       colSitsIn: "Sits in", colHides: "Hides its", colHiddenIn: "Hidden in", colBhavam: "Bhavam",
@@ -188,7 +204,23 @@ const LABELS = {
       sashtashtagamNone: "எந்தக் கிரகமும் D9இல் 6 அல்லது 8ஆம் இடத்தில் இல்லை. இது ஜாதகத்திற்குப் பெரிய பலம்.",
       sashtashtagamSummary: "D9இல் 6 அல்லது 8ஆம் இடம், அந்தக் கிரகம், அதன் வீடுகள் தொடர்பான பிரச்சினைகள்",
       sashtashtagamNoLordship: "எந்த வீட்டிற்கும் அதிபதி இல்லை, {house}ஆம் வீட்டில் உள்ளது",
-      topHome: "ஜாதகம்", topPariharam: "பரிகாரம்", topPrasannam: "பிரசன்னம்", vargottamaWord: "வர்கோத்தமம்",
+      topHome: "ஜாதகம்", topPariharam: "பரிகாரம்", topPrasannam: "பிரசன்னம்",
+      topAyul: "ஆயுள் நிர்ணயம்", ayulCalcNav: "கணிப்பான்",
+      ayulIntro: "ஒரு ஜாதகத்திலிருந்து பாரம்பரிய முறையில் ஆயுளைக் கணிக்கவும். சேமித்த ஜாதகத்தைத் தேர்ந்தெடுக்கவும் அல்லது பிறப்பு விவரங்களை உள்ளிடவும். பிறகு லக்னம், சூரியன், சந்திரன் இவற்றில் எது வலிமையானது என்பதைத் தேர்ந்தெடுக்கவும். லக்னம் வலிமையானால் அம்சாயு, சூரியன் வலிமையானால் பிண்டாயு, சந்திரன் வலிமையானால் நிசர்காயு என்று பிருஹத் பராசர ஹோரா சாஸ்திரம் கூறுகிறது.",
+      ayulSource: "யாருடைய ஜாதகம்", ayulSaved: "சேமித்த ஜாதகம்", ayulNew: "பிறப்பு விவரங்களை உள்ளிடவும்", ayulChart: "சேமித்த ஜாதகம்", ayulNoSaved: "இன்னும் சேமித்த ஜாதகம் இல்லை",
+      ayulStrong: "எது வலிமையானது", ayulStrongLagna: "லக்னம் (அம்சாயு)", ayulStrongSun: "சூரியன் (பிண்டாயு)", ayulStrongMoon: "சந்திரன் (நிசர்காயு)",
+      ayulCalculate: "கணிக்க", ayulWorking: "கணிக்கிறது...", ayulNeedDetails: "பிறந்த தேதி, நேரம், இடத்தை உள்ளிடவும்", ayulError: "கணிக்க முடியவில்லை. ",
+      ayulAmsayu: "அம்சாயு", ayulPindayu: "பிண்டாயு", ayulComesTo: "{method} கணக்கு",
+      ayulYmd: "{y}வ {m}மா {d}நா", ayulYmdLong: "{y} வருடம் {m} மாதம் {d} நாள்",
+      ayulSteps: "360 நாள் சந்திரமான வருடங்களில் மொத்தம் {c}. அதன் {days} நாட்களை 365.2654 ஆல் வகுத்தால் {solar} சௌரமான வருடங்கள்.",
+      ayulCompare: "{method} உடன் ஒப்பிடுக",
+      ayulNisarga: "சந்திரன் வலிமையாக இருக்கும்போது பயன்படும் நிசர்காயு இன்னும் சேர்க்கப்படவில்லை. முதலில் திரையில் கணித்துப் பார்ப்போம். ஒப்பிடுவதற்காக அம்சாயுவும் பிண்டாயுவும் கீழே உள்ளன.",
+      ayulNote: "இது பாரம்பரிய நூல்களின்படி செய்யப்படும் கணக்கு மட்டுமே, முன்கணிப்பு அல்ல. அறிந்த ஜாதகங்களில் சோதித்தபோது சிலவற்றுக்கு அருகில் வந்தது, சிலவற்றுக்குப் பல வருடங்கள் விலகியது. எனவே இது யாருடைய உண்மையான ஆயுளுக்கும் வழிகாட்டி அல்ல.",
+      colHouse: "பாவம்", colAOriginal: "A மூல வருடம்", colIncrease: "கூடுதல்", colB: "B", colHaranams: "ஹரணங்கள்", colC: "C",
+      colShare: "முழு வருடத்தில் பங்கு", colYears: "வருடம்", colAfterHaranams: "ஹரணத்திற்குப் பின்", totalWord: "மொத்தம்",
+      ayulShareOf: "{max} இல் {share}", ayulLess: "{loss} குறைவு",
+      ayulReason: { ucham: "உச்சம்", vakram: "வக்கிரம்", own_house: "சொந்த வீடு", vargottamam: "வர்கோத்தமம்", own_navamsa: "நவாம்சத்தில் சொந்த வீடு", own_drekkana: "திரேக்காணத்தில் சொந்த வீடு", last_degree: "29\u00B0 அல்லது மேல், கூடுதல் இல்லை" },
+      ayulHaranam: { chakrapata: "சக்ரபாத {f} ({h} பாவம்)", ashtanga: "அஸ்தங்க {f}", shatru: "சத்ரு க்ஷேத்ர {f}" }, vargottamaWord: "வர்கோத்தமம்",
       hiddenTab: "மறைந்த உச்சம் / நீசம்", hiddenWhereTitle: "ஒவ்வொரு கிரகமும் எங்கே மறைக்கிறது",
       hiddenTransitsTitle: "மறைந்த பாதங்களின் மீது ராகு, கேது, 2026 முதல் 2035 வரை",
       colSitsIn: "நிற்கும் பாதம்", colHides: "மறைக்கும் நிலை", colHiddenIn: "மறைந்திருக்கும் இடம்", colBhavam: "பாவம்",
@@ -919,5 +951,114 @@ const READING_TOPICS = {
       en: "This comes from a video and has no written source. Only the rasi counts, not the degree.",
       ta: "இது ஒரு காணொளியிலிருந்து எடுக்கப்பட்டது, எழுத்து மூலம் இல்லை. பாகை அல்ல, ராசி மட்டுமே கணக்கில் கொள்ளப்படுகிறது.",
     },
+  },
+};
+
+// Ayul Nirnayam: the descriptions shown from its own side nav. Planet and rasi names come from
+// LABELS so they follow the language setting.
+const PINDAYU_TABLE = [["Sun", 19, 0, 10], ["Moon", 25, 1, 3], ["Mars", 15, 9, 28], ["Mercury", 12, 5, 15], ["Jupiter", 15, 3, 5], ["Venus", 21, 11, 27], ["Saturn", 20, 6, 20]];
+const BPHS_43 = { title: "Brihat Parashara Hora Shastra, Chapter 43 (Longevity)", url: "http://vedic-astro.s3.amazonaws.com/books/bhrihat_parasara_hora_shastra.pdf" };
+const SOURAMANAM_SECTION = {
+  heading: { en: "Souramanam", ta: "சௌரமானம்" },
+  text: {
+    en: "All the years are counted in Chandramanam years of 360 days with months of 30 days. The total is changed to Souramanam years by dividing its days by 365.2654.",
+    ta: "எல்லா வருடங்களும் 30 நாள் மாதங்களுடன் 360 நாள் சந்திரமான வருடங்களில் கணக்கிடப்படுகின்றன. மொத்த நாட்களை 365.2654 ஆல் வகுத்து சௌரமான வருடங்களாக மாற்றப்படுகிறது.",
+  },
+};
+const AYUL_TOPICS = {
+  pindayu: {
+    title: { en: "Pindayu", ta: "பிண்டாயு" },
+    intro: {
+      en: "Pindayu is the span of life worked out from how close each planet is to its deep ucham point. Brihat Parashara Hora Shastra uses it when the Sun is the strongest of the lagna, the Sun and the Moon. Each planet gives up to a fixed number of years, all of them at its deep ucham point and half of them at its deep neecham point.",
+      ta: "பிண்டாயு என்பது ஒவ்வொரு கிரகமும் தன் பரம உச்சத்திற்கு எவ்வளவு அருகில் உள்ளது என்பதைக் கொண்டு கணிக்கப்படும் ஆயுள். லக்னம், சூரியன், சந்திரன் மூன்றில் சூரியன் வலிமையாக இருக்கும்போது பிருஹத் பராசர ஹோரா சாஸ்திரம் இதைப் பயன்படுத்துகிறது. ஒவ்வொரு கிரகமும் குறிப்பிட்ட வருடங்கள் வரை தருகிறது. பரம உச்சத்தில் முழுவதும், பரம நீசத்தில் பாதியும் தருகிறது.",
+    },
+    tableHeader: [{ en: "Planet", ta: "கிரகம்" }, { en: "Full years", ta: "முழு வருடங்கள்" }, { en: "Deep ucham point", ta: "பரம உச்சம்" }],
+    table: PINDAYU_TABLE.map(([planet, years, rasi, deg]) => [
+      bothLangs((l) => LABELS[l].planets[planet]),
+      { en: String(years), ta: String(years) },
+      bothLangs((l) => `${LABELS[l].rasi[rasi]} ${deg}°`),
+    ]),
+    sections: [
+      {
+        heading: { en: "Each planet's years", ta: "ஒவ்வொரு கிரகத்தின் வருடங்கள்" },
+        text: {
+          en: "Measure how far the planet is from its deep ucham point the short way round, which is never more than 180°. Its share of its full years is 1 less that distance divided by 360, so 1 at the deep ucham point and ½ at the deep neecham point. The lagna gives one year for each rasi it has crossed from Mesham and the part of a rasi in proportion, the same as in Amsayu.",
+          ta: "கிரகம் தன் பரம உச்சத்திலிருந்து குறுகிய வழியில் எவ்வளவு தூரம் உள்ளது என்று அளக்கவும். இது 180° க்கு மேல் இருக்காது. அந்தத் தூரத்தை 360 ஆல் வகுத்து 1 இலிருந்து கழித்தால் முழு வருடத்தில் அதன் பங்கு கிடைக்கும். பரம உச்சத்தில் 1, பரம நீசத்தில் ½. லக்னம் மேஷத்திலிருந்து கடந்த ஒவ்வொரு ராசிக்கும் ஒரு வருடமும், மீதிப் பகுதிக்கு விகிதப்படியும் தருகிறது. இது அம்சாயுவில் உள்ளது போலவே.",
+        },
+      },
+      {
+        heading: { en: "Haranams", ta: "ஹரணங்கள்" },
+        text: {
+          en: "Pindayu has no tripling or doubling. The same haranams as in Amsayu are taken from each planet's own years. The Amsayu page explains how each one is worked out.",
+          ta: "பிண்டாயுவில் மும்மடங்கோ இரட்டிப்போ இல்லை. அம்சாயுவில் உள்ள அதே ஹரணங்கள் ஒவ்வொரு கிரகத்தின் சொந்த வருடங்களிலிருந்து கழிக்கப்படுகின்றன. ஒவ்வொன்றும் எப்படிக் கணிக்கப்படுகிறது என்பது அம்சாயு பக்கத்தில் உள்ளது.",
+        },
+      },
+      SOURAMANAM_SECTION,
+    ],
+    note: {
+      en: "Tested against known charts, Pindayu came within about 5 or 6 years for some and was 14 to 20 years out for others.",
+      ta: "அறிந்த ஜாதகங்களில் சோதித்தபோது பிண்டாயு சிலவற்றுக்கு சுமார் 5 அல்லது 6 வருடங்களுக்குள் வந்தது, சிலவற்றுக்கு 14 முதல் 20 வருடங்கள் விலகியது.",
+    },
+    sources: [BPHS_43],
+  },
+  amsayu: {
+    title: { en: "Amsayu", ta: "அம்சாயு" },
+    intro: {
+      en: "Amsayu is the span of life worked out from the navamsas the planets have reached. Brihat Parashara Hora Shastra uses it when the lagna is the strongest of the lagna, the Sun and the Moon. It is worked out in three steps called A, B and C here.",
+      ta: "அம்சாயு என்பது கிரகங்கள் அடைந்த நவாம்சங்களைக் கொண்டு கணிக்கப்படும் ஆயுள். லக்னம், சூரியன், சந்திரன் மூன்றில் லக்னம் வலிமையாக இருக்கும்போது பிருஹத் பராசர ஹோரா சாஸ்திரம் இதைப் பயன்படுத்துகிறது. இங்கே இது A, B, C என்ற மூன்று படிகளில் கணிக்கப்படுகிறது.",
+    },
+    sections: [
+      {
+        heading: { en: "A, the original years", ta: "A, மூல வருடங்கள்" },
+        text: {
+          en: "Change the planet's longitude from Mesham 0° into minutes and divide by 200 to get the navamsas it has crossed. Take away whole multiples of 12. The whole number left is years and the fraction times 360 is days. For example the Sun at 239°24′ is 14,364 minutes, which is 71.82 navamsas. 71 less 60 leaves 11 years and 0.82 times 360 gives 295 days, so 11 years 9 months 25 days. The lagna gives one year for each rasi it has crossed and the part of a rasi in proportion.",
+          ta: "மேஷம் 0° இலிருந்து கிரகத்தின் பாகையை கலைகளாக மாற்றி 200 ஆல் வகுத்தால் அது கடந்த நவாம்சங்கள் கிடைக்கும். 12 இன் முழு மடங்குகளை நீக்கவும். மீதியுள்ள முழு எண் வருடங்கள், பின்னத்தை 360 ஆல் பெருக்கினால் நாட்கள். உதாரணமாக 239°24′ இல் உள்ள சூரியன் 14,364 கலைகள், அதாவது 71.82 நவாம்சங்கள். 71 இல் 60 ஐக் கழித்தால் 11 வருடங்கள், 0.82 ஐ 360 ஆல் பெருக்கினால் 295 நாட்கள், அதாவது 11 வருடம் 9 மாதம் 25 நாள். லக்னம் கடந்த ஒவ்வொரு ராசிக்கும் ஒரு வருடமும், மீதிப் பகுதிக்கு விகிதப்படியும் தருகிறது.",
+        },
+      },
+      {
+        heading: { en: "B, the increases", ta: "B, கூடுதல்கள்" },
+        text: {
+          en: "A planet in its ucham rasi or vakram has its years tripled. Otherwise a planet in its own house, vargottamam, or in its own house in the navamsa or the drekkana has its years doubled. Only one increase is given and tripling comes first. The lagna and a planet 29° or more into its rasi get no increase.",
+          ta: "உச்ச ராசியில் உள்ள அல்லது வக்கிரமான கிரகத்தின் வருடங்கள் மும்மடங்காகும். இல்லையெனில் சொந்த வீட்டில், வர்கோத்தமத்தில், அல்லது நவாம்சத்திலோ திரேக்காணத்திலோ சொந்த வீட்டில் உள்ள கிரகத்தின் வருடங்கள் இரட்டிப்பாகும். ஒரு கூடுதல் மட்டுமே, மும்மடங்கு முதலில். லக்னத்துக்கும், ராசியில் 29° அல்லது மேல் உள்ள கிரகத்துக்கும் கூடுதல் இல்லை.",
+        },
+      },
+      {
+        heading: { en: "C, the haranams", ta: "C, ஹரணங்கள்" },
+        text: {
+          en: "Each haranam is a share of the planet's A, taken from its B. The total taken from a planet is never more than its A.",
+          ta: "ஒவ்வொரு ஹரணமும் கிரகத்தின் A இன் ஒரு பங்கு, அது B இலிருந்து கழிக்கப்படுகிறது. ஒரு கிரகத்திலிருந்து கழிக்கப்படும் மொத்தம் அதன் A ஐ விட அதிகமாகாது.",
+        },
+        tableHeader: [{ en: "Haranam", ta: "ஹரணம்" }, { en: "When and how much", ta: "எப்போது, எவ்வளவு" }],
+        table: [
+          [
+            { en: "Chakrapata", ta: "சக்ரபாத" },
+            {
+              en: "A planet in houses 7 to 12, counted in whole rasis from the lagna. The Sun, Mars and Saturn lose 1/6, 1/5, 1/4, 1/3, 1/2 and all in houses 7 to 12. The Moon, Mercury, Jupiter and Venus lose half that. Only the planet with the most years in a rasi is cut. A planet 29° or more into its rasi counts in the next house.",
+              ta: "லக்னத்திலிருந்து முழு ராசிகளாக எண்ணி 7 முதல் 12 வரையிலான பாவங்களில் உள்ள கிரகம். சூரியன், செவ்வாய், சனி 7 முதல் 12 வரை 1/6, 1/5, 1/4, 1/3, 1/2, முழுவதும் இழக்கின்றன. சந்திரன், புதன், குரு, சுக்ரன் அதில் பாதி இழக்கின்றன. ஒரு ராசியில் அதிக வருடங்கள் உள்ள கிரகம் மட்டுமே குறைக்கப்படுகிறது. ராசியில் 29° அல்லது மேல் உள்ள கிரகம் அடுத்த பாவத்தில் எண்ணப்படுகிறது.",
+            },
+          ],
+          [
+            { en: "Ashtanga", ta: "அஸ்தங்க" },
+            {
+              en: "Half, for the Moon within 12°, Mars within 17° or Jupiter within 11° of the Sun. Mercury, Venus and Saturn are not cut.",
+              ta: "சூரியனிலிருந்து 12° க்குள் சந்திரன், 17° க்குள் செவ்வாய், 11° க்குள் குரு இருந்தால் பாதி. புதன், சுக்ரன், சனி குறைக்கப்படுவதில்லை.",
+            },
+          ],
+          [
+            { en: "Shatru Kshetra", ta: "சத்ரு க்ஷேத்ர" },
+            {
+              en: "A third, for a planet in the rasi of a natural enemy. Not when the planet is vakram, and not when it already loses half to Ashtanga.",
+              ta: "இயற்கைப் பகைவரின் ராசியில் உள்ள கிரகத்துக்கு மூன்றில் ஒரு பங்கு. கிரகம் வக்கிரமாக இருந்தாலோ, ஏற்கனவே அஸ்தங்கத்தில் பாதி இழந்தாலோ இல்லை.",
+            },
+          ],
+        ],
+      },
+      SOURAMANAM_SECTION,
+    ],
+    note: {
+      en: "Two working rules here are ours and not the text's. The planet with the most years takes the Chakrapata cut in a rasi, and Mercury is left out of Ashtanga. Tested against known charts, Amsayu came within days for one, within 5 years for two more and 18 to 50 years short for others.",
+      ta: "இங்குள்ள இரண்டு விதிகள் நூலில் உள்ளவை அல்ல, நாம் கடைப்பிடிப்பவை. ஒரு ராசியில் அதிக வருடங்கள் உள்ள கிரகமே சக்ரபாத குறைப்பை ஏற்கிறது, புதன் அஸ்தங்கத்திலிருந்து விலக்கப்படுகிறது. அறிந்த ஜாதகங்களில் சோதித்தபோது அம்சாயு ஒன்றுக்கு சில நாட்களுக்குள், மேலும் இரண்டுக்கு 5 வருடங்களுக்குள் வந்தது, சிலவற்றுக்கு 18 முதல் 50 வருடங்கள் குறைவாக வந்தது.",
+    },
+    sources: [BPHS_43, { title: "The Haranas of Amsayurdaya (Thoughts on Jyotish)", url: "https://medium.com/thoughts-on-jyotish/the-bharanas-of-amsayurdaya-abfa771045d4" }],
   },
 };

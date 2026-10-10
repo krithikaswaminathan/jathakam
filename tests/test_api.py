@@ -142,3 +142,32 @@ def test_prasannam_now_uses_the_time_zone(client):
 def test_prasannam_rejects_an_unknown_time_zone(client):
     res = client.get("/api/prasannam", params={"latitude": 13.08, "longitude": 80.27, "timezone": "Not/AZone"})
     assert res.status_code == 400
+
+
+PADMINI = {
+    "name": "Padmini", "dob": "1932-12-14", "tob": "17:45:00", "pob_label": "Thiruvananthapuram",
+    "latitude": 8.4855, "longitude": 76.94924, "timezone": "Asia/Kolkata",
+}
+
+
+def test_ayul_from_birth_details(client):
+    body = client.post("/api/ayul", json=PADMINI).json()
+    # The 1932 Asia/Kolkata offset is +5:30, as in the on-screen working.
+    assert body["amsayu"]["c_days"] == 74 * 360 + 10 * 30 + 19
+    assert round(body["amsayu"]["solar_years"], 2) == 73.81
+    assert round(body["pindayu"]["solar_years"], 1) == 87.6
+    assert [r["body"] for r in body["amsayu"]["rows"]][0] == "Lagna"
+    sun = next(r for r in body["amsayu"]["rows"] if r["body"] == "Sun")
+    assert sun["haranams"] == [{"kind": "chakrapata", "share": 0.2, "house": 8}]
+
+
+def test_ayul_for_a_saved_chart_matches_birth_details(client):
+    chart_id = client.post("/api/chart", json=BIRTH).json()["id"]
+    saved = client.get(f"/api/ayul/{chart_id}").json()
+    direct = client.post("/api/ayul", json={k: v for k, v in BIRTH.items() if k != "gender"}).json()
+    assert saved == direct
+    assert client.get("/api/ayul/99999").status_code == 404
+
+
+def test_ayul_rejects_an_unknown_time_zone(client):
+    assert client.post("/api/ayul", json={**PADMINI, "timezone": "Nowhere/Else"}).status_code == 400

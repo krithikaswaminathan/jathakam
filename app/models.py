@@ -273,3 +273,77 @@ class PrasannamResponse(BaseModel):
     timezone: str
     lagna_longitude: float
     d1: ChartOut
+
+
+class HaranamOut(BaseModel):
+    kind: str  # "chakrapata", "ashtanga" or "shatru"
+    share: float
+    house: int | None = None
+
+
+class AmsayuRowOut(BaseModel):
+    body: str
+    longitude: float
+    rasi: int
+    degree_in_sign: float
+    house: int
+    retrograde: bool = False
+    a_days: int
+    increase: str | None
+    increase_reasons: list[str]
+    b_days: int
+    haranams: list[HaranamOut]
+    loss_days: int
+    c_days: int
+
+
+class AmsayuOut(BaseModel):
+    rows: list[AmsayuRowOut]
+    a_days: int
+    b_days: int
+    c_days: int
+    solar_years: float
+
+
+class PindayuRowOut(BaseModel):
+    body: str
+    longitude: float
+    rasi: int
+    degree_in_sign: float
+    house: int
+    retrograde: bool = False
+    max_years: int | None
+    share: float | None
+    a_days: int
+    haranams: list[HaranamOut]
+    loss_days: int
+    c_days: int
+
+
+class PindayuOut(BaseModel):
+    rows: list[PindayuRowOut]
+    a_days: int
+    c_days: int
+    solar_years: float
+
+
+class AyulRequest(BaseModel):
+    """Birth details for the Ayul Nirnayam calculator. Not saved."""
+    name: str = ""
+    dob: date
+    tob: time
+    pob_label: str = ""
+    latitude: float
+    longitude: float
+    timezone: str
+
+
+class AyulResponse(BaseModel):
+    name: str
+    dob: date
+    tob: time
+    pob_label: str
+    lagna_rasi: int
+    lagna_degree: float
+    amsayu: AmsayuOut
+    pindayu: PindayuOut

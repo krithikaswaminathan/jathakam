@@ -35,6 +35,7 @@
         <button type="button" class="top-tab active" data-page="home" id="lblTopHome">Jathakam</button>
         <button type="button" class="top-tab" data-page="pariharam" id="lblTopPariharam">Pariharam</button>
         <button type="button" class="top-tab" data-page="prasannam" id="lblTopPrasannam">Prasannam</button>
+        <button type="button" class="top-tab" data-page="ayul" id="lblTopAyul">Ayul Nirnayam</button>
       </nav>
       <select id="langToggle">
         <option value="en">English</option>
@@ -53,6 +54,10 @@
   <nav id="pariharamNav" class="side-nav hidden">
     <h2 id="lblPariharamNav">Pariharam</h2>
     <ul id="pariharamNavList" class="side-nav-list"></ul>
+  </nav>
+  <nav id="ayulNav" class="side-nav hidden">
+    <h2 id="lblAyulNav">Ayul Nirnayam</h2>
+    <ul id="ayulNavList" class="side-nav-list"></ul>
   </nav>
 
   <main>
@@ -98,6 +103,53 @@
           <tbody id="prasBody"></tbody>
         </table>
       </div>
+    </section>
+
+    <section id="ayulSection" class="card hidden">
+      <h2 id="ayulTitle">Ayul Nirnayam</h2>
+      <div id="ayulCalc">
+        <p id="ayulIntro" class="ayul-intro"></p>
+        <form id="ayulForm">
+          <fieldset class="ayul-choice">
+            <legend id="lblAyulSource">Whose chart</legend>
+            <label><input type="radio" name="ayulSource" value="saved" checked /> <span id="lblAyulSaved">A saved chart</span></label>
+            <label><input type="radio" name="ayulSource" value="new" /> <span id="lblAyulNew">Enter birth details</span></label>
+          </fieldset>
+          <div id="ayulSavedFields" class="ayul-fields">
+            <label><span id="lblAyulChart">Saved chart</span><select id="ayulChart"></select></label>
+          </div>
+          <div id="ayulNewFields" class="ayul-fields hidden">
+            <label><span id="lblAyulName">Name</span><input type="text" id="ayulName" /></label>
+            <label><span id="lblAyulDob">Date of Birth</span><input type="date" id="ayulDob" /></label>
+            <label><span id="lblAyulTob">Time of Birth</span>
+              <div class="tob-group">
+                <select id="ayulHour" aria-label="Hour"></select>
+                <span class="tob-colon">:</span>
+                <select id="ayulMinute" aria-label="Minute"></select>
+                <select id="ayulAmPm" aria-label="AM or PM">
+                  <option value="AM">AM</option>
+                  <option value="PM">PM</option>
+                </select>
+              </div>
+            </label>
+            <label class="pob-field ayul-pob">
+              <span id="lblAyulPob">Place of Birth</span>
+              <input type="text" id="ayulPob" autocomplete="off" />
+              <ul id="ayulPobResults" class="pob-results hidden"></ul>
+            </label>
+          </div>
+          <fieldset class="ayul-choice">
+            <legend id="lblAyulStrong">Which is the strongest</legend>
+            <label><input type="radio" name="ayulStrong" value="lagna" checked /> <span id="lblAyulStrongLagna"></span></label>
+            <label><input type="radio" name="ayulStrong" value="sun" /> <span id="lblAyulStrongSun"></span></label>
+            <label><input type="radio" name="ayulStrong" value="moon" /> <span id="lblAyulStrongMoon"></span></label>
+          </fieldset>
+          <button type="submit" id="ayulCalculate">Calculate</button>
+        </form>
+        <div id="ayulStatus" class="info-hint"></div>
+        <div id="ayulResult" class="hidden"></div>
+      </div>
+      <div id="ayulTopic" class="hidden"></div>
     </section>
 
     <section id="formSection" class="card">
