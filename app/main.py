@@ -22,6 +22,7 @@ from app.constants import (
     PEYARCHI_START_YEAR,
     RASI_LORDS,
 )
+from app.amatyakaraka import compute_amatyakaraka
 from app.amsayu import compute_amsayu
 from app.chara_karaka import compute_chara_karakas
 from app.dasa import compute_mahadasas, compute_sub_periods
@@ -384,6 +385,7 @@ def jaimini(req: AyulRequest) -> JaiminiResponse:
         rasi_drishti=[vars(r) for r in compute_rasi_drishti(d1)],
         chara_karakas=[vars(k) for k in karakas],
         karakamsa=_karakamsa_out(compute_karakamsa(d1, d9, karakas[0].planet)),
+        amatyakaraka=vars(compute_amatyakaraka(d1, karakas)),
     )
 
 

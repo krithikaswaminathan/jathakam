@@ -406,6 +406,21 @@ class KarakamsaOut(BaseModel):
     readings: list[KarakamsaReadingOut]
 
 
+class AmatyakarakaOut(BaseModel):
+    planet: str
+    rasi: int
+    house: int
+    groups: list[str]
+    atmakaraka: str
+    ak_rasi: int
+    ak_house: int
+    count: int
+    aspect: bool
+    same_rasi: bool
+    kendra_trikona: bool
+    related: bool
+
+
 class JaiminiResponse(BaseModel):
     """Everything the Jaimini Sutras calculators show for one chart."""
     name: str
@@ -420,3 +435,4 @@ class JaiminiResponse(BaseModel):
     rasi_drishti: list[RasiDrishtiOut]
     chara_karakas: list[CharaKarakaOut]
     karakamsa: KarakamsaOut
+    amatyakaraka: AmatyakarakaOut

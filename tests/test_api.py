@@ -190,6 +190,8 @@ def test_jaimini_for_a_saved_chart_and_birth_details(client):
     assert saved["arudha_upapada_aspect"] is False  # Simham does not aspect Kumbham
     karakas = saved["chara_karakas"]
     assert [k["karaka"] for k in karakas] == ["AK", "AmK", "BK", "MK", "PK", "GK", "DK"]
+    amk = saved["amatyakaraka"]
+    assert (amk["planet"], amk["house"], amk["related"]) == ("Mercury", 1, False)
     kk = saved["karakamsa"]
     assert (kk["atmakaraka"], kk["rasi"]) == ("Venus", 11)  # Sukran in Meenam in the Navamsa
     assert {"kind": "jupiter", "planet": "Jupiter", "house": 10} in kk["readings"]

@@ -1021,6 +1021,7 @@ const JAIMINI_VIEWS = {
   arudha: { title: "alTitle", intro: ["alIntro", "alMethod"], render: () => renderArudhaResult("arudha_lagna") },
   upapada: { title: "upapadaTitle", intro: ["upapadaIntro", "upapadaMethod"], render: () => renderArudhaResult("upapada") },
   karaka: { title: "karakaTitle", intro: ["karakaIntro", "karakaRules"], render: () => renderKarakaResult() },
+  amatya: { title: "amkTitle", intro: ["amkIntro", "amkRel"], render: () => renderAmatyakarakaResult() },
   karakamsa: { title: "kkTitle", intro: ["kkIntro", "kkHow"], render: () => renderKarakamsaResult() },
   drishti: { title: "drishtiTitle", intro: ["drishtiIntro", "drishtiRules"], render: () => renderDrishtiResult() },
 };
@@ -1225,6 +1226,61 @@ function renderKarakaResult() {
   wrap.className = "table-wrap";
   wrap.appendChild(table);
   container.appendChild(wrap);
+}
+
+// Amatyakaraka: the readings for each planet and house group are shown before any chart is picked;
+// a chart adds its Amatyakaraka, the readings that apply and its link with the Atmakaraka.
+const AMK_PLANETS = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn"];
+const AMK_GROUPS = ["kendra", "trikona", "upachaya", "dusthana"];
+
+function renderAmatyakarakaResult() {
+  const container = document.getElementById("jaiminiResult");
+  container.classList.remove("hidden");
+  container.innerHTML = "";
+  const labels = L();
+  const ui = labels.ui;
+  const planet = (p) => labels.planets[p];
+  const chart = state.jaimini.result;
+  const addTable = (rows, header, className = "drishti-table") => {
+    const wrap = document.createElement("div");
+    wrap.className = "table-wrap";
+    wrap.appendChild(simpleTable(className, rows, header));
+    container.appendChild(wrap);
+  };
+
+  if (!chart) {
+    addTable(AMK_PLANETS.map((p) => [planet(p), ui.amkPlanet[p]]), [ui.colPlanet, ui.colAsAmk]);
+    addTable(AMK_GROUPS.map((g) => [ui.amkGroupName[g], ui.amkGroupReading[g]]), [ui.colHouses, ui.colReading]);
+    return;
+  }
+
+  const a = chart.amatyakaraka;
+  const place = (p, rasi, house) => fillTemplate(ui.ulLordIn, { lord: planet(p), rasi: labels.rasi[rasi], ord: ORDINAL[state.lang](house) });
+  const how = a.aspect ? ui.amkHow.aspect : a.same_rasi ? ui.amkHow.same : fillTemplate(ui.amkHow.kt, { ord: ORDINAL[state.lang](a.count) });
+  const relation = a.related ? fillTemplate(ui.amkRelated, { how }) : ui.amkNotRelated;
+  container.appendChild(jaiminiHead(chart));
+  const box = document.createElement("div");
+  box.className = "ayul-result-box";
+  const big = document.createElement("div");
+  big.className = "ul-summary";
+  big.textContent = fillTemplate(ui.amkIs, { planet: planet(a.planet), rasi: labels.rasi[a.rasi], ord: ORDINAL[state.lang](a.house) });
+  box.appendChild(big);
+  if (a.related) {
+    const note = document.createElement("div");
+    note.className = "ul-aspect-note";
+    note.textContent = relation;
+    box.appendChild(note);
+  }
+  container.appendChild(box);
+
+  const houseText = a.groups.map((g) => `${ui.amkGroupName[g]}. ${ui.amkGroupReading[g]}`).join(" ") || "\u2013";
+  addTable([
+    [ui.amkRowAk, place(a.atmakaraka, a.ak_rasi, a.ak_house)],
+    [ui.amkRowAmk, place(a.planet, a.rasi, a.house)],
+    [ui.amkRowCareer, ui.amkPlanet[a.planet]],
+    [ui.amkRowHouse, houseText],
+    [ui.amkRowRelation, relation],
+  ], null, "ul-details");
 }
 
 // Karakamsa Lagna: the readings are listed before any chart is picked; a chart adds the steps, the
