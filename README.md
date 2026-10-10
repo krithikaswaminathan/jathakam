@@ -71,7 +71,9 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   steps, the Upapada with the planets in and aspecting it, its lord and where it sits, and the 2nd
   rasi from the Upapada with its planets, aspects and lord. **Chara Karakas** ranks the seven
   planets from the Sun to Saturn by degree within the rasi (the seven karaka system, no Rahu or
-  Ketu), from the Atmakaraka down to the Darakaraka. **Karakamsa Lagna** is the Atmakaraka's
+  Ketu), from the Atmakaraka down to the Darakaraka. **Amatyakaraka**, the career karaka, gives the
+  reading for its planet and for its house from the lagna (kendra, trikona, upachaya, dusthana),
+  and says whether it is related to the Atmakaraka. **Karakamsa Lagna** is the Atmakaraka's
   Navamsa rasi, with the twelve houses counted from it in the Navamsa (the 12th marked as moksha)
   and the readings that apply. **Rasi Drishti** shows which rasi
   aspects which, and for a chart the planets in each rasi and the planets aspecting it.
@@ -232,3 +234,9 @@ python -m pytest tests/ -v
   from the Karakamsa: Ketu in the 2nd or 3rd, Venus in the 12th, Jupiter in a kendra, and the line
   of work from the Sun, Venus, Saturn, Mars or Rahu in the Karakamsa. The Atmakaraka itself, which
   is always there, gives no work reading (the user's choice).
+
+- Amatyakaraka readings come from the user's notes (Mani, Jaimini Astrology). Houses are counted
+  from the D1 lagna, and every house group a house falls in is read (the 1st is a kendra and a
+  trikona, the 10th a kendra and an upachaya, the 6th an upachaya and a dusthana). The Atmakaraka
+  and Amatyakaraka are related when they aspect each other by rasi drishti, share a rasi, or are
+  1, 4, 5, 7, 9 or 10 rasis apart.
