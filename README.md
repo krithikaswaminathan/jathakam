@@ -69,7 +69,8 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   the pada of the lagna, shows the steps, the Arudha with the planets in and aspecting it, and its
   lord. The **Upapada Lagna**, the arudha of the 12th house, read for marriage and the spouse. It shows the
   steps, the Upapada with the planets in and aspecting it, its lord and where it sits, and the 2nd
-  rasi from the Upapada with its planets, aspects and lord. **Chara Karakas** ranks the seven
+  rasi from the Upapada with its planets, aspects and lord. It also reads the Darakaraka with the
+  Upapada. **Chara Karakas** ranks the seven
   planets from the Sun to Saturn by degree within the rasi (the seven karaka system, no Rahu or
   Ketu), from the Atmakaraka down to the Darakaraka. **Amatyakaraka**, the career karaka, gives the
   reading for its planet and for its house from the lagna (kendra, trikona, upachaya, dusthana),
@@ -240,3 +241,9 @@ python -m pytest tests/ -v
   trikona, the 10th a kendra and an upachaya, the 6th an upachaya and a dusthana). The Atmakaraka
   and Amatyakaraka are related when they aspect each other by rasi drishti, share a rasi, or are
   1, 4, 5, 7, 9 or 10 rasis apart.
+
+- Darakaraka and Upapada, from the user's notes (Mani, Jaimini Astrology) with the user's choices:
+  related (marriage life changing) when they aspect each other by rasi drishti, are 1, 4, 5, 7, 9
+  or 10 apart (the same rasi included), or Jupiter or Venus is in or aspects the Darakaraka's rasi
+  or the Upapada (the Darakaraka does not count for its own rasi); adverse (karmic challenges in
+  marriage, but spiritual maturity) when 6/8 or 2/12 apart. A chart can be both.
