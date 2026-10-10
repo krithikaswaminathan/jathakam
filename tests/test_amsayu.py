@@ -106,3 +106,11 @@ def test_pindayu_has_no_increases_and_cuts_its_own_years():
     chart = _chart(0, {"Saturn": (340.0, False), "Sun": (150.0, False)})  # Sani in Meenam, the 12th
     sat = _row(compute_pindayu(chart, 5.0), "Saturn")
     assert sat.loss_days == sat.a_days and sat.c_days == 0
+
+
+def test_nisargayu_uses_the_natural_years_from_half_at_deep_neecham():
+    from app.pindayu import NISARGA_YEARS, compute_nisargayu
+    assert sum(NISARGA_YEARS.values()) == 120
+    chart = _chart(0, {"Saturn": (20.0, False), "Sun": (100.0, False)})  # Sani at deep neecham, Mesham 20
+    sat = _row(compute_nisargayu(chart, 5.0), "Saturn")
+    assert sat.max_years == 50 and sat.share == 0.5 and sat.a_days == 25 * 360

@@ -73,7 +73,7 @@ from app.kaala_pakai import compute_kaala_pakai
 from app.mudakku import compute_mudakku
 from app.navamsa_sashtashtagam import compute_navamsa_sashtashtagam
 from app.peyarchi import compute_peyarchis
-from app.pindayu import compute_pindayu
+from app.pindayu import compute_nisargayu, compute_pindayu
 from app.pranapada import compute_pranapada_longitude
 from app.tara import compute_tara_balam
 from app.tithi import compute_tithi
@@ -301,7 +301,7 @@ def remove_chart(chart_id: int) -> None:
 
 
 def _ayul_response(name: str, dob, tob, pob_label: str, latitude: float, longitude: float, timezone: str) -> AyulResponse:
-    """Amsayu and Pindayu for the Ayul Nirnayam calculator. The page shows the method the user picks."""
+    """Amsayu, Pindayu and Nisargayu for the Ayul Nirnayam calculator. The page shows the method the user picks."""
     try:
         utc_offset = compute_utc_offset(timezone, dob, tob)
     except (ZoneInfoNotFoundError, ValueError):
@@ -319,6 +319,7 @@ def _ayul_response(name: str, dob, tob, pob_label: str, latitude: float, longitu
         lagna_longitude,
     )
     pindayu = compute_pindayu(d1, lagna_longitude)
+    nisargayu = compute_nisargayu(d1, lagna_longitude)
 
     def row_out(row) -> dict:
         retro = row.body in d1.grahas and d1.grahas[row.body].retrograde
@@ -333,6 +334,7 @@ def _ayul_response(name: str, dob, tob, pob_label: str, latitude: float, longitu
         lagna_degree=lagna_longitude % 30,
         amsayu=AmsayuOut(**{**vars(amsayu), "rows": [row_out(r) for r in amsayu.rows]}),
         pindayu=PindayuOut(**{**vars(pindayu), "rows": [row_out(r) for r in pindayu.rows]}),
+        nisargayu=PindayuOut(**{**vars(nisargayu), "rows": [row_out(r) for r in nisargayu.rows]}),
     )
 
 

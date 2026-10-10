@@ -347,3 +347,4 @@ class AyulResponse(BaseModel):
     lagna_degree: float
     amsayu: AmsayuOut
     pindayu: PindayuOut
+    nisargayu: PindayuOut  # same shape as Pindayu, with the natural years

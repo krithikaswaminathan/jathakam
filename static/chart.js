@@ -639,8 +639,9 @@ function renderPariharam() {
 
 // --- Ayul Nirnayam: its own side nav (the calculator, then a page on each method) ---
 
-// Nisargayu (the Moon) is not added yet, so both of the others are shown for comparison.
-const AYUL_STRONG_METHODS = { lagna: ["amsayu"], sun: ["pindayu"], moon: ["amsayu", "pindayu"] };
+const AYUL_STRONG_METHODS = { lagna: ["amsayu"], sun: ["pindayu"], moon: ["nisargayu"] };
+const AYUL_METHODS = ["amsayu", "pindayu", "nisargayu"];
+const AYUL_METHOD_LABEL = { amsayu: "ayulAmsayu", pindayu: "ayulPindayu", nisargayu: "ayulNisargayu" };
 
 function applyAyulLanguage() {
   const ui = L().ui;
@@ -914,7 +915,7 @@ function pindayuBlock(p) {
 function ayulMethodSection(method) {
   const ui = L().ui;
   const data = state.ayul.result[method];
-  const name = method === "amsayu" ? ui.ayulAmsayu : ui.ayulPindayu;
+  const name = ui[AYUL_METHOD_LABEL[method]];
   const section = document.createElement("div");
   const h3 = document.createElement("h3");
   h3.className = "timing-title";
@@ -955,25 +956,22 @@ function renderAyulResult() {
   head.textContent = `${who} · ${ui.lagna} ${labels.rasi[r.lagna_rasi]} ${formatDMS(r.lagna_degree)}`;
   container.appendChild(head);
 
-  if (state.ayul.strong === "moon") {
-    const p = document.createElement("p");
-    p.className = "ayul-other";
-    p.textContent = ui.ayulNisarga;
-    container.appendChild(p);
-  }
   for (const method of state.ayul.methods) container.appendChild(ayulMethodSection(method));
-  const other = ["amsayu", "pindayu"].find((m) => !state.ayul.methods.includes(m));
-  if (other) {
+  const others = AYUL_METHODS.filter((m) => !state.ayul.methods.includes(m));
+  if (others.length) {
     const p = document.createElement("p");
     p.className = "ayul-other";
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.textContent = ui.ayulCompare.replace("{method}", other === "amsayu" ? ui.ayulAmsayu : ui.ayulPindayu);
-    btn.addEventListener("click", () => {
-      state.ayul.methods.push(other);
-      renderAyulResult();
+    others.forEach((other, i) => {
+      if (i) p.append(" \u00B7 ");
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = ui.ayulCompare.replace("{method}", ui[AYUL_METHOD_LABEL[other]]);
+      btn.addEventListener("click", () => {
+        state.ayul.methods.push(other);
+        renderAyulResult();
+      });
+      p.appendChild(btn);
     });
-    p.appendChild(btn);
     container.appendChild(p);
   }
 

@@ -55,11 +55,10 @@ const LABELS = {
       ayulSource: "Whose chart", ayulSaved: "A saved chart", ayulNew: "Enter birth details", ayulChart: "Saved chart", ayulNoSaved: "No saved charts yet",
       ayulStrong: "Which is the strongest", ayulStrongLagna: "Lagna (Amsayu)", ayulStrongSun: "Sun (Pindayu)", ayulStrongMoon: "Moon (Nisargayu)",
       ayulCalculate: "Calculate", ayulWorking: "Working it out...", ayulNeedDetails: "Please enter the date, time and place of birth", ayulError: "Could not work it out. ",
-      ayulAmsayu: "Amsayu", ayulPindayu: "Pindayu", ayulComesTo: "{method} comes to",
+      ayulAmsayu: "Amsayu", ayulPindayu: "Pindayu", ayulNisargayu: "Nisargayu", ayulComesTo: "{method} comes to",
       ayulYmd: "{y}y {m}m {d}d", ayulYmdLong: "{y} years {m} months {d} days",
       ayulSteps: "The total is {c} in Chandramanam years of 360 days. Dividing its {days} days by 365.2654 gives {solar} Souramanam years.",
       ayulCompare: "Compare with {method}",
-      ayulNisarga: "Nisargayu, for when the Moon is the strongest, is not added yet. We will work it out on screen first. Amsayu and Pindayu are below for comparison.",
       ayulNote: "This is a traditional calculation from the classical texts, not a prediction. Tested against known charts it came close for some and was many years out for others, so it is no guide to anyone's actual span of life.",
       colHouse: "House", colAOriginal: "A original", colIncrease: "Increase", colB: "B", colHaranams: "Haranams", colC: "C",
       colShare: "Share of full years", colYears: "Years", colAfterHaranams: "After haranams", totalWord: "Total",
@@ -210,11 +209,10 @@ const LABELS = {
       ayulSource: "யாருடைய ஜாதகம்", ayulSaved: "சேமித்த ஜாதகம்", ayulNew: "பிறப்பு விவரங்களை உள்ளிடவும்", ayulChart: "சேமித்த ஜாதகம்", ayulNoSaved: "இன்னும் சேமித்த ஜாதகம் இல்லை",
       ayulStrong: "எது வலிமையானது", ayulStrongLagna: "லக்னம் (அம்சாயு)", ayulStrongSun: "சூரியன் (பிண்டாயு)", ayulStrongMoon: "சந்திரன் (நிசர்காயு)",
       ayulCalculate: "கணிக்க", ayulWorking: "கணிக்கிறது...", ayulNeedDetails: "பிறந்த தேதி, நேரம், இடத்தை உள்ளிடவும்", ayulError: "கணிக்க முடியவில்லை. ",
-      ayulAmsayu: "அம்சாயு", ayulPindayu: "பிண்டாயு", ayulComesTo: "{method} கணக்கு",
+      ayulAmsayu: "அம்சாயு", ayulPindayu: "பிண்டாயு", ayulNisargayu: "நிசர்காயு", ayulComesTo: "{method} கணக்கு",
       ayulYmd: "{y}வ {m}மா {d}நா", ayulYmdLong: "{y} வருடம் {m} மாதம் {d} நாள்",
       ayulSteps: "360 நாள் சந்திரமான வருடங்களில் மொத்தம் {c}. அதன் {days} நாட்களை 365.2654 ஆல் வகுத்தால் {solar} சௌரமான வருடங்கள்.",
       ayulCompare: "{method} உடன் ஒப்பிடுக",
-      ayulNisarga: "சந்திரன் வலிமையாக இருக்கும்போது பயன்படும் நிசர்காயு இன்னும் சேர்க்கப்படவில்லை. முதலில் திரையில் கணித்துப் பார்ப்போம். ஒப்பிடுவதற்காக அம்சாயுவும் பிண்டாயுவும் கீழே உள்ளன.",
       ayulNote: "இது பாரம்பரிய நூல்களின்படி செய்யப்படும் கணக்கு மட்டுமே, முன்கணிப்பு அல்ல. அறிந்த ஜாதகங்களில் சோதித்தபோது சிலவற்றுக்கு அருகில் வந்தது, சிலவற்றுக்குப் பல வருடங்கள் விலகியது. எனவே இது யாருடைய உண்மையான ஆயுளுக்கும் வழிகாட்டி அல்ல.",
       colHouse: "பாவம்", colAOriginal: "A மூல வருடம்", colIncrease: "கூடுதல்", colB: "B", colHaranams: "ஹரணங்கள்", colC: "C",
       colShare: "முழு வருடத்தில் பங்கு", colYears: "வருடம்", colAfterHaranams: "ஹரணத்திற்குப் பின்", totalWord: "மொத்தம்",
@@ -1060,5 +1058,40 @@ const AYUL_TOPICS = {
       ta: "இங்குள்ள இரண்டு விதிகள் நூலில் உள்ளவை அல்ல, நாம் கடைப்பிடிப்பவை. ஒரு ராசியில் அதிக வருடங்கள் உள்ள கிரகமே சக்ரபாத குறைப்பை ஏற்கிறது, புதன் அஸ்தங்கத்திலிருந்து விலக்கப்படுகிறது. அறிந்த ஜாதகங்களில் சோதித்தபோது அம்சாயு ஒன்றுக்கு சில நாட்களுக்குள், மேலும் இரண்டுக்கு 5 வருடங்களுக்குள் வந்தது, சிலவற்றுக்கு 18 முதல் 50 வருடங்கள் குறைவாக வந்தது.",
     },
     sources: [BPHS_43, { title: "The Haranas of Amsayurdaya (Thoughts on Jyotish)", url: "https://medium.com/thoughts-on-jyotish/the-bharanas-of-amsayurdaya-abfa771045d4" }],
+  },
+  nisargayu: {
+    title: { en: "Nisargayu", ta: "நிசர்காயு" },
+    intro: {
+      en: "Nisargayu is used when the Moon is the strongest of the lagna, the Sun and the Moon. It is worked out like Pindayu. The only difference is the years each planet gives at its deep ucham point, which are its natural years from Brihat Parashara Hora Shastra 43.16-17. A planet at its deep neecham point gives half of them.",
+      ta: "லக்னம், சூரியன், சந்திரன் மூன்றில் சந்திரன் வலிமையாக இருக்கும்போது நிசர்காயு பயன்படுகிறது. இது பிண்டாயு போலவே கணிக்கப்படுகிறது. ஒரே வேறுபாடு, பரம உச்சத்தில் ஒவ்வொரு கிரகமும் தரும் வருடங்கள். அவை பிருஹத் பராசர ஹோரா சாஸ்திரம் 43.16-17 கூறும் இயற்கை வருடங்கள். பரம நீசத்தில் உள்ள கிரகம் அதில் பாதி தருகிறது.",
+    },
+    tableHeader: [{ en: "Planet", ta: "கிரகம்" }, { en: "At deep ucham", ta: "பரம உச்சத்தில்" }, { en: "At deep neecham", ta: "பரம நீசத்தில்" }],
+    table: [["Sun", 20], ["Moon", 1], ["Mars", 2], ["Mercury", 9], ["Jupiter", 18], ["Venus", 20], ["Saturn", 50]].map(([planet, years]) => [
+      bothLangs((l) => LABELS[l].planets[planet]),
+      bothLangs((l) => `${years} ${l === "ta" ? "வருடம்" : years === 1 ? "year" : "years"}`),
+      bothLangs((l) => `${years / 2} ${l === "ta" ? "வருடம்" : years / 2 === 1 ? "year" : "years"}`),
+    ]),
+    sections: [
+      {
+        heading: { en: "Each planet's years", ta: "ஒவ்வொரு கிரகத்தின் வருடங்கள்" },
+        text: {
+          en: "Take the planet's distance from its deep neecham point, the Ayusphuta. If it is more than 180°, take it from 360°. The planet's years are its neecham years, plus the same again times the Ayusphuta divided by 180. So they run from the neecham years at deep neecham up to the full years at deep ucham. The lagna gives one year for each rasi it has crossed from Mesham and the part of a rasi in proportion, as in Pindayu.",
+          ta: "கிரகம் தன் பரம நீசத்திலிருந்து உள்ள தூரமே ஆயுஸ்புடம். அது 180° க்கு மேல் இருந்தால் 360° இலிருந்து கழிக்கவும். கிரகத்தின் வருடங்கள் அதன் நீச வருடங்களுடன், அதே அளவை ஆயுஸ்புடத்தால் பெருக்கி 180 ஆல் வகுத்ததைக் கூட்டினால் கிடைக்கும். ஆகவே பரம நீசத்தில் நீச வருடங்களிலிருந்து பரம உச்சத்தில் முழு வருடங்கள் வரை செல்கிறது. லக்னம் மேஷத்திலிருந்து கடந்த ஒவ்வொரு ராசிக்கும் ஒரு வருடமும், மீதிப் பகுதிக்கு விகிதப்படியும் தருகிறது, பிண்டாயுவில் உள்ளது போலவே.",
+        },
+      },
+      {
+        heading: { en: "Haranams", ta: "ஹரணங்கள்" },
+        text: {
+          en: "The same haranams as in Pindayu and Amsayu are taken from each planet's years. Poddar also lists Krurodaya, which is not used here, as in the other two.",
+          ta: "பிண்டாயு, அம்சாயுவில் உள்ள அதே ஹரணங்கள் ஒவ்வொரு கிரகத்தின் வருடங்களிலிருந்து கழிக்கப்படுகின்றன. போத்தார் க்ரூரோதயத்தையும் குறிப்பிடுகிறார், மற்ற இரண்டிலும் போலவே அது இங்கே பயன்படுத்தப்படவில்லை.",
+        },
+      },
+      SOURAMANAM_SECTION,
+    ],
+    note: {
+      en: "Saturn's 50 years are well over a third of the 120, so where Saturn sits decides much of the result. Tested against known charts, Nisargayu came within about 3 to 6 years for four and was more than 20 years short for others.",
+      ta: "120 இல் சனியின் 50 வருடங்கள் மூன்றில் ஒரு பங்குக்கும் மேல், எனவே சனி இருக்கும் இடமே முடிவின் பெரும்பகுதியைத் தீர்மானிக்கிறது. அறிந்த ஜாதகங்களில் சோதித்தபோது நிசர்காயு நான்குக்கு சுமார் 3 முதல் 6 வருடங்களுக்குள் வந்தது, சிலவற்றுக்கு 20 வருடங்களுக்கு மேல் குறைவாக வந்தது.",
+    },
+    sources: [BPHS_43, { title: "Sarajit Poddar, Health and Longevity, p. 234", url: "https://a.co/015XCpsD" }],
   },
 };

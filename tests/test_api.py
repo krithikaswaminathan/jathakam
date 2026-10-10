@@ -156,6 +156,7 @@ def test_ayul_from_birth_details(client):
     assert body["amsayu"]["c_days"] == 74 * 360 + 10 * 30 + 19
     assert round(body["amsayu"]["solar_years"], 2) == 73.81
     assert round(body["pindayu"]["solar_years"], 1) == 87.6
+    assert round(body["nisargayu"]["solar_years"], 1) == 76.8
     assert [r["body"] for r in body["amsayu"]["rows"]][0] == "Lagna"
     sun = next(r for r in body["amsayu"]["rows"] if r["body"] == "Sun")
     assert sun["haranams"] == [{"kind": "chakrapata", "share": 0.2, "house": 8}]
