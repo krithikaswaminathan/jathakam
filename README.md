@@ -56,6 +56,13 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
 - **Prasannam**: a tab at the top that casts the chart for this moment where you are (the
   browser's location, or a place you type if location is not allowed), draws it, and gives the
   Chandra Nadi: the Moon's star, pada, exact degree and the rasi it is crossing. Nothing is saved.
+- **Ayul Nirnayam**: a tab at the top with its own side nav (Calculator, Pindayu and Amsayu).
+  The calculator takes a saved chart or birth details typed in (not saved) and asks which of the
+  lagna, the Sun and the Moon is the strongest. The lagna gives Amsayu and the Sun Pindayu, each
+  shown step by step with every planet's years, increases and haranams, the total in Chandramanam
+  years and the same in Souramanam years. Nisargayu (the Moon) is not added yet, so picking the
+  Moon shows both of the others. The other method can be shown alongside for comparison. No date
+  is ever shown, and the page says it is a traditional calculation, not a prediction.
 - **Hidden Ucham / Neecham** tab, after Ucham / Neecham and laid out like Moorthy: where each
   planet hides its ucham, neecham and moolatrikonam (count the padas from its Kaala Purusha pada
   A to where it sits B, both counted, to get C, then count C padas again from B), with the bhavam,
@@ -180,3 +187,19 @@ python -m pytest tests/ -v
   lowest point lasts one degree ending at the deep degree, so the Sun's paramoccham runs from just
   past 9° to 10° of Mesham. Rahu (exalted in Taurus) and Ketu (in Scorpio) peak at 3°, like the
   Moon, as given by the user, putting Rahu's paramoccham in Krittika 2 and Ketu's in Vishakha 4.
+- Ayul Nirnayam follows BPHS chapter 43, with working rules agreed against a hand-worked chart
+  (Padmini Ramachandran, which it matches to within 12 days with the hand-worked lagna). Years are
+  360 days of 30-day months, and Souramanam is the total days divided by 365.2654.
+  Amsayu A is each planet's navamsas from Mesham (longitude in minutes / 200, less multiples of
+  12) and the lagna's longitude / 30. B triples a planet in its ucham rasi or vakram, otherwise
+  doubles one in its own house, vargottamam or its own house in D9 or D3, once only, never the
+  lagna or a planet 29° or more into its rasi. Pindayu gives each planet its full years (19, 25,
+  15, 12, 15, 21, 20) at deep ucham falling to half at deep neecham, the lagna as in Amsayu, and
+  no increases. Both then take the same haranams, as shares of the years before increases:
+  Chakrapata in houses 7 to 12 (whole rasis, a planet 29°+ in the next house; malefics 1/6 to all,
+  benefics half; one planet per rasi, the one with the most years, BPHS 43.10-11), Ashtanga half
+  for a combust Moon, Mars or Jupiter (Mercury exempt, a working rule), and Shatru Kshetra a third
+  in a natural enemy's rasi unless vakram or already combust (BPHS 43.22). Krurodaya is not used.
+  Which of the lagna, Sun and Moon is strongest is the user's choice; the app does not judge it.
+  Tested on eight known charts, neither method was reliable on its own (Amsayu from 0 to 52 years
+  out, Pindayu 5 to 20).
