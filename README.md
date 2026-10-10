@@ -201,9 +201,9 @@ python -m pytest tests/ -v
   Sarajit Poddar's Health and Longevity, p. 234. All three then take the same haranams, as shares of the years before increases:
   Chakrapata in houses 7 to 12 (whole rasis, a planet 29°+ in the next house; malefics 1/6 to all,
   benefics half; one planet per rasi, the one with the most years, BPHS 43.10-11), Ashtanga half
-  for a combust Moon, Mars or Jupiter (Mercury exempt, a working rule), and Shatru Kshetra a third
-  in a natural enemy's rasi unless vakram or already combust (BPHS 43.22). Krurodaya is not used.
+  for a combust Moon (12°), Mars (17°), Mercury (14°, 12° vakram) or Jupiter (11°), and Shatru
+  Kshetra a third in a natural enemy's rasi unless vakram, Mars, or already combust (BPHS 43.22),
+  as in Sarajit Poddar's Health and Longevity, p. 235. Krurodaya is not used.
   Which of the lagna, Sun and Moon is strongest is the user's choice; the app does not judge it.
-  Poddar (p. 235) exempts Mars from Shatru Kshetra and cuts Mercury for Ashtanga; the app does
-  neither. Tested on eight known charts, no method was reliable on its own (Amsayu from 0 to 52
-  years out, Pindayu 5 to 20, Nisargayu 2 to 31).
+  Tested on eight known charts, no method was reliable on its own (Amsayu from 0 to 52 years
+  out, Pindayu 1 to 20, Nisargayu 2 to 30).
