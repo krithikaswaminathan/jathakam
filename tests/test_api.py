@@ -188,4 +188,8 @@ def test_jaimini_for_a_saved_chart_and_birth_details(client):
     assert (padmini["upapada"]["rasi"], padmini["arudha_lagna"]["rasi"]) == (8, 11)  # Dhanusu, Meenam
     assert padmini["arudha_upapada_aspect"] is True  # two dual rasis
     assert saved["arudha_upapada_aspect"] is False  # Simham does not aspect Kumbham
+    karakas = saved["chara_karakas"]
+    assert [k["karaka"] for k in karakas] == ["AK", "AmK", "BK", "MK", "PK", "GK", "DK"]
+    degrees = [k["degree_in_sign"] for k in karakas]
+    assert degrees == sorted(degrees, reverse=True)
     assert client.get("/api/jaimini/99999").status_code == 404

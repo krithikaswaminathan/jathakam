@@ -379,6 +379,13 @@ class RasiDrishtiOut(BaseModel):
     aspected_by: list[str]
 
 
+class CharaKarakaOut(BaseModel):
+    karaka: str  # "AK", "AmK", "BK", "MK", "PK", "GK" or "DK"
+    planet: str
+    rasi: int
+    degree_in_sign: float
+
+
 class JaiminiResponse(BaseModel):
     """Everything the Jaimini Sutras calculators show for one chart."""
     name: str
@@ -391,3 +398,4 @@ class JaiminiResponse(BaseModel):
     upapada: ArudhaOut
     arudha_upapada_aspect: bool  # the Arudha Lagna and Upapada aspect each other
     rasi_drishti: list[RasiDrishtiOut]
+    chara_karakas: list[CharaKarakaOut]

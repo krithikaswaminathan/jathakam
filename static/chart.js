@@ -1020,6 +1020,7 @@ function renderAyulResult() {
 const JAIMINI_VIEWS = {
   arudha: { title: "alTitle", intro: ["alIntro", "alMethod"], render: () => renderArudhaResult("arudha_lagna") },
   upapada: { title: "upapadaTitle", intro: ["upapadaIntro", "upapadaMethod"], render: () => renderArudhaResult("upapada") },
+  karaka: { title: "karakaTitle", intro: ["karakaIntro", "karakaRules"], render: () => renderKarakaResult() },
   drishti: { title: "drishtiTitle", intro: ["drishtiIntro", "drishtiRules"], render: () => renderDrishtiResult() },
 };
 
@@ -1195,6 +1196,34 @@ function renderArudhaResult(kind) {
     );
   }
   container.appendChild(simpleTable("ul-details", rows));
+}
+
+// Chara karakas: the karakas and what they signify are shown before any chart is picked; a chart
+// adds the planet holding each one, its rasi and its degree in the rasi.
+const KARAKA_ORDER = ["AK", "AmK", "BK", "MK", "PK", "GK", "DK"];
+
+function renderKarakaResult() {
+  const container = document.getElementById("jaiminiResult");
+  container.classList.remove("hidden");
+  container.innerHTML = "";
+  const labels = L();
+  const ui = labels.ui;
+  const chart = state.jaimini.result;
+  let table;
+  if (!chart) {
+    const rows = KARAKA_ORDER.map((k) => [ui.karakaNames[k], ui.karakaMeanings[k]]);
+    table = simpleTable("drishti-table", rows, [ui.colKaraka, ui.colSignifies]);
+  } else {
+    container.appendChild(jaiminiHead(chart));
+    const rows = chart.chara_karakas.map((k) => [
+      ui.karakaNames[k.karaka], labels.planets[k.planet], labels.rasi[k.rasi], formatDMS(k.degree_in_sign), ui.karakaMeanings[k.karaka],
+    ]);
+    table = simpleTable("drishti-table", rows, [ui.colKaraka, ui.colPlanet, ui.colRasi, ui.colDegInRasi, ui.colSignifies]);
+  }
+  const wrap = document.createElement("div");
+  wrap.className = "table-wrap";
+  wrap.appendChild(table);
+  container.appendChild(wrap);
 }
 
 // Rasi drishti: the table of which rasi aspects which is shown before any chart is picked (it is

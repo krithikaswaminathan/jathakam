@@ -23,6 +23,7 @@ from app.constants import (
     RASI_LORDS,
 )
 from app.amsayu import compute_amsayu
+from app.chara_karaka import compute_chara_karakas
 from app.dasa import compute_mahadasas, compute_sub_periods
 from app.db import SavedChart, delete_chart, get_chart, init_db, list_charts, save_chart
 from app.dignity import compute_dignities
@@ -378,6 +379,7 @@ def jaimini(req: AyulRequest) -> JaiminiResponse:
         upapada=vars(upapada),
         arudha_upapada_aspect=arudha_and_upapada_aspect(arudha_lagna, upapada),
         rasi_drishti=[vars(r) for r in compute_rasi_drishti(d1)],
+        chara_karakas=[vars(k) for k in compute_chara_karakas(d1)],
     )
 
 
