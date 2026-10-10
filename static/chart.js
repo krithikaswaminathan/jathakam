@@ -31,7 +31,8 @@ let state = {
   // Ayul Nirnayam: view is "calc" or a key of AYUL_TOPICS; result is the last /api/ayul response;
   // strong is the pick ("lagna", "sun" or "moon"); methods are the ones shown, in order.
   ayul: { view: "calc", result: null, strong: null, methods: [] },
-  // Jaimini Sutras: view is the calculator shown (only "upapada" so far); result its last response.
+  // Jaimini Sutras: view is a key of JAIMINI_VIEWS; result is the last /api/jaimini response,
+  // which every view reads.
   jaimini: { view: "upapada", result: null },
 };
 
@@ -1014,9 +1015,12 @@ function renderAyulResult() {
   container.appendChild(note);
 }
 
-// --- Jaimini Sutras: its own side nav of calculators (only the Upapada Lagna so far) ---
+// --- Jaimini Sutras: its own side nav of calculators, all reading one /api/jaimini result ---
 
-const JAIMINI_VIEWS = { upapada: "upapadaTitle" };
+const JAIMINI_VIEWS = {
+  upapada: { title: "upapadaTitle", intro: ["upapadaIntro", "upapadaMethod"], render: () => renderUpapadaResult() },
+  drishti: { title: "drishtiTitle", intro: ["drishtiIntro", "drishtiRules"], render: () => renderDrishtiResult() },
+};
 
 function applyJaiminiLanguage() {
   const ui = L().ui;
@@ -1030,12 +1034,12 @@ function renderJaimini() {
   const ui = L().ui;
   const nav = document.getElementById("jaiminiNavList");
   nav.innerHTML = "";
-  for (const [key, labelKey] of Object.entries(JAIMINI_VIEWS)) {
+  for (const [key, view] of Object.entries(JAIMINI_VIEWS)) {
     const li = document.createElement("li");
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "pariharam-topic" + (key === state.jaimini.view ? " active" : "");
-    btn.textContent = ui[labelKey];
+    btn.textContent = ui[view.title];
     btn.addEventListener("click", () => {
       state.jaimini.view = key;
       renderJaimini();
@@ -1043,16 +1047,17 @@ function renderJaimini() {
     li.appendChild(btn);
     nav.appendChild(li);
   }
-  document.getElementById("jaiminiTitle").textContent = ui[JAIMINI_VIEWS[state.jaimini.view]];
+  const view = JAIMINI_VIEWS[state.jaimini.view];
+  document.getElementById("jaiminiTitle").textContent = ui[view.title];
   const intro = document.getElementById("jaiminiIntro");
   intro.innerHTML = "";
-  for (const key of ["upapadaIntro", "upapadaMethod"]) {
+  for (const key of view.intro) {
     const p = document.createElement("p");
     p.className = "calc-intro";
     p.textContent = ui[key];
     intro.appendChild(p);
   }
-  renderUpapadaResult();
+  view.render();
 }
 
 document.getElementById("jaiminiForm").addEventListener("submit", async (e) => {
@@ -1060,7 +1065,7 @@ document.getElementById("jaiminiForm").addEventListener("submit", async (e) => {
   const ui = L().ui;
   const status = document.getElementById("jaiminiStatus");
   status.textContent = ui.workingOut;
-  const res = await jaiminiPicker.fetch("/api/upapada");
+  const res = await jaiminiPicker.fetch("/api/jaimini");
   if (typeof res === "string") {
     status.textContent = res;
     return;
@@ -1071,7 +1076,7 @@ document.getElementById("jaiminiForm").addEventListener("submit", async (e) => {
   }
   status.textContent = "";
   state.jaimini.result = await res.json();
-  renderUpapadaResult();
+  JAIMINI_VIEWS[state.jaimini.view].render();
 });
 
 function simpleTable(className, rows, header) {
@@ -1098,25 +1103,44 @@ function simpleTable(className, rows, header) {
   return table;
 }
 
+function fillTemplate(template, values) {
+  return Object.entries(values).reduce((t, [k, v]) => t.replaceAll(`{${k}}`, v), template);
+}
+
+function noneText() {
+  const word = L().ui.noneWord;
+  return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
+// The chart line at the top of a Jaimini result: who, when, where and the lagna.
+function jaiminiHead(r) {
+  const labels = L();
+  const head = document.createElement("div");
+  head.className = "yoga-summary";
+  const who = [r.name, r.dob, r.tob.slice(0, 5), r.pob_label].filter(Boolean).join(" \u00B7 ");
+  head.textContent = `${who} \u00B7 ${labels.ui.lagna} ${labels.rasi[r.lagna_rasi]} ${formatDMS(r.lagna_degree)}`;
+  return head;
+}
+
 function renderUpapadaResult() {
   const container = document.getElementById("jaiminiResult");
-  const r = state.jaimini.result;
-  container.classList.toggle("hidden", !r);
+  const chart = state.jaimini.result;
+  container.classList.toggle("hidden", !chart);
   container.innerHTML = "";
-  if (!r) return;
+  if (!chart) return;
+  const r = chart.upapada;
   const labels = L();
   const ui = labels.ui;
   const rasi = (i) => labels.rasi[i];
   const planet = (p) => labels.planets[p];
-  const fill = (template, values) => Object.entries(values).reduce((t, [k, v]) => t.replaceAll(`{${k}}`, v), template);
-  const planetList = (names) => (names.length ? names.map(planet).join(", ") : ui.noneWord.charAt(0).toUpperCase() + ui.noneWord.slice(1));
-  const house = (rasiIndex) => ORDINAL[state.lang]((rasiIndex - r.lagna_rasi + 12) % 12 + 1);
+  const fill = fillTemplate;
+  const planetList = (names) => (names.length ? names.map(planet).join(", ") : noneText());
+  const house = (rasiIndex) => ORDINAL[state.lang]((rasiIndex - chart.lagna_rasi + 12) % 12 + 1);
+  const where = Object.fromEntries(chart.rasi_drishti.flatMap((d) => d.planets.map((p) => [p, d.rasi])));
+  const aspectedBy = (names) =>
+    names.length ? names.map((p) => fill(ui.ulAspectedFrom, { planet: planet(p), rasi: rasi(where[p]) })).join(", ") : noneText();
 
-  const head = document.createElement("div");
-  head.className = "yoga-summary";
-  const who = [r.name, r.dob, r.tob.slice(0, 5), r.pob_label].filter(Boolean).join(" · ");
-  head.textContent = `${who} · ${ui.lagna} ${rasi(r.lagna_rasi)} ${formatDMS(r.lagna_degree)}`;
-  container.appendChild(head);
+  container.appendChild(jaiminiHead(chart));
 
   const box = document.createElement("div");
   box.className = "ayul-result-box";
@@ -1139,11 +1163,44 @@ function renderUpapadaResult() {
   container.appendChild(simpleTable("ul-details", [
     [ui.upapadaTitle, `${rasi(r.rasi)} (${house(r.rasi)})`],
     [ui.ulRowPlanets, planetList(r.planets)],
+    [ui.ulRowAspectedBy, aspectedBy(r.aspected_by)],
     [ui.ulRowLord, lordIn(r.lord, r.lord_sits_in)],
     [ui.ulRowSecond, `${rasi(r.second)} (${house(r.second)})`],
     [ui.ulRowSecondPlanets, planetList(r.second_planets)],
+    [ui.ulRowAspectedBy, aspectedBy(r.second_aspected_by)],
     [ui.ulRowLord, lordIn(r.second_lord, r.second_lord_rasi)],
   ]));
+}
+
+// Rasi drishti: the table of which rasi aspects which is shown before any chart is picked (it is
+// the same for every chart); a chart adds its house, the planets in each rasi and those aspecting it.
+const JAIMINI_ASPECTS = (rasi) => {
+  const counts = [0, 3, 6, 9].includes(rasi) ? [5, 8, 11] : [1, 4, 7, 10].includes(rasi) ? [3, 6, 9] : [4, 7, 10];
+  return counts.map((c) => (rasi + c - 1) % 12);
+};
+
+function renderDrishtiResult() {
+  const container = document.getElementById("jaiminiResult");
+  container.classList.remove("hidden");
+  container.innerHTML = "";
+  const labels = L();
+  const ui = labels.ui;
+  const chart = state.jaimini.result;
+  const planets = (names) => (names.length ? names.map((p) => labels.planets[p]).join(", ") : "\u2013");
+  const aspectsText = (list) => list.map((i) => labels.rasi[i]).join(", ");
+  if (!chart) {
+    const rows = [...Array(12).keys()].map((i) => [labels.rasi[i], aspectsText(JAIMINI_ASPECTS(i))]);
+    container.appendChild(simpleTable("drishti-table", rows, [ui.colRasi, ui.colAspects]));
+    return;
+  }
+  container.appendChild(jaiminiHead(chart));
+  const rows = chart.rasi_drishti.map((d) => [
+    `${labels.rasi[d.rasi]} (${ORDINAL[state.lang](d.house)})`, planets(d.planets), aspectsText(d.aspects), planets(d.aspected_by),
+  ]);
+  const wrap = document.createElement("div");
+  wrap.className = "table-wrap";
+  wrap.appendChild(simpleTable("drishti-table", rows, [ui.colRasi, ui.colPlanetsIn, ui.colAspects, ui.colAspectedBy]));
+  container.appendChild(wrap);
 }
 
 function readingTable(header, rows) {

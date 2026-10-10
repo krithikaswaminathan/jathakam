@@ -350,13 +350,7 @@ class AyulResponse(BaseModel):
     nisargayu: PindayuOut  # same shape as Pindayu, with the natural years
 
 
-class UpapadaResponse(BaseModel):
-    name: str
-    dob: date
-    tob: time
-    pob_label: str
-    lagna_rasi: int
-    lagna_degree: float
+class UpapadaOut(BaseModel):
     twelfth: int
     twelfth_lord: str
     lord_rasi: int
@@ -366,9 +360,31 @@ class UpapadaResponse(BaseModel):
     rasi: int
     house: int
     planets: list[str]
+    aspected_by: list[str]
     lord: str
     lord_sits_in: int
     second: int
     second_planets: list[str]
+    second_aspected_by: list[str]
     second_lord: str
     second_lord_rasi: int
+
+
+class RasiDrishtiOut(BaseModel):
+    rasi: int
+    house: int
+    planets: list[str]
+    aspects: list[int]
+    aspected_by: list[str]
+
+
+class JaiminiResponse(BaseModel):
+    """Everything the Jaimini Sutras calculators show for one chart."""
+    name: str
+    dob: date
+    tob: time
+    pob_label: str
+    lagna_rasi: int
+    lagna_degree: float
+    upapada: UpapadaOut
+    rasi_drishti: list[RasiDrishtiOut]

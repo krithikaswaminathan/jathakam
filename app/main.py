@@ -54,6 +54,7 @@ from app.models import (
     GandanthamOut,
     GrahaOut,
     HiddenDignityOut,
+    JaiminiResponse,
     KaalaPakaiOut,
     MudakkuOut,
     NodeTransitOut,
@@ -66,7 +67,6 @@ from app.models import (
     TaraEntryOut,
     TithiOut,
     TransitWindowOut,
-    UpapadaResponse,
     UpasanaOut,
     YogaOut,
 )
@@ -75,6 +75,7 @@ from app.mudakku import compute_mudakku
 from app.navamsa_sashtashtagam import compute_navamsa_sashtashtagam
 from app.peyarchi import compute_peyarchis
 from app.pindayu import compute_nisargayu, compute_pindayu
+from app.rasi_drishti import compute_rasi_drishti
 from app.pranapada import compute_pranapada_longitude
 from app.tara import compute_tara_balam
 from app.tithi import compute_tithi
@@ -366,18 +367,20 @@ def ayul_for_saved_chart(chart_id: int) -> AyulResponse:
     return ayul(_saved_birth(chart_id))
 
 
-@app.post("/api/upapada", response_model=UpapadaResponse)
-def upapada(req: AyulRequest) -> UpapadaResponse:
+@app.post("/api/jaimini", response_model=JaiminiResponse)
+def jaimini(req: AyulRequest) -> JaiminiResponse:
     d1, _longitudes, _speeds, lagna_longitude = _birth_chart(req.dob, req.tob, req.latitude, req.longitude, req.timezone)
-    return UpapadaResponse(
+    return JaiminiResponse(
         name=req.name, dob=req.dob, tob=req.tob, pob_label=req.pob_label,
-        lagna_rasi=d1.lagna_rasi, lagna_degree=lagna_longitude % 30, **vars(compute_upapada(d1)),
+        lagna_rasi=d1.lagna_rasi, lagna_degree=lagna_longitude % 30,
+        upapada=vars(compute_upapada(d1)),
+        rasi_drishti=[vars(r) for r in compute_rasi_drishti(d1)],
     )
 
 
-@app.get("/api/upapada/{chart_id}", response_model=UpapadaResponse)
-def upapada_for_saved_chart(chart_id: int) -> UpapadaResponse:
-    return upapada(_saved_birth(chart_id))
+@app.get("/api/jaimini/{chart_id}", response_model=JaiminiResponse)
+def jaimini_for_saved_chart(chart_id: int) -> JaiminiResponse:
+    return jaimini(_saved_birth(chart_id))
 
 
 @app.get("/api/prasannam", response_model=PrasannamResponse)

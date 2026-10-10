@@ -10,6 +10,7 @@ from dataclasses import dataclass
 
 from app.astrology import ChartData
 from app.constants import RASI_LORDS
+from app.rasi_drishti import planets_aspecting
 
 
 @dataclass
@@ -23,10 +24,12 @@ class Upapada:
     rasi: int  # the Upapada Lagna
     house: int  # its house from the lagna
     planets: list[str]
+    aspected_by: list[str]  # by Jaimini rasi drishti
     lord: str
     lord_sits_in: int  # rasi of the Upapada's lord
     second: int  # the 2nd rasi from the Upapada
     second_planets: list[str]
+    second_aspected_by: list[str]
     second_lord: str
     second_lord_rasi: int
 
@@ -53,10 +56,12 @@ def compute_upapada(d1: ChartData) -> Upapada:
         rasi=rasi,
         house=(rasi - d1.lagna_rasi) % 12 + 1,
         planets=planets_in(rasi),
+        aspected_by=planets_aspecting(d1, rasi),
         lord=RASI_LORDS[rasi],
         lord_sits_in=d1.grahas[RASI_LORDS[rasi]].rasi,
         second=second,
         second_planets=planets_in(second),
+        second_aspected_by=planets_aspecting(d1, second),
         second_lord=RASI_LORDS[second],
         second_lord_rasi=d1.grahas[RASI_LORDS[second]].rasi,
     )

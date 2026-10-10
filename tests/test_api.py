@@ -174,10 +174,14 @@ def test_ayul_rejects_an_unknown_time_zone(client):
     assert client.post("/api/ayul", json={**PADMINI, "timezone": "Nowhere/Else"}).status_code == 400
 
 
-def test_upapada_for_a_saved_chart_and_birth_details(client):
+def test_jaimini_for_a_saved_chart_and_birth_details(client):
     chart_id = client.post("/api/chart", json=BIRTH).json()["id"]
-    saved = client.get(f"/api/upapada/{chart_id}").json()
-    assert (saved["rasi"], saved["exception"], saved["lord"]) == (10, "seventh", "Saturn")  # Kumbham
-    assert saved == client.post("/api/upapada", json={k: v for k, v in BIRTH.items() if k != "gender"}).json()
-    assert client.post("/api/upapada", json=PADMINI).json()["rasi"] == 8  # Dhanusu
-    assert client.get("/api/upapada/99999").status_code == 404
+    saved = client.get(f"/api/jaimini/{chart_id}").json()
+    ul = saved["upapada"]
+    assert (ul["rasi"], ul["exception"], ul["lord"]) == (10, "seventh", "Saturn")  # Kumbham
+    # Kumbham is aspected from Mesham, Kadagam and Thulam: Sani in Mesham and Guru in Thulam among them.
+    assert {"Saturn", "Jupiter"} <= set(ul["aspected_by"])
+    assert [r["aspects"] for r in saved["rasi_drishti"]][10] == [0, 3, 6]
+    assert saved == client.post("/api/jaimini", json={k: v for k, v in BIRTH.items() if k != "gender"}).json()
+    assert client.post("/api/jaimini", json=PADMINI).json()["upapada"]["rasi"] == 8  # Dhanusu
+    assert client.get("/api/jaimini/99999").status_code == 404
