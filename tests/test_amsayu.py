@@ -66,9 +66,10 @@ def test_combust_and_enemy_rasi_take_only_the_half():
 
 
 def test_vakram_is_not_cut_for_an_enemy_rasi_and_cuts_never_exceed_a():
-    chart = _chart(0, {"Mars": (65.0, True), "Saturn": (340.0, False), "Sun": (150.0, False)})  # Sani in Meenam, the 12th
+    # Guru vakram in Rishabam (Sukran's rasi, an enemy); Sani in Meenam, the 12th
+    chart = _chart(0, {"Jupiter": (45.0, True), "Saturn": (340.0, False), "Sun": (150.0, False)})
     r = compute_amsayu(chart, chart, chart, 5.0)
-    assert not _row(r, "Mars").haranams
+    assert not _row(r, "Jupiter").haranams
     sat = _row(r, "Saturn")
     assert sat.loss_days == sat.a_days and sat.c_days == sat.b_days - sat.a_days
 
@@ -114,3 +115,15 @@ def test_nisargayu_uses_the_natural_years_from_half_at_deep_neecham():
     chart = _chart(0, {"Saturn": (20.0, False), "Sun": (100.0, False)})  # Sani at deep neecham, Mesham 20
     sat = _row(compute_nisargayu(chart, 5.0), "Saturn")
     assert sat.max_years == 50 and sat.share == 0.5 and sat.a_days == 25 * 360
+
+
+def test_mercury_is_combust_within_fourteen_degrees_or_twelve_when_vakram():
+    chart = _chart(0, {"Mercury": (73.0, False), "Sun": (60.0, False)})  # 13 degrees apart
+    assert [h.kind for h in _row(compute_amsayu(chart, chart, chart, 5.0), "Mercury").haranams] == ["ashtanga"]
+    chart = _chart(0, {"Mercury": (73.0, True), "Sun": (60.0, False)})
+    assert _row(compute_amsayu(chart, chart, chart, 5.0), "Mercury").haranams == []
+
+
+def test_mars_is_never_cut_for_an_enemy_rasi():
+    chart = _chart(0, {"Mars": (65.0, False), "Sun": (150.0, False)})  # Mithunam, Budhan's rasi
+    assert _row(compute_amsayu(chart, chart, chart, 5.0), "Mars").haranams == []

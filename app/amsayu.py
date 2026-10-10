@@ -12,7 +12,8 @@ C  B less the haranams, each worked out as a share of the planet's A and capped 
    Chakrapata for houses 7-12 (whole rasis from the lagna, a planet 29deg+ counted in the next
    house): malefics lose 1/6, 1/5, 1/4, 1/3, 1/2, all; benefics half that. Only one planet per
    rasi takes it, the one with the most years (BPHS 43.10-11). Ashtanga: half for a combust
-   Chandran, Sevvai or Guru. Shatru Kshetra: a third in an enemy's rasi, not when vakram. Only
+   planet, except Sukran and Sani (BPHS 43.9). Shatru Kshetra: a third in an enemy's rasi, not
+   when vakram and never for Sevvai (Sarajit Poddar, Health and Longevity, p. 235). Only
    the half applies when a planet is both combust and in an enemy's rasi (BPHS 43.22).
 Souramanam  C in solar years: C's days / 365.2654.
 """
@@ -35,8 +36,10 @@ ENEMIES = {
 }
 MALEFICS = {"Sun", "Mars", "Saturn"}  # Chandran, Budhan, Guru and Sukran are benefics here
 CHAKRAPATA_SHARE = {7: 1 / 6, 8: 1 / 5, 9: 1 / 4, 10: 1 / 3, 11: 1 / 2, 12: 1.0}
-# Combustion limits from the Suriyan. Budhan, Sukran and Sani are exempt from Ashtanga.
-COMBUST_ORB = {"Moon": 12.0, "Mars": 17.0, "Jupiter": 11.0}
+# Combustion limits from the Suriyan. Sukran and Sani are exempt from Ashtanga.
+COMBUST_ORB = {"Moon": 12.0, "Mars": 17.0, "Mercury": 14.0, "Jupiter": 11.0}
+MERCURY_VAKRAM_ORB = 12.0
+SHATRU_EXEMPT = {"Mars"}  # Poddar, p. 235
 LAST_DEGREE = 29.0
 YEAR_DAYS = 360
 SOLAR_YEAR_DAYS = 365.2654
@@ -107,8 +110,9 @@ def apply_haranams(planets: list, d1: ChartData) -> None:
         if row.body in takers:
             share = CHAKRAPATA_SHARE[row.house] * (1 if row.body in MALEFICS else 0.5)
             row.haranams.append(Haranam("chakrapata", share, row.house))
-        combust = row.body in COMBUST_ORB and abs((g.longitude - sun + 180) % 360 - 180) <= COMBUST_ORB[row.body]
-        enemy = RASI_LORDS[row.rasi] in ENEMIES[row.body] and not g.retrograde
+        orb = MERCURY_VAKRAM_ORB if row.body == "Mercury" and g.retrograde else COMBUST_ORB.get(row.body)
+        combust = orb is not None and abs((g.longitude - sun + 180) % 360 - 180) <= orb
+        enemy = RASI_LORDS[row.rasi] in ENEMIES[row.body] and not g.retrograde and row.body not in SHATRU_EXEMPT
         if combust:
             row.haranams.append(Haranam("ashtanga", 0.5))  # only the half, even in an enemy's rasi
         elif enemy:

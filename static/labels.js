@@ -956,6 +956,7 @@ const READING_TOPICS = {
 // LABELS so they follow the language setting.
 const PINDAYU_TABLE = [["Sun", 19, 0, 10], ["Moon", 25, 1, 3], ["Mars", 15, 9, 28], ["Mercury", 12, 5, 15], ["Jupiter", 15, 3, 5], ["Venus", 21, 11, 27], ["Saturn", 20, 6, 20]];
 const BPHS_43 = { title: "Brihat Parashara Hora Shastra, Chapter 43 (Longevity)", url: "http://vedic-astro.s3.amazonaws.com/books/bhrihat_parasara_hora_shastra.pdf" };
+const PODDAR = { title: "Sarajit Poddar, Health and Longevity, pp. 234-235", url: "https://a.co/015XCpsD" };
 const SOURAMANAM_SECTION = {
   heading: { en: "Souramanam", ta: "சௌரமானம்" },
   text: {
@@ -994,10 +995,10 @@ const AYUL_TOPICS = {
       SOURAMANAM_SECTION,
     ],
     note: {
-      en: "Tested against known charts, Pindayu came within about 5 or 6 years for some and was 14 to 20 years out for others.",
-      ta: "அறிந்த ஜாதகங்களில் சோதித்தபோது பிண்டாயு சிலவற்றுக்கு சுமார் 5 அல்லது 6 வருடங்களுக்குள் வந்தது, சிலவற்றுக்கு 14 முதல் 20 வருடங்கள் விலகியது.",
+      en: "Tested against known charts, Pindayu came within about 1 to 6 years for three and was 14 to 20 years out for others.",
+      ta: "அறிந்த ஜாதகங்களில் சோதித்தபோது பிண்டாயு மூன்றுக்கு சுமார் 1 முதல் 6 வருடங்களுக்குள் வந்தது, சிலவற்றுக்கு 14 முதல் 20 வருடங்கள் விலகியது.",
     },
-    sources: [BPHS_43],
+    sources: [BPHS_43, PODDAR],
   },
   amsayu: {
     title: { en: "Amsayu", ta: "அம்சாயு" },
@@ -1038,15 +1039,15 @@ const AYUL_TOPICS = {
           [
             { en: "Ashtanga", ta: "அஸ்தங்க" },
             {
-              en: "Half, for the Moon within 12°, Mars within 17° or Jupiter within 11° of the Sun. Mercury, Venus and Saturn are not cut.",
-              ta: "சூரியனிலிருந்து 12° க்குள் சந்திரன், 17° க்குள் செவ்வாய், 11° க்குள் குரு இருந்தால் பாதி. புதன், சுக்ரன், சனி குறைக்கப்படுவதில்லை.",
+              en: "Half, for the Moon within 12\u00B0, Mars within 17\u00B0, Mercury within 14\u00B0 (12\u00B0 when vakram) or Jupiter within 11\u00B0 of the Sun. Venus and Saturn are not cut.",
+              ta: "சூரியனிலிருந்து 12\u00B0 க்குள் சந்திரன், 17\u00B0 க்குள் செவ்வாய், 14\u00B0 க்குள் புதன் (வக்கிரமானால் 12\u00B0), 11\u00B0 க்குள் குரு இருந்தால் பாதி. சுக்ரன், சனி குறைக்கப்படுவதில்லை.",
             },
           ],
           [
             { en: "Shatru Kshetra", ta: "சத்ரு க்ஷேத்ர" },
             {
-              en: "A third, for a planet in the rasi of a natural enemy. Not when the planet is vakram, and not when it already loses half to Ashtanga.",
-              ta: "இயற்கைப் பகைவரின் ராசியில் உள்ள கிரகத்துக்கு மூன்றில் ஒரு பங்கு. கிரகம் வக்கிரமாக இருந்தாலோ, ஏற்கனவே அஸ்தங்கத்தில் பாதி இழந்தாலோ இல்லை.",
+              en: "A third, for a planet in the rasi of a natural enemy. Not for Mars, not when the planet is vakram, and not when it already loses half to Ashtanga.",
+              ta: "இயற்கைப் பகைவரின் ராசியில் உள்ள கிரகத்துக்கு மூன்றில் ஒரு பங்கு. செவ்வாய்க்கு இல்லை, கிரகம் வக்கிரமாக இருந்தாலோ ஏற்கனவே அஸ்தங்கத்தில் பாதி இழந்தாலோ இல்லை.",
             },
           ],
         ],
@@ -1054,10 +1055,10 @@ const AYUL_TOPICS = {
       SOURAMANAM_SECTION,
     ],
     note: {
-      en: "Two working rules here are ours and not the text's. The planet with the most years takes the Chakrapata cut in a rasi, and Mercury is left out of Ashtanga. Tested against known charts, Amsayu came within days for one, within 5 years for two more and 18 to 50 years short for others.",
-      ta: "இங்குள்ள இரண்டு விதிகள் நூலில் உள்ளவை அல்ல, நாம் கடைப்பிடிப்பவை. ஒரு ராசியில் அதிக வருடங்கள் உள்ள கிரகமே சக்ரபாத குறைப்பை ஏற்கிறது, புதன் அஸ்தங்கத்திலிருந்து விலக்கப்படுகிறது. அறிந்த ஜாதகங்களில் சோதித்தபோது அம்சாயு ஒன்றுக்கு சில நாட்களுக்குள், மேலும் இரண்டுக்கு 5 வருடங்களுக்குள் வந்தது, சிலவற்றுக்கு 18 முதல் 50 வருடங்கள் குறைவாக வந்தது.",
+      en: "The haranams follow Sarajit Poddar's Health and Longevity. One working rule here is ours and not the text's. The text says the strongest planet in a rasi takes the Chakrapata cut, and here that is the planet with the most years. Tested against known charts, Amsayu came within days for one, within about 4 to 6 years for two more and 18 to 50 years short for others.",
+      ta: "ஹரணங்கள் சரஜித் போத்தாரின் Health and Longevity நூலைப் பின்பற்றுகின்றன. இங்குள்ள ஒரு விதி நூலில் உள்ளது அல்ல, நாம் கடைப்பிடிப்பது. ஒரு ராசியில் வலிமையான கிரகமே சக்ரபாத குறைப்பை ஏற்கும் என்று நூல் கூறுகிறது, இங்கே அது அதிக வருடங்கள் உள்ள கிரகம். அறிந்த ஜாதகங்களில் சோதித்தபோது அம்சாயு ஒன்றுக்கு சில நாட்களுக்குள், மேலும் இரண்டுக்கு சுமார் 4 முதல் 6 வருடங்களுக்குள் வந்தது, சிலவற்றுக்கு 18 முதல் 50 வருடங்கள் குறைவாக வந்தது.",
     },
-    sources: [BPHS_43, { title: "The Haranas of Amsayurdaya (Thoughts on Jyotish)", url: "https://medium.com/thoughts-on-jyotish/the-bharanas-of-amsayurdaya-abfa771045d4" }],
+    sources: [BPHS_43, PODDAR, { title: "The Haranas of Amsayurdaya (Thoughts on Jyotish)", url: "https://medium.com/thoughts-on-jyotish/the-bharanas-of-amsayurdaya-abfa771045d4" }],
   },
   nisargayu: {
     title: { en: "Nisargayu", ta: "நிசர்காயு" },
@@ -1089,9 +1090,9 @@ const AYUL_TOPICS = {
       SOURAMANAM_SECTION,
     ],
     note: {
-      en: "Saturn's 50 years are well over a third of the 120, so where Saturn sits decides much of the result. Tested against known charts, Nisargayu came within about 3 to 6 years for four and was more than 20 years short for others.",
-      ta: "120 இல் சனியின் 50 வருடங்கள் மூன்றில் ஒரு பங்குக்கும் மேல், எனவே சனி இருக்கும் இடமே முடிவின் பெரும்பகுதியைத் தீர்மானிக்கிறது. அறிந்த ஜாதகங்களில் சோதித்தபோது நிசர்காயு நான்குக்கு சுமார் 3 முதல் 6 வருடங்களுக்குள் வந்தது, சிலவற்றுக்கு 20 வருடங்களுக்கு மேல் குறைவாக வந்தது.",
+      en: "Saturn's 50 years are well over a third of the 120, so where Saturn sits decides much of the result. Tested against known charts, Nisargayu came within about 2 to 7 years for four and was 15 to 30 years short for others.",
+      ta: "120 இல் சனியின் 50 வருடங்கள் மூன்றில் ஒரு பங்குக்கும் மேல், எனவே சனி இருக்கும் இடமே முடிவின் பெரும்பகுதியைத் தீர்மானிக்கிறது. அறிந்த ஜாதகங்களில் சோதித்தபோது நிசர்காயு நான்குக்கு சுமார் 2 முதல் 7 வருடங்களுக்குள் வந்தது, சிலவற்றுக்கு 15 முதல் 30 வருடங்கள் குறைவாக வந்தது.",
     },
-    sources: [BPHS_43, { title: "Sarajit Poddar, Health and Longevity, p. 234", url: "https://a.co/015XCpsD" }],
+    sources: [BPHS_43, PODDAR],
   },
 };
