@@ -1021,6 +1021,7 @@ const JAIMINI_VIEWS = {
   arudha: { title: "alTitle", intro: ["alIntro", "alMethod"], render: () => renderArudhaResult("arudha_lagna") },
   upapada: { title: "upapadaTitle", intro: ["upapadaIntro", "upapadaMethod"], render: () => renderArudhaResult("upapada") },
   karaka: { title: "karakaTitle", intro: ["karakaIntro", "karakaRules"], render: () => renderKarakaResult() },
+  karakamsa: { title: "kkTitle", intro: ["kkIntro", "kkHow"], render: () => renderKarakamsaResult() },
   drishti: { title: "drishtiTitle", intro: ["drishtiIntro", "drishtiRules"], render: () => renderDrishtiResult() },
 };
 
@@ -1223,6 +1224,82 @@ function renderKarakaResult() {
   const wrap = document.createElement("div");
   wrap.className = "table-wrap";
   wrap.appendChild(table);
+  container.appendChild(wrap);
+}
+
+// Karakamsa Lagna: the readings are listed before any chart is picked; a chart adds the steps, the
+// twelve houses from the Karakamsa in the Navamsa, and the readings that apply to it.
+const KK_READINGS = ["ketu", "venus12", "jupiter"];
+const KK_CAREER = ["Sun", "Venus", "Saturn", "Mars", "Rahu"];
+
+function renderKarakamsaResult() {
+  const container = document.getElementById("jaiminiResult");
+  container.classList.remove("hidden");
+  container.innerHTML = "";
+  const labels = L();
+  const ui = labels.ui;
+  const planet = (p) => labels.planets[p];
+  const rasi = (i) => labels.rasi[i];
+  const chart = state.jaimini.result;
+  const readingText = (kind, p) => fillTemplate(ui.kkReading[kind], { field: p ? ui.kkFields[p] : "" });
+
+  if (!chart) {
+    const rows = [
+      ...KK_READINGS.map((kind) => [ui.kkCond[kind], readingText(kind)]),
+      ...KK_CAREER.map((p) => [fillTemplate(ui.kkCond.career, { planet: planet(p) }), readingText("career", p)]),
+    ];
+    const wrap = document.createElement("div");
+    wrap.className = "table-wrap";
+    wrap.appendChild(simpleTable("drishti-table", rows, [ui.colCondition, ui.colReading]));
+    container.appendChild(wrap);
+    return;
+  }
+
+  const k = chart.karakamsa;
+  container.appendChild(jaiminiHead(chart));
+  const box = document.createElement("div");
+  box.className = "ayul-result-box";
+  const big = document.createElement("div");
+  big.className = "ul-summary";
+  big.textContent = fillTemplate(ui.kkIs, { rasi: rasi(k.rasi) });
+  box.appendChild(big);
+  container.appendChild(box);
+
+  const steps = [
+    fillTemplate(ui.kkStep1, { planet: planet(k.atmakaraka), rasi: rasi(k.ak_rasi) }),
+    fillTemplate(ui.kkStep2, { planet: planet(k.atmakaraka), rasi: rasi(k.rasi) }),
+  ];
+  container.appendChild(simpleTable("ul-steps", steps.map((s, i) => [String(i + 1), s]), [ui.ulStepCol, ui.ulWorkingCol]));
+
+  const h3 = document.createElement("h3");
+  h3.className = "timing-title";
+  h3.textContent = ui.kkReadingsTitle;
+  container.appendChild(h3);
+  if (k.readings.length === 0) {
+    const p = document.createElement("p");
+    p.className = "calc-intro";
+    p.textContent = ui.kkNoReadings;
+    container.appendChild(p);
+  } else {
+    const ul = document.createElement("ul");
+    ul.className = "kk-readings";
+    for (const r of k.readings) {
+      const li = document.createElement("li");
+      const what = fillTemplate(ui.kkApplied[r.kind], { ord: ORDINAL[state.lang](r.house), planet: planet(r.planet) });
+      li.textContent = `${what} ${readingText(r.kind, r.planet)}`;
+      ul.appendChild(li);
+    }
+    container.appendChild(ul);
+  }
+
+  const rows = k.houses.map((h) => [
+    ORDINAL[state.lang](h.house) + (h.house === 12 ? ` (${ui.kkMoksha})` : ""),
+    rasi(h.rasi),
+    h.planets.length ? h.planets.map(planet).join(", ") : "\u2013",
+  ]);
+  const wrap = document.createElement("div");
+  wrap.className = "table-wrap";
+  wrap.appendChild(simpleTable("drishti-table", rows, [ui.kkColHouse, ui.colRasi, ui.kkColPlanets]));
   container.appendChild(wrap);
 }
 

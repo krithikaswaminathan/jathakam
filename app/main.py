@@ -72,6 +72,7 @@ from app.models import (
     YogaOut,
 )
 from app.kaala_pakai import compute_kaala_pakai
+from app.karakamsa import compute_karakamsa
 from app.mudakku import compute_mudakku
 from app.navamsa_sashtashtagam import compute_navamsa_sashtashtagam
 from app.peyarchi import compute_peyarchis
@@ -370,8 +371,10 @@ def ayul_for_saved_chart(chart_id: int) -> AyulResponse:
 
 @app.post("/api/jaimini", response_model=JaiminiResponse)
 def jaimini(req: AyulRequest) -> JaiminiResponse:
-    d1, _longitudes, _speeds, lagna_longitude = _birth_chart(req.dob, req.tob, req.latitude, req.longitude, req.timezone)
+    d1, longitudes, speeds, lagna_longitude = _birth_chart(req.dob, req.tob, req.latitude, req.longitude, req.timezone)
+    d9 = build_varga_chart("D9", lagna_longitude, longitudes, speeds)
     arudha_lagna, upapada = compute_arudha_lagna(d1), compute_upapada(d1)
+    karakas = compute_chara_karakas(d1)
     return JaiminiResponse(
         name=req.name, dob=req.dob, tob=req.tob, pob_label=req.pob_label,
         lagna_rasi=d1.lagna_rasi, lagna_degree=lagna_longitude % 30,
@@ -379,8 +382,13 @@ def jaimini(req: AyulRequest) -> JaiminiResponse:
         upapada=vars(upapada),
         arudha_upapada_aspect=arudha_and_upapada_aspect(arudha_lagna, upapada),
         rasi_drishti=[vars(r) for r in compute_rasi_drishti(d1)],
-        chara_karakas=[vars(k) for k in compute_chara_karakas(d1)],
+        chara_karakas=[vars(k) for k in karakas],
+        karakamsa=_karakamsa_out(compute_karakamsa(d1, d9, karakas[0].planet)),
     )
+
+
+def _karakamsa_out(k) -> dict:
+    return {**vars(k), "houses": [vars(h) for h in k.houses], "readings": [vars(r) for r in k.readings]}
 
 
 @app.get("/api/jaimini/{chart_id}", response_model=JaiminiResponse)

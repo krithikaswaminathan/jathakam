@@ -190,6 +190,9 @@ def test_jaimini_for_a_saved_chart_and_birth_details(client):
     assert saved["arudha_upapada_aspect"] is False  # Simham does not aspect Kumbham
     karakas = saved["chara_karakas"]
     assert [k["karaka"] for k in karakas] == ["AK", "AmK", "BK", "MK", "PK", "GK", "DK"]
+    kk = saved["karakamsa"]
+    assert (kk["atmakaraka"], kk["rasi"]) == ("Venus", 11)  # Sukran in Meenam in the Navamsa
+    assert {"kind": "jupiter", "planet": "Jupiter", "house": 10} in kk["readings"]
     degrees = [k["degree_in_sign"] for k in karakas]
     assert degrees == sorted(degrees, reverse=True)
     assert client.get("/api/jaimini/99999").status_code == 404

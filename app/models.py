@@ -386,6 +386,26 @@ class CharaKarakaOut(BaseModel):
     degree_in_sign: float
 
 
+class KarakamsaHouseOut(BaseModel):
+    house: int
+    rasi: int
+    planets: list[str]
+
+
+class KarakamsaReadingOut(BaseModel):
+    kind: str  # "ketu", "venus12", "jupiter" or "career"
+    planet: str
+    house: int
+
+
+class KarakamsaOut(BaseModel):
+    atmakaraka: str
+    ak_rasi: int
+    rasi: int
+    houses: list[KarakamsaHouseOut]
+    readings: list[KarakamsaReadingOut]
+
+
 class JaiminiResponse(BaseModel):
     """Everything the Jaimini Sutras calculators show for one chart."""
     name: str
@@ -399,3 +419,4 @@ class JaiminiResponse(BaseModel):
     arudha_upapada_aspect: bool  # the Arudha Lagna and Upapada aspect each other
     rasi_drishti: list[RasiDrishtiOut]
     chara_karakas: list[CharaKarakaOut]
+    karakamsa: KarakamsaOut
