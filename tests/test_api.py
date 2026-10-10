@@ -186,4 +186,6 @@ def test_jaimini_for_a_saved_chart_and_birth_details(client):
     assert saved["arudha_lagna"]["rasi"] == 4  # Simham
     padmini = client.post("/api/jaimini", json=PADMINI).json()
     assert (padmini["upapada"]["rasi"], padmini["arudha_lagna"]["rasi"]) == (8, 11)  # Dhanusu, Meenam
+    assert padmini["arudha_upapada_aspect"] is True  # two dual rasis
+    assert saved["arudha_upapada_aspect"] is False  # Simham does not aspect Kumbham
     assert client.get("/api/jaimini/99999").status_code == 404

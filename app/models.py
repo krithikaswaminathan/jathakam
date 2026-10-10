@@ -389,4 +389,5 @@ class JaiminiResponse(BaseModel):
     lagna_degree: float
     arudha_lagna: ArudhaOut
     upapada: ArudhaOut
+    arudha_upapada_aspect: bool  # the Arudha Lagna and Upapada aspect each other
     rasi_drishti: list[RasiDrishtiOut]

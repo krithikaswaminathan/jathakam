@@ -11,7 +11,7 @@ from dataclasses import dataclass
 
 from app.astrology import ChartData
 from app.constants import RASI_LORDS
-from app.rasi_drishti import planets_aspecting
+from app.rasi_drishti import aspected_rasis, planets_aspecting
 
 
 @dataclass
@@ -76,3 +76,9 @@ def compute_arudha_lagna(d1: ChartData) -> Arudha:
 
 def compute_upapada(d1: ChartData) -> Arudha:
     return compute_arudha(d1, 12)
+
+
+def arudha_and_upapada_aspect(arudha_lagna: Arudha, upapada: Arudha) -> bool:
+    """True when the two aspect each other by rasi drishti, which the user reads as a great social
+    change after marriage. Rasi drishti is mutual, and a rasi does not aspect itself."""
+    return upapada.rasi in aspected_rasis(arudha_lagna.rasi)

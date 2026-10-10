@@ -1,5 +1,5 @@
 from app.astrology import ChartData, GrahaPosition
-from app.arudha import compute_arudha_lagna, compute_upapada
+from app.arudha import arudha_and_upapada_aspect, compute_arudha_lagna, compute_upapada
 
 
 def _chart(lagna_rasi: int, rasis: dict[str, int]) -> ChartData:
@@ -47,3 +47,11 @@ def test_arudha_lagna_exceptions():
     assert (lambda a: (a.exception, a.rasi))(compute_arudha_lagna(_chart(0, {"Mars": 0}))) == ("same", 9)
     # Sevvai in Kadagam is 4, 4 from Kadagam is Thulam, the 7th: the 10th from Thulam, Kadagam.
     assert (lambda a: (a.exception, a.rasi))(compute_arudha_lagna(_chart(0, {"Mars": 3}))) == ("seventh", 3)
+
+
+def test_arudha_lagna_and_upapada_aspect_each_other():
+    padmini = _chart(1, {"Mars": 4, "Venus": 6})  # AL Meenam, UL Dhanusu: dual rasis aspect each other
+    assert arudha_and_upapada_aspect(compute_arudha_lagna(padmini), compute_upapada(padmini))
+    krithika = _chart(8, {"Jupiter": 6, "Mars": 10})  # AL Simham, UL Kumbham: next but one, no aspect
+    al, ul = compute_arudha_lagna(krithika), compute_upapada(krithika)
+    assert (al.rasi, ul.rasi) == (4, 10) and not arudha_and_upapada_aspect(al, ul)

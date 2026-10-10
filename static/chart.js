@@ -1156,6 +1156,17 @@ function renderArudhaResult(kind) {
   big.className = "ul-summary";
   big.textContent = fill(ui[text.is], { rasi: rasi(r.rasi), ord: ORDINAL[state.lang](r.house) });
   box.appendChild(big);
+  // Both arudha pages say whether the Arudha Lagna and the Upapada aspect each other.
+  const alUl = fill(chart.arudha_upapada_aspect ? ui.alUlYes : ui.alUlNo, {
+    al: `${ui.alTitle} (${rasi(chart.arudha_lagna.rasi)})`,
+    ul: `${ui.upapadaTitle} (${rasi(chart.upapada.rasi)})`,
+  });
+  if (chart.arudha_upapada_aspect) {
+    const note = document.createElement("div");
+    note.className = "ul-aspect-note";
+    note.textContent = alUl;
+    box.appendChild(note);
+  }
   container.appendChild(box);
 
   const last = ui[{ same: text.same, seventh: text.seventh }[r.exception] || text.none];
@@ -1173,6 +1184,7 @@ function renderArudhaResult(kind) {
     [ui[text.planets], planetList(r.planets)],
     [ui.ulRowAspectedBy, aspectedBy(r.aspected_by)],
     [ui.ulRowLord, lordIn(r.lord, r.lord_sits_in)],
+    [ui.alUlRow, alUl],
   ];
   if (text.second) {
     rows.push(

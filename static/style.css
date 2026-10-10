@@ -487,3 +487,4 @@ tr.lagna-row td { font-weight: 600; color: var(--maroon-700); }
 .drishti-table { margin-top: 0.5rem; }
 .drishti-table td:first-child { font-weight: 600; color: var(--maroon-700); white-space: nowrap; }
 .table-wrap { overflow-x: auto; }
+.ul-aspect-note { margin-top: 0.4rem; font-weight: 600; color: var(--good); }
