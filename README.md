@@ -71,7 +71,9 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   steps, the Upapada with the planets in and aspecting it, its lord and where it sits, and the 2nd
   rasi from the Upapada with its planets, aspects and lord. **Chara Karakas** ranks the seven
   planets from the Sun to Saturn by degree within the rasi (the seven karaka system, no Rahu or
-  Ketu), from the Atmakaraka down to the Darakaraka. **Rasi Drishti** shows which rasi
+  Ketu), from the Atmakaraka down to the Darakaraka. **Karakamsa Lagna** is the Atmakaraka's
+  Navamsa rasi, with the twelve houses counted from it in the Navamsa (the 12th marked as moksha)
+  and the readings that apply. **Rasi Drishti** shows which rasi
   aspects which, and for a chart the planets in each rasi and the planets aspecting it.
 - **Hidden Ucham / Neecham** tab, after Ucham / Neecham and laid out like Moorthy: where each
   planet hides its ucham, neecham and moolatrikonam (count the padas from its Kaala Purusha pada
@@ -225,3 +227,8 @@ python -m pytest tests/ -v
   next to them), fixed rasis the 3rd, 6th and 9th (every movable rasi but the one next to them) and
   dual rasis the 4th, 7th and 10th. Aspects are mutual and every planet, Rahu and Ketu included,
   aspects what its rasi aspects.
+
+- Karakamsa readings come from the user's notes (Mani, Jaimini Astrology), counted in the Navamsa
+  from the Karakamsa: Ketu in the 2nd or 3rd, Venus in the 12th, Jupiter in a kendra, and the line
+  of work from the Sun, Venus, Saturn, Mars or Rahu in the Karakamsa. The Atmakaraka itself, which
+  is always there, gives no work reading (the user's choice).
