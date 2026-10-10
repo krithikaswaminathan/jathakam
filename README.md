@@ -65,8 +65,9 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   alongside for comparison. No date is ever shown, and the page says it is a traditional
   calculation, not a prediction.
 - **Jaimini Sutras**: a tab at the top with its own side nav of Jaimini calculators, each taking a
-  saved chart or birth details typed in (not saved), like Ayul Nirnayam. The first is the
-  **Upapada Lagna**, the arudha of the 12th house, read for marriage and the spouse. It shows the
+  saved chart or birth details typed in (not saved), like Ayul Nirnayam. The **Arudha Lagna**,
+  the pada of the lagna, shows the steps, the Arudha with the planets in and aspecting it, and its
+  lord. The **Upapada Lagna**, the arudha of the 12th house, read for marriage and the spouse. It shows the
   steps, the Upapada with the planets in and aspecting it, its lord and where it sits, and the 2nd
   rasi from the Upapada with its planets, aspects and lord. **Rasi Drishti** shows which rasi
   aspects which, and for a chart the planets in each rasi and the planets aspecting it.
@@ -213,9 +214,9 @@ python -m pytest tests/ -v
   Which of the lagna, Sun and Moon is strongest is the user's choice; the app does not judge it.
   Tested on eight known charts, no method was reliable on its own (Amsayu from 0 to 52 years
   out, Pindayu 1 to 20, Nisargayu 2 to 30).
-- Upapada Lagna: count from the 12th house (as 1) to its lord's rasi, then the same number again
-  from the lord's rasi. If that lands on the 12th house or the 7th from it, take the 10th rasi from
-  there. Kumbham is ruled by Saturn and Viruchigam by Mars (not Rahu or Ketu), as given by the user.
+- Arudha Lagna and Upapada Lagna (the padas of the 1st and 12th houses): count from the house (as
+  1) to its lord's rasi, then the same number again from the lord's rasi. If that lands on the
+  house itself or the 7th from it, take the 10th rasi from there. Kumbham is ruled by Saturn and Viruchigam by Mars (not Rahu or Ketu), as given by the user.
 - Jaimini rasi drishti: movable rasis aspect the 5th, 8th and 11th (every fixed rasi but the one
   next to them), fixed rasis the 3rd, 6th and 9th (every movable rasi but the one next to them) and
   dual rasis the 4th, 7th and 10th. Aspects are mutual and every planet, Rahu and Ketu included,
