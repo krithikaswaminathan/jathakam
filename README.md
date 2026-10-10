@@ -216,7 +216,9 @@ python -m pytest tests/ -v
   out, Pindayu 1 to 20, Nisargayu 2 to 30).
 - Arudha Lagna and Upapada Lagna (the padas of the 1st and 12th houses): count from the house (as
   1) to its lord's rasi, then the same number again from the lord's rasi. If that lands on the
-  house itself or the 7th from it, take the 10th rasi from there. Kumbham is ruled by Saturn and Viruchigam by Mars (not Rahu or Ketu), as given by the user.
+  house itself or the 7th from it, take the 10th rasi from there. When the Arudha Lagna and the Upapada aspect
+  each other by rasi drishti, both pages say it shows a great social change after marriage, as
+  given by the user. Kumbham is ruled by Saturn and Viruchigam by Mars (not Rahu or Ketu), as given by the user.
 - Jaimini rasi drishti: movable rasis aspect the 5th, 8th and 11th (every fixed rasi but the one
   next to them), fixed rasis the 3rd, 6th and 9th (every movable rasi but the one next to them) and
   dual rasis the 4th, 7th and 10th. Aspects are mutual and every planet, Rahu and Ketu included,
