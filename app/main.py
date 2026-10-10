@@ -66,6 +66,7 @@ from app.models import (
     TaraEntryOut,
     TithiOut,
     TransitWindowOut,
+    UpapadaResponse,
     UpasanaOut,
     YogaOut,
 )
@@ -78,6 +79,7 @@ from app.pranapada import compute_pranapada_longitude
 from app.tara import compute_tara_balam
 from app.tithi import compute_tithi
 from app.timezone_utils import compute_utc_offset
+from app.upapada import compute_upapada
 from app.upasana import compute_upasana
 from app.upagraha import compute_gulika_longitude, compute_mandi_longitude
 from app.yogas import detect_all_yogas
@@ -300,8 +302,9 @@ def remove_chart(chart_id: int) -> None:
         raise HTTPException(status_code=404, detail="Chart not found")
 
 
-def _ayul_response(name: str, dob, tob, pob_label: str, latitude: float, longitude: float, timezone: str) -> AyulResponse:
-    """Amsayu, Pindayu and Nisargayu for the Ayul Nirnayam calculator. The page shows the method the user picks."""
+def _birth_chart(dob, tob, latitude: float, longitude: float, timezone: str):
+    """D1 for the calculators that take a saved chart or typed-in birth details (Ayul Nirnayam,
+    Jaimini), with the longitudes and speeds for any vargas they need."""
     try:
         utc_offset = compute_utc_offset(timezone, dob, tob)
     except (ZoneInfoNotFoundError, ValueError):
@@ -311,7 +314,22 @@ def _ayul_response(name: str, dob, tob, pob_label: str, latitude: float, longitu
     longitudes = {n: lon for n, (lon, _speed) in positions.items()}
     speeds = {n: speed for n, (_lon, speed) in positions.items()}
     lagna_longitude = compute_ascendant(jd_ut, latitude, longitude)
-    d1 = build_chart(lagna_longitude, longitudes, speeds)
+    return build_chart(lagna_longitude, longitudes, speeds), longitudes, speeds, lagna_longitude
+
+
+def _saved_birth(chart_id: int):
+    record = get_chart(chart_id)
+    if record is None:
+        raise HTTPException(status_code=404, detail="Chart not found")
+    return AyulRequest(
+        name=record.name, dob=record.dob, tob=record.tob, pob_label=record.pob_label,
+        latitude=record.latitude, longitude=record.longitude, timezone=record.tz_name,
+    )
+
+
+def _ayul_response(name: str, dob, tob, pob_label: str, latitude: float, longitude: float, timezone: str) -> AyulResponse:
+    """Amsayu, Pindayu and Nisargayu for the Ayul Nirnayam calculator. The page shows the method the user picks."""
+    d1, longitudes, speeds, lagna_longitude = _birth_chart(dob, tob, latitude, longitude, timezone)
     amsayu = compute_amsayu(
         d1,
         build_varga_chart("D9", lagna_longitude, longitudes, speeds),
@@ -345,11 +363,21 @@ def ayul(req: AyulRequest) -> AyulResponse:
 
 @app.get("/api/ayul/{chart_id}", response_model=AyulResponse)
 def ayul_for_saved_chart(chart_id: int) -> AyulResponse:
-    record = get_chart(chart_id)
-    if record is None:
-        raise HTTPException(status_code=404, detail="Chart not found")
-    return _ayul_response(record.name, record.dob, record.tob, record.pob_label,
-                          record.latitude, record.longitude, record.tz_name)
+    return ayul(_saved_birth(chart_id))
+
+
+@app.post("/api/upapada", response_model=UpapadaResponse)
+def upapada(req: AyulRequest) -> UpapadaResponse:
+    d1, _longitudes, _speeds, lagna_longitude = _birth_chart(req.dob, req.tob, req.latitude, req.longitude, req.timezone)
+    return UpapadaResponse(
+        name=req.name, dob=req.dob, tob=req.tob, pob_label=req.pob_label,
+        lagna_rasi=d1.lagna_rasi, lagna_degree=lagna_longitude % 30, **vars(compute_upapada(d1)),
+    )
+
+
+@app.get("/api/upapada/{chart_id}", response_model=UpapadaResponse)
+def upapada_for_saved_chart(chart_id: int) -> UpapadaResponse:
+    return upapada(_saved_birth(chart_id))
 
 
 @app.get("/api/prasannam", response_model=PrasannamResponse)

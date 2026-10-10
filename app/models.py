@@ -328,7 +328,7 @@ class PindayuOut(BaseModel):
 
 
 class AyulRequest(BaseModel):
-    """Birth details for the Ayul Nirnayam calculator. Not saved."""
+    """Birth details typed into a calculator (Ayul Nirnayam, Jaimini). Not saved."""
     name: str = ""
     dob: date
     tob: time
@@ -348,3 +348,27 @@ class AyulResponse(BaseModel):
     amsayu: AmsayuOut
     pindayu: PindayuOut
     nisargayu: PindayuOut  # same shape as Pindayu, with the natural years
+
+
+class UpapadaResponse(BaseModel):
+    name: str
+    dob: date
+    tob: time
+    pob_label: str
+    lagna_rasi: int
+    lagna_degree: float
+    twelfth: int
+    twelfth_lord: str
+    lord_rasi: int
+    count: int
+    landing: int
+    exception: str | None
+    rasi: int
+    house: int
+    planets: list[str]
+    lord: str
+    lord_sits_in: int
+    second: int
+    second_planets: list[str]
+    second_lord: str
+    second_lord_rasi: int

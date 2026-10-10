@@ -172,3 +172,12 @@ def test_ayul_for_a_saved_chart_matches_birth_details(client):
 
 def test_ayul_rejects_an_unknown_time_zone(client):
     assert client.post("/api/ayul", json={**PADMINI, "timezone": "Nowhere/Else"}).status_code == 400
+
+
+def test_upapada_for_a_saved_chart_and_birth_details(client):
+    chart_id = client.post("/api/chart", json=BIRTH).json()["id"]
+    saved = client.get(f"/api/upapada/{chart_id}").json()
+    assert (saved["rasi"], saved["exception"], saved["lord"]) == (10, "seventh", "Saturn")  # Kumbham
+    assert saved == client.post("/api/upapada", json={k: v for k, v in BIRTH.items() if k != "gender"}).json()
+    assert client.post("/api/upapada", json=PADMINI).json()["rasi"] == 8  # Dhanusu
+    assert client.get("/api/upapada/99999").status_code == 404

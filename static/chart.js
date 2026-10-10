@@ -28,10 +28,11 @@ let state = {
   hiddenPlanet: "", // planet filter on the Hidden Ucham / Neecham tab; "" = all
   prasannam: { place: null, chart: null }, // place: { latitude, longitude, timezone, label }; label null = device location
   peyarchiPlanet: "", // planet filter on the Peyarchi tab; "" = all
-  // Ayul Nirnayam: view is "calc" or a key of AYUL_TOPICS; place is the entered birth place;
-  // result is the last /api/ayul response; strong is the pick ("lagna", "sun" or "moon"); methods
-  // are the ones shown, in order.
-  ayul: { view: "calc", place: null, result: null, strong: null, methods: [] },
+  // Ayul Nirnayam: view is "calc" or a key of AYUL_TOPICS; result is the last /api/ayul response;
+  // strong is the pick ("lagna", "sun" or "moon"); methods are the ones shown, in order.
+  ayul: { view: "calc", result: null, strong: null, methods: [] },
+  // Jaimini Sutras: view is the calculator shown (only "upapada" so far); result its last response.
+  jaimini: { view: "upapada", result: null },
 };
 
 function L() {
@@ -67,22 +68,12 @@ function readTob24Hour() {
 }
 
 function populateTobMinutes() {
-  for (const id of ["tobMinute", "ayulMinute"]) {
-    const select = document.getElementById(id);
-    for (let m = 0; m < 60; m++) {
-      const opt = document.createElement("option");
-      opt.value = String(m);
-      opt.textContent = String(m).padStart(2, "0");
-      select.appendChild(opt);
-    }
-  }
-  const hour = document.getElementById("ayulHour");
-  for (let h = 1; h <= 12; h++) {
+  const select = document.getElementById("tobMinute");
+  for (let m = 0; m < 60; m++) {
     const opt = document.createElement("option");
-    opt.value = String(h);
-    opt.textContent = String(h);
-    opt.selected = h === 12;
-    hour.appendChild(opt);
+    opt.value = String(m);
+    opt.textContent = String(m).padStart(2, "0");
+    select.appendChild(opt);
   }
 }
 
@@ -192,7 +183,9 @@ function applyLanguage() {
   document.getElementById("thPrStar").textContent = labels.ui.colStar;
   document.getElementById("thPrPada").textContent = labels.ui.colPada;
   if (state.prasannam.chart) renderPrasannam();
+  CHART_PICKERS.forEach((p) => p.applyLanguage());
   applyAyulLanguage();
+  applyJaiminiLanguage();
   document.querySelectorAll(".side-nav-topic").forEach((btn) => {
     btn.textContent = READING_TOPICS[btn.dataset.topic].title[state.lang];
   });
@@ -210,7 +203,7 @@ async function loadSavedCharts() {
   const res = await fetch("/api/charts");
   state.savedCharts = await res.json();
   renderSavedList(state.savedCharts);
-  populateAyulCharts();
+  CHART_PICKERS.forEach((p) => p.populate());
 }
 
 function renderSavedList(list) {
@@ -380,6 +373,7 @@ document.getElementById("readingBack").addEventListener("click", hideReadingPage
 
 function showReadingPage(topicKey) {
   document.getElementById("ayulSection").classList.add("hidden");
+  document.getElementById("jaiminiSection").classList.add("hidden");
   document.getElementById("pariharamSection").classList.add("hidden");
   document.getElementById("prasannamSection").classList.add("hidden");
   setTopTab("home");
@@ -408,7 +402,7 @@ document.querySelectorAll(".top-tab").forEach((btn) => {
   btn.addEventListener("click", () => showPage(btn.dataset.page));
 });
 
-const PAGE_SECTIONS = ["formSection", "savedSection", "resultSection", "readingSection", "pariharamSection", "prasannamSection", "ayulSection"];
+const PAGE_SECTIONS = ["formSection", "savedSection", "resultSection", "readingSection", "pariharamSection", "prasannamSection", "ayulSection", "jaiminiSection"];
 
 // "home" is the birth-chart page (with the Reading side nav); the others replace it.
 function showPage(page) {
@@ -416,10 +410,12 @@ function showPage(page) {
   document.getElementById("sideNav").classList.toggle("hidden", page !== "home");
   document.getElementById("pariharamNav").classList.toggle("hidden", page !== "pariharam");
   document.getElementById("ayulNav").classList.toggle("hidden", page !== "ayul");
+  document.getElementById("jaiminiNav").classList.toggle("hidden", page !== "jaimini");
   if (page === "home") {
     document.getElementById("pariharamSection").classList.add("hidden");
     document.getElementById("prasannamSection").classList.add("hidden");
     document.getElementById("ayulSection").classList.add("hidden");
+    document.getElementById("jaiminiSection").classList.add("hidden");
     hideReadingPage();
     return;
   }
@@ -434,6 +430,9 @@ function showPage(page) {
   } else if (page === "ayul") {
     document.getElementById("ayulSection").classList.remove("hidden");
     renderAyul();
+  } else if (page === "jaimini") {
+    document.getElementById("jaiminiSection").classList.remove("hidden");
+    renderJaimini();
   }
 }
 
@@ -637,6 +636,144 @@ function renderPariharam() {
   container.appendChild(ol);
 }
 
+// --- "Whose chart" picker: a saved chart, or birth details typed in and not saved. Shared by the
+// calculators on the Ayul Nirnayam and Jaimini Sutras pages; each keeps its own in CHART_PICKERS.
+
+const CHART_PICKERS = [];
+
+function createChartPicker(host) {
+  const group = `chartSource${CHART_PICKERS.length}`;
+  host.classList.add("picker");
+  host.innerHTML = `
+    <fieldset class="picker-choice">
+      <legend data-label="chartSource"></legend>
+      <label><input type="radio" name="${group}" value="saved" checked /> <span data-label="chartSourceSaved"></span></label>
+      <label><input type="radio" name="${group}" value="new" /> <span data-label="chartSourceNew"></span></label>
+    </fieldset>
+    <div class="picker-fields picker-saved">
+      <label><span data-label="chartSourceChart"></span><select class="picker-chart"></select></label>
+    </div>
+    <div class="picker-fields picker-new hidden">
+      <label><span data-label="name"></span><input type="text" class="picker-name" /></label>
+      <label><span data-label="dob"></span><input type="date" class="picker-dob" /></label>
+      <label><span data-label="tob"></span>
+        <div class="tob-group">
+          <select class="picker-hour" aria-label="Hour"></select>
+          <span class="tob-colon">:</span>
+          <select class="picker-minute" aria-label="Minute"></select>
+          <select class="picker-ampm" aria-label="AM or PM"><option value="AM">AM</option><option value="PM">PM</option></select>
+        </div>
+      </label>
+      <label class="pob-field picker-pob">
+        <span data-label="pob"></span>
+        <input type="text" class="picker-place" autocomplete="off" />
+        <ul class="pob-results hidden"></ul>
+      </label>
+    </div>`;
+  const q = (selector) => host.querySelector(selector);
+  const picker = { place: null };
+  for (let h = 1; h <= 12; h++) q(".picker-hour").add(new Option(String(h), String(h), h === 12, h === 12));
+  for (let m = 0; m < 60; m++) q(".picker-minute").add(new Option(String(m).padStart(2, "0"), String(m)));
+
+  picker.isNew = () => host.querySelector(`input[name="${group}"]:checked`).value === "new";
+  host.querySelectorAll(`input[name="${group}"]`).forEach((radio) => {
+    radio.addEventListener("change", () => {
+      q(".picker-saved").classList.toggle("hidden", picker.isNew());
+      q(".picker-new").classList.toggle("hidden", !picker.isNew());
+    });
+  });
+
+  const placeInput = q(".picker-place");
+  const placeList = q(".pob-results");
+  let searchTimer = null;
+  placeInput.addEventListener("input", () => {
+    picker.place = null;
+    clearTimeout(searchTimer);
+    const query = placeInput.value.trim();
+    if (query.length < 2) {
+      placeList.classList.add("hidden");
+      return;
+    }
+    searchTimer = setTimeout(async () => {
+      const res = await fetch(`/api/geocode?query=${encodeURIComponent(query)}`);
+      const places = res.ok ? await res.json() : [];
+      placeList.innerHTML = "";
+      if (places.length === 0) {
+        const li = document.createElement("li");
+        li.className = "pob-no-results";
+        li.textContent = L().ui.pobNoResults;
+        placeList.appendChild(li);
+      }
+      for (const p of places) {
+        const li = document.createElement("li");
+        li.textContent = p.label;
+        li.addEventListener("click", () => {
+          picker.place = p;
+          placeInput.value = p.label;
+          placeList.classList.add("hidden");
+        });
+        placeList.appendChild(li);
+      }
+      placeList.classList.remove("hidden");
+    }, 300);
+  });
+  document.addEventListener("click", (e) => {
+    if (!q(".picker-pob").contains(e.target)) placeList.classList.add("hidden");
+  });
+
+  picker.populate = () => {
+    const select = q(".picker-chart");
+    const keep = select.value;
+    select.innerHTML = "";
+    const charts = state.savedCharts || [];
+    if (charts.length === 0) select.add(new Option(L().ui.noSavedCharts, ""));
+    for (const c of charts) select.add(new Option(`${c.name} — ${c.dob}`, String(c.id)));
+    if (charts.some((c) => String(c.id) === keep)) select.value = keep;
+  };
+
+  picker.applyLanguage = () => {
+    const ui = L().ui;
+    host.querySelectorAll("[data-label]").forEach((el) => { el.textContent = ui[el.dataset.label]; });
+    placeInput.placeholder = ui.pobPlaceholder;
+    picker.populate();
+  };
+
+  // GETs `${base}/{id}` for a saved chart, or POSTs the typed-in birth details to `base`. Returns
+  // the Response, or a message to show if something is missing.
+  picker.fetch = async (base) => {
+    const ui = L().ui;
+    if (!picker.isNew()) {
+      const id = q(".picker-chart").value;
+      return id ? fetch(`${base}/${id}`) : ui.noSavedCharts;
+    }
+    const dob = q(".picker-dob").value;
+    if (!dob || !picker.place) return ui.needBirthDetails;
+    let hour = parseInt(q(".picker-hour").value, 10) % 12;
+    if (q(".picker-ampm").value === "PM") hour += 12;
+    const minute = parseInt(q(".picker-minute").value, 10);
+    const p = picker.place;
+    return fetch(base, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: q(".picker-name").value.trim(),
+        dob,
+        tob: `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00`,
+        pob_label: p.label,
+        latitude: p.latitude,
+        longitude: p.longitude,
+        timezone: p.timezone,
+      }),
+    });
+  };
+
+  CHART_PICKERS.push(picker);
+  return picker;
+}
+
+const ayulPicker = createChartPicker(document.getElementById("ayulPicker"));
+const jaiminiPicker = createChartPicker(document.getElementById("jaiminiPicker"));
+
 // --- Ayul Nirnayam: its own side nav (the calculator, then a page on each method) ---
 
 const AYUL_STRONG_METHODS = { lagna: ["amsayu"], sun: ["pindayu"], moon: ["nisargayu"] };
@@ -649,42 +786,12 @@ function applyAyulLanguage() {
   set("lblTopAyul", ui.topAyul);
   set("lblAyulNav", ui.topAyul);
   set("ayulIntro", ui.ayulIntro);
-  set("lblAyulSource", ui.ayulSource);
-  set("lblAyulSaved", ui.ayulSaved);
-  set("lblAyulNew", ui.ayulNew);
-  set("lblAyulChart", ui.ayulChart);
-  set("lblAyulName", ui.name);
-  set("lblAyulDob", ui.dob);
-  set("lblAyulTob", ui.tob);
-  set("lblAyulPob", ui.pob);
-  document.getElementById("ayulPob").placeholder = ui.pobPlaceholder;
   set("lblAyulStrong", ui.ayulStrong);
   set("lblAyulStrongLagna", ui.ayulStrongLagna);
   set("lblAyulStrongSun", ui.ayulStrongSun);
   set("lblAyulStrongMoon", ui.ayulStrongMoon);
-  set("ayulCalculate", ui.ayulCalculate);
-  populateAyulCharts();
+  set("ayulCalculate", ui.calculateShort);
   if (!document.getElementById("ayulSection").classList.contains("hidden")) renderAyul();
-}
-
-function populateAyulCharts() {
-  const select = document.getElementById("ayulChart");
-  const keep = select.value;
-  select.innerHTML = "";
-  const charts = state.savedCharts || [];
-  if (charts.length === 0) {
-    const opt = document.createElement("option");
-    opt.value = "";
-    opt.textContent = L().ui.ayulNoSaved;
-    select.appendChild(opt);
-  }
-  for (const c of charts) {
-    const opt = document.createElement("option");
-    opt.value = String(c.id);
-    opt.textContent = `${c.name} — ${c.dob}`;
-    select.appendChild(opt);
-  }
-  if (charts.some((c) => String(c.id) === keep)) select.value = keep;
 }
 
 function renderAyul() {
@@ -720,55 +827,18 @@ function renderAyul() {
   }
 }
 
-document.querySelectorAll('input[name="ayulSource"]').forEach((radio) => {
-  radio.addEventListener("change", () => {
-    const fresh = document.querySelector('input[name="ayulSource"]:checked').value === "new";
-    document.getElementById("ayulSavedFields").classList.toggle("hidden", fresh);
-    document.getElementById("ayulNewFields").classList.toggle("hidden", !fresh);
-  });
-});
-
 document.getElementById("ayulForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const ui = L().ui;
   const status = document.getElementById("ayulStatus");
-  const fresh = document.querySelector('input[name="ayulSource"]:checked').value === "new";
-  let res;
-  if (fresh) {
-    const dob = document.getElementById("ayulDob").value;
-    if (!dob || !state.ayul.place) {
-      status.textContent = ui.ayulNeedDetails;
-      return;
-    }
-    let hour = parseInt(document.getElementById("ayulHour").value, 10) % 12;
-    if (document.getElementById("ayulAmPm").value === "PM") hour += 12;
-    const minute = parseInt(document.getElementById("ayulMinute").value, 10);
-    const place = state.ayul.place;
-    status.textContent = ui.ayulWorking;
-    res = await fetch("/api/ayul", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: document.getElementById("ayulName").value.trim(),
-        dob,
-        tob: `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:00`,
-        pob_label: place.label,
-        latitude: place.latitude,
-        longitude: place.longitude,
-        timezone: place.timezone,
-      }),
-    });
-  } else {
-    const id = document.getElementById("ayulChart").value;
-    if (!id) {
-      status.textContent = ui.ayulNoSaved;
-      return;
-    }
-    status.textContent = ui.ayulWorking;
-    res = await fetch(`/api/ayul/${id}`);
+  status.textContent = ui.workingOut;
+  const res = await ayulPicker.fetch("/api/ayul");
+  if (typeof res === "string") {
+    status.textContent = res;
+    return;
   }
   if (!res.ok) {
-    status.textContent = ui.ayulError + (await res.text());
+    status.textContent = ui.workingError + (await res.text());
     return;
   }
   status.textContent = "";
@@ -776,43 +846,6 @@ document.getElementById("ayulForm").addEventListener("submit", async (e) => {
   state.ayul.strong = document.querySelector('input[name="ayulStrong"]:checked').value;
   state.ayul.methods = [...AYUL_STRONG_METHODS[state.ayul.strong]];
   renderAyulResult();
-});
-
-let ayulPobTimer = null;
-document.getElementById("ayulPob").addEventListener("input", (e) => {
-  state.ayul.place = null;
-  clearTimeout(ayulPobTimer);
-  const query = e.target.value.trim();
-  const list = document.getElementById("ayulPobResults");
-  if (query.length < 2) {
-    list.classList.add("hidden");
-    return;
-  }
-  ayulPobTimer = setTimeout(async () => {
-    const res = await fetch(`/api/geocode?query=${encodeURIComponent(query)}`);
-    const places = res.ok ? await res.json() : [];
-    list.innerHTML = "";
-    if (places.length === 0) {
-      const li = document.createElement("li");
-      li.className = "pob-no-results";
-      li.textContent = L().ui.pobNoResults;
-      list.appendChild(li);
-    }
-    for (const p of places) {
-      const li = document.createElement("li");
-      li.textContent = p.label;
-      li.addEventListener("click", () => {
-        state.ayul.place = p;
-        e.target.value = p.label;
-        list.classList.add("hidden");
-      });
-      list.appendChild(li);
-    }
-    list.classList.remove("hidden");
-  }, 300);
-});
-document.addEventListener("click", (e) => {
-  if (!e.target.closest(".ayul-pob")) document.getElementById("ayulPobResults").classList.add("hidden");
 });
 
 // Days of 360-day years (30-day months) as years, months and days.
@@ -979,6 +1012,138 @@ function renderAyulResult() {
   note.className = "reading-note";
   note.textContent = ui.ayulNote;
   container.appendChild(note);
+}
+
+// --- Jaimini Sutras: its own side nav of calculators (only the Upapada Lagna so far) ---
+
+const JAIMINI_VIEWS = { upapada: "upapadaTitle" };
+
+function applyJaiminiLanguage() {
+  const ui = L().ui;
+  document.getElementById("lblTopJaimini").textContent = ui.topJaimini;
+  document.getElementById("lblJaiminiNav").textContent = ui.topJaimini;
+  document.getElementById("jaiminiCalculate").textContent = ui.calculateShort;
+  if (!document.getElementById("jaiminiSection").classList.contains("hidden")) renderJaimini();
+}
+
+function renderJaimini() {
+  const ui = L().ui;
+  const nav = document.getElementById("jaiminiNavList");
+  nav.innerHTML = "";
+  for (const [key, labelKey] of Object.entries(JAIMINI_VIEWS)) {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "pariharam-topic" + (key === state.jaimini.view ? " active" : "");
+    btn.textContent = ui[labelKey];
+    btn.addEventListener("click", () => {
+      state.jaimini.view = key;
+      renderJaimini();
+    });
+    li.appendChild(btn);
+    nav.appendChild(li);
+  }
+  document.getElementById("jaiminiTitle").textContent = ui[JAIMINI_VIEWS[state.jaimini.view]];
+  const intro = document.getElementById("jaiminiIntro");
+  intro.innerHTML = "";
+  for (const key of ["upapadaIntro", "upapadaMethod"]) {
+    const p = document.createElement("p");
+    p.className = "calc-intro";
+    p.textContent = ui[key];
+    intro.appendChild(p);
+  }
+  renderUpapadaResult();
+}
+
+document.getElementById("jaiminiForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const ui = L().ui;
+  const status = document.getElementById("jaiminiStatus");
+  status.textContent = ui.workingOut;
+  const res = await jaiminiPicker.fetch("/api/upapada");
+  if (typeof res === "string") {
+    status.textContent = res;
+    return;
+  }
+  if (!res.ok) {
+    status.textContent = ui.workingError + (await res.text());
+    return;
+  }
+  status.textContent = "";
+  state.jaimini.result = await res.json();
+  renderUpapadaResult();
+});
+
+function simpleTable(className, rows, header) {
+  const table = document.createElement("table");
+  table.className = className;
+  if (header) {
+    const tr = document.createElement("tr");
+    for (const text of header) {
+      const th = document.createElement("th");
+      th.textContent = text;
+      tr.appendChild(th);
+    }
+    table.appendChild(tr);
+  }
+  for (const cells of rows) {
+    const tr = document.createElement("tr");
+    for (const text of cells) {
+      const td = document.createElement("td");
+      td.textContent = text;
+      tr.appendChild(td);
+    }
+    table.appendChild(tr);
+  }
+  return table;
+}
+
+function renderUpapadaResult() {
+  const container = document.getElementById("jaiminiResult");
+  const r = state.jaimini.result;
+  container.classList.toggle("hidden", !r);
+  container.innerHTML = "";
+  if (!r) return;
+  const labels = L();
+  const ui = labels.ui;
+  const rasi = (i) => labels.rasi[i];
+  const planet = (p) => labels.planets[p];
+  const fill = (template, values) => Object.entries(values).reduce((t, [k, v]) => t.replaceAll(`{${k}}`, v), template);
+  const planetList = (names) => (names.length ? names.map(planet).join(", ") : ui.noneWord.charAt(0).toUpperCase() + ui.noneWord.slice(1));
+  const house = (rasiIndex) => ORDINAL[state.lang]((rasiIndex - r.lagna_rasi + 12) % 12 + 1);
+
+  const head = document.createElement("div");
+  head.className = "yoga-summary";
+  const who = [r.name, r.dob, r.tob.slice(0, 5), r.pob_label].filter(Boolean).join(" · ");
+  head.textContent = `${who} · ${ui.lagna} ${rasi(r.lagna_rasi)} ${formatDMS(r.lagna_degree)}`;
+  container.appendChild(head);
+
+  const box = document.createElement("div");
+  box.className = "ayul-result-box";
+  const big = document.createElement("div");
+  big.className = "ul-summary";
+  big.textContent = fill(ui.ulIs, { rasi: rasi(r.rasi), ord: ORDINAL[state.lang](r.house) });
+  box.appendChild(big);
+  container.appendChild(box);
+
+  const last = { twelfth: ui.ulStepTwelfth, seventh: ui.ulStepSeventh }[r.exception] || ui.ulStepNone;
+  const steps = [
+    fill(ui.ulStep1, { rasi: rasi(r.twelfth), lord: planet(r.twelfth_lord) }),
+    fill(ui.ulStep2, { lord: planet(r.twelfth_lord), rasi: rasi(r.lord_rasi), from: rasi(r.twelfth), n: r.count }),
+    fill(ui.ulStep3, { n: r.count, rasi: rasi(r.lord_rasi), landing: rasi(r.landing) }),
+    fill(last, { landing: rasi(r.landing), ul: rasi(r.rasi) }),
+  ];
+  container.appendChild(simpleTable("ul-steps", steps.map((s, i) => [String(i + 1), s]), [ui.ulStepCol, ui.ulWorkingCol]));
+
+  const lordIn = (lord, at) => fill(ui.ulLordIn, { lord: planet(lord), rasi: rasi(at), ord: house(at) });
+  container.appendChild(simpleTable("ul-details", [
+    [ui.upapadaTitle, `${rasi(r.rasi)} (${house(r.rasi)})`],
+    [ui.ulRowPlanets, planetList(r.planets)],
+    [ui.ulRowLord, lordIn(r.lord, r.lord_sits_in)],
+    [ui.ulRowSecond, `${rasi(r.second)} (${house(r.second)})`],
+    [ui.ulRowSecondPlanets, planetList(r.second_planets)],
+    [ui.ulRowLord, lordIn(r.second_lord, r.second_lord_rasi)],
+  ]));
 }
 
 function readingTable(header, rows) {
