@@ -490,3 +490,4 @@ tr.lagna-row td { font-weight: 600; color: var(--maroon-700); }
 .ul-aspect-note { margin-top: 0.4rem; font-weight: 600; color: var(--good); }
 .kk-readings { margin: 0.2rem 0 1rem; padding-left: 1.2rem; line-height: 1.6; }
 .kk-readings li { margin-bottom: 0.3rem; }
+.ul-aspect-note.adverse { color: var(--neutral); }

@@ -1019,7 +1019,7 @@ function renderAyulResult() {
 
 const JAIMINI_VIEWS = {
   arudha: { title: "alTitle", intro: ["alIntro", "alMethod"], render: () => renderArudhaResult("arudha_lagna") },
-  upapada: { title: "upapadaTitle", intro: ["upapadaIntro", "upapadaMethod"], render: () => renderArudhaResult("upapada") },
+  upapada: { title: "upapadaTitle", intro: ["upapadaIntro", "upapadaMethod", "ulDkRule"], render: () => renderArudhaResult("upapada") },
   karaka: { title: "karakaTitle", intro: ["karakaIntro", "karakaRules"], render: () => renderKarakaResult() },
   amatya: { title: "amkTitle", intro: ["amkIntro", "amkRel"], render: () => renderAmatyakarakaResult() },
   karakamsa: { title: "kkTitle", intro: ["kkIntro", "kkHow"], render: () => renderKarakamsaResult() },
@@ -1170,6 +1170,28 @@ function renderArudhaResult(kind) {
     note.textContent = alUl;
     box.appendChild(note);
   }
+  // The Upapada page also reads the Darakaraka with the Upapada.
+  const dk = chart.darakaraka_upapada;
+  const dkLines = [];
+  if (text.second) {
+    if (dk.related) {
+      const reasons = [];
+      if (dk.aspect) reasons.push(ui.dkHow.aspect);
+      if (dk.kendra_trikona) reasons.push(fill(ui.dkHow.kt, { ord: ORDINAL[state.lang](dk.count) }));
+      for (const b of dk.benefics) {
+        const key = (b.how === "in" ? "in" : "aspect") + (b.on === "dk" ? "Dk" : "Ul");
+        reasons.push(fill(ui.dkHow[key], { planet: planet(b.planet) }));
+      }
+      dkLines.push(["good", fill(ui.dkRelated, { how: reasons.join(ui.dkHow.joiner) })]);
+    }
+    if (dk.adverse) dkLines.push(["adverse", fill(ui.dkAdverse, { pair: [2, 12].includes(dk.count) ? "2/12" : "6/8" })]);
+    for (const [cls, line] of dkLines) {
+      const note = document.createElement("div");
+      note.className = "ul-aspect-note" + (cls === "adverse" ? " adverse" : "");
+      note.textContent = line;
+      box.appendChild(note);
+    }
+  }
   container.appendChild(box);
 
   const last = ui[{ same: text.same, seventh: text.seventh }[r.exception] || text.none];
@@ -1195,6 +1217,8 @@ function renderArudhaResult(kind) {
       [ui.ulRowSecondPlanets, planetList(r.second_planets)],
       [ui.ulRowAspectedBy, aspectedBy(r.second_aspected_by)],
       [ui.ulRowLord, lordIn(r.second_lord, r.second_lord_rasi)],
+      [ui.dkRowDk, lordIn(dk.planet, dk.rasi)],
+      [ui.dkRowRelation, dkLines.length ? dkLines.map(([, line]) => line).join(" ") : ui.dkNone],
     );
   }
   container.appendChild(simpleTable("ul-details", rows));

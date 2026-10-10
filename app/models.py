@@ -421,6 +421,25 @@ class AmatyakarakaOut(BaseModel):
     related: bool
 
 
+class BeneficInfluenceOut(BaseModel):
+    planet: str
+    on: str  # "dk" or "ul"
+    how: str  # "in" or "aspect"
+
+
+class DarakarakaUpapadaOut(BaseModel):
+    planet: str
+    rasi: int
+    house: int
+    upapada_rasi: int
+    count: int
+    aspect: bool
+    kendra_trikona: bool
+    benefics: list[BeneficInfluenceOut]
+    related: bool
+    adverse: bool
+
+
 class JaiminiResponse(BaseModel):
     """Everything the Jaimini Sutras calculators show for one chart."""
     name: str
@@ -436,3 +455,4 @@ class JaiminiResponse(BaseModel):
     chara_karakas: list[CharaKarakaOut]
     karakamsa: KarakamsaOut
     amatyakaraka: AmatyakarakaOut
+    darakaraka_upapada: DarakarakaUpapadaOut

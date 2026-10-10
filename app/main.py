@@ -25,6 +25,7 @@ from app.constants import (
 from app.amatyakaraka import compute_amatyakaraka
 from app.amsayu import compute_amsayu
 from app.chara_karaka import compute_chara_karakas
+from app.darakaraka import compute_darakaraka_upapada
 from app.dasa import compute_mahadasas, compute_sub_periods
 from app.db import SavedChart, delete_chart, get_chart, init_db, list_charts, save_chart
 from app.dignity import compute_dignities
@@ -386,7 +387,12 @@ def jaimini(req: AyulRequest) -> JaiminiResponse:
         chara_karakas=[vars(k) for k in karakas],
         karakamsa=_karakamsa_out(compute_karakamsa(d1, d9, karakas[0].planet)),
         amatyakaraka=vars(compute_amatyakaraka(d1, karakas)),
+        darakaraka_upapada=_darakaraka_out(compute_darakaraka_upapada(d1, karakas, upapada)),
     )
+
+
+def _darakaraka_out(d) -> dict:
+    return {**vars(d), "benefics": [vars(b) for b in d.benefics]}
 
 
 def _karakamsa_out(k) -> dict:
