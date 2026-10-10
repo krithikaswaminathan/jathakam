@@ -67,8 +67,9 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
 - **Jaimini Sutras**: a tab at the top with its own side nav of Jaimini calculators, each taking a
   saved chart or birth details typed in (not saved), like Ayul Nirnayam. The first is the
   **Upapada Lagna**, the arudha of the 12th house, read for marriage and the spouse. It shows the
-  steps, the Upapada and the planets in it, its lord and where it sits, and the 2nd rasi from the
-  Upapada with its planets and lord.
+  steps, the Upapada with the planets in and aspecting it, its lord and where it sits, and the 2nd
+  rasi from the Upapada with its planets, aspects and lord. **Rasi Drishti** shows which rasi
+  aspects which, and for a chart the planets in each rasi and the planets aspecting it.
 - **Hidden Ucham / Neecham** tab, after Ucham / Neecham and laid out like Moorthy: where each
   planet hides its ucham, neecham and moolatrikonam (count the padas from its Kaala Purusha pada
   A to where it sits B, both counted, to get C, then count C padas again from B), with the bhavam,
@@ -215,3 +216,7 @@ python -m pytest tests/ -v
 - Upapada Lagna: count from the 12th house (as 1) to its lord's rasi, then the same number again
   from the lord's rasi. If that lands on the 12th house or the 7th from it, take the 10th rasi from
   there. Kumbham is ruled by Saturn and Viruchigam by Mars (not Rahu or Ketu), as given by the user.
+- Jaimini rasi drishti: movable rasis aspect the 5th, 8th and 11th (every fixed rasi but the one
+  next to them), fixed rasis the 3rd, 6th and 9th (every movable rasi but the one next to them) and
+  dual rasis the 4th, 7th and 10th. Aspects are mutual and every planet, Rahu and Ketu included,
+  aspects what its rasi aspects.
