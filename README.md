@@ -69,7 +69,9 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   the pada of the lagna, shows the steps, the Arudha with the planets in and aspecting it, and its
   lord. The **Upapada Lagna**, the arudha of the 12th house, read for marriage and the spouse. It shows the
   steps, the Upapada with the planets in and aspecting it, its lord and where it sits, and the 2nd
-  rasi from the Upapada with its planets, aspects and lord. **Rasi Drishti** shows which rasi
+  rasi from the Upapada with its planets, aspects and lord. **Chara Karakas** ranks the seven
+  planets from the Sun to Saturn by degree within the rasi (the seven karaka system, no Rahu or
+  Ketu), from the Atmakaraka down to the Darakaraka. **Rasi Drishti** shows which rasi
   aspects which, and for a chart the planets in each rasi and the planets aspecting it.
 - **Hidden Ucham / Neecham** tab, after Ucham / Neecham and laid out like Moorthy: where each
   planet hides its ucham, neecham and moolatrikonam (count the padas from its Kaala Purusha pada
