@@ -385,7 +385,7 @@ def jaimini(req: AyulRequest) -> JaiminiResponse:
         arudha_upapada_aspect=arudha_and_upapada_aspect(arudha_lagna, upapada),
         rasi_drishti=[vars(r) for r in compute_rasi_drishti(d1)],
         chara_karakas=[vars(k) for k in karakas],
-        karakamsa=_karakamsa_out(compute_karakamsa(d1, d9, karakas[0].planet)),
+        karakamsa=_karakamsa_out(compute_karakamsa(d1, d9, karakas[0].planet, karakas[1].planet)),
         amatyakaraka=vars(compute_amatyakaraka(d1, karakas)),
         darakaraka_upapada=_darakaraka_out(compute_darakaraka_upapada(d1, karakas, upapada)),
     )
@@ -396,7 +396,8 @@ def _darakaraka_out(d) -> dict:
 
 
 def _karakamsa_out(k) -> dict:
-    return {**vars(k), "houses": [vars(h) for h in k.houses], "readings": [vars(r) for r in k.readings]}
+    views = [{**vars(v), "houses": [vars(h) for h in v.houses], "readings": [vars(r) for r in v.readings]} for v in k.views]
+    return {**vars(k), "views": views}
 
 
 @app.get("/api/jaimini/{chart_id}", response_model=JaiminiResponse)

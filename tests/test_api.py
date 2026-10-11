@@ -195,8 +195,12 @@ def test_jaimini_for_a_saved_chart_and_birth_details(client):
     amk = saved["amatyakaraka"]
     assert (amk["planet"], amk["house"], amk["related"]) == ("Mercury", 1, False)
     kk = saved["karakamsa"]
-    assert (kk["atmakaraka"], kk["rasi"]) == ("Venus", 11)  # Sukran in Meenam in the Navamsa
-    assert {"kind": "jupiter", "planet": "Jupiter", "house": 10} in kk["readings"]
+    assert (kk["atmakaraka"], kk["rasi"], kk["element"], kk["ak_dignity"], kk["ak_strong"]) == ("Venus", 11, "water", "ucham", True)
+    swamsa, karakamsa = kk["views"]
+    assert (swamsa["chart"], karakamsa["chart"]) == ("swamsa", "karakamsa")
+    assert any(r["kind"] == "jupiter" and r["house"] == 10 for r in swamsa["readings"])
+    # In the birth chart the Amatyakaraka Budhan is in Dhanusu, the 10th from Meenam.
+    assert any(r["kind"] == "tenth_amk" and r["planet"] == "Mercury" and r["how"] == "in" for r in karakamsa["readings"])
     degrees = [k["degree_in_sign"] for k in karakas]
     assert degrees == sorted(degrees, reverse=True)
     assert client.get("/api/jaimini/99999").status_code == 404

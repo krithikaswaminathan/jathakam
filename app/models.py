@@ -393,17 +393,33 @@ class KarakamsaHouseOut(BaseModel):
 
 
 class KarakamsaReadingOut(BaseModel):
-    kind: str  # "ketu", "venus12", "jupiter" or "career"
-    planet: str
-    house: int
+    kind: str
+    planet: str = ""
+    house: int = 0
+    how: str = ""
+    planets: list[str] = []
+    reasons: list[str] = []
+
+
+class KarakamsaViewOut(BaseModel):
+    chart: str  # "swamsa" or "karakamsa"
+    lagna_house: int
+    houses: list[KarakamsaHouseOut]
+    readings: list[KarakamsaReadingOut]
 
 
 class KarakamsaOut(BaseModel):
     atmakaraka: str
     ak_rasi: int
     rasi: int
-    houses: list[KarakamsaHouseOut]
-    readings: list[KarakamsaReadingOut]
+    element: str
+    ak_dignity: str | None
+    ak_benefics: list[str]
+    ak_malefics: list[str]
+    ak_strong: bool
+    ak_weak: bool
+    with_ak: list[str]
+    views: list[KarakamsaViewOut]
 
 
 class AmatyakarakaOut(BaseModel):

@@ -1307,10 +1307,13 @@ function renderAmatyakarakaResult() {
   ], null, "ul-details");
 }
 
-// Karakamsa Lagna: the readings are listed before any chart is picked; a chart adds the steps, the
-// twelve houses from the Karakamsa in the Navamsa, and the readings that apply to it.
-const KK_READINGS = ["ketu", "venus12", "jupiter"];
+// Karakamsa: the conditions and readings are listed before any chart is picked; a chart adds the
+// Atmakaraka's state in the Navamsa, then the Swamsa (Navamsa) and Karakamsa (birth chart) views,
+// each with the readings that apply and the twelve houses counted from the rasi.
 const KK_CAREER = ["Sun", "Venus", "Saturn", "Mars", "Rahu"];
+const KK_STATIC = ["fire", "earth", "air", "water", "strong", "weak", "withJupiter", "withSaturn", "withVenus",
+  "ketu", "venus12", "jupiter", "career", "influenceJupiter", "influenceMars", "influenceVenus", "spiritual",
+  "tenthAmk", "seventhBenefic", "seventhMalefic"];
 
 function renderKarakamsaResult() {
   const container = document.getElementById("jaiminiResult");
@@ -1319,19 +1322,58 @@ function renderKarakamsaResult() {
   const labels = L();
   const ui = labels.ui;
   const planet = (p) => labels.planets[p];
+  // "Jupiter, Venus and Ketu" in English; Tamil lists with commas.
+  const planetList = (ps) => {
+    const names = ps.map(planet);
+    return state.lang === "en" && names.length > 1 ? `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}` : names.join(", ");
+  };
   const rasi = (i) => labels.rasi[i];
+  const fill = fillTemplate;
   const chart = state.jaimini.result;
-  const readingText = (kind, p) => fillTemplate(ui.kkReading[kind], { field: p ? ui.kkFields[p] : "" });
-
-  if (!chart) {
-    const rows = [
-      ...KK_READINGS.map((kind) => [ui.kkCond[kind], readingText(kind)]),
-      ...KK_CAREER.map((p) => [fillTemplate(ui.kkCond.career, { planet: planet(p) }), readingText("career", p)]),
-    ];
+  const addTable = (rows, header) => {
     const wrap = document.createElement("div");
     wrap.className = "table-wrap";
-    wrap.appendChild(simpleTable("drishti-table", rows, [ui.colCondition, ui.colReading]));
+    wrap.appendChild(simpleTable("drishti-table", rows, header));
     container.appendChild(wrap);
+  };
+  const addHeading = (text) => {
+    const h3 = document.createElement("h3");
+    h3.className = "timing-title";
+    h3.textContent = text;
+    container.appendChild(h3);
+  };
+  const addList = (lines) => {
+    if (!lines.length) {
+      const p = document.createElement("p");
+      p.className = "calc-intro";
+      p.textContent = ui.kkNoReadings;
+      container.appendChild(p);
+      return;
+    }
+    const ul = document.createElement("ul");
+    ul.className = "kk-readings";
+    for (const line of lines) {
+      const li = document.createElement("li");
+      li.textContent = line;
+      ul.appendChild(li);
+    }
+    container.appendChild(ul);
+  };
+
+  if (!chart) {
+    const rows = [];
+    for (const key of KK_STATIC) {
+      if (key === "career") {
+        for (const p of KK_CAREER) rows.push([fill(ui.kkCond.career, { planet: planet(p) }), fill(ui.kkRead.career, { field: ui.kkFields[p] })]);
+      } else {
+        rows.push([ui.kkCond[key], ui.kkRead[key]]);
+      }
+    }
+    addTable(rows, [ui.colCondition, ui.colReading]);
+    const note = document.createElement("p");
+    note.className = "reading-note";
+    note.textContent = ui.kkCondNote;
+    container.appendChild(note);
     return;
   }
 
@@ -1341,46 +1383,68 @@ function renderKarakamsaResult() {
   box.className = "ayul-result-box";
   const big = document.createElement("div");
   big.className = "ul-summary";
-  big.textContent = fillTemplate(ui.kkIs, { rasi: rasi(k.rasi) });
+  big.textContent = fill(ui.kkIs, { rasi: rasi(k.rasi) });
   box.appendChild(big);
   container.appendChild(box);
-
   const steps = [
-    fillTemplate(ui.kkStep1, { planet: planet(k.atmakaraka), rasi: rasi(k.ak_rasi) }),
-    fillTemplate(ui.kkStep2, { planet: planet(k.atmakaraka), rasi: rasi(k.rasi) }),
+    fill(ui.kkStep1, { planet: planet(k.atmakaraka), rasi: rasi(k.ak_rasi) }),
+    fill(ui.kkStep2, { planet: planet(k.atmakaraka), rasi: rasi(k.rasi) }),
   ];
   container.appendChild(simpleTable("ul-steps", steps.map((s, i) => [String(i + 1), s]), [ui.ulStepCol, ui.ulWorkingCol]));
 
-  const h3 = document.createElement("h3");
-  h3.className = "timing-title";
-  h3.textContent = ui.kkReadingsTitle;
-  container.appendChild(h3);
-  if (k.readings.length === 0) {
-    const p = document.createElement("p");
-    p.className = "calc-intro";
-    p.textContent = ui.kkNoReadings;
-    container.appendChild(p);
-  } else {
-    const ul = document.createElement("ul");
-    ul.className = "kk-readings";
-    for (const r of k.readings) {
-      const li = document.createElement("li");
-      const what = fillTemplate(ui.kkApplied[r.kind], { ord: ORDINAL[state.lang](r.house), planet: planet(r.planet) });
-      li.textContent = `${what} ${readingText(r.kind, r.planet)}`;
-      ul.appendChild(li);
-    }
-    container.appendChild(ul);
-  }
+  // The Atmakaraka in the Navamsa: element, strength, planets with it.
+  addHeading(ui.kkAkTitle);
+  const akLines = [`${fill(ui.kkWhat.element, { element: ui.kkElements[k.element] })} ${ui.kkRead[k.element]}`];
+  const why = (dignityOk, group) => {
+    const parts = [];
+    if (dignityOk) parts.push(ui.kkWhy[k.ak_dignity]);
+    if (group.length) parts.push(fill(ui.kkWhy.influenced, { planets: planetList(group) }));
+    return parts.join(ui.kkWhy.joiner);
+  };
+  if (k.ak_strong) akLines.push(`${fill(ui.kkWhat.strong, { why: why(["ucham", "own"].includes(k.ak_dignity), k.ak_benefics) })} ${ui.kkRead.strong}`);
+  if (k.ak_weak) akLines.push(`${fill(ui.kkWhat.weak, { why: why(k.ak_dignity === "neecham", k.ak_malefics) })} ${ui.kkRead.weak}`);
+  for (const p of k.with_ak) akLines.push(`${fill(ui.kkWhat.withAk, { planet: planet(p) })} ${ui.kkRead["with" + p]}`);
+  addList(akLines);
 
-  const rows = k.houses.map((h) => [
-    ORDINAL[state.lang](h.house) + (h.house === 12 ? ` (${ui.kkMoksha})` : ""),
-    rasi(h.rasi),
-    h.planets.length ? h.planets.map(planet).join(", ") : "\u2013",
-  ]);
-  const wrap = document.createElement("div");
-  wrap.className = "table-wrap";
-  wrap.appendChild(simpleTable("drishti-table", rows, [ui.kkColHouse, ui.colRasi, ui.kkColPlanets]));
-  container.appendChild(wrap);
+  for (const v of k.views) {
+    const view = ui.kkViewName[v.chart];
+    addHeading(ui.kkViewTitle[v.chart]);
+    const where = document.createElement("p");
+    where.className = "calc-intro";
+    where.textContent = fill(ui.kkLagnaHouse, { rasi: rasi(k.rasi), ord: ORDINAL[state.lang](v.lagna_house) });
+    container.appendChild(where);
+    const lines = v.readings.map((r) => {
+      const ord = ORDINAL[state.lang](r.house);
+      switch (r.kind) {
+        case "career":
+          return `${fill(ui.kkWhat.career, { planet: planet(r.planet), view })} ${fill(ui.kkRead.career, { field: ui.kkFields[r.planet] })}`;
+        case "influence":
+          return `${fill(ui.kkWhat.influence, { planet: planet(r.planet), view })} ${ui.kkRead["influence" + r.planet]}`;
+        case "spiritual": {
+          const sp = ui.kkSpiritual;
+          const influencers = r.reasons.filter((x) => x === "ketu" || x === "jupiter").map((x) => (x === "ketu" ? "Ketu" : "Jupiter"));
+          const parts = [];
+          if (influencers.length) parts.push(fill(sp.influenced, { planets: planetList(influencers), view }));
+          if (r.reasons.includes("pisces")) parts.push(fill(sp.pisces, { meenam: rasi(11), view }));
+          if (r.reasons.includes("twelfth")) parts.push(fill(sp.twelfth, { view }));
+          return `${fill(sp.sentence, { view, parts: parts.join(sp.joiner) })} ${ui.kkRead.spiritual}`;
+        }
+        case "tenth_amk":
+          return `${fill(r.how === "in" ? ui.kkWhat.tenthAmkIn : ui.kkWhat.tenthAmkAspect, { planet: planet(r.planet), view })} ${ui.kkRead.tenthAmk}`;
+        case "seventh_benefic":
+        case "seventh_malefic":
+          return `${fill(ui.kkWhat.seventh, { planets: planetList(r.planets), view })} ${ui.kkRead[r.kind === "seventh_benefic" ? "seventhBenefic" : "seventhMalefic"]}`;
+        default:
+          return `${fill(ui.kkWhat[r.kind], { ord, view })} ${ui.kkRead[r.kind]}`;
+      }
+    });
+    addList(lines);
+    addTable(v.houses.map((h) => [
+      ORDINAL[state.lang](h.house) + (h.house === 12 ? ` (${ui.kkMoksha})` : ""),
+      rasi(h.rasi),
+      h.planets.length ? planetList(h.planets) : "–",
+    ]), [ui.kkColHouse, ui.colRasi, ui.kkColPlanets]);
+  }
 }
 
 // Rasi drishti: the table of which rasi aspects which is shown before any chart is picked (it is
