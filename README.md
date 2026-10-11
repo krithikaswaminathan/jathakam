@@ -74,9 +74,11 @@ A personal Vedic astrology birth chart (jathakam) calculator, with an English/Ta
   planets from the Sun to Saturn by degree within the rasi (the seven karaka system, no Rahu or
   Ketu), from the Atmakaraka down to the Darakaraka. **Amatyakaraka**, the career karaka, gives the
   reading for its planet and for its house from the lagna (kendra, trikona, upachaya, dusthana),
-  and says whether it is related to the Atmakaraka. **Karakamsa Lagna** is the Atmakaraka's
-  Navamsa rasi, with the twelve houses counted from it in the Navamsa (the 12th marked as moksha)
-  and the readings that apply. **Rasi Drishti** shows which rasi
+  and says whether it is related to the Atmakaraka. **Karakamsa Lagna** reads the Atmakaraka's
+  Navamsa rasi two ways: as the Swamsa in the Navamsa (the inner nature) and as the Karakamsa in the
+  birth chart (the outer expression), each with its readings and the twelve houses counted from it
+  (the 12th marked as moksha). It also reads the Atmakaraka's element, strength and companions in
+  the Navamsa. **Rasi Drishti** shows which rasi
   aspects which, and for a chart the planets in each rasi and the planets aspecting it.
 - **Hidden Ucham / Neecham** tab, after Ucham / Neecham and laid out like Moorthy: where each
   planet hides its ucham, neecham and moolatrikonam (count the padas from its Kaala Purusha pada
@@ -231,10 +233,15 @@ python -m pytest tests/ -v
   dual rasis the 4th, 7th and 10th. Aspects are mutual and every planet, Rahu and Ketu included,
   aspects what its rasi aspects.
 
-- Karakamsa readings come from the user's notes (Mani, Jaimini Astrology), counted in the Navamsa
-  from the Karakamsa: Ketu in the 2nd or 3rd, Venus in the 12th, Jupiter in a kendra, and the line
-  of work from the Sun, Venus, Saturn, Mars or Rahu in the Karakamsa. The Atmakaraka itself, which
-  is always there, gives no work reading (the user's choice).
+- Karakamsa readings come from the user's notes (Mani, Jaimini Astrology), checked from the Swamsa
+  in the Navamsa and from the Karakamsa in the birth chart: Ketu in the 2nd or 3rd, Venus in the
+  12th, Jupiter in a kendra, the line of work from the Sun, Venus, Saturn, Mars or Rahu in it (not
+  the Atmakaraka itself), Jupiter, Mars or Venus influencing it, Ketu or Jupiter influencing it or
+  it being Meenam or the 12th from the lagna (spiritual), the Amatyakaraka in or aspecting the 10th,
+  and benefics or malefics influencing the 7th. A planet influences a rasi when it is in it or
+  aspects it by rasi drishti. Benefics are Jupiter and Venus, malefics the Sun, Mars, Saturn, Rahu
+  and Ketu. The Atmakaraka is strong in the Navamsa when ucham, in its own rasi or influenced by a
+  benefic, and weak when neecham or influenced by a malefic; it can be both.
 
 - Amatyakaraka readings come from the user's notes (Mani, Jaimini Astrology). Houses are counted
   from the D1 lagna, and every house group a house falls in is read (the 1st is a kendra and a
